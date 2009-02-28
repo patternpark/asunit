@@ -1,0 +1,5 @@
+
+h1. AsUnit 2.x
+
+This build of the AsUnit framework is intended to work with ActionScript 2.x as it appeared in Flash Players 7 and 8. There was an earlier version of ActionScript 2 that did not support exceptions. If you plan on supporting Flash Player 6 or Flash Lite 1.0, you may need to use the as2 branch found nearby.
+

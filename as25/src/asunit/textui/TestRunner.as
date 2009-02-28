@@ -66,8 +66,6 @@ class asunit.textui.TestRunner{
 	public function start(testCase:Function, testMethod:String, showTrace:Boolean):TestResult {
 		if(testMethod==undefined) testMethod = null;
 		if(showTrace==undefined) showTrace = false;
-		
-//			fscommand("showmenu", "false");
 		try {
 			var instance:Test;
 			if(testMethod != null) {

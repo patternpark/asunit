@@ -1,0 +1,1 @@
+class asunit.flash.events.Event {	public static var COMPLETE:String = "complete";	public static var CHANGE:String = "change";		private var _type:String;	private var _target:Object;		public function Event(type:String, target:Object) {		_type = type;		_target = target==undefined ? null : target;	}		public function get type():String{		return _type;	}	}

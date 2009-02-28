@@ -1,0 +1,1 @@
+import asunit.flash.events.Event;interface asunit.flash.events.IEventDispatcher {	public function addEventListener(type:String, listener:Function, scope:Object):Void;	public function dispatchEvent(event:Event):Void;}

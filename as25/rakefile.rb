@@ -2,6 +2,15 @@ require 'sprout'
 sprout 'as2'
 
 ##########################################
+# To build from this file, install Ruby (http://ruby-lang.org)
+# and RubyGems (http://rubygems.org/), then run:
+#   gem install sprout
+#   gem install rake
+#   rake
+# This should walk you through the installation
+# of required gems, compilers and vms
+
+##########################################
 # Compile the Test Harness
 
 desc "Compile the test harness"

@@ -1,4 +1,4 @@
-import asunit.framework.TestCaseMock;
+import asunit.framework.TestCaseStub;
 import asunit.framework.TestCase;
 import asunit.flash.events.EventDispatcher;
 import asunit.flash.events.Event;
@@ -17,13 +17,13 @@ class asunit.framework.TestCaseTest extends TestCase {
 	}
 	
 	public function testCustomConstructor():Void {
-		var mock : TestCaseMock = new TestCaseMock("testMethod1");
+		var mock : TestCaseStub = new TestCaseStub("testMethod1");
 		var handler:Function = addAsync(getCustomConstructorCompleteHandler(mock));
 		mock.addEventListener(Event.COMPLETE, handler);
 		mock.run();
 	}
 	
-	private function getCustomConstructorCompleteHandler(mock:TestCaseMock):Function {
+	private function getCustomConstructorCompleteHandler(mock:TestCaseStub):Function {
 		return function():Void {
 			this.assertTrue("testMethod1Run", mock.testMethod1Run);
 			this.assertFalse("testMethod2Run", mock.testMethod2Run);
@@ -33,13 +33,13 @@ class asunit.framework.TestCaseTest extends TestCase {
 	}
 	
 	public function testCustomConstructor2():Void {
-		var mock:TestCaseMock = new TestCaseMock("testMethod1, testMethod3");
+		var mock:TestCaseStub = new TestCaseStub("testMethod1, testMethod3");
 		var handler:Function = addAsync(getCustomConstructor2CompleteHandler(mock));
 		mock.addEventListener(Event.COMPLETE, handler);
 		mock.run();
 	}
 	
-	private function getCustomConstructor2CompleteHandler(mock:TestCaseMock):Function {
+	private function getCustomConstructor2CompleteHandler(mock:TestCaseStub):Function {
 		return function():Void {
 			this.assertTrue("testMethod1Run", mock.testMethod1Run);
 			this.assertFalse("testMethod2Run", mock.testMethod2Run);
@@ -49,13 +49,13 @@ class asunit.framework.TestCaseTest extends TestCase {
 	}
 
 	public function testCustomConstructor3():Void {
-		var mock:TestCaseMock = new TestCaseMock("testMethod1,testMethod3");
+		var mock:TestCaseStub = new TestCaseStub("testMethod1,testMethod3");
 		var handler:Function = addAsync(getCustomConstructor3CompleteHandler(mock));
 		mock.addEventListener(Event.COMPLETE, handler);
 		mock.run();
 	}
 	
-	private function getCustomConstructor3CompleteHandler(mock:TestCaseMock):Function {
+	private function getCustomConstructor3CompleteHandler(mock:TestCaseStub):Function {
 		return function():Void {
 			this.assertTrue("testMethod1Run", mock.testMethod1Run);
 			this.assertFalse("testMethod2Run", mock.testMethod2Run);
@@ -65,13 +65,13 @@ class asunit.framework.TestCaseTest extends TestCase {
 	}
 
 	public function testCustomConstructor4():Void {
-		var mock:TestCaseMock = new TestCaseMock("testMethod1, testMethod2,testMethod3");
+		var mock:TestCaseStub = new TestCaseStub("testMethod1, testMethod2,testMethod3");
 		var handler:Function = addAsync(getCustomConstructor4CompleteHandler(mock));
 		mock.addEventListener(Event.COMPLETE, handler);
 		mock.run();
 	}
 
-	private function getCustomConstructor4CompleteHandler(mock:TestCaseMock):Function {
+	private function getCustomConstructor4CompleteHandler(mock:TestCaseStub):Function {
 		return function():Void {
 			this.assertTrue("testMethod1Run", mock.testMethod1Run);
 			this.assertTrue("testMethod2Run", mock.testMethod2Run);

@@ -35,20 +35,31 @@ package asunit.framework {
 			// and it will handle error states by failing loudly...
 			configureListeners(loader);
 			loader.load(request);
+			
+			// call super.run() to start network duration:
+			super.run();
 		}
 
-		protected override function completeHandler(event:Event):void {
+		protected override function setDataSource(event:Event):void {
 			// put a copy of the data into a member reference
-			dataSource = XML(event.target.data).copy();
-			// call super.run() to execute test methods
-			super.run();
+			if (event == null)
+			{
+				dataSource = null;
+			}
+			else
+			{
+				dataSource = XML(event.target.data).copy();
+			}
 		}
 		
 		protected override function setUp():void {
 			// create a new instance of the class under test
 			instance = new Object();
-			// copy the data into a member or method of the instance
-			instance.data = dataSource.copy();			
+			if (dataSource != null)	// i.e. there was no IOError or SecurityError
+			{
+				// copy the data into a member or method of the _instance
+				instance.data = dataSource.copy();
+			}
 		}
 		
 		protected override function tearDown():void {
@@ -57,12 +68,24 @@ package asunit.framework {
 		}
 		
 		public function testBookCount():void {
+			if (instance.data == null)
+			{
+				// there was an IOError or a SecurityError; can't do this test
+				return;
+			}
+
 			var data:XML = XML(instance.data);
 			var list:XMLList = data..book;
 			assertTrue("list.length() == " + list.length() + " (6?)", list.length() == 6);
 		}
 		
 		public function testOReillyBookCount():void {
+			if (instance.data == null)
+			{
+				// there was an IOError or a SecurityError; can't do this test
+				return;
+			}
+
 			var data:XML = XML(instance.data);
 			var list:XMLList = data..book.(@publisher == "O'Reilly Media");
 			assertTrue("list.length() == " + list.length() + " (2?)", list.length() == 2);			

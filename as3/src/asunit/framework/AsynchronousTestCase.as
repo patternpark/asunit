@@ -1,4 +1,6 @@
 package asunit.framework {
+	import asunit.errors.AbstractError;
+	
 	import flash.errors.IllegalOperationError;
 	import flash.events.*;
 	import flash.net.URLLoader;
@@ -61,7 +63,7 @@ package asunit.framework {
 
 		// override this method and call super.run() at the end
 		public override function run():void {
-			//throw new AbstractError("run", this);
+			throw new AbstractError("run() method must be overridden in class derived from AsynchronousTestCase");
 			
 			startNetworkDuration();
 		}

@@ -1,6 +1,5 @@
 package asunit.textui {
 	import asunit.errors.AssertionFailedError;
-	import asunit.framework.AsynchronousTestCase;
 	import asunit.framework.Test;
 	import asunit.framework.TestFailure;
 	import asunit.framework.TestListener;
@@ -189,15 +188,7 @@ package asunit.textui {
 		    println();
 		    var len:Number = testTimes.length;
 		    for(var i:Number = 0; i < len; i++) {
-		    	var testTime:Object = testTimes[i];
-		    	if (testTime.networkDuration)
-		    	{
-					println(testTime.duration + 'ms : ' + testTime.name + ' (network: ' + testTime.networkDuration + 'ms)');
-		    	}
-		    	else
-		    	{
-					println(testTime.duration + 'ms : ' + testTime.name);
-		    	}
+		    	println(testTimes[i].toString());
 		    }
 		}
 
@@ -255,15 +246,7 @@ package asunit.textui {
 		 */
 		public function endTest(test:Test):void {
 			var duration:Number = getTimer() - startTime;
-			var asyncTest:AsynchronousTestCase = test as AsynchronousTestCase;
-			if (asyncTest)
-			{
-				testTimes.push({name: test.getName(), duration: duration, networkDuration: asyncTest.networkDuration});
-			}
-			else
-			{
-				testTimes.push({name: test.getName(), duration: duration});
-			}
+			testTimes.push(TestTime.create(test, duration));
 		}
 	}
 }

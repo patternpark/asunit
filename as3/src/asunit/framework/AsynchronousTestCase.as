@@ -10,24 +10,28 @@ package asunit.framework {
 	 * Extend this class if you have a TestCase that requires the
 	 * asynchronous load of external data.
 	 */
-	public class AsynchronousTestCase extends TestCase {
+	public class AsynchronousTestCase extends TestCase implements Test {
 
-		protected static const DEFAULT_NETWORK_TIMEOUT:int = 30000;
+		protected static const DEFAULT_REMOTE_TIMEOUT:int = 30000;
 		private static const INVALID_TIME:int = -1;
 		
-		private var _networkStartTime:int;
+		private var _remoteStartTime:int;
 		
-		private var _networkDuration:int;
-		public function get networkDuration():int
+		private var _remoteDuration:int;
+		public function get remoteDuration():int
 		{
-			return _networkDuration;
+			return _remoteDuration;
+		}
+		public function remoteDurationIsValid():Boolean
+		{
+			return _remoteDuration != INVALID_TIME;
 		}
 		
-		private var _networkTimeout:int;
-		// see testNetworkDuration() below
-		public function set networkTimeout(ms:int):void
+		private var _remoteTimeout:int;
+		// see testRemoteDuration() below
+		public function set remoteTimeout(ms:int):void
 		{
-			_networkTimeout = ms;
+			_remoteTimeout = ms;
 		}
 
 		private var _ioErrorExpected:Boolean;
@@ -44,10 +48,10 @@ package asunit.framework {
 		
 		public function AsynchronousTestCase(testMethod:String = null) {
 			super(testMethod);
-			_networkStartTime = INVALID_TIME;
+			_remoteStartTime = INVALID_TIME;
 			
 			// set defaults for user-configurable properties:
-			_networkTimeout = DEFAULT_NETWORK_TIMEOUT;
+			_remoteTimeout = DEFAULT_REMOTE_TIMEOUT;
 			_ioErrorExpected = false;
 			_securityErrorExpected = false;
 		}
@@ -61,57 +65,64 @@ package asunit.framework {
 			loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
 		}
 
-		// override this method and call super.run() at the end
+		// in a subclass, you should override this method and call super.run() at the end
 		public override function run():void {
-			throw new AbstractError("run() method must be overridden in class derived from AsynchronousTestCase");
-			
-			startNetworkDuration();
+			if ((this as Object).constructor == AsynchronousTestCase)
+			{
+				throw new AbstractError("run() method must be overridden in class derived from AsynchronousTestCase");
+			}
+	
+			startRemoteDuration();
 		}
 
-		private final function startNetworkDuration():void {
-			_networkStartTime = getTimer();
+		private final function startRemoteDuration():void {
+			_remoteStartTime = getTimer();
 		}
 
-		private final function setNetworkDuration():void {
-			if (_networkStartTime == INVALID_TIME)
+		private final function setRemoteDuration():void {
+			if (_remoteStartTime == INVALID_TIME)
 			{
 				// I guess you overrode run() in a subclass without calling super.run()
-				_networkDuration = INVALID_TIME;
+				_remoteDuration = INVALID_TIME;
 			}
 			else
 			{
-				_networkDuration = getTimer() - _networkStartTime;
+				_remoteDuration = getTimer() - _remoteStartTime;
 			}
 		}
 
 		protected final function completeHandler(event:Event):void {
-			setNetworkDuration();
+			setRemoteDuration();
 			setDataSource(event);
-			// call super.run() to execute test methods
+			// call super.run() to execute test methods:
 			runTests();
 		}
 		
 		// override this method to put a copy of the data into a member reference
 		protected function setDataSource(event:Event):void {
-			//throw new AbstractError("setDataSource", this);
+			throw new AbstractError("setDataSource must be overridden in class derived from AsynchronousTestCase");
 		}
-
+		
+		// this method gives derived classes access to TestCase.run()
 		protected final function runTests():void {
 			super.run();
 		}
 		
 		// TODO: add support for failing status events...
 		protected function httpStatusHandler(event:HTTPStatusEvent):void {
+			// I believe this is useless except in AIR.
 		}
 
 		protected final function ioErrorHandler(event:IOErrorEvent):void {
+			result.startTest(this);
 			if (_ioErrorExpected == false)
 			{
 				// access is authorized and we didn't get in: log the error
 				result.addError(this, new IllegalOperationError(event.text));
 			}
-			setDataSource(null);
-			runTests();
+			setRemoteDuration();
+			testRemoteDuration();
+			dispatchEvent(new Event(Event.COMPLETE));
 		}
 
 		protected function openHandler(event:Event):void {
@@ -121,24 +132,30 @@ package asunit.framework {
 		}
 
 		protected final function securityErrorHandler(event:SecurityErrorEvent):void {
+			result.startTest(this);
 			if (_securityErrorExpected == false)
 			{
 				// access is authorized and we didn't get in: log the error
-				result.addError(this, new IllegalOperationError(event.toString()));
+				result.addError(this, new IllegalOperationError(event.text));
 			}
-			setDataSource(null);
-			runTests();
+			setRemoteDuration();
+			testRemoteDuration();
+			dispatchEvent(new Event(Event.COMPLETE));
 		}
 
-		public function testNetworkDuration():void {
-			if (_networkDuration > _networkTimeout)
+		public function testRemoteDuration():void {
+			if (!remoteDurationIsValid())
 			{
-				fail("network communication took too long: " + _networkDuration/1000 + " seconds.\n" + this.toString());
+				return;
+			}
+			if (_remoteDuration > _remoteTimeout)
+			{
+				result.addError(this, new IllegalOperationError("remote communication took too long: " + _remoteDuration/1000 + " seconds.\n" + this.toString()));
 			}
 		}
 
 		public function testUnauthorizedAccess():void {
-			if (_securityErrorExpected == true)
+			if (_securityErrorExpected || _ioErrorExpected)
 			{
 				fail("unauthorized access permitted (expected no access)\n" + this.toString());
 			}

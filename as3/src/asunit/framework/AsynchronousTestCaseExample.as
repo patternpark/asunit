@@ -1,7 +1,7 @@
 package asunit.framework {
-	import flash.net.URLRequest;
-	import flash.net.URLLoader;
 	import flash.events.*;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
 	
 	/**
 	 * This example is built on the following mock data:
@@ -68,24 +68,12 @@ package asunit.framework {
 		}
 		
 		public function testBookCount():void {
-			if (instance.data == null)
-			{
-				// there was an IOError or a SecurityError; can't do this test
-				return;
-			}
-
 			var data:XML = XML(instance.data);
 			var list:XMLList = data..book;
 			assertTrue("list.length() == " + list.length() + " (6?)", list.length() == 6);
 		}
 		
 		public function testOReillyBookCount():void {
-			if (instance.data == null)
-			{
-				// there was an IOError or a SecurityError; can't do this test
-				return;
-			}
-
 			var data:XML = XML(instance.data);
 			var list:XMLList = data..book.(@publisher == "O'Reilly Media");
 			assertTrue("list.length() == " + list.length() + " (2?)", list.length() == 2);			

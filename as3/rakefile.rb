@@ -1,7 +1,7 @@
 require 'sprout'
 sprout 'as3'
 
-ASUNIT_VERSION = '1.8'
+ASUNIT_VERSION = '2.8'
 
 ##########################################
 # To build from this file, install Ruby (http://ruby-lang.org)

@@ -1,6 +1,8 @@
 require 'sprout'
 sprout 'as3'
 
+ASUNIT_VERSION = '1.8'
+
 ##########################################
 # To build from this file, install Ruby (http://ruby-lang.org)
 # and RubyGems (http://rubygems.org/), then run:
@@ -34,6 +36,19 @@ end
 
 desc "Compile and run the test harness"
 flashplayer :run => 'bin/AsUnitRunner.swf'
+
+##########################################
+# Package framework ZIPs and SWCs
+
+archive = "bin/asunit3.#{ASUNIT_VERSION}.zip"
+
+zip archive do |t|
+  t.input = 'src/asunit'
+  puts "Created zip archive at: #{archive}"
+end
+
+desc "Create zip archives"
+task :zip => archive
 
 ##########################################
 # Set up task wrappers

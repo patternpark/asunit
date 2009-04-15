@@ -238,6 +238,100 @@ package asunit.framework {
 			failNotEquals(message, expected, actual);
 		}
 
+		/**
+		 * Asserts that two arrays have the same length and contain the same
+		 * objects in the same order. If the arrays are not equal by this
+		 * definition an AssertionFailedError is thrown with the given message.
+		 */
+		static public function assertEqualsArrays(...args:Array):void {
+			var message:String;
+			var expected:Array;
+			var actual:Array;
+
+			if(args.length == 2) {
+				message = "";
+				expected = args[0];
+				actual = args[1];
+			}
+			else if(args.length == 3) {
+				message = args[0];
+				expected = args[1];
+				actual = args[2];
+			}
+			else {
+				throw new IllegalOperationError("Invalid argument count");
+			}
+			
+			if (expected == null && actual == null) {
+				return;
+			}
+			if ((expected == null && actual != null) || (expected != null && actual == null)) {
+				failNotEquals(message, expected, actual);
+			}
+			// from here on: expected != null && actual != null
+			if (expected.length != actual.length) {
+				failNotEquals(message, expected, actual);
+			}
+			for (var i : int = 0; i < expected.length; i++) {
+				assertEquals(expected[i], actual[i]);
+			}
+		}
+
+		/**
+		 * Asserts that two arrays have the same length and contain the same
+		 * objects. The order of the objects in the arrays is ignored. If they
+		 * are not equal by this definition an AssertionFailedError is thrown
+		 * with the given message.
+		 */
+		static public function assertEqualsArraysIgnoringOrder(...args:Array):void {
+			var message:String;
+			var expected:Array;
+			var actual:Array;
+
+			if(args.length == 2) {
+				message = "";
+				expected = args[0];
+				actual = args[1];
+			}
+			else if(args.length == 3) {
+				message = args[0];
+				expected = args[1];
+				actual = args[2];
+			}
+			else {
+				throw new IllegalOperationError("Invalid argument count");
+			}
+
+			if (expected == null && actual == null) {
+				return;
+			}
+			if ((expected == null && actual != null) || (expected != null && actual == null)) {
+				failNotEquals(message, expected, actual);
+			}
+			// from here on: expected != null && actual != null
+			if (expected.length != actual.length) {
+				failNotEquals(message, expected, actual);
+			}
+			for (var i : int = 0; i < expected.length; i++) {
+				var foundMatch : Boolean = false;
+				var expectedMember : Object = expected[i];
+				for (var j : int = 0; j < actual.length; j++) {
+					var actualMember : Object = actual[j];
+					try {
+						assertEquals(expectedMember, actualMember);
+						foundMatch = true;
+						break;
+					}
+					catch (e : AssertionFailedError) {
+						//  no match, try next
+					}
+				}
+				if (!foundMatch) {
+					failNotEquals("Found no match for " + expectedMember + ";", expected, actual);
+				}
+			}
+		}
+
 
 		static private function failSame(message:String):void {
 			var formatted:String = "";

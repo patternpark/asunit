@@ -1,7 +1,0 @@
-
-h1. AsUnit 2
-
-This build of the AsUnit framework is intended to work with ActionScript 2 as it appeared in Flash Player 6.
-
-ActionScript 2 was quickly improved for Flash Players 7, 8 and Flash Lite 2.0, and if you're developing for those platforms, please use the as25 branch found nearby, as that framework is much more robust and mature.
-

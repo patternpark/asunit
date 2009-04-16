@@ -1,2 +1,0 @@
-class asunit.flash.errors.IllegalOperationError extends Error {		public var fqcn:String = "asunit.flash.errors.IllegalOperationError";	public function IllegalOperationError(message : String) {		super(message);		name = "IllegalOperationError";	}
-}

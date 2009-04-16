@@ -1,0 +1,281 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>AsUnit</title>
+<link href="css/AsUnit.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<center>
+	<div class="content">
+
+	<!-- Header -->
+	<div id="header">
+
+		<img src="img/AsUnitLogo.gif" alt="AsUnit Logo" />
+
+		<br />
+		<img src="img/TagLine.gif" alt="The only open-source Unit Test Framework that supports testing in Flash Players 6, 7, 8 and 8.5" />
+	</div>
+
+	<div class="success-bar"></div>
+
+	<!-- Introduction -->
+	<div id="section-description">AsUnit can help you build automated test fixtures for SWF applications that are built in almost any development environment, and deployed to almost any modern Flash Player. AsUnit is the primary means by which developers can truly implement <a href="http://en.wikipedia.org/wiki/Test-driven_development">Test-Driven development</a> practices in ActionScript projects.
+	</div>
+
+	<br />
+	<center>
+	<table id="badges">
+		<tr>
+			<td class="badge">
+			<a href="#getStarted">
+				<img class="badgeLabel" src="img/GetStartedText.gif" alt="Get Started" /><br />
+				<img class="badge" src="img/GetStarted.gif" />
+
+			</a>
+
+			</td>
+			<td class="badge">
+			<a href="#getInvolved">
+				<img class="badgeLabel" src="img/GetInvolvedText.gif" alt="Get Involved" /><br />
+				<img class="badge" src="img/GetInvolved.gif" />
+			</a>
+			</td>
+
+			<td class="badge">
+			<a href="#learnMore">
+
+				<img class="badgeLabel" src="img/LearnMoreText.gif" alt="Learn More" /><br />
+				<img class="badge" src="img/LearnMore.gif" />
+			</a>
+			</td>
+		</tr>
+	</table>
+
+	</center>
+
+	<!-- AsUnit Questions -->
+
+	<div id="questions" class="success-bar"></div>
+	<div class="section">
+		<center>
+			<table>
+				<tr>
+					<td class="question">What exactly is AsUnit?</td>
+
+					<td class="answer"><p>At it's most basic, AsUnit is simply some ActionScript classes that make it easier for you to build and execute automated tests for your applications. This simple, lightweight component is known as the <i>AsUnit <a href="#getStarted">framework</a></i>, and it currently supports ActionScript 2.0 and ActionScript 3.0 development.</p>
+
+					<p>The AsUnit <i><a href="#getStarted">framework</a></i> is deployed along with a variety of additional tools that we believe make adding (and maintaining) features much simpler.</p>
+					<p> These tools include:
+					<ul>
+
+						<li><strong>XUL UI:</strong> This is a complete, <i>(soon-to-be cross-platform)</i> desktop application written entirely in <a href="http://xulplanet.com/">XUL</a> that simplifies the work involved in creating classes, <a href="http://en.wikipedia.org/wiki/Test_case">test cases</a>, <a href="http://en.wikipedia.org/wiki/Test_suite">test suites</a>, and <a href="http://en.wikipedia.org/wiki/Mock_object">mock objects</a>. The XUL UI includes everything found in the <a href="#getStarted">framework</a> package.</li>
+
+						<li><strong>MXP:</strong> This is a self-extracting Macromedia extension that will install AsUnit directly into Flash MX 2004 and/or Flash 8 Authoring. This extension requres the <a href="http://www.macromedia.com/exchange/em_download/">Macromedia Extension Manager</a>.</li>
+						<li><a href="files/releases/SwfUi-20060302.swf" alt="Right-Click and choose 'save target' to download the Ui"><strong>SWF UI:</strong></a> This is a simple SWF file that can be run from anywhere on your system <i>(including the desktop or the browser)</i> to present test results from an ActionScript 2.0 application that has implemented the ActionScript 2.0 AsUnit <a href="#getStarted">framework</a>. <i>(You can right-click and save this link to your desktop if you want to run the UI locally)</i></li>
+
+					</ul>
+					</p>
+					</td>
+				</tr>
+				<tr>
+					<td class="question">Who uses it?</td>
+					<td class="answer"><p>Everyone from one-person shops all the way up to companies like <a href="http://developer.yahoo.com/">Yahoo!</a> are using AsUnit every day. At the time of this writing (March 2006), AsUnit has been downloaded almost 7,000 times.</p>
+
+					</td>
+				</tr>
+
+				<tr>
+					<td class="question">Do I need anything else?</td>
+					<td class="answer"><p>Yes, you will need:
+					<ul>
+					<li><strong>OOP:</strong> Basic comprehension of <a href="http://en.wikipedia.org/wiki/Object_oriented_programming">Object-Oriented Programming</a> principles and how they apply to ActionScript (2.0 or 3.0).</<br />
+
+					<li><strong>Some flavor of text editor:</strong> Flash MX 2004, <a href="http://www.macromedia.com/software/flash/flashpro/">Flash 8</a>, <a href="http://labs.macromedia.com/">Flex Builder</a>, <a href="http://fdt.powerflasher.com/flashsite/flash.htm">FDT</a>, <a href="http://sourceforge.net/projects/aseclipseplugin/">ASDT</a>, <a href="http://www.bomberstudios.com/sciteflash/index.php">Scite|Flash</a>, <a href="http://www.vim.org/">VIM</a>, <a href="http://www.gnu.org/software/emacs/emacs.html">Emacs</a>, <a href="http://macromates.com/">TextMate</a> or anything else that lets you edit text files and doesn't make you <a href="http://video.google.com/videoplay?docid=6330278913814994">too angry</a>.</li>
+
+					<li><strong>An ActionScript Compiler: </strong> <a href="http://mtasc.org/">MTASC</a>, <a href="http://labs.macromedia.com">MXMLC</a>, or the <a href="http://www.macromedia.com/software/flash/flashpro">Flash IDE</a> of your choosing (2004 or 8.0)</li>
+					<li><strong>AsUnit Framework: </strong> If you are compiling with ActionScript 2.0, add the "as2" package to the class path of your compiler, If you are compiling ActionScript 3.0, add the "as3" package to the class path of your compiler. </li>
+
+					</p>
+
+					</td>
+				</tr>
+			</table>
+		</center>
+	</div>
+
+	<!-- Get Started -->
+	<div id="getStarted" class="success-bar"></div>
+
+	<div class="section">
+
+		<table>
+		<tr>
+			<td class="question">Get Started</td>
+			<td class="answer"><p>Please read each of the following items as you may want to download more than one depending on your system configuration and project needs.</p>
+			</td>
+		</tr>
+
+		</table>
+
+		<center>
+		<table id="badges">
+			<tr>
+				<td class="badge">
+				<a href="http://sourceforge.net/project/showfiles.php?group_id=108947&package_id=208528">
+					<img id="frameworkDownload" class="badgeLabel" src="img/DownloadFrameworkText.gif" alt="Download the Framework" /><br />
+					<img class="badge" src="img/DownloadFramework.gif" />
+
+					<p class="badge">You use a simple text editor and compiler. You know what a class path is and you don't want to be bothered with all the fluff. You are running on <strong>Windows, Mac, or *nix</strong>.</p>
+
+				</a>
+				</td>
+				<td class="badge">
+				<a href="http://sourceforge.net/project/showfiles.php?group_id=108947&package_id=168969">
+					<img class="badgeLabel" src="img/DownloadXULUIText.gif" alt="Download the XULUI" /><br />
+					<img class="badge" src="img/DownloadXULUI.gif" />
+
+					<p class="badge">You use <strong>Eclipse</strong> or some other IDE, you want help building classes, test cases and test suites. You are writing <strong style="white-space:nowrap">ActionScript 2.0 or 3.0</strong>.</p><p class="badge">You are running <strong>Windows</strong>. </p>
+
+				</a>
+				</td>
+				<td class="badge">
+
+				<a href="http://prdownloads.sourceforge.net/asunit/FlashUi.mxp?download">
+					<img class="badgeLabel" src="img/DownloadMXPText.gif" alt="Download the MXP" /><br />
+					<img class="badge" src="img/DownloadMXP.gif" />
+					<p class="badge">You use Flash Authoring. You write <strong>ActionScript 2.0</strong>. You want to get up and running quickly. You are running on <strong>Windows or Macintosh</strong></p>
+
+				</a>
+				</td>
+
+			</tr>
+			<tr>
+				<td class="badge-footer"></td>
+				<td class="badge-footer"><i>*This installer includes the framework</i></td>
+				<td class="badge-footer"><i>*This installer includes the framework</i></td>
+			</tr>
+
+			<tr>
+
+				<td class="badge-footer"></td>
+				<td class="badge-footer">*OSX users can <a href="http://aralbalkan.com/798">grab this build</a><br /><i>(Generously contributed by Aral Balkan)</i></td>
+				<td class="badge-footer"></td>
+			</tr>
+		</table>
+
+		</center>
+
+	</div>
+
+	<!-- Get Started -->
+	<div id="getInvolved" class="success-bar"></div>
+	<div class="section">
+		<div id="section-description">
+			<table>
+				<tr>
+
+					<td class="question">Get Involved</td>
+					<td class="answer">
+					<p>AsUnit was first released in March of 2004 by <a href="http://www.lukebayes.com">Luke Bayes</a> and <a href="http://www.alimills.com">Ali Mills</a> of <a href="http://www.patternpark.com">Pattern Park</a>. Since then, many people have contributed to the project and you can be one of them.</p>
+
+					<p>One of the simplest and most helpful ways you can get involved is by <a href="http://lists.sourceforge.net/lists/listinfo/asunit-users">joining our mailing list</a> and asking questions about things that seem unclear. Your questions help us figure out what to focus on next.</p>
+
+		<p>If you're interested in contributing some real time to the project, please check out the to-do lists and writeboards at our <a href="http://patternpark.projectpath.com/projects/333541/todos">basecamp</a> site.</p>
+		<p>Username: anonymous<br />
+		Password: anonymous</p>
+
+		</p>
+					</td>
+				</tr>
+
+				<tr>
+					<td class="question">Get More Involved</td>
+					<td class="answer"><p>If you are interested in becoming a more serious contributor, please feel free to start <a href="http://svn.sourceforge.net/viewcvs.cgi/asunit/">browsing the Subversion repository</a> or <a href="http://sourceforge.net/svn/?group_id=108947">checking out the sources directly</a>.</p>
+
+					<p>If you're going to pull down the source code, be aware that it's pretty large. You would probably do well to grab only the module or folders that interest you.</p>
+					<ul>
+
+						<li><strong><a href="http://svn.sourceforge.net/viewcvs.cgi/asunit/trunk/comm/">comm</a>:</strong> Communications sources are in here. This web site, our <a href="http://asunit.sourceforge.net/AsUnitTrailer.swf" alt="right-click to download this">trailer for being Flashforward film festival finalists</a>, T-shirt art, logos, etc... </li>
+						<li><strong><a href="http://svn.sourceforge.net/viewcvs.cgi/asunit/trunk/flashui">flashui</a>:</strong> The files required to build the MXP file for the Flash IDE extension are in here. <i>These files are pretty stale at this point and probably won't build easily without some human intervention. It would be nice if someone could write a shell script that copies requisite framework sources into the MXI's expected directories, builds the MXP and then removes the copied sources?</i></li>
+
+						<li><strong><a href="http://svn.sourceforge.net/viewcvs.cgi/asunit/trunk/framework">framework</a>:</strong> This module should house the absolute minimal files for getting AsUnit to work manually across platforms. This is the tiny foundation upon which all that is AsUnit is built.</li>
+
+						<li><strong><a href="http://svn.sourceforge.net/viewcvs.cgi/asunit/trunk/installers">installers</a>:</strong> Right now, the win installer is stored here, but for the time being, <a href="http://aralbalkan.com/798">Aral is hosting the Mac build</a>. </li>
+						<li><strong><a href="http://svn.sourceforge.net/viewcvs.cgi/asunit/trunk/swfui">swfui</a>:</strong> The source files required for the SWF-based AsUnit Ui that has been so popular with the AS 2.0 crowd.</li>
+
+						<li><strong><a href="http://svn.sourceforge.net/viewcvs.cgi/asunit/trunk/xului">xului</a>:</strong> The source and build files associated with the xului. <i>The files required to build the existing XUL UI installer are currently hiding in the xului/exploration package. We still need to clean these up and resolve some issues before publishing out to the actual installers module.</i></li>
+
+					</ul>
+					<p>Once you get the appropriate sources down to your disk, please make sure you're up to date with the head revision before you begin making modifications. You can then easily make the changes you want, and when you're done - create a patch file directly from subversion. You can then easily send us your patch file in order to simplify our integration process. If you find yourself sending us patches more than once or twice, we will likely promote you to developer on the project and just get you write access to SVN. </p>
+					<p><strong>Any contributions will be greatly appreciated!</strong></p>
+
+					</td>
+					</tr>
+				<tr>
+					<td class="question">Contributors</td>
+
+					<td class="answer"><p>We would like to give the following contributors special recognition for their efforts:</p>
+					<ul>
+			<li><a href="http://www.flashant.org/">Aral</a> <a href="http://www.osflash.org">Balkan</a></li>
+
+			<li><a href="http://www.caleb.org">Caleb Adam Haye</a></li>
+			<li><a href="http://www.danieldura.com/">Daniel Dura</a></li>
+			<li><a href="http://www.v-i-a.net/">Eric Priou</a></li>
+
+			<li><a href="http://www.bit-101.com/blog/">Keith Peters</a></li>
+			<li><a href="http://collcoll.com/">Mark Daggett</a></li>
+			<li><a href="http://www.robertpenner.com/">Robert Penner</a></li>
+
+			<li><a href="http://www.imagerator.com">Tibor Claassen</a></li>
+			</ul>
+					</td>
+				</tr>
+
+			</table>
+	</div>
+
+	<!-- Learn More -->
+
+	<div id="learnMore" class="success-bar"></div>
+	<div class="section">
+			<table>
+				<tr>
+					<td class="question">Learn More
+					</td>
+
+					<td class="answer">
+<p>Check out the following resources to learn more about AsUnit in particular and <a href="http://en.wikipedia.org/wiki/Unit_test">unit testing</a> in general.</p>
+
+			<ul>
+				<li><a href="http://marstonstudio.com/index.php/2007/07/28/asunit-testing-with-flash-cs3-and-actionscript-3/">AsUnit 3 with CS 3 Tutorial</a> Thanks to Jonathan Marston!</li>
+				<li><a href="docs/asunit3">AsUnit 3 (ActionScript 3) AsDoc output</a> (Thanks to Michael Baird for packaging these)</li>
+				<li><a href="http://www.asserttrue.com/articles/tag/asunit">AssertTrue</a> is the official destination for all news and articles related to AsUnit.</li>
+				<li><a href="http://svn.sourceforge.net/viewcvs.cgi/*checkout*/asunit/trunk/comm/marketing/trailer/fla/AsUnit-TechnicalMerit-Trailer.swf">The trailer that was played at the Flashforward film festival</a> Thanks to all of you - AsUnit was a finalist in the Technical Merit category!</li>
+				<li><a href="http://www.v-i-a.net/blog/mt-search.cgi?IncludeBlogs=1&search=asunit"><strong>Unit Testing en ActionScript 1-4</strong> <i>(French)</i></a><i> by <a href="http://www.v-i-a.net/">Eric Priou</a></i></li>
+
+				<li><a href="http://flashant.org/index.php?p=375&more=1&c=1"><strong>Unit Testing with FAMES</strong> <i>(and AsUnit)</i></a> <i>by <a href="http://flashant.org/">Aral Balkan</a></i></li>
+
+				<li><a href="http://www.collcoll.com/content/uploads/Unit-Testing-with-ASUNIT.pdf"><strong>Unit Testing with AsUnit</strong></a><i> by <a href="http://collcoll.com/">Mark Daggett</a></i></li>
+				<!--
+				<li><a href="http://www.bit-101.com/blog/archives/000152.html"><strong>TestCase/Suite templates for FAMES development</strong></a> by <a href="http://www.bit-101.com/blog/">Keith Peters</a></li>
+				-->
+
+			</ul>
+					</td>
+				</tr>
+			</table>
+			<p>We recognize that this section is in desparate need of more current content, if you are interested in contributing some instructional material, please <a href="http://lists.sourceforge.net/lists/listinfo/asunit-users">contact us</a> to discuss.</p>
+		</div>
+
+	</div>
+
+
+	<div class="success-bar"></div>
+
+
+	</div>
+</center>
+</body>
+</html>

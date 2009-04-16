@@ -1,0 +1,86 @@
+
+body {
+	font-family: verdana, "Lucida Grande", arial, helvetica, sans-serif;
+	color: #333;
+}
+
+.content {
+	padding:10px;
+	margin: 10px;
+	min-width:650px;
+	max-width:1024px;
+	text-align: center;
+}
+
+#header {
+	padding:20px;
+	text-align: center;
+}
+
+.section-header {
+	text-align:left;
+}
+
+.success-bar {
+	background: #0F0;
+	border: solid 1px #666;
+	margin:10px 0px 10px 0px;
+	font-size: 1px;
+	padding:0px;
+	height:3px;
+}
+
+a:hover {
+	background:#FFFF66;
+}
+
+#section-description {
+}
+
+#badges {
+	text-align:center;
+}
+
+#spacer {
+	width:100%;
+}
+
+.badgeLabel {
+	border:none;
+}
+
+td.badge, div.badge, a.badge {
+	padding:5px;
+	vertical-align:top;
+}
+
+td.badge:hover, div.badge:hover, a.badge:hover {
+	background:#FFFF66;
+}
+
+img.badge {
+	background:#FFF;
+	margin:5px;
+	border:solid 2px #666;
+}
+
+p.badge, .badge-footer {
+	margin:0px;
+	font-size:12px;
+}
+
+.question {
+	padding:10px 0px 10px 0px;
+	text-align:left;
+	vertical-align:top;
+	width:300px;
+	font-size:28px;
+}
+
+li {
+	margin:5px;
+}
+
+.answer {
+	text-align:left;
+}

@@ -1,7 +1,0 @@
-
-h1. AsUnit is the only unit test framework that supports Flash Players 6, 7, 8, 9, 10, Flash Lite, Flex and Adobe AIR
-
-AsUnit is compatible with any ActionScript compiler, runtime or IDE. This includes MTASC, Flash MX, Flash MX 2004, Flash 8, Flash CS3, Flash CS4, Flex Builder 1.5, Flex Builder 2.0, Flex Builder 3.0, Flash Lite 1.0, Flash Lite 2.0, and even Adobe AIR.
-
-
-

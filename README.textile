@@ -2,5 +2,5 @@ h1. AsUnit Web Site
 
 This git branch contains the source code and related files for the AsUnit web site.
 
-This is the website that you see when you go to "asunit.com":http://asunit.com. This site automatically published by "Github":http://github.com whenever a change is checked in, so the version seen here is always the most current version that is live.
+This is the website that you see when you go to "asunit.com":http://asunit.com. This site is automatically published by "Github":http://github.com whenever a change is checked in, so the version checked into this branch is always the most current version that is live.
 

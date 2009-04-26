@@ -16,7 +16,7 @@ package asunit.textui {
     import flash.display.DisplayObject;
 
     /**
-    *   The base class for ActionScript 3.0 test applications.
+    *   The base class for ActionScript 3.0 test harness.
     *   
     *   The <code>TestRunner</code> should be extended by your
     *   concrete runner for your project.
@@ -42,6 +42,8 @@ package asunit.textui {
     *       }
     *   }
     *   </pre>
+    *   
+    *   @includeExample TestRunnerExample.as
     *   
     *   @see asunit.textui.FlexRunner
     *   @see asunit.textui.AirRunner
@@ -84,10 +86,29 @@ package asunit.textui {
         }
 
         /**
-         * Starts a test run based on the TestCase/TestSuite provided
-         * Create a new custom class that extends TestRunner
-         * and call start(TestCaseClass) from within the
-         * constructor.
+         *  Starts a test run based on the <code>TestCase</code> or <code>TestSuite</code> provided.
+         *  
+         *  If a concrete <code>TestCase</code> is provided to the <code>start</code> method, 
+         *  you can also provide the string name of a single test method to execute.
+         *  
+         *  This will run the <code>TestCase</code> <code>setUp</code> method, then
+         *  the test method name that was provided, and will <em>not</em> run <code>tearDown</code>.
+         *  
+         *  This is a great way to build visual components in isolation and verify that they
+         *  behave as expected.
+         *  
+         *  @example The start method can accept a concrete test case and test method name:
+         *  <listing>
+         *  start(MyTestCase, 'myTestMethod');
+         *  </listing>
+         *  
+         *  @example The start method usually accepts a test suite that includes all of your
+         *  test methods.
+         *  <listing>
+         *  start(AllTests, null, TestRunner.SHOW_TRACE);
+         *  </listing>
+         *  
+         *  @see TestSuite
          */
         public function start(testCase:Class, testMethod:String = null, showTrace:Boolean = false):TestResult {
 //            fscommand("showmenu", "false");

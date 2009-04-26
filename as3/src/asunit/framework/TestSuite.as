@@ -6,16 +6,12 @@ package asunit.framework {
     import flash.events.Event;
     
     /**
-     * A <code>TestSuite</code> is a <code>Composite</code> of Tests.
-     * It runs a collection of test cases. Here is an example using
-     * the dynamic test definition.
-     * <pre>
-     * TestSuite suite = new TestSuite();
-     * suite.addTest(new MathTest());
-     * suite.addTest(new OtherTest());
-     * </pre>
-     * @see Test
-     * @see TestCase
+     *  A <code>TestSuite</code> is a <code>Composite</code> of Tests.
+     *  
+     *  @see Test
+     *  @see TestCase
+     *  
+     *  @includeExample TestSuiteExample.as
      */
     public class TestSuite extends TestCase implements Test {
         private var fTests:Array = new Array();
@@ -33,7 +29,7 @@ package asunit.framework {
         }
         
         /**
-         * Adds a test to the suite.
+         * Adds a test instance to the suite.
          */
         public function addTest(test:Test):void {
             fTests.push(test);

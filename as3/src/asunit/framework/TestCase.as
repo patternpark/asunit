@@ -47,6 +47,20 @@ package asunit.framework {
      *        assertEquals(5, result);
      *    }
      * </listing>
+     *  
+     *  There are three common types of test cases:
+     *  
+     *  <ol>
+     *  <li>Simple unit test</li>
+     *  <li>Visual integration test</li>
+     *  <li>Asynchronous test</li>
+     *  </ol>
+     *  
+     *  @includeExample MathUtilTest.as
+     *  @includeExample ComponentTestIntroduction.as
+     *  @includeExample ComponentUnderTest.as
+     *  @includeExample ComponentTestExample.as
+     *  @includeExample AsynchronousTestMethodExample.as
      */
     public class TestCase extends Assert implements Test {
         protected static const PRE_SET_UP:int        = 0;

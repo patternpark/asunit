@@ -113,14 +113,14 @@ package asunit.framework {
          *  It automatically provides useful information about what
          *  the failing values were.
          *
-         *  <pre>
+         *  <listing>
          *  public function testNames():void {
          *      var name1:String = "Federico Aubele";
          *      var name2:String = "Frederico Aubele";
          *      
          *      assertEquals(name1, name2);
          *  }
-         *  </pre>
+         *  </listing>
          */
         static public function assertEquals(...args:Array):void {
             var message:String;

@@ -20,7 +20,7 @@ package asunit.framework {
      * Each test runs in its own fixture so there
      * can be no side effects among test runs.
      * Here is an example:
-     * <pre>
+     * <listing>
      * public class MathTest extends TestCase {
      *      private var value1:Number;
      *      private var value2:Number;
@@ -28,25 +28,25 @@ package asunit.framework {
      *      public function MathTest(methodName:String=null) {
      *         super(methodName);
      *      }
-     *
+     * 
      *      override protected function setUp():void {
      *         super.setUp();
      *         value1 = 2;
      *         value2 = 3;
      *      }
      * }
-     * </pre>
+     * </listing>
      *
      * For each test implement a method which interacts
      * with the fixture. Verify the expected results with assertions specified
      * by calling <code>assertTrue</code> with a boolean, or <code>assertEquals</code>
      * with two primitive values that should match.
-     * <pre>
+     * <listing>
      *    public function testAdd():void {
      *        var result:Number = value1 + value2;
      *        assertEquals(5, result);
      *    }
-     * </pre>
+     * </listing>
      */
     public class TestCase extends Assert implements Test {
         protected static const PRE_SET_UP:int        = 0;
@@ -338,7 +338,7 @@ package asunit.framework {
         *   test method, and will block execution until each handler has returned.
         *   
         *   Following is an example of how to use the <code>addAsync</code> feature:
-        *   <pre>
+        *   <listing>
         *   public function testDispatcher():void {
         *       var dispatcher:IEventDispatcher = new EventDispatcher();
         *       // Subscribe to an event by sending the return value of addAsync:
@@ -347,16 +347,16 @@ package asunit.framework {
         *           assertEquals(34, dispatcher.value);
         *       }));
         *   }
-        *   </pre>
+        *   </listing>
         *   
         *   If you just want to verify that a particular event is triggered, you don't
         *   need to provide a handler of your own, you can do the following:
-        *   <pre>
+        *   <listing>
         *   public function testDispatcher():void {
         *       var dispatcher:IEventDispatcher = new EventDispatcher();
         *       dispatcher.addEventListener(Event.COMPLETE, addAsync());
         *   }
-        *   </pre>
+        *   </listing>
         *   
         *   If you have a series of events that need to happen, you can generally add
         *   the async handler to the last one.
@@ -425,7 +425,7 @@ package asunit.framework {
         * children will be subsequently removed, even when tests fail.
         * 
         * Here is an example of the <code>addChild</code> method:
-        * <pre>
+        * <listing>
         *   private var instance:MyComponent;
         * 
         *   override protected function setUp():void {
@@ -443,7 +443,7 @@ package asunit.framework {
         *   public function testParam():void {
         *       assertEquals(34, instance.value);
         *   }
-        * </pre>
+        * </listing>
         **/
         protected function addChild(child:DisplayObject):DisplayObject {
             return getContext().addChild(child);

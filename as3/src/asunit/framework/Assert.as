@@ -84,14 +84,14 @@ package asunit.framework {
         *  Asserts that the provided block throws an exception that matches
         *  the type provided.
         *
-        *  <pre>
+        *  <listing>
         *  public function testFailingCode():void {
         *     assertThrows(CustomError, function():void {
         *           var instance:Sprite = new Sprite();
         *           instance.callMethodThatThrows();
         *     });
         *  }
-        *  </pre>
+        *  </listing>
         **/
         static public function assertThrows(errorType:Class, block:Function):void {
             try {

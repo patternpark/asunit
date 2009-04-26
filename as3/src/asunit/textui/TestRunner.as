@@ -25,7 +25,7 @@ package asunit.textui {
     *   extend the <code>FlexRunner</code>
     *   
     *   Your concrete runner will usually look like the following:
-    *   <pre>
+    *   <listing>
     *   package {
     *       import asunit.textui.TestRunner;
     *   
@@ -41,7 +41,7 @@ package asunit.textui {
     *           }
     *       }
     *   }
-    *   </pre>
+    *   </listing>
     *   
     *   @includeExample TestRunnerExample.as
     *   

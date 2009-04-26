@@ -22,62 +22,31 @@ package asunit.framework {
      * Here is an example:
      * <pre>
      * public class MathTest extends TestCase {
-     *      protected double fValue1;
-     *      protected double fValue2;
+     *      private var value1:Number;
+     *      private var value2:Number;
      * 
      *      public function MathTest(methodName:String=null) {
      *         super(methodName);
      *      }
      *
-     *      protected void setUp() {
-     *         fValue1= 2.0;
-     *         fValue2= 3.0;
+     *      override protected function setUp():void {
+     *         super.setUp();
+     *         value1 = 2;
+     *         value2 = 3;
      *      }
      * }
      * </pre>
      *
      * For each test implement a method which interacts
      * with the fixture. Verify the expected results with assertions specified
-     * by calling <code>assertTrue</code> with a boolean.
+     * by calling <code>assertTrue</code> with a boolean, or <code>assertEquals</code>
+     * with two primitive values that should match.
      * <pre>
-     *    public void testAdd() {
-     *        double result= fValue1 + fValue2;
-     *        assertTrue(result == 5.0);
+     *    public function testAdd():void {
+     *        var result:Number = value1 + value2;
+     *        assertEquals(5, result);
      *    }
      * </pre>
-     * Once the methods are defined you can run them. The framework supports
-     * both a static type safe and more dynamic way to run a test.
-     * In the static way you override the runTest method and define the method to
-     * be invoked. A convenient way to do so is with an anonymous inner class.
-     * <pre>
-     * TestCase test= new MathTest("add") {
-     *        public void runTest() {
-     *            testAdd();
-     *        }
-     * };
-     * test.run();
-     * </pre>
-     * The dynamic way uses reflection to implement <code>runTest</code>. It dynamically finds
-     * and invokes a method.
-     * In this case the name of the test case has to correspond to the test method
-     * to be run.
-     * <pre>
-     * TestCase= new MathTest("testAdd");
-     * test.run();
-     * </pre>
-     * The tests to be run can be collected into a TestSuite. JUnit provides
-     * different <i>test runners</i> which can run a test suite and collect the results.
-     * A test runner either expects a static method <code>suite</code> as the entry
-     * point to get a test to run or it will extract the suite automatically.
-     * <pre>
-     * public static Test suite() {
-     *      suite.addTest(new MathTest("testAdd"));
-     *      suite.addTest(new MathTest("testDivideByZero"));
-     *      return suite;
-     *  }
-     * </pre>
-     * @see TestResult
-     * @see TestSuite
      */
     public class TestCase extends Assert implements Test {
         protected static const PRE_SET_UP:int        = 0;
@@ -85,23 +54,27 @@ package asunit.framework {
         protected static const RUN_METHOD:int         = 2;
         protected static const TEAR_DOWN:int        = 3;
         protected static const DEFAULT_TIMEOUT:int     = 1000;
+
+        protected var context:DisplayObjectContainer;
         protected var fName:String;
+        protected var isComplete:Boolean;
         protected var result:TestListener;
         protected var testMethods:Array;
-        protected var isComplete:Boolean;
-        protected var context:DisplayObjectContainer;
-//        protected var methodIsAsynchronous:Boolean;
-//        protected var timeout:Timer;
-//        private var setUpIsAsynchronous:Boolean;
+
         private var asyncQueue:Array;
         private var currentMethod:String;
-        private var runSingle:Boolean;
-        private var methodIterator:Iterator;
-        private var layoutManager:Object;
         private var currentState:int;
+        private var layoutManager:Object;
+        private var methodIterator:Iterator;
+        private var runSingle:Boolean;
 
         /**
          * Constructs a test case with the given name.
+         *  
+         * Be sure to implement the constructor in your own TestCase base classes.
+         * 
+         * Using the optional <code>testMethod</code> constructor parameter is how we 
+         * create and run a single test case and test method.
          */
         public function TestCase(testMethod:String = null) {
             var description:XML = describeType(this);
@@ -201,8 +174,7 @@ package asunit.framework {
 
         /**
          * Runs the bare test sequence.
-         * @exception Error if any exception is thrown
-         *  throws Error
+         * @throws Error if any exception is thrown
          */
         public function runBare():void {
             if(isComplete) {
@@ -230,9 +202,11 @@ package asunit.framework {
             return methodIterator;
         }
 
-        // Override this method in Asynchronous test cases
-        // or any other time you want to perform additional
-        // member cleanup after all test methods have run
+        /**
+        *   Override this method in Asynchronous test cases 
+        *   or any other time you want to perform additional
+        *   member cleanup after all test methods have run
+        **/
         protected function cleanUp():void {
         }
         
@@ -265,17 +239,57 @@ package asunit.framework {
         /**
          * Sets up the fixture, for example, instantiate a mock object.
          * This method is called before each test is executed.
-         * throws Exception on error
+         * throws Exception on error.
+         *
+         * @example This method is usually overridden in your concrete test cases:
+         *  <listing>
+         *  private var instance:MyInstance;
+         *  
+         *  override protected function setUp():void {
+         *      super.setUp();
+         *      instance = new MyInstance();
+         *      addChild(instance);
+         *  }
+         *  </listing>
          */
         protected function setUp():void {
         }
         /**
-         * Tears down the fixture, for example, delete mock object.
-         * This method is called after a test is executed.
-         *  throws Exception on error
+         *  Tears down the fixture, for example, delete mock object.
+         *  
+         *  This method is called after a test is executed - even if the test method
+         *  throws an exception or fails.
+         *  
+         *  Even though the base class <code>TestCase</code> doesn't do anything on <code>tearDown</code>,
+         *  It's a good idea to call <code>super.tearDown()</code> in your subclasses. Many projects
+         *  wind up using some common fixtures which can often be extracted out a common project 
+         *  <code>TestCase</code>.
+         *  
+         *  <code>tearDown</code> is <em>not</em> called when we tell a test case to execute
+         *  a single test method.
+         *  
+         *  @throws Error on error.
+         * 
+         *  @example This method is usually overridden in your concrete test cases:
+         *  <listing>
+         *  private var instance:MyInstance;
+         *  
+         *  override protected function setUp():void {
+         *      super.setUp();
+         *      instance = new MyInstance();
+         *      addChild(instance);
+         *  }
+         *  
+         *  override protected function tearDown():void {
+         *      super.tearDown();
+         *      removeChild(instance);
+         *  }
+         *  </listing>
+         *  
          */
         protected function tearDown():void {
         }
+        
         /**
          * Returns a string representation of the test case
          */
@@ -307,6 +321,10 @@ package asunit.framework {
             this.context = context;
         }
 
+        /**
+        *   Returns the visual <code>DisplayObjectContainer</code> that will be used by
+        *   <code>addChild</code> and <code>removeChild</code> helper methods.
+        **/
         public function getContext():DisplayObjectContainer {
             return context;
         }
@@ -448,9 +466,5 @@ package asunit.framework {
             }
             return null;
         }
-
-//        public function fail(message:String):void {
-//            result.addFailure(this, new AssertionFailedError(message));
-//        }
     }
 }

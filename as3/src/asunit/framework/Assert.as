@@ -67,6 +67,7 @@ package asunit.framework {
 		static public function fail(message:String):void {
 			throw new AssertionFailedError(message);
 		}
+		
 		/**
 		 * Asserts that two objects are equal. If they are not
 		 * an AssertionFailedError is thrown with the given message.

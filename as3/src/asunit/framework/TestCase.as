@@ -22,13 +22,17 @@ package asunit.framework {
 	 * Here is an example:
 	 * <pre>
 	 * public class MathTest extends TestCase {
-	 *     protected double fValue1;
-	 *     protected double fValue2;
+	 *      protected double fValue1;
+	 *      protected double fValue2;
+	 * 
+	 *      public function MathTest(methodName:String=null) {
+	 *         super(methodName);
+	 *      }
 	 *
-	 *    protected void setUp() {
+	 *      protected void setUp() {
 	 *         fValue1= 2.0;
 	 *         fValue2= 3.0;
-	 *     }
+	 *      }
 	 * }
 	 * </pre>
 	 *
@@ -307,6 +311,41 @@ package asunit.framework {
 			return context;
 		}
 
+        /**
+        *   Called from within <code>setUp</code> or the body of any test method.
+        *   
+        *   Any call to <code>addAsync</code>, will prevent test execution from continuing
+        *   until the <code>duration</code> (in milliseconds) is exceeded, or the function returned by <code>addAsync</code>
+        *   is called. <code>addAsync</code> can be called any number of times within a particular
+        *   test method, and will block execution until each handler has returned.
+        *   
+        *   Following is an example of how to use the <code>addAsync</code> feature:
+        *   <pre>
+        *   public function testDispatcher():void {
+        *       var dispatcher:IEventDispatcher = new EventDispatcher();
+        *       // Subscribe to an event by sending the return value of addAsync:
+        *       dispatcher.addEventListener(Event.COMPLETE, addAsync(function(event:Event):void {
+        *           // Make assertions *inside* your async handler:
+        *           assertEquals(34, dispatcher.value);
+        *       }));
+        *   }
+        *   </pre>
+        *   
+        *   If you just want to verify that a particular event is triggered, you don't
+        *   need to provide a handler of your own, you can do the following:
+        *   <pre>
+        *   public function testDispatcher():void {
+        *       var dispatcher:IEventDispatcher = new EventDispatcher();
+        *       dispatcher.addEventListener(Event.COMPLETE, addAsync());
+        *   }
+        *   </pre>
+        *   
+        *   If you have a series of events that need to happen, you can generally add
+        *   the async handler to the last one.
+        *   
+        *   The main thing to remember is that any assertions that happen outside of the
+        *   initial thread of execution, must be inside of an <code>addAsync</code> block.
+        **/
 		protected function addAsync(handler:Function = null, duration:Number=DEFAULT_TIMEOUT):Function {
 			if(handler == null) {
 				handler = function(args:*):* {return;};
@@ -352,15 +391,62 @@ package asunit.framework {
 			setTimeout(runBare, 5);
 		}
 		
+		/**
+		* Helper method for testing <code>DisplayObject</code>s.
+		* 
+		* This method allows you to more easily add and manage <code>DisplayObject</code>
+		* instances in your <code>TestCase</code>.
+		* 
+		* If you are using the regular <code>TestRunner</code>, you cannot add Flex classes.
+		* 
+		* If you are using a <code>FlexRunner</code> base class, you can add either
+		* regular <code>DisplayObject</code>s or <code>IUIComponent</code>s.
+		* 
+		* Usually, this method is called within <code>setUp</code>, and <code>removeChild</code>
+		* is called from within <code>tearDown</code>. Using these methods, ensures that added
+		* children will be subsequently removed, even when tests fail.
+		* 
+		* Here is an example of the <code>addChild</code> method:
+		* <pre>
+		*   private var instance:MyComponent;
+		* 
+		*   override protected function setUp():void {
+		*       super.setUp();
+		*       instance = new MyComponent();
+		*       instance.addEventListener(Event.COMPLETE, addAsync());
+		*       addChild(instance);
+		*   }
+		* 
+		*   override protected function tearDown():void {
+		*       super.tearDown();
+		*       removeChild(instance);
+		*   }
+		* 
+		*   public function testParam():void {
+		*       assertEquals(34, instance.value);
+		*   }
+		* </pre>
+		**/
 		protected function addChild(child:DisplayObject):DisplayObject {
 			return getContext().addChild(child);
 		}
 
+        /**
+        * Helper method for removing added <code>DisplayObject</code>s. 
+        * 
+        * <b>Update:</b> This method should no longer fail if the provided <code>DisplayObject</code> 
+        * has already been removed.
+        **/
 		protected function removeChild(child:DisplayObject):DisplayObject {
 			if(child == null) {
-				throw new IllegalOperationError("TestCase.removeChild must have non-null parameter child");
+			    return;
 			}
-			return getContext().removeChild(child);
+			try {
+			    return getContext().removeChild(child);
+		    }
+		    catch(e:Error) {
+		        return null;
+	        }
 		}
 
 //		public function fail(message:String):void {

@@ -16,6 +16,17 @@ package asunit.textui {
     import flash.utils.setInterval;
     import flash.utils.setTimeout;
 
+    /**
+    *   This is the base class for collecting test output and formatting for different
+    *   displays.
+    *   
+    *   This class simply presents test results as if they were being shown on a terminal.
+    *   
+    *   The <code>XMLResultPrinter</code> provides a good example of how this class can 
+    *   be subclassed and used to emit different/additional output.
+    *   
+    *   @see XMLResultPrinter
+    **/
     public class ResultPrinter extends Sprite implements TestListener {
         private var fColumn:int = 0;
         private var textArea:TextField;

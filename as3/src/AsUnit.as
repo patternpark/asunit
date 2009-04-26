@@ -19,7 +19,7 @@ package {
     import asunit.runner.BaseTestRunner;
     import asunit.runner.TestSuiteLoader;
     import asunit.runner.Version;
-    //import asunit.textui.AirRunner;
+    import asunit.textui.AirRunner;
     import asunit.textui.FlexRunner;
     import asunit.textui.FlexTestRunner;
     import asunit.textui.ResultPrinter;
@@ -50,7 +50,7 @@ package {
         private var baseTestRunner:BaseTestRunner;
         private var testSuiteLoader:TestSuiteLoader;
         private var version:Version;
-        //private var airRunner:AirRunner;
+        private var airRunner:AirRunner;
         private var flexRunner:FlexRunner;
         private var flexTestRunner:FlexTestRunner;
         private var resultPrinter:ResultPrinter;

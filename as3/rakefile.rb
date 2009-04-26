@@ -30,6 +30,11 @@ asdoc 'doc' do |t|
   t.appended_args = '-examples-path=examples'
   t.source_path << 'src'
   t.doc_classes << 'AsUnit'
+
+  # Include air swcs to avoid failures
+  # on AirRunner:
+  t.library_path << 'lib/airglobal.swc'
+  t.library_path << 'lib/airframework.swc'
 end
 
 ##########################################

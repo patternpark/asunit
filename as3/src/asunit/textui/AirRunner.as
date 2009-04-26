@@ -4,8 +4,13 @@ package asunit.textui {
     import mx.core.WindowedApplication;
     
     /**
-     * @author Ian
-     */
+    *   The base class for Air application runners that use the Flex framework.
+    *   
+    *   @includeExample AirRunnerExample.mxml
+    *   
+    *   @author Ian
+    *   @playerversion AIR 1.1
+    **/
     public class AirRunner extends WindowedApplication {
         
         protected var runner:TestRunner;
@@ -19,6 +24,5 @@ package asunit.textui {
         public function start(testCase:Class, testMethod:String = null, showTrace:Boolean = false) : TestResult {
             return runner.start(testCase, testMethod, showTrace);
         }        
-        
     }
 }

@@ -4,6 +4,9 @@ package asunit.textui {
     import mx.core.IUIComponent;
     import asunit.textui.TestRunner;
 
+    /**
+    *   @private
+    **/
     public class FlexTestRunner extends TestRunner {
 
         public function FlexTestRunner() {

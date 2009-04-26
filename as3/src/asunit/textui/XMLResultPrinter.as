@@ -7,6 +7,16 @@ package asunit.textui {
     import flash.utils.setTimeout;
     import flash.utils.Dictionary;
     
+    /**
+    *   The <code>XMLResultPrinter</code> is used to transform AsUnit test results
+    *   to JUnit-compatible XML content.
+    *   
+    *   This printer will send JUnit-compatible XML content to trace output. The XML content
+    *   will be enclosed by '&lt;XMLResultPrinter/&gt;' tags.
+    *   
+    *   @includeExample XMLResultPrinterExample.as
+    *   @includeExample XMLResultPrinterExample.xml
+    **/
     public class XMLResultPrinter extends ResultPrinter {
         
         protected var results:Dictionary;
@@ -47,39 +57,8 @@ package asunit.textui {
             results[test.getName()].addError(test, t);
         }
 
-/*
-<testsuites>
-  <testsuite name="Flash Profile Card AsUnit Test Suite" errors="1" failures="1" tests="8" time="8.002">
-    <testcase classname="lib.test.cases.FailureTest" name="testError" time="0.049">
-      <error type="java.lang.NullPointerException">
-          <!-- stack trace -->
-      </error>
-      <failure type="Error">Reference runtime test error</failure>
-    </testcase>
-    <testcase classname="lib.test.cases.FailureTest" name="testAssertion">
-      <failure type="AssertionFailedError">Reference assertion test failure</failure>
-    </testcase>
-  </testsuite>
-</testsuites>
-*/
         override public function printResult(result:TestResult, runTime:Number):void {
             super.printResult(result, runTime);
-
-/*
-            if(result.errorCount()) {
-                var error:TestFailure;
-                for each(error in result.errors()) {
-                    results[error.failedTest().getName()].addFailure(error);
-                }
-            }
-            if(result.failureCount()) {
-                var failure:TestFailure;
-                for each(failure in result.failures()) {
-                    results[failure.failedTest().getName()].addFailure(failure);
-                }
-            }
-*/
-
             trace("<XMLResultPrinter>");
             trace("<?xml version='1.0' encoding='UTF-8'?>");
             trace("<testsuites>");

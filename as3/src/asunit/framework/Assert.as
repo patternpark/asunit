@@ -62,15 +62,60 @@ package asunit.framework {
             assertTrue(message, !condition);
         }
         /**
-         * Fails a test with the given message.
+         *  Fails a test with the given message.
+         *  
+         *  This method can be called anytime you want to break out and fail
+         *  the current test.
+         *
+         *  <pre>
+         *      
+         *  </pre>
          */
         static public function fail(message:String):void {
             throw new AssertionFailedError(message);
         }
-        
+
         /**
-         * Asserts that two objects are equal. If they are not
-         * an AssertionFailedError is thrown with the given message.
+        *  Asserts that the provided block throws an exception that matches
+        *  the type provided.
+        *
+        *  <pre>
+        *  public function testFailingCode():void {
+        *     assertThrows(CustomError, function():void {
+        *           var instance:Sprite = new Sprite();
+        *           instance.callMethodThatThrows();
+        *     });
+        *  }
+        *  </pre>
+        **/
+        static public function assertThrows(errorType:Class, block:Function):void {
+            try {
+                block.call();
+                fail("assertThrows block did not throw an expected exception");
+            }
+            catch(e:Error) {
+                if(!(e is errorType)) {
+                    fail("assertThrows did not throw the expected error type.");
+                }
+            }
+        }
+
+        /**
+         *  Asserts that two objects are equal. If they are not
+         *  an AssertionFailedError is thrown with the given message.
+         * 
+         *  This assertion should be (by far) the one you use the most.
+         *  It automatically provides useful information about what
+         *  the failing values were.
+         *
+         *  <pre>
+         *  public function testNames():void {
+         *      var name1:String = "Federico Aubele";
+         *      var name2:String = "Frederico Aubele";
+         *      
+         *      assertEquals(name1, name2);
+         *  }
+         *  </pre>
          */
         static public function assertEquals(...args:Array):void {
             var message:String;

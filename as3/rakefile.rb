@@ -27,6 +27,7 @@ end
 
 desc "Generate documentation"
 asdoc 'doc' do |t|
+  t.appended_args = '-examples-path=examples'
   t.source_path << 'src'
   t.doc_classes << 'AsUnit'
 end

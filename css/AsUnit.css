@@ -29,71 +29,13 @@ body > div {
 }
 
 h3 {
+    font-family: courier, serif;
+    color: #202020;
     margin-top: -5px;
 }
 
-/*
-    padding:20px;
-    text-align: center;
+h2 {
+    font-family: courier, serif;
+    color: #000;
+    margin-top: -5px;
 }
-
-.section-header {
-    text-align:left;
-}
-
-
-a:hover {
-    background:#FFFF66;
-}
-
-#section-description {
-}
-
-#badges {
-    text-align:center;
-}
-
-#spacer {
-    width:100%;
-}
-
-.badgeLabel {
-    border:none;
-}
-
-td.badge, div.badge, a.badge {
-    padding:5px;
-    vertical-align:top;
-}
-
-td.badge:hover, div.badge:hover, a.badge:hover {
-    background:#FFFF66;
-}
-
-img.badge {
-    background:#FFF;
-    margin:5px;
-    border:solid 2px #666;
-}
-
-p.badge, .badge-footer {
-    margin:0px;
-    font-size:12px;
-}
-
-.question {
-    padding:10px 0px 10px 0px;
-    text-align:left;
-    vertical-align:top;
-    width:300px;
-    font-size:28px;
-}
-
-li {
-    margin:5px;
-}
-
-.answer {
-    text-align:left;
-}
-*/

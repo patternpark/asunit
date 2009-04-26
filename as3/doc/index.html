@@ -7,20 +7,20 @@
 <title>Adobe Flex 2 Language Reference</title>
     
 <script language="javascript" type="text/javascript">
-    	<!--
+        <!--
         window.onload=function(){
             var d=document.location.search;
-			var args=d.substring(d.lastIndexOf('?')+1,d.length);
-			var classFrameContent=args;
-			var classListFrameContent='';
-			if (args.indexOf('&') != -1) {
-				classFrameContent = args.substring(0,args.indexOf('&'));
-				classListFrameContent = args.substring(args.indexOf('&')+1,args.length);
-			}
+            var args=d.substring(d.lastIndexOf('?')+1,d.length);
+            var classFrameContent=args;
+            var classListFrameContent='';
+            if (args.indexOf('&') != -1) {
+                classFrameContent = args.substring(0,args.indexOf('&'));
+                classListFrameContent = args.substring(args.indexOf('&')+1,args.length);
+            }
             if(classFrameContent!='')
-            	top.frames['classFrame'].document.location.href=classFrameContent;
-			if(classListFrameContent!='')
-				top.frames['packageFrame'].frames['classListFrame'].document.location.href=classListFrameContent;
+                top.frames['classFrame'].document.location.href=classFrameContent;
+            if(classListFrameContent!='')
+                top.frames['packageFrame'].frames['classListFrame'].document.location.href=classListFrameContent;
         }
         -->
     
@@ -33,15 +33,15 @@
 <frame src="package-frame.html" name="packageFrame" scrolling="no">
        
 <frameset rows="80,*" border="0" bordercolor="#AAAAAA">
-       		
+               
 <frame src="title-bar.html" name="titlebar" scrolling="no" frameborder="0">
-       		
+               
 <frame src="package-summary.html" name="classFrame" frameborder="0">
-    	
+        
 </frameset>
     
 <noframes>
-	
+    
 <body>
         
 <h2>Frame Alert</h2>

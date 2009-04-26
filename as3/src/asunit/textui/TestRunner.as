@@ -16,18 +16,37 @@ package asunit.textui {
     import flash.display.DisplayObject;
 
     /**
-     * A command line based tool to run tests.
-     * <pre>
-     * java junit.textui.TestRunner TestCaseClass
-     * </pre>
-     * TestRunner expects the name of a TestCase class as argument.
-     * If this class defines a static <code>suite</code> method it
-     * will be invoked and the returned test is run. Otherwise all
-     * the methods starting with "test" having no arguments are run.
-     * <p>
-     * TestRunner prints a trace as the tests are executed followed by a
-     * summary at the end.
-     */
+    *   The base class for ActionScript 3.0 test applications.
+    *   
+    *   The <code>TestRunner</code> should be extended by your
+    *   concrete runner for your project.
+    *   
+    *   If you're building a Flex application, you will need to
+    *   extend the <code>FlexRunner</code>
+    *   
+    *   Your concrete runner will usually look like the following:
+    *   <pre>
+    *   package {
+    *       import asunit.textui.TestRunner;
+    *   
+    *       public class MyProjectRunner extends TestRunner {
+    *       
+    *           public function MyProjectRunner() {
+    *               // start(clazz:Class, methodName:String, showTrace:Boolean)
+    *               // NOTE: sending a particular class and method name will
+    *               // execute setUp(), the method and NOT tearDown.
+    *               // This allows you to get visual confirmation while developing
+    *               // visual entities
+    *               start(AllTests, null, TestRunner.SHOW_TRACE);
+    *           }
+    *       }
+    *   }
+    *   </pre>
+    *   
+    *   @see asunit.textui.FlexRunner
+    *   @see asunit.textui.AirRunner
+    *   @see asunit.textui.XMLResultPrinter
+    **/
     public class TestRunner extends Sprite {
         public static const SUCCESS_EXIT:int   = 0;
         public static const FAILURE_EXIT:int   = 1;

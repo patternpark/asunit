@@ -3,6 +3,14 @@ package asunit.textui {
     
     import mx.core.Application;
     
+    /**
+    *   This is the base class that should be used to test Flex applications.
+    *   
+    *   @example The <code>FlexTestRunner</code> should be the base class for your 
+    *   test harness.
+    *   
+    *   @includeExample examples/FlexRunnerExample.mxml
+    **/
     public class FlexRunner extends Application {
         protected var runner:TestRunner;
 

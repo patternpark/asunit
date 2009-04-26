@@ -439,14 +439,14 @@ package asunit.framework {
         **/
         protected function removeChild(child:DisplayObject):DisplayObject {
             if(child == null) {
-                return;
+                return null;
             }
             try {
                 return getContext().removeChild(child);
             }
             catch(e:Error) {
-                return null;
             }
+            return null;
         }
 
 //        public function fail(message:String):void {

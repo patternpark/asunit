@@ -64,12 +64,17 @@ package asunit.framework {
         /**
          *  Fails a test with the given message.
          *  
-         *  This method can be called anytime you want to break out and fail
+         *  @example This method can be called anytime you want to break out and fail
          *  the current test.
          *
-         *  <pre>
-         *      
-         *  </pre>
+         *  <listing>
+         *  public function testSomething():void {
+         *      var instance:MyClass = new MyClass();
+         *      if(instance.foo()) {
+         *          fail('The foo should not have been there');
+         *      }
+         *  }
+         *  </listing>
          */
         static public function fail(message:String):void {
             throw new AssertionFailedError(message);

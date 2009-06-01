@@ -1,4 +1,5 @@
 package asunit.framework {
+    
     import asunit.errors.AbstractError;
     
     import flash.errors.IllegalOperationError;
@@ -15,36 +16,11 @@ package asunit.framework {
         protected static const DEFAULT_REMOTE_TIMEOUT:int = 30000;
         private static const INVALID_TIME:int = -1;
         
-        private var _remoteStartTime:int;
-        
-        private var _remoteDuration:int;
-        public function get remoteDuration():int
-        {
-            return _remoteDuration;
-        }
-        public function remoteDurationIsValid():Boolean
-        {
-            return _remoteDuration != INVALID_TIME;
-        }
-        
-        private var _remoteTimeout:int;
-        // see testRemoteDuration() below
-        public function set remoteTimeout(ms:int):void
-        {
-            _remoteTimeout = ms;
-        }
-
         private var _ioErrorExpected:Boolean;
-        public function set ioErrorExpected(yn:Boolean):void
-        {
-            _ioErrorExpected = yn;
-        }
-        
+        private var _remoteDuration:int;
+        private var _remoteStartTime:int;
+        private var _remoteTimeout:int;
         private var _securityErrorExpected:Boolean;
-        public function set securityErrorExpected(yn:Boolean):void
-        {
-            _securityErrorExpected = yn;
-        }
         
         public function AsynchronousTestCase(testMethod:String = null) {
             super(testMethod);
@@ -54,6 +30,27 @@ package asunit.framework {
             _remoteTimeout = DEFAULT_REMOTE_TIMEOUT;
             _ioErrorExpected = false;
             _securityErrorExpected = false;
+        }
+        
+        public function get remoteDuration():int {
+            return _remoteDuration;
+        }
+
+        public function remoteDurationIsValid():Boolean {
+            return _remoteDuration != INVALID_TIME;
+        }
+        
+        // see testRemoteDuration() below
+        public function set remoteTimeout(ms:int):void {
+            _remoteTimeout = ms;
+        }
+
+        public function set ioErrorExpected(yn:Boolean):void {
+            _ioErrorExpected = yn;
+        }
+        
+        public function set securityErrorExpected(yn:Boolean):void {
+            _securityErrorExpected = yn;
         }
 
         // use this method in overriding run() if you are using a URLLoader:
@@ -81,13 +78,11 @@ package asunit.framework {
         }
 
         private final function setRemoteDuration():void {
-            if (_remoteStartTime == INVALID_TIME)
-            {
+            if (_remoteStartTime == INVALID_TIME) {
                 // I guess you overrode run() in a subclass without calling super.run()
                 _remoteDuration = INVALID_TIME;
             }
-            else
-            {
+            else {
                 _remoteDuration = getTimer() - _remoteStartTime;
             }
         }

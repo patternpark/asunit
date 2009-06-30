@@ -1,4 +1,11 @@
 as2/bin
 as25/bin
 as3/bin
+as3/bin-debug
+html-template
 .DS_Store
+.actionScriptProperties
+.flexProperties
+.settings
+.project
+*~

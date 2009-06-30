@@ -1,11 +1,11 @@
 package asunit.framework {
-    import flash.errors.IllegalOperationError;    
+    import flash.errors.IllegalOperationError;
     
-    import asunit.errors.AssertionFailedError;    
+    import asunit.errors.AssertionFailedError;
     
-    import flash.events.Event;    
-    import flash.events.TimerEvent;    
-    import flash.utils.Timer;    
+    import flash.events.Event;
+    import flash.events.TimerEvent;
+    import flash.utils.Timer;
     
 
     public class AsyncOperation{

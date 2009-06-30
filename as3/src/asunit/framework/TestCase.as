@@ -378,17 +378,17 @@ package asunit.framework {
         *   The main thing to remember is that any assertions that happen outside of the
         *   initial thread of execution, must be inside of an <code>addAsync</code> block.
         **/
-        protected function addAsync(handler:Function = null, duration:Number=DEFAULT_TIMEOUT):Function {
+        protected function addAsync(handler:Function = null, duration:Number=DEFAULT_TIMEOUT, failureHandler:Function=null):Function {
             if(handler == null) {
                 handler = function(args:*):* {return;};
             }
-            var async:AsyncOperation = new AsyncOperation(this, handler, duration);
+            var async:AsyncOperation = new AsyncOperation(this, handler, duration, failureHandler);
             asyncQueue.push(async);
             return async.getCallback();
         }
 
-        internal function asyncOperationTimeout(async:AsyncOperation, duration:Number):void{
-            getResult().addError(this, new IllegalOperationError("TestCase.timeout (" + duration + "ms) exceeded on an asynchronous operation."));
+        internal function asyncOperationTimeout(async:AsyncOperation, duration:Number, isError:Boolean=true):void {
+            if(isError) getResult().addError(this, new IllegalOperationError("TestCase.timeout (" + duration + "ms) exceeded on an asynchronous operation."));
             asyncOperationComplete(async);
         }
 

@@ -3,6 +3,7 @@ package asunit.framework {
     
     import asunit.errors.AssertionFailedError;    
     
+    import flash.events.Event;    
     import flash.events.TimerEvent;    
     import flash.utils.Timer;    
     
@@ -13,8 +14,9 @@ package asunit.framework {
         private var testCase:TestCase;
         private var callback:Function;
         private var duration:Number;
+        private var failureHandler:Function;
 
-        public function AsyncOperation(testCase:TestCase, handler:Function, duration:Number){
+        public function AsyncOperation(testCase:TestCase, handler:Function, duration:Number, failureHandler:Function=null){
             this.testCase = testCase;
             this.duration = duration;
             timeout = new Timer(duration, 1);
@@ -23,6 +25,7 @@ package asunit.framework {
             if(handler == null) {
                 handler = function(args:*):* {return;};
             }
+            this.failureHandler = failureHandler;
             var context:AsyncOperation = this;
             callback = function(args:*):* {
                 timeout.stop();
@@ -47,6 +50,9 @@ package asunit.framework {
         }
 
         private function onTimeoutComplete(event:TimerEvent):void {
+            if(null != failureHandler) {
+                failureHandler(new Event('async timeout'));
+            }
             testCase.asyncOperationTimeout(this, duration);
         }
     }

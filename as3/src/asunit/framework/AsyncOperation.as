@@ -53,7 +53,7 @@ package asunit.framework {
             if(null != failureHandler) {
                 failureHandler(new Event('async timeout'));
             }
-            testCase.asyncOperationTimeout(this, duration);
+            testCase.asyncOperationTimeout(this, duration, null==failureHandler);
         }
     }
     

@@ -53,6 +53,11 @@ package asunit.framework {
             var result:TestListener = getResult();
             var test:Test;
             var itr:Iterator = getIterator();
+            
+            // @see http://alecmce.com/as3/asunit-gotcha-empty-testsuite-bug
+            if (!itr.hasNext())
+                throw new Error("Unable to complete tests: [TestSuite " + flash.utils.getQualifiedClassName(this) + "] is defined without any tests.");
+            
             while(itr.hasNext()) {
                 isRunning = true;
                 test = Test(itr.next());

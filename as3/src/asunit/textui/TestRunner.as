@@ -123,7 +123,13 @@ package asunit.textui {
                 return doRun(instance, showTrace);
             }
             catch(e:Error) {
-                throw new Error("Could not create and run test suite: " + e.getStackTrace());
+                
+                // @see http://alecmce.com/as3/asunit-gotcha-empty-testsuite-bug
+                if(fPrinter == null)
+                    setPrinter(new ResultPrinter(showTrace));
+                
+                getPrinter().println(e.message);
+                
             }
             return null;
         }

@@ -1,6 +1,8 @@
 package asunit.framework {
     import asunit.errors.AssertionFailedError;
     
+    import flash.utils.getQualifiedClassName;
+    
     import flash.errors.IllegalOperationError;
     import flash.events.EventDispatcher;
 
@@ -100,7 +102,7 @@ package asunit.framework {
             }
             catch(e:Error) {
                 if(!(e is errorType)) {
-                    fail("assertThrows did not throw the expected error type.");
+                    fail("assertThrows did not throw the expected error type, instead threw: " + getQualifiedClassName(e));
                 }
             }
         }

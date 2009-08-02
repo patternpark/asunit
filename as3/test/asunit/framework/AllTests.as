@@ -14,6 +14,7 @@ package asunit.framework {
             addTest(new asunit.framework.AssertTest());
             addTest(new asunit.framework.AssertEqualsArraysTest());
             addTest(new asunit.framework.AssertEqualsArraysIgnoringOrderTest());
+            addTest(new asunit.framework.AsyncFailureTest());
             addTest(new asunit.framework.AsyncMethodTest());
             addTest(new asunit.framework.TestCaseTest());
             addTest(new asunit.framework.TestFailureTest());

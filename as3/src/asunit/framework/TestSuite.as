@@ -32,7 +32,8 @@ package asunit.framework {
          * Adds a test instance to the suite.
          */
         public function addTest(test:Test):void {
-            fTests.push(test);
+			if (!test.getIsComplete())
+            	fTests.push(test);
         }
         
         /**
@@ -53,11 +54,6 @@ package asunit.framework {
             var result:TestListener = getResult();
             var test:Test;
             var itr:Iterator = getIterator();
-            
-            // @see http://alecmce.com/as3/asunit-gotcha-empty-testsuite-bug
-            if (!itr.hasNext())
-                throw new Error("Unable to complete tests: [TestSuite " + flash.utils.getQualifiedClassName(this) + "] is defined without any tests.");
-            
             while(itr.hasNext()) {
                 isRunning = true;
                 test = Test(itr.next());

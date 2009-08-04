@@ -129,7 +129,12 @@ package asunit.textui {
         }
 
         public function doRun(test:Test, showTrace:Boolean = false):TestResult {
+            
             result = new TestResult();
+            
+            if (test.getIsComplete())
+                return result;
+            
             if(fPrinter == null) {
                 setPrinter(new ResultPrinter(showTrace));
             }

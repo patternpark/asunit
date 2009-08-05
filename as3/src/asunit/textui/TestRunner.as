@@ -2,7 +2,7 @@ package asunit.textui {
     import asunit.framework.Test;
     import asunit.framework.TestResult;
 
-    import flash.display.Sprite;
+    import flash.display.MovieClip;
     import flash.display.StageAlign;
     import flash.display.StageScaleMode;
     import flash.events.Event;
@@ -49,7 +49,7 @@ package asunit.textui {
     *   @see asunit.textui.AirRunner
     *   @see asunit.textui.XMLResultPrinter
     **/
-    public class TestRunner extends Sprite {
+    public class TestRunner extends MovieClip {
         public static const SUCCESS_EXIT:int   = 0;
         public static const FAILURE_EXIT:int   = 1;
         public static const EXCEPTION_EXIT:int = 2;

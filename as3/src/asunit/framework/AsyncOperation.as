@@ -1,5 +1,6 @@
 package asunit.framework {
 	import asunit.errors.AssertionFailedError;
+	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;

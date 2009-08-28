@@ -98,7 +98,13 @@ class asunit.framework.TestCase extends Assert implements Test {
 		} else {
 			setTestMethods(this);
 		}
-		setName(this.className);		// I don't think this is necessary for as2
+		try {
+		    setName(this.className);
+                }
+	        catch(e:ClassNameUndefinedError) {
+	            trace(">> WARNING: Concrete TestCase classes must have a 'className' parameter with the fully qualified class name in order for AsUnit to provide useful failures.");
+                }
+
 //		resolveLayoutManager();
 		asyncQueue = [];
 	}

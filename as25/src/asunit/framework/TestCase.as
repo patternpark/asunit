@@ -1,8 +1,20 @@
 import asunit.flash.utils.Timer;
 import asunit.errors.ClassNameUndefinedError;
-import asunit.util.ArrayUtil;import asunit.framework.AsyncOperation;import asunit.framework.TestResult;import asunit.framework.TestListener;import asunit.framework.Test;import asunit.framework.Assert;
-import asunit.flash.errors.IllegalOperationError;import asunit.flash.events.Event;import asunit.errors.AssertionFailedError;import asunit.util.ArrayIterator;import asunit.util.Iterator;	
-/**
+import asunit.util.ArrayUtil;
+import asunit.framework.AsyncOperation;
+import asunit.framework.TestResult;
+
+import asunit.framework.TestListener;
+import asunit.framework.Test;
+import asunit.framework.Assert;
+import asunit.flash.errors.IllegalOperationError;
+import asunit.flash.events.Event;
+
+import asunit.errors.AssertionFailedError;
+import asunit.util.ArrayIterator;
+import asunit.util.Iterator;	
+
+/**
  * A test case defines the fixture to run multiple tests. To define a test case<br>
  * 1) implement a subclass of TestCase<br>
  * 2) define instance variables that store the state of the fixture<br>
@@ -72,7 +84,8 @@ class asunit.framework.TestCase extends Assert implements Test {
 	private static var RUN_METHOD:Number 		= 2;
 	private static var TEAR_DOWN:Number			= 3;
 	private static var DEFAULT_TIMEOUT:Number 	= 1000;
-	private var className:String;	private var fName:String;
+	private var className:String;
+	private var fName:String;
 	private var result : TestListener;
 	private var testMethods:Array;
 	private var isComplete:Boolean;
@@ -89,7 +102,8 @@ class asunit.framework.TestCase extends Assert implements Test {
 	/**
 	 * Constructs a test case with the given name.
 	 */
-	public function TestCase(testMethod:String) {		if(testMethod==undefined) testMethod=null;
+	public function TestCase(testMethod:String) {
+		if(testMethod==undefined) testMethod=null;
 		if(testMethod != null) {
 			testMethods = testMethod.split(", ").join(",").split(",");
 			if(testMethods.length == 1) {
@@ -98,13 +112,8 @@ class asunit.framework.TestCase extends Assert implements Test {
 		} else {
 			setTestMethods(this);
 		}
-		try {
-		    setName(this.className);
-                }
-	        catch(e:ClassNameUndefinedError) {
-	            trace(">> WARNING: Concrete TestCase classes must have a 'className' parameter with the fully qualified class name in order for AsUnit to provide useful failures.");
-                }
-
+		setName(this.className);
+		// I don't think this is necessary for as2
 //		resolveLayoutManager();
 		asyncQueue = [];
 	}
@@ -132,7 +141,10 @@ class asunit.framework.TestCase extends Assert implements Test {
 	 * Sets the name of a TestCase
 	 * @param name The name to set
 	 */
-	public function setName(name:String):Void {		if(name==undefined || name==null){			throw new ClassNameUndefinedError("You must assign a ClassName for your TestCase subclass.")		}
+	public function setName(name:String):Void {
+		if(name==undefined || name==null){
+			throw new ClassNameUndefinedError("You must assign a ClassName for your TestCase subclass.")
+		}
 		fName = name;
 	}
 
@@ -142,7 +154,8 @@ class asunit.framework.TestCase extends Assert implements Test {
 		for(var prop:String in obj) {
 				// look for functions starting with "test"
 			if((prop.indexOf("test")==0)  && (obj[prop] instanceof Function)){
-				testMethods.push(prop);			}
+				testMethods.push(prop);
+			}
 		}
 		_global.ASSetPropFlags(this.__proto__, null, 1, true);
 		testMethods.reverse();		
@@ -299,13 +312,16 @@ class asunit.framework.TestCase extends Assert implements Test {
 	}
 
 	public function getContext():MovieClip {
-		return context;
+	    return context;
 	}
 
 	private function addAsync(handler:Function, duration:Number):Function {
 		if(handler == undefined) {
 			handler = function():Void{};
-		}		if(duration == undefined) {			duration = DEFAULT_TIMEOUT;		}
+		}
+		if(duration == undefined) {
+			duration = DEFAULT_TIMEOUT;
+		}
 		var async:AsyncOperation = new AsyncOperation(this, handler, duration);
 		asyncQueue.push(async);
 		return async.getCallback();
@@ -351,7 +367,8 @@ class asunit.framework.TestCase extends Assert implements Test {
 	 */
 	
 	private function createEmptyMovieClip(name:String, depth:Number):MovieClip {
-		if(depth==undefined || depth===null) depth = getNextHighestDepth();
+	    if(name == null) name = getValidName(getContext());
+		if(depth == null) depth = getNextHighestDepth();
 		return getContext().createEmptyMovieClip(name, depth);
 	}
 
@@ -361,9 +378,9 @@ class asunit.framework.TestCase extends Assert implements Test {
 	}
 
 	private function getNextHighestDepth():Number {
-		return getContext().getNextHighestDepth();
+	    return getValidDepth(getContext());
 	}
-
+	
 	/*
 	 * This helper method will support the following method signatures:
 	 *
@@ -398,19 +415,6 @@ class asunit.framework.TestCase extends Assert implements Test {
 		return getContext().attachMovie(linkageId, name, depth, initObj);
  	}
 
-	public function getUpperEmptyDepth(parent:MovieClip, depth:Number):Number {
-		if(depth == undefined || !isValidDepth(parent, depth)) {
-			var high:Number = (depth == undefined) ? 1 : depth;
-			for(var i:String in parent) {
-				if(parent[i] instanceof MovieClip && parent[i].getDepth() != undefined) {
-					high = Math.max(parent[i].getDepth()+1, high);
-				}
-			}
-			return high;
-		}
-		return depth;
-	}
-
 	private function getValidName(parent:MovieClip, nm:Object):String {
 		var incr:Number = 1;
 
@@ -423,20 +427,6 @@ class asunit.framework.TestCase extends Assert implements Test {
 			ref = parent[name2];
 		}
 		return name2;
-	}
-
-	private function isValidDepth(parent:MovieClip, depth:Number):Boolean {
-		var item:MovieClip = getItemByDepth(parent, depth);
-		return (item == null) ? true : false;
-	}
-
-	private function getItemByDepth(parent:MovieClip, depth:Number):MovieClip {
-		for(var i:String in parent) {
-			if(parent[i].getDepth() == depth) {
-				return parent[i];
-			}
-		}
-		return null;
 	}
 
 	/**

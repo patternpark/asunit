@@ -3,6 +3,8 @@ package asunit.framework {
 	import flash.events.EventDispatcher;
 	import flash.utils.describeType;
 	import asunit.errors.AssertionFailedError;
+	import asunit.util.ArrayIterator;
+	import asunit.util.Iterator;
 
 	public class FreeRunner extends EventDispatcher {
 
@@ -33,9 +35,10 @@ package asunit.framework {
 		
 		public function runTest(test:Object):void {
 			var testResult:FreeTestResult = new FreeTestResult();
-			var methodNames:Array = getTestMethods(test);
+            var methodsList:Iterator = new ArrayIterator(getTestMethods(test));
 			
-			for each (var methodName:String in methodNames) {
+            while (methodsList.hasNext()) {
+				var methodName:String = String(methodsList.next());
 				test.setUp();
 				try {
 					test[methodName]();

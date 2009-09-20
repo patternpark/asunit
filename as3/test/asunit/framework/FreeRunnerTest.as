@@ -42,12 +42,12 @@ package asunit.framework {
 		}
 		//////
 		// For now, the test methods are sorted alphabetically to enable precise testing.
-		public function test_runTest_calls_setup_before_and_tearDown_after_each_test_method():void {
-			runner.addEventListener(TestResultEvent.NAME, addAsync(check_methodsCalled_after_runTest, 10));
-			runner.runTest(spriteTest);
+		public function test_run_calls_setup_before_and_tearDown_after_each_test_method():void {
+			runner.addEventListener(TestResultEvent.NAME, addAsync(check_methodsCalled_after_run, 10));
+			runner.run(spriteTest);
 		}
 		
-		private function check_methodsCalled_after_runTest(e:TestResultEvent):void {
+		private function check_methodsCalled_after_run(e:TestResultEvent):void {
 			assertEquals(9, spriteTest.methodsCalled.length);
 			
 			assertSame(spriteTest.setUp, 								spriteTest.methodsCalled[0]);
@@ -63,9 +63,9 @@ package asunit.framework {
 			assertSame(spriteTest.tearDown, 							spriteTest.methodsCalled[8]);
 		}
 		//////
-		public function test_runTest_triggers_TestResultEvent_with_wasSuccessful_false_and_failures():void {
+		public function test_run_triggers_TestResultEvent_with_wasSuccessful_false_and_failures():void {
 			runner.addEventListener(TestResultEvent.NAME, addAsync(check_TestResult_wasSuccessful_false, 10));
-			runner.runTest(spriteTest);
+			runner.run(spriteTest);
 		}
 		
 		private function check_TestResult_wasSuccessful_false(e:TestResultEvent):void {

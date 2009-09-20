@@ -33,13 +33,13 @@ package asunit.framework {
 			return getTestMethods(test).length;
 		}
 		
-		public function runTest(test:Object):void {
+		public function run(test:Object):void {
 			var testResult:FreeTestResult = new FreeTestResult();
-            var methodsList:Iterator = new ArrayIterator(getTestMethods(test));
+			var methodsList:Iterator = new ArrayIterator(getTestMethods(test));
 			
-            while (methodsList.hasNext()) {
+			while (methodsList.hasNext()) {
 				var methodName:String = String(methodsList.next());
-				test.setUp();
+				if (test.hasOwnProperty('setUp')) test.setUp();
 				try {
 					test[methodName]();
 				}
@@ -49,7 +49,7 @@ package asunit.framework {
 				catch (error:Error) {
 					testResult.addError(test, methodName, error);
 				}
-				test.tearDown();
+				if (test.hasOwnProperty('tearDown')) test.tearDown();
 			}
 			
 			dispatchEvent(new TestResultEvent(TestResultEvent.NAME, testResult));

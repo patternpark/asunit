@@ -50,15 +50,15 @@ package asunit.framework {
 		private function check_methodsCalled_after_runTest(e:TestResultEvent):void {
 			assertEquals(9, spriteTest.methodsCalled.length);
 			
-			assertSame(spriteTest.setup, 								spriteTest.methodsCalled[0]);
+			assertSame(spriteTest.setUp, 								spriteTest.methodsCalled[0]);
 			assertSame(spriteTest.test_fail_assertEquals,				spriteTest.methodsCalled[1]);
 			assertSame(spriteTest.tearDown, 							spriteTest.methodsCalled[2]);
 
-			assertSame(spriteTest.setup, 								spriteTest.methodsCalled[3]);
+			assertSame(spriteTest.setUp, 								spriteTest.methodsCalled[3]);
 			assertSame(spriteTest.test_numChildren_is_0_by_default,		spriteTest.methodsCalled[4]);
 			assertSame(spriteTest.tearDown, 							spriteTest.methodsCalled[5]);
 			
-			assertSame(spriteTest.setup,								spriteTest.methodsCalled[6]);
+			assertSame(spriteTest.setUp,								spriteTest.methodsCalled[6]);
 			assertSame(spriteTest.test_stage_is_null_by_default, 		spriteTest.methodsCalled[7]);
 			assertSame(spriteTest.tearDown, 							spriteTest.methodsCalled[8]);
 		}
@@ -94,7 +94,7 @@ class SpriteTest {
 		methodsCalled = [];
 	}
 	
-	public function setup():void {
+	public function setUp():void {
 		methodsCalled.push(arguments.callee);
 		//trace('SpriteTest.setup()');
 		sprite = new Sprite();

@@ -36,7 +36,7 @@ package asunit.framework {
 			var methodNames:Array = getTestMethods(test);
 			
 			for each (var methodName:String in methodNames) {
-				test.setup();
+				test.setUp();
 				try {
 					test[methodName]();
 				}

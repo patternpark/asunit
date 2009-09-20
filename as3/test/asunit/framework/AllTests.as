@@ -5,6 +5,7 @@ package asunit.framework {
 	import asunit.framework.AssertTest;
 	import asunit.framework.AsyncFailureTest;
 	import asunit.framework.AsyncMethodTest;
+	import asunit.framework.FreeRunnerTest;
 	import asunit.framework.TestCaseTest;
 	import asunit.framework.TestFailureTest;
 	import asunit.framework.VisualTestCaseTest;
@@ -17,6 +18,7 @@ package asunit.framework {
 			addTest(new asunit.framework.AssertTest());
 			addTest(new asunit.framework.AsyncFailureTest());
 			addTest(new asunit.framework.AsyncMethodTest());
+			addTest(new asunit.framework.FreeRunnerTest());
 			addTest(new asunit.framework.TestCaseTest());
 			addTest(new asunit.framework.TestFailureTest());
 			addTest(new asunit.framework.VisualTestCaseTest());

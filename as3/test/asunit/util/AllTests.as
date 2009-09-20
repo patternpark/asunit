@@ -1,11 +1,11 @@
 package asunit.util {
-    import asunit.framework.TestSuite;
-    import asunit.util.ArrayIteratorTest;
+	import asunit.framework.TestSuite;
+	import asunit.util.ArrayIteratorTest;
 
-    public class AllTests extends TestSuite {
+	public class AllTests extends TestSuite {
 
-        public function AllTests() {
-            addTest(new asunit.util.ArrayIteratorTest());
-        }
-    }
+		public function AllTests() {
+			addTest(new asunit.util.ArrayIteratorTest());
+		}
+	}
 }

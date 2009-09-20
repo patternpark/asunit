@@ -1,4 +1,5 @@
 package asunit.framework {
+	import asunit.framework.async.FreeAsyncOperation;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.describeType;
@@ -6,6 +7,8 @@ package asunit.framework {
 	import asunit.util.ArrayIterator;
 	import asunit.util.Iterator;
 	import flash.utils.setTimeout;
+	import asunit.framework.async.Async;
+	import flash.events.IEventDispatcher;
 
 	public class FreeRunner extends EventDispatcher {
 		protected var testResult:FreeTestResult;
@@ -39,8 +42,7 @@ package asunit.framework {
 		}
 		
 		protected function get completed():Boolean {
-			//TODO: check for async also
-			return !methodsList || !methodsList.hasNext();
+			return (!methodsList || !methodsList.hasNext() && asyncsCompleted);
 		}
 		
 		public function run(test:Object):void {
@@ -52,19 +54,38 @@ package asunit.framework {
 		
 		protected function runNextMethod():void {
 			if (completed) {
-				dispatchEvent(new TestResultEvent(TestResultEvent.NAME, testResult));
+				onCompleted();
 				return;
 			}
 				
 			if (currentTest.hasOwnProperty('setUp'))
 				currentTest.setUp();
 			
-			runMethodOnly(currentTest, String(methodsList.next()), testResult);
+			var methodName:String = String(methodsList.next());
+			runMethodOnly(currentTest, methodName, testResult);
+			
+			var operations:Array = Async.instance.getOperationsForTest(currentTest);
+			if (operations && operations.length) {
+				// find the async operations and listen to them
+				for each (var operation:FreeAsyncOperation in operations) {
+					operation.testResult = testResult;
+					operation.addEventListener(TestResultEvent.NAME, onAsyncOperationCompleted);
+				}
+				return;
+			}
 			
 			if (currentTest.hasOwnProperty('tearDown'))
 				currentTest.tearDown();
 			
 			setTimeout(runNextMethod, 1); // Avoid escalating callstack.
+		}
+		
+		protected function onAsyncOperationCompleted(e:TestResultEvent):void {
+			IEventDispatcher(e.currentTarget).removeEventListener(e.type, arguments.callee);
+			
+			if (asyncsCompleted) {
+				onCompleted();
+			}
 		}
 		
 		protected static function runMethodOnly(test:Object, methodName:String, testResult:FreeTestResult):void {
@@ -79,6 +100,15 @@ package asunit.framework {
 			}
 		}
 		
+		protected function onCompleted():void {
+			dispatchEvent(new TestResultEvent(TestResultEvent.NAME, testResult));
+		}
+		
+		protected function get asyncsCompleted():Boolean {
+			//TODO: maybe send an event instead of checking all the time
+			var operations:Array = Async.instance.getOperationsForTest(currentTest);
+			return (!operations || operations.length == 0);
+		}
 		
 	}
 }

@@ -43,7 +43,7 @@ package asunit.framework {
 		//////
 		// For now, the test methods are sorted alphabetically to enable precise testing.
 		public function test_run_calls_setup_before_and_tearDown_after_each_test_method():void {
-			runner.addEventListener(TestResultEvent.NAME, addAsync(check_methodsCalled_after_run, 10));
+			runner.addEventListener(TestResultEvent.NAME, addAsync(check_methodsCalled_after_run, 100));
 			runner.run(spriteTest);
 		}
 		
@@ -64,7 +64,7 @@ package asunit.framework {
 		}
 		//////
 		public function test_run_triggers_TestResultEvent_with_wasSuccessful_false_and_failures():void {
-			runner.addEventListener(TestResultEvent.NAME, addAsync(check_TestResult_wasSuccessful_false, 10));
+			runner.addEventListener(TestResultEvent.NAME, addAsync(check_TestResult_wasSuccessful_false, 100));
 			runner.run(spriteTest);
 		}
 		

@@ -5,10 +5,15 @@ package asunit.framework {
 	import asunit.errors.AssertionFailedError;
 	import asunit.util.ArrayIterator;
 	import asunit.util.Iterator;
+	import flash.utils.setTimeout;
 
 	public class FreeRunner extends EventDispatcher {
+		protected var testResult:FreeTestResult;
+		protected var methodsList:Iterator;
+		protected var currentTest:Object;
 
 		public function FreeRunner() {
+			testResult = new FreeTestResult();
 		}
 		
 		/**
@@ -33,26 +38,47 @@ package asunit.framework {
 			return getTestMethods(test).length;
 		}
 		
-		public function run(test:Object):void {
-			var testResult:FreeTestResult = new FreeTestResult();
-			var methodsList:Iterator = new ArrayIterator(getTestMethods(test));
-			
-			while (methodsList.hasNext()) {
-				var methodName:String = String(methodsList.next());
-				if (test.hasOwnProperty('setUp')) test.setUp();
-				try {
-					test[methodName]();
-				}
-				catch (assertionError:AssertionFailedError) {
-					testResult.addFailure(test, methodName, assertionError);
-				}
-				catch (error:Error) {
-					testResult.addError(test, methodName, error);
-				}
-				if (test.hasOwnProperty('tearDown')) test.tearDown();
-			}
-			
-			dispatchEvent(new TestResultEvent(TestResultEvent.NAME, testResult));
+		protected function get completed():Boolean {
+			//TODO: check for async also
+			return !methodsList || !methodsList.hasNext();
 		}
+		
+		public function run(test:Object):void {
+			currentTest = test;
+			methodsList = new ArrayIterator(getTestMethods(test));
+			
+			runNextMethod();
+		}
+		
+		protected function runNextMethod():void {
+			if (completed) {
+				dispatchEvent(new TestResultEvent(TestResultEvent.NAME, testResult));
+				return;
+			}
+				
+			if (currentTest.hasOwnProperty('setUp'))
+				currentTest.setUp();
+			
+			runMethodOnly(currentTest, String(methodsList.next()), testResult);
+			
+			if (currentTest.hasOwnProperty('tearDown'))
+				currentTest.tearDown();
+			
+			setTimeout(runNextMethod, 1); // Avoid escalating callstack.
+		}
+		
+		protected static function runMethodOnly(test:Object, methodName:String, testResult:FreeTestResult):void {
+			try {
+				test[methodName]();
+			}
+			catch (assertionError:AssertionFailedError) {
+				testResult.addFailure(test, methodName, assertionError);
+			}
+			catch (error:Error) {
+				testResult.addError(test, methodName, error);
+			}
+		}
+		
+		
 	}
 }

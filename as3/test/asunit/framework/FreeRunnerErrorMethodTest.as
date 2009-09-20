@@ -25,7 +25,7 @@ package asunit.framework {
 		
 		//////
 		public function test_runTest_triggers_TestResultEvent_with_errors():void {
-			runner.addEventListener(TestResultEvent.NAME, addAsync(check_TestResult_has_one_error, 10));
+			runner.addEventListener(TestResultEvent.NAME, addAsync(check_TestResult_has_one_error, 100));
 			runner.run(freeTest);
 		}
 		

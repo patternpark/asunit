@@ -89,8 +89,7 @@ class SpriteTest {
 	public var methodsCalled:Array;
 	protected var sprite:Sprite;
 	
-	public function SpriteTest()
-	{
+	public function SpriteTest() {
 		methodsCalled = [];
 	}
 	

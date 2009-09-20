@@ -43,9 +43,9 @@ package asunit.framework {
 				catch (assertionError:AssertionFailedError) {
 					testResult.addFailure(test, methodName, assertionError);
 				}
-				//catch (error:Error) {
-					//testResult.addError(test, methodName, error);
-				//}
+				catch (error:Error) {
+					testResult.addError(test, methodName, error);
+				}
 				test.tearDown();
 			}
 			

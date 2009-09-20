@@ -11,7 +11,7 @@ package asunit.framework {
      *
      * @see Test
      */
-    public class FreeTestResult /* implements TestListener */ {
+    public class FreeTestResult /* TODO: create and implement interface */ {
         protected var _failures:Array;
         protected var _errors:Array;
 
@@ -19,6 +19,7 @@ package asunit.framework {
 			_failures	= new Array();
 			_errors		= new Array();
         }
+		
         /**
          * Adds an error to the list of errors. The passed in exception
          * caused the error.
@@ -26,6 +27,7 @@ package asunit.framework {
         public function addError(test:Object, methodName:String, error:Error):void {
             _errors.push(new FreeTestFailure(test, methodName, error));
         }
+		
         /**
          * Adds a failure to the list of failures. The passed in exception
          * caused the failure.
@@ -40,18 +42,21 @@ package asunit.framework {
         public function get errorCount():int {
             return _errors.length;
         }
+		
         /**
          * Returns an Enumeration for the errors
          */
         public function get errors():Array {
             return _errors;
         }
+		
         /**
          * Gets the number of detected failures.
          */
         public function get failureCount():int {
             return _failures.length;
         }
+		
         /**
          * Returns an Enumeration for the failures
          */

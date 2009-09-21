@@ -14,20 +14,12 @@ package asunit.framework {
     public class FreeTestResult implements ITestResult {
         protected var _failures:Array;
         protected var _errors:Array;
+		protected var _listeners:Array;
 
         public function FreeTestResult() {
 			_failures	= new Array();
 			_errors		= new Array();
         }
-		
-        /**
-         * Adds an error to the list of errors. The passed in exception
-         * caused the error.
-         */
-        //public function addError(test:Object, methodName:String, error:Error):void {
-        //public function addError(errorFailure:FreeTestFailure):void {
-            //_errors.push(errorFailure);
-        //}
 		
         /**
          * Adds a failure to the list of failures. The passed in exception
@@ -79,5 +71,29 @@ package asunit.framework {
         public function get wasSuccessful():Boolean {
             return failureCount == 0 && errorCount == 0;
         }
+		
+        /**
+         * Registers a TestListener
+         */
+        public function addListener(listener:TestListener):void {
+            _listeners.push(listener);
+        }
+		
+        /**
+         * Unregisters a TestListener
+         */
+        public function removeListener(listener:TestListener):void {
+			//TODO: use _listener.indexOf()
+            var len:uint = _listeners.length;
+            for(var i:uint; i < len; i++) {
+                if(_listeners[i] == listener) {
+                    _listeners.splice(i, 1);
+                    return;
+                }
+            }
+            throw new InstanceNotFoundError("removeListener called without listener in list");
+        }
+		
+		
     }
 }

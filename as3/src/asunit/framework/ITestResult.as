@@ -16,6 +16,9 @@
 		function get runCount():uint;
 		
 		function get wasSuccessful():Boolean;
+		
+		function addListener(listener:TestListener):void;
+		function removeListener(listener:TestListener):void;
 	}
 	
 }

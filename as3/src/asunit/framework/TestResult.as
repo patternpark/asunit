@@ -1,7 +1,7 @@
 package asunit.framework {
     import asunit.errors.AssertionFailedError;
     import asunit.errors.InstanceNotFoundError;
-    
+
     /**
      * A <code>TestResult</code> collects the results of executing
      * a test case. It is an instance of the Collecting Parameter pattern.
@@ -11,60 +11,53 @@ package asunit.framework {
      *
      * @see Test
      */
-    public class TestResult implements TestListener {
-        protected var fFailures:Array;
-        protected var fErrors:Array;
-        protected var fListeners:Array;
-        protected var fRunTests:int;
-        private var fStop:Boolean;
-        
+    public class TestResult implements TestListener, ITestResult {
+        protected var _failures:Array;
+        protected var _errors:Array;
+        protected var _listeners:Array;
+        protected var _runTests:int;
+        protected var _stop:Boolean;
+
         public function TestResult() {
-            fFailures  = new Array();
-            fErrors       = new Array();
-            fListeners = new Array();
-            fRunTests  = 0;
-            fStop       = false;
+            _failures  = new Array();
+            _errors    = new Array();
+            _listeners = new Array();
+            _runTests  = 0;
+            _stop      = false;
         }
-        /**
-         * Adds an error to the list of errors. The passed in exception
-         * caused the error.
-         */
-        public function addError(test:Test, t:Error):void {
-            fErrors.push(new TestFailure(test, t));
-            var len:uint = fListeners.length;
-            var item:TestListener;
-            for(var i:uint; i < len; i++) {
-                item = TestListener(fListeners[i]);
-                item.addError(test, t);
-            }
-        }
+		
+		
         /**
          * Adds a failure to the list of failures. The passed in exception
          * caused the failure.
          */
-        public function addFailure(test:Test, t:AssertionFailedError):void {
-            fFailures.push(new TestFailure(test, t));
-            var len:uint = fListeners.length;
-            var item:TestListener;
+        public function addFailure(failure:ITestFailure):void {
+			if (failure.isFailure)
+				_failures.push(failure);
+			else
+				_errors.push(failure);
+				
+            var len:uint = _listeners.length;
+            var item:ITestResult;
             for(var i:uint; i < len; i++) {
-                item = TestListener(fListeners[i]);
-                item.addFailure(test, t);
+                item = ITestResult(_listeners[i]);
+                item.addFailure(failure);
             }
         }
         /**
          * Registers a TestListener
          */
         public function addListener(listener:TestListener):void {
-            fListeners.push(listener);
+            _listeners.push(listener);
         }
         /**
          * Unregisters a TestListener
          */
         public function removeListener(listener:TestListener):void {
-            var len:uint = fListeners.length;
+            var len:uint = _listeners.length;
             for(var i:uint; i < len; i++) {
-                if(fListeners[i] == listener) {
-                    fListeners.splice(i, 1);
+                if(_listeners[i] == listener) {
+                    _listeners.splice(i, 1);
                     return;
                 }
             }
@@ -73,28 +66,28 @@ package asunit.framework {
         /**
          * Gets the number of detected errors.
          */
-        public function errorCount():int {
-            return fErrors.length;
+        public function get errorCount():uint {
+            return _errors.length;
         }
         /**
          * Returns an Enumeration for the errors
          */
-        public function errors():Array {
-            return fErrors;
+        public function get errors():Array {
+            return _errors;
         }
         /**
          * Gets the number of detected failures.
          */
-        public function failureCount():int {
-            return fFailures.length;
+        public function get failureCount():uint {
+            return _failures.length;
         }
         /**
          * Returns an Enumeration for the failures
          */
-        public function failures():Array {
-            return fFailures;
+        public function get failures():Array {
+            return _failures;
         }
-        
+
         /**
          * Runs a TestCase.
          */
@@ -105,56 +98,56 @@ package asunit.framework {
         /**
          * Gets the number of run tests.
          */
-        public function runCount():int {
-            return fRunTests;
+        public function get runCount():uint {
+            return _runTests;
         }
         /**
          * Checks whether the test run should stop
          */
         public function shouldStop():Boolean {
-            return fStop;
+            return _stop;
         }
         /**
          * Informs the result that a test will be started.
          */
         public function startTest(test:Test):void {
             var count:int = test.countTestCases();
-            fRunTests += count;
+            _runTests += count;
 
-            var len:uint = fListeners.length;
+            var len:uint = _listeners.length;
             var item:TestListener;
             for(var i:uint; i < len; i++) {
-                item = TestListener(fListeners[i]);
+                item = TestListener(_listeners[i]);
                 item.startTest(test);
             }
         }
-        
+
         public function startTestMethod(test:Test, method:String):void {
-            var len:uint = fListeners.length;
+            var len:uint = _listeners.length;
             var item:TestListener;
             for(var i:uint; i < len; i++) {
-                item = TestListener(fListeners[i]);
+                item = TestListener(_listeners[i]);
                 item.startTestMethod(test, method);
             }
         }
-        
+
         public function endTestMethod(test:Test, method:String):void {
-            var len:uint = fListeners.length;
+            var len:uint = _listeners.length;
             var item:TestListener;
             for(var i:uint; i < len; i++) {
-                item = TestListener(fListeners[i]);
+                item = TestListener(_listeners[i]);
                 item.endTestMethod(test, method);
             }
         }
-        
+
         /**
          * Informs the result that a test was completed.
          */
         public function endTest(test:Test):void {
-            var len:uint = fListeners.length;
+            var len:uint = _listeners.length;
             var item:TestListener;
             for(var i:uint; i < len; i++) {
-                item = TestListener(fListeners[i]);
+                item = TestListener(_listeners[i]);
                 item.endTest(test);
             }
         }
@@ -162,13 +155,13 @@ package asunit.framework {
          * Marks that the test run should stop.
          */
         public function stop():void {
-            fStop = true;
+            _stop = true;
         }
         /**
          * Returns whether the entire test was successful or not.
          */
-        public function wasSuccessful():Boolean {
-            return failureCount() == 0 && errorCount() == 0;
+        public function get wasSuccessful():Boolean {
+            return failureCount == 0 && errorCount == 0;
         }
     }
 }

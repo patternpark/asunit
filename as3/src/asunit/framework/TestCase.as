@@ -72,7 +72,7 @@ package asunit.framework {
 		protected var context:DisplayObjectContainer;
 		protected var fName:String;
 		protected var isComplete:Boolean;
-		protected var result:TestListener;
+		protected var result:ITestResult;
 		protected var testMethods:Array;
 
 		private var asyncQueue:Array;
@@ -160,7 +160,7 @@ package asunit.framework {
 		 *
 		 * @see TestResult
 		 */
-		protected function createResult():TestResult {
+		protected function createResult():ITestResult {
 			return new TestResult();
 		}
 
@@ -175,15 +175,19 @@ package asunit.framework {
 		 * @see TestResult
 		 */
 		public function run():void {
-			getResult().run(this);
+			TestListener(getResult()).run(this);
 		}
 
-		public function setResult(result:TestListener):void {
+		public function setResult(result:ITestResult):void {
 			this.result = result;
 		}
 
-		internal function getResult():TestListener {
+		internal function getResult():ITestResult {
 			return (result == null) ? createResult() : result;
+		}
+		
+		internal function get listener():TestListener {
+			return getResult() as TestListener;
 		}
 
 		/**
@@ -203,7 +207,7 @@ package asunit.framework {
 			}
 			else {
 				cleanUp();
-				getResult().endTest(this);
+				TestListener(getResult()).endTest(this);
 				isComplete = true;
 				dispatchEvent(new Event(Event.COMPLETE));
 			}
@@ -228,7 +232,7 @@ package asunit.framework {
 			try {
 				if(currentState == PRE_SET_UP) {
 					currentState = SET_UP;
-					getResult().startTestMethod(this, methodName);
+					listener.startTestMethod(this, methodName);
 					setUp(); // setUp may be async and change the state of methodIsAsynchronous
 				}
 				currentMethod = methodName;
@@ -237,11 +241,8 @@ package asunit.framework {
 					this[methodName]();
 				}
 			}
-			catch(assertionFailedError:AssertionFailedError) {
-				getResult().addFailure(this, assertionFailedError);
-			}
-			catch(unknownError:Error) {
-				getResult().addError(this, unknownError);
+			catch(error:Error) {
+				getResult().addFailure(new TestFailure(this, error));
 			}
 			finally {
 				if(!waitForAsync()) {
@@ -387,8 +388,11 @@ package asunit.framework {
 			return async.getCallback();
 		}
 
-		internal function asyncOperationTimeout(async:AsyncOperation, duration:Number, isError:Boolean=true):void {
-			if(isError) getResult().addError(this, new IllegalOperationError("TestCase.timeout (" + duration + "ms) exceeded on an asynchronous operation."));
+		internal function asyncOperationTimeout(async:AsyncOperation, duration:Number, isError:Boolean = true):void {
+			if (isError) {
+				var error:IllegalOperationError = new IllegalOperationError("TestCase.timeout (" + duration + "ms) exceeded on an asynchronous operation.");
+				getResult().addFailure(new TestFailure(this, error));
+			}
 			asyncOperationComplete(async);
 		}
 
@@ -419,7 +423,7 @@ package asunit.framework {
 				return;
 			}
 			if(!runSingle) {
-				getResult().endTestMethod(this, currentMethod);
+				listener.endTestMethod(this, currentMethod);
 				tearDown();
 				layoutManager.resetAll();
 			}

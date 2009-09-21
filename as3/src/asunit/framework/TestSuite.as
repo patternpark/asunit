@@ -1,16 +1,16 @@
 package asunit.framework {
     import asunit.util.ArrayIterator;
     import asunit.util.Iterator;
-    
+
     import flash.display.DisplayObjectContainer;
     import flash.events.Event;
-    
+
     /**
      *  A <code>TestSuite</code> is a <code>Composite</code> of Tests.
-     *  
+     *
      *  @see Test
      *  @see TestCase
-     *  
+     *
      *  @includeExample TestSuiteExample.as
      */
     public class TestSuite extends TestCase implements Test {
@@ -27,7 +27,7 @@ package asunit.framework {
         protected override function setTestMethods(methodNodes:XMLList):void {
             testMethods = new Array();
         }
-        
+
         /**
          * Adds a test instance to the suite.
          */
@@ -35,7 +35,7 @@ package asunit.framework {
 			if (!test.getIsComplete())
             	fTests.push(test);
         }
-        
+
         /**
          * Counts the number of tests that will be run by this Suite.
          */
@@ -46,12 +46,12 @@ package asunit.framework {
             }
             return count;
         }
-        
+
         /**
          * Runs the tests and collects their result in a TestResult.
          */
         public override function run():void {
-            var result:TestListener = getResult();
+            var result:ITestResult = getResult();
             var test:Test;
             var itr:Iterator = getIterator();
             while(itr.hasNext()) {
@@ -73,7 +73,7 @@ package asunit.framework {
             }
             return iterator;
         }
-        
+
         private function testCompleteHandler(event:Event):void {
             if(!isRunning) {
                 run();
@@ -82,18 +82,18 @@ package asunit.framework {
                 dispatchEvent(new Event(Event.COMPLETE));
             }
         }
-        
+
         /**
          * Returns the number of tests in this suite
          */
         public function testCount():int {
             return fTests.length;
         }
-        
+
         public override function toString():String {
             return getName();
         }
-        
+
         public override function getIsComplete():Boolean {
             for each(var test:TestCase in fTests) {
                 if(!test.getIsComplete()) {
@@ -102,7 +102,7 @@ package asunit.framework {
             }
             return true;
         }
-        
+
         public override function setContext(context:DisplayObjectContainer):void {
             super.setContext(context);
             for each(var test:Test in fTests) {

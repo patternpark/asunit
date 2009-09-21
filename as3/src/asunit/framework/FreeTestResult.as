@@ -33,8 +33,7 @@ package asunit.framework {
          * Adds a failure to the list of failures. The passed in exception
          * caused the failure.
          */
-        //public function addFailure(test:Object, methodName:String, error:AssertionFailedError):void {
-        public function addFailure(failure:FreeTestFailure):void {
+        public function addFailure(failure:ITestFailure):void {
 			if (failure.isFailure)
 				_failures.push(failure);
 			else
@@ -68,6 +67,11 @@ package asunit.framework {
         public function get failures():Array {
             return _failures;
         }
+		
+		public function get runCount():uint {
+			//TODO: implement
+			return 1;
+		}
 		
         /**
          * Returns whether the entire test was successful or not.

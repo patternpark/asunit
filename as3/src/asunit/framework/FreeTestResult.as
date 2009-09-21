@@ -11,7 +11,7 @@ package asunit.framework {
      *
      * @see Test
      */
-    public class FreeTestResult /* TODO: create and implement interface */ {
+    public class FreeTestResult implements ITestResult {
         protected var _failures:Array;
         protected var _errors:Array;
 
@@ -44,7 +44,7 @@ package asunit.framework {
         /**
          * Gets the number of detected errors.
          */
-        public function get errorCount():int {
+        public function get errorCount():uint {
             return _errors.length;
         }
 		
@@ -58,7 +58,7 @@ package asunit.framework {
         /**
          * Gets the number of detected failures.
          */
-        public function get failureCount():int {
+        public function get failureCount():uint {
             return _failures.length;
         }
 		

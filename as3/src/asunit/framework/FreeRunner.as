@@ -1,5 +1,7 @@
 package asunit.framework {
 	import asunit.framework.async.TimeoutCommand;
+	import asunit.runner.ITestRunner;
+	import asunit.textui.ResultPrinter;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.describeType;
@@ -9,15 +11,23 @@ package asunit.framework {
 	import flash.utils.setTimeout;
 	import asunit.framework.async.Async;
 	import flash.events.IEventDispatcher;
+	import flash.display.MovieClip;
 
-	public class FreeRunner extends EventDispatcher {
+	public class FreeRunner extends MovieClip implements ITestRunner {
 		protected var testResult:FreeTestResult;
 		protected var methodsList:Iterator;
 		protected var currentTest:Object;
 		protected var currentMethodName:String;
+		protected var _printer:ResultPrinter;
 
 		public function FreeRunner() {
 			testResult = new FreeTestResult();
+		}
+		
+		public function get printer():ResultPrinter { return _printer; }
+		
+		public function set printer(value:ResultPrinter):void {
+			_printer = value;
 		}
 		
 		/**
@@ -128,6 +138,11 @@ package asunit.framework {
 			var commands:Array = Async.instance.getCommandsForTest(currentTest);
 			return (!commands || commands.length == 0);
 		}
+		
+		
+		//////////////////////////////////////////////////////
+		
+		
 		
 	}
 }

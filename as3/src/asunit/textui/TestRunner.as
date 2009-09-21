@@ -2,6 +2,7 @@ package asunit.textui {
     import asunit.framework.Test;
     import asunit.framework.TestResult;
     import asunit.framework.ITestResult;
+	import asunit.runner.ITestRunner;
 
     import flash.display.MovieClip;
     import flash.display.StageAlign;
@@ -50,12 +51,12 @@ package asunit.textui {
     *   @see asunit.textui.AirRunner
     *   @see asunit.textui.XMLResultPrinter
     **/
-    public class TestRunner extends MovieClip {
+    public class TestRunner extends MovieClip implements ITestRunner {
         public static const SUCCESS_EXIT:int   = 0;
         public static const FAILURE_EXIT:int   = 1;
         public static const EXCEPTION_EXIT:int = 2;
         public static const SHOW_TRACE:Boolean = true;
-        protected var fPrinter:ResultPrinter;
+        protected var _printer:ResultPrinter;
         protected var startTime:Number;
         protected var result:ITestResult;
 
@@ -73,7 +74,7 @@ package asunit.textui {
             {
                 return;
             }
-            if(event.target === fPrinter) {
+            if(event.target === _printer) {
                 stage.align = StageAlign.TOP_LEFT;
                 stage.scaleMode = StageScaleMode.NO_SCALE;
                 stage.addEventListener(Event.RESIZE, resizeHandler);
@@ -82,8 +83,8 @@ package asunit.textui {
         }
 
         private function resizeHandler(event:Event):void {
-            fPrinter.width = stage.stageWidth;
-            fPrinter.height = stage.stageHeight;
+            _printer.width = stage.stageWidth;
+            _printer.height = stage.stageHeight;
         }
 
         /**
@@ -129,21 +130,21 @@ package asunit.textui {
             return null;
         }
 
-        public function doRun(test:Test, showTrace:Boolean = false):ITestResult {
+        public function doRun(test:Object, showTrace:Boolean = false):ITestResult {
 
             result = new TestResult();
 
             if (test.getIsComplete())
                 return result;
 
-            if(fPrinter == null) {
-                setPrinter(new ResultPrinter(showTrace));
+            if(_printer == null) {
+                printer = new ResultPrinter(showTrace);
             }
             else {
-                fPrinter.setShowTrace(showTrace);
+                _printer.setShowTrace(showTrace);
             }
-			//TODO: fix this downcasting. This is the only place addListener is used.
-            TestResult(result).addListener(getPrinter());
+			
+            result.addListener(printer);
             startTime = getTimer();
             test.setResult(result);
             test.setContext(this);
@@ -155,22 +156,22 @@ package asunit.textui {
         private function testCompleteHandler(event:Event):void {
             var endTime:Number = getTimer();
             var runTime:Number = endTime - startTime;
-            getPrinter().printResult(result, runTime);
+            printer.printResult(result, runTime);
         }
 
-        public function setPrinter(printer:ResultPrinter):void {
-            if(fPrinter is DisplayObject && getChildIndex(fPrinter)) {
-                removeChild(fPrinter);
+        public function set printer(printer:ResultPrinter):void {
+            if(_printer is DisplayObject && getChildIndex(_printer)) {
+                removeChild(_printer);
             }
 
-            fPrinter = printer;
-            if(fPrinter is DisplayObject) {
-                addChild(fPrinter);
+            _printer = printer;
+            if(_printer is DisplayObject) {
+                addChild(_printer);
             }
         }
 
-        public function getPrinter():ResultPrinter {
-            return fPrinter;
+        public function get printer():ResultPrinter {
+            return _printer;
         }
     }
 }

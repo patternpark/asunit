@@ -25,14 +25,18 @@ package asunit.framework {
 		protected var _printer:ResultPrinter;
 		protected var startTime:Number;
 
-		public function FreeRunner() {
+		public function FreeRunner(printer:ResultPrinter = null) {
 			result = new FreeTestResult();
+			this.printer = printer;
 			configureListeners();
 		}
 		
 		public function get printer():ResultPrinter { return _printer; }
 		
         public function set printer(printer:ResultPrinter):void {
+			if (_printer && result)
+				result.removeListener(_printer);
+				
 			if (_printer is DisplayObject && getChildIndex(_printer)) {
 				removeChild(_printer);
 			}
@@ -42,6 +46,8 @@ package asunit.framework {
 			if (_printer is DisplayObject) {
 				addChild(_printer);
 			}
+			if (result)
+				result.addListener(_printer);
         }
 
 		
@@ -77,7 +83,8 @@ package asunit.framework {
 			methodsList = new ArrayIterator(getTestMethods(test));
 			
 			startTime = getTimer();
-			_printer.startTest(test);
+			if (_printer)
+				_printer.startTest(test);
 			
 			runNextMethod();
 		}
@@ -108,6 +115,7 @@ package asunit.framework {
 			
 			if (currentTest.hasOwnProperty('tearDown'))
 				currentTest.tearDown();
+				
 			
 			// If setTimeout() were not used, the synchronous test methods
 			// would keep increasing the callstack.
@@ -125,12 +133,6 @@ package asunit.framework {
 			var testFailure:FreeTestFailure = new FreeTestFailure(currentTest, currentMethodName, e.error);
 			// Record the test failure.
 			result.addFailure(testFailure);
-			
-			//TODO: use events
-			if (testFailure.isFailure)
-				_printer.addFailure(currentTest, e.error as AssertionFailedError);
-			else
-				_printer.addError(currentTest, e.error);
 				
 			onAsyncMethodCompleted(e);
 		}
@@ -157,6 +159,7 @@ package asunit.framework {
 		protected function onCompleted():void {
 			dispatchEvent(new TestResultEvent(TestResultEvent.NAME, result));
 			
+			if (!_printer) return;
 			_printer.endTest(currentTest);
 			var runTime:Number = getTimer() - startTime;
 			_printer.printResult(result, runTime);
@@ -190,32 +193,9 @@ package asunit.framework {
         }
 
         private function resizeHandler(event:Event):void {
+			if (!_printer) return;
             _printer.width = stage.stageWidth;
             _printer.height = stage.stageHeight;
         }
-		/*
-		public function doRun(test:Object, showTrace:Boolean = false):ITestResult {
-
-			//result = new FreeTestResult();
-
-			//if (test.getIsComplete())
-				//return result;
-
-			if(_printer == null) {
-				printer = new ResultPrinter(showTrace);
-			}
-			else {
-				_printer.setShowTrace(showTrace);
-			}
-
-			result.addListener(printer);
-			startTime = getTimer();
-			test.setResult(result);
-			test.setContext(this);
-			test.addEventListener(Event.COMPLETE, testCompleteHandler);
-			test.run();
-			return result;
-		}
-		*/
 	}
 }

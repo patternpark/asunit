@@ -216,14 +216,18 @@ package asunit.textui {
         /**
          * @see asunit.framework.TestListener#addError(Test, Throwable)
          */
-        public function addError(test:Object, t:Error):void {
+        public function addError(failure:ITestFailure):void {
+			if (failure.thrownException is AssertionFailedError) {
+				addFailure(failure);
+				return;
+			}
             print("E");
         }
 
         /**
          * @see asunit.framework.TestListener#addFailure(Test, AssertionFailedError)
          */
-        public function addFailure(test:Object, t:AssertionFailedError):void {
+        public function addFailure(failure:ITestFailure):void {
             print("F");
         }
 

@@ -19,6 +19,7 @@ package asunit.framework {
         public function FreeTestResult() {
 			_failures	= new Array();
 			_errors		= new Array();
+			_listeners  = new Array();
         }
 		
         /**
@@ -30,6 +31,9 @@ package asunit.framework {
 				_failures.push(failure);
 			else
 				_errors.push(failure);
+				
+			if (_listeners[0])
+				_listeners[0].addError(failure);
         }
 		
         /**
@@ -75,6 +79,7 @@ package asunit.framework {
         /**
          * Registers a TestListener
          */
+		//TODO: use EventDispatcher instead
         public function addListener(listener:TestListener):void {
             _listeners.push(listener);
         }
@@ -91,7 +96,7 @@ package asunit.framework {
                     return;
                 }
             }
-            throw new InstanceNotFoundError("removeListener called without listener in list");
+            //throw new InstanceNotFoundError("removeListener called without listener in list");
         }
 		
 		

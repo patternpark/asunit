@@ -38,9 +38,9 @@ package asunit.framework {
 				_errors.push(failure);
 				
             var len:uint = _listeners.length;
-            var item:ITestResult;
+            var item:TestListener;
             for(var i:uint; i < len; i++) {
-                item = ITestResult(_listeners[i]);
+                item = TestListener(_listeners[i]);
                 item.addFailure(failure);
             }
         }

@@ -23,5 +23,10 @@ package asunit.framework {
          * A test ended.
          */
          function endTest(test:Object):void;
+		
+		function addFailure(failure:ITestFailure):void;
+		
+		
+		
     }
 }

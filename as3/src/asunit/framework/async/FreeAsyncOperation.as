@@ -1,4 +1,5 @@
 package asunit.framework.async {
+	import asunit.framework.Command;
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -6,13 +7,14 @@ package asunit.framework.async {
 	import flash.utils.Timer;
 	import asunit.framework.ErrorEvent;
 	
-	[Event(name="complete",	type="flash.events.Event")]
+	[Event(name="called",	type="flash.events.Event")]
 	[Event(name="error",	type="asunit.framework.ErrorEvent")]
 
-	public class FreeAsyncOperation extends EventDispatcher {
-
+	public class FreeAsyncOperation extends EventDispatcher implements Command {
+		public static const CALLED:String = 'called';
 		public var scope:Object;
 		public var handler:Function; // public for now for testing
+		protected var params:Array;
 		
 		protected var timeout:Timer;
 		protected var duration:Number;
@@ -29,31 +31,30 @@ package asunit.framework.async {
 			timeout.start();
 		}
 		
-		protected function execute(...args):* {
-			timeout.stop();
-			try {
-				handler.apply(scope, args);
-			}
-			catch(error:Error) {
-				sendError(error);
-			}
-			finally {
-				dispatchEvent(new Event(Event.COMPLETE));
-			}
+		public function execute():* {
+			return handler.apply(scope, params);
 		}
 		
 		public function getCallback():Function{
-			return execute;
+			return callback;
 		}
 		
-		protected function sendError(error:Error):void {
-			dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, error));
+		protected function callback(...params):* {
+			timeout.stop();
+			this.params = params;
+			dispatchEvent(new Event(CALLED));
 		}
-
+		
 		protected function onTimeoutComplete(event:TimerEvent):void {
 			sendError(new IllegalOperationError('Async operation timed out.'));
 		}
 		
+		protected function sendError(error:Error):void {
+			var event:ErrorEvent = new ErrorEvent(ErrorEvent.ERROR, error);
+			dispatchEvent(event);
+			if (failureHandler != null) failureHandler(event);
+		}
+
 		override public function toString():String {
 			return '[FreeAsyncOperation scope=' + scope + ']';;
 		}

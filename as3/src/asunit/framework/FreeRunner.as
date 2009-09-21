@@ -60,17 +60,18 @@ package asunit.framework {
 			}
 			
 			currentMethodName = String(methodsList.next());
-				
+			var method:Function = currentTest[currentMethodName] as Function;
+			
 			if (currentTest.hasOwnProperty('setUp'))
 				currentTest.setUp();
 			
-			runMethodOnly(currentTest, currentMethodName, testResult);
+			runMethodForTest(method, currentTest, currentMethodName, testResult);
 			
 			var operations:Array = Async.instance.getOperationsForTest(currentTest);
 			if (operations && operations.length) {
 				// find the async operations and listen to them
 				for each (var operation:FreeAsyncOperation in operations) {
-					operation.addEventListener(Event.COMPLETE, onAsyncTestCompleted);
+					operation.addEventListener(FreeAsyncOperation.CALLED, onAsyncCalled);
 					operation.addEventListener(ErrorEvent.ERROR, onAsyncTestFailed);
 				}
 				return;
@@ -80,6 +81,12 @@ package asunit.framework {
 				currentTest.tearDown();
 			
 			setTimeout(runNextMethod, 1); // Avoid escalating callstack.
+		}
+		
+		protected function onAsyncCalled(e:Event):void {
+			var operation:FreeAsyncOperation = FreeAsyncOperation(e.currentTarget);
+			runMethodForTest(operation.execute, currentTest, currentMethodName, testResult);
+			onAsyncTestCompleted(e);
 		}
 		
 		protected function onAsyncTestFailed(e:ErrorEvent):void {
@@ -97,7 +104,7 @@ package asunit.framework {
 			//trace('      currentMethodName: ' + currentMethodName);
 			//trace('----------------------');
 			var operation:FreeAsyncOperation = FreeAsyncOperation(e.currentTarget);
-			operation.removeEventListener(Event.COMPLETE, onAsyncTestCompleted);
+			operation.removeEventListener(FreeAsyncOperation.CALLED, onAsyncTestCompleted);
 			operation.removeEventListener(ErrorEvent.ERROR, onAsyncTestFailed);
 			
 			//var operations:Array = Async.instance.getOperationsForTest(currentTest);
@@ -108,13 +115,12 @@ package asunit.framework {
 			}
 		}
 		
-		protected static function runMethodOnly(test:Object, methodName:String, testResult:FreeTestResult):void {
+		protected static function runMethodForTest(method:Function, test:Object, testMethodName:String, testResult:FreeTestResult):void {
 			try {
-				//trace('\n**** runMethodOnly - ' + test + ' - ' + methodName);
-				test[methodName]();
+				method();
 			}
 			catch (error:Error) {
-				testResult.addFailure(new FreeTestFailure(test, methodName, error));
+				testResult.addFailure(new FreeTestFailure(test, testMethodName, error));
 			}
 		}
 		

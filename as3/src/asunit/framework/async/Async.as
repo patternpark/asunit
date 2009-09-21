@@ -39,14 +39,14 @@
 				operationsByTest[test] = [];
 				
 			operationsByTest[test].push(operation);
-			operation.addEventListener(Event.COMPLETE,		onTestResult);
-			operation.addEventListener(ErrorEvent.ERROR,	onTestResult);
+			operation.addEventListener(FreeAsyncOperation.CALLED,	onTestResult);
+			operation.addEventListener(ErrorEvent.ERROR, 			onTestResult);
 		}
 		
 		protected function onTestResult(e:Event):void {
 			var operation:FreeAsyncOperation = FreeAsyncOperation(e.currentTarget);
-			operation.removeEventListener(Event.COMPLETE,	onTestResult);
-			operation.removeEventListener(ErrorEvent.ERROR,	onTestResult);
+			operation.removeEventListener(FreeAsyncOperation.CALLED,	onTestResult);
+			operation.removeEventListener(ErrorEvent.ERROR,				onTestResult);
 			
 			removeOperationForTest(operation.scope, operation);
 		}

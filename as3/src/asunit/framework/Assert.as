@@ -1,8 +1,8 @@
 package asunit.framework {
     import asunit.errors.AssertionFailedError;
-    
+
     import flash.utils.getQualifiedClassName;
-    
+
     import flash.errors.IllegalOperationError;
     import flash.events.EventDispatcher;
 
@@ -23,22 +23,22 @@ package asunit.framework {
          */
         static public function assertTrue(...args:Array):void {
             var message:String;
-            var condition:Boolean;
+            var actual:Object;
 
             if(args.length == 1) {
                 message = "";
-                condition = Boolean(args[0]);
+                actual = args[0];
             }
             else if(args.length == 2) {
                 message = args[0];
-                condition = Boolean(args[1]);
+                actual = args[1];
             }
             else {
                 throw new IllegalOperationError("Invalid argument count");
             }
 
-            if(!condition) {
-                fail(message);
+            if(!actual) {
+				failNotEquals(message, true, actual);
             }
         }
         /**
@@ -47,25 +47,27 @@ package asunit.framework {
          */
         static public function assertFalse(...args:Array):void {
             var message:String;
-            var condition:Boolean;
+            var actual:Object;
 
             if(args.length == 1) {
                 message = "";
-                condition = Boolean(args[0]);
+                actual = args[0];
             }
             else if(args.length == 2) {
                 message = args[0];
-                condition = Boolean(args[1]);
+                actual = args[1];
             }
             else {
                 throw new IllegalOperationError("Invalid argument count");
             }
 
-            assertTrue(message, !condition);
+            if(actual) {
+				failNotEquals(message, false, actual);
+            }
         }
         /**
          *  Fails a test with the given message.
-         *  
+         *
          *  @example This method can be called anytime you want to break out and fail
          *  the current test.
          *
@@ -110,7 +112,7 @@ package asunit.framework {
         /**
          *  Asserts that two objects are equal. If they are not
          *  an AssertionFailedError is thrown with the given message.
-         * 
+         *
          *  This assertion should be (by far) the one you use the most.
          *  It automatically provides useful information about what
          *  the failing values were.
@@ -119,7 +121,7 @@ package asunit.framework {
          *  public function testNames():void {
          *      var name1:String = "Federico Aubele";
          *      var name2:String = "Frederico Aubele";
-         *      
+         *
          *      assertEquals(name1, name2);
          *  }
          *  </listing>
@@ -188,21 +190,21 @@ package asunit.framework {
          */
         static public function assertNull(...args:Array):void {
             var message:String;
-            var object:Object;
+            var actual:Object;
 
             if(args.length == 1) {
                 message = "";
-                object = args[0];
+                actual = args[0];
             }
             else if(args.length == 2) {
                 message = args[0];
-                object = args[1];
+                actual = args[1];
             }
             else {
                 throw new IllegalOperationError("Invalid argument count");
             }
 
-            assertTrue(message, object == null);
+            assertEquals(message, null, actual);
         }
         /**
          * Asserts that two objects refer to the same object. If they are not
@@ -314,7 +316,7 @@ package asunit.framework {
             else {
                 throw new IllegalOperationError("Invalid argument count");
             }
-            
+
             if (expected == null && actual == null) {
                 return;
             }

@@ -28,6 +28,10 @@ package asunit.framework {
         public function get failedMethod():String {
             return _failedMethod;
         }
+		
+		public function set failedMethod(value:String):void {
+			_failedMethod = value;
+		}
 
         /**
          * Gets the failed test case.

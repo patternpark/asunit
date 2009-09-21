@@ -24,16 +24,21 @@ package asunit.framework {
          * Adds an error to the list of errors. The passed in exception
          * caused the error.
          */
-        public function addError(test:Object, methodName:String, error:Error):void {
-            _errors.push(new FreeTestFailure(test, methodName, error));
-        }
+        //public function addError(test:Object, methodName:String, error:Error):void {
+        //public function addError(errorFailure:FreeTestFailure):void {
+            //_errors.push(errorFailure);
+        //}
 		
         /**
          * Adds a failure to the list of failures. The passed in exception
          * caused the failure.
          */
-        public function addFailure(test:Object, methodName:String, error:AssertionFailedError):void {
-            _failures.push(new FreeTestFailure(test, methodName, error));
+        //public function addFailure(test:Object, methodName:String, error:AssertionFailedError):void {
+        public function addFailure(failure:FreeTestFailure):void {
+			if (failure.isFailure)
+				_failures.push(failure);
+			else
+				_errors.push(failure);
         }
 		
         /**

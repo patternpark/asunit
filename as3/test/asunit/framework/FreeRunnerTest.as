@@ -83,7 +83,7 @@ package asunit.framework {
 }
 /////////////////////////////////////////
 import flash.display.Sprite;
-import asunit.framework.Assert;
+import asunit.asserts.*;
 
 class SpriteTest {
 	public var methodsCalled:Array;
@@ -95,29 +95,27 @@ class SpriteTest {
 	
 	public function setUp():void {
 		methodsCalled.push(arguments.callee);
-		//trace('SpriteTest.setup()');
 		sprite = new Sprite();
 	}
 	
 	public function tearDown():void {
 		methodsCalled.push(arguments.callee);
-		//trace('SpriteTest.tearDown()');
 		sprite = null;
 	}
 	
 	public function test_numChildren_is_0_by_default():void {
 		methodsCalled.push(arguments.callee);
-		Assert.assertEquals(0, sprite.numChildren);
+		assertEquals(0, sprite.numChildren);
 	}
 	
 	public function test_stage_is_null_by_default():void {
 		methodsCalled.push(arguments.callee);
-		Assert.assertNull(sprite.stage);
+		assertNull(sprite.stage);
 	}
 	
 	public function test_fail_assertEquals():void {
 		methodsCalled.push(arguments.callee);
-		Assert.assertEquals('wrongName', sprite.name);
+		assertEquals('wrongName', sprite.name);
 	}
 	
 }

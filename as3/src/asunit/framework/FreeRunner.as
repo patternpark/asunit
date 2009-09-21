@@ -14,6 +14,7 @@ package asunit.framework {
 		protected var testResult:FreeTestResult;
 		protected var methodsList:Iterator;
 		protected var currentTest:Object;
+		protected var currentMethodName:String;
 
 		public function FreeRunner() {
 			testResult = new FreeTestResult();
@@ -42,7 +43,7 @@ package asunit.framework {
 		}
 		
 		protected function get completed():Boolean {
-			return (!methodsList || !methodsList.hasNext() && asyncsCompleted);
+			return (!methodsList || !methodsList.hasNext()) && asyncsCompleted;
 		}
 		
 		public function run(test:Object):void {
@@ -57,19 +58,20 @@ package asunit.framework {
 				onCompleted();
 				return;
 			}
+			
+			currentMethodName = String(methodsList.next());
 				
 			if (currentTest.hasOwnProperty('setUp'))
 				currentTest.setUp();
 			
-			var methodName:String = String(methodsList.next());
-			runMethodOnly(currentTest, methodName, testResult);
+			runMethodOnly(currentTest, currentMethodName, testResult);
 			
 			var operations:Array = Async.instance.getOperationsForTest(currentTest);
 			if (operations && operations.length) {
 				// find the async operations and listen to them
 				for each (var operation:FreeAsyncOperation in operations) {
-					operation.testResult = testResult;
-					operation.addEventListener(TestResultEvent.NAME, onAsyncOperationCompleted);
+					operation.addEventListener(Event.COMPLETE, onAsyncTestCompleted);
+					operation.addEventListener(ErrorEvent.ERROR, onAsyncTestFailed);
 				}
 				return;
 			}
@@ -80,8 +82,26 @@ package asunit.framework {
 			setTimeout(runNextMethod, 1); // Avoid escalating callstack.
 		}
 		
-		protected function onAsyncOperationCompleted(e:TestResultEvent):void {
-			IEventDispatcher(e.currentTarget).removeEventListener(e.type, arguments.callee);
+		protected function onAsyncTestFailed(e:ErrorEvent):void {
+			// The AsyncOperation doesn't ever know the method name.
+			var testFailure:FreeTestFailure = new FreeTestFailure(currentTest, currentMethodName, e.error);
+			// Record the test failure.
+			testResult.addFailure(testFailure);
+			onAsyncTestCompleted(e);
+		}
+		
+		protected function onAsyncTestCompleted(e:Event):void {
+			//trace('onAsyncTestCompleted - ' + e);
+			//trace('  e.currentTarget: ' + e.currentTarget);
+			//trace('    currentTest: ' + currentTest);
+			//trace('      currentMethodName: ' + currentMethodName);
+			//trace('----------------------');
+			var operation:FreeAsyncOperation = FreeAsyncOperation(e.currentTarget);
+			operation.removeEventListener(Event.COMPLETE, onAsyncTestCompleted);
+			operation.removeEventListener(ErrorEvent.ERROR, onAsyncTestFailed);
+			
+			//var operations:Array = Async.instance.getOperationsForTest(currentTest);
+			//trace('operations: ' + operations);
 			
 			if (asyncsCompleted) {
 				onCompleted();
@@ -90,13 +110,11 @@ package asunit.framework {
 		
 		protected static function runMethodOnly(test:Object, methodName:String, testResult:FreeTestResult):void {
 			try {
+				//trace('\n**** runMethodOnly - ' + test + ' - ' + methodName);
 				test[methodName]();
 			}
-			catch (assertionError:AssertionFailedError) {
-				testResult.addFailure(test, methodName, assertionError);
-			}
 			catch (error:Error) {
-				testResult.addError(test, methodName, error);
+				testResult.addFailure(new FreeTestFailure(test, methodName, error));
 			}
 		}
 		
@@ -105,7 +123,7 @@ package asunit.framework {
 		}
 		
 		protected function get asyncsCompleted():Boolean {
-			//TODO: maybe send an event instead of checking all the time
+			//TODO: maybe have Async send an event instead of checking it
 			var operations:Array = Async.instance.getOperationsForTest(currentTest);
 			return (!operations || operations.length == 0);
 		}

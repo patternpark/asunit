@@ -25,34 +25,34 @@ package asunit.textui {
             results = new Dictionary();
         }
 
-        override public function startTest(test:Test):void {
+        override public function startTest(test:Object):void {
             super.startTest(test);
             var result:TestListener = new XMLTestResult(test);
             results[test.getName()] = result;
             result.startTest(test);
         }
 
-        override public function endTest(test:Test):void {
+        override public function endTest(test:Object):void {
             super.endTest(test);
             results[test.getName()].endTest(test);
         }
 
-        override public function startTestMethod(test:Test, methodName:String):void {
+        override public function startTestMethod(test:Object, methodName:String):void {
             super.startTestMethod(test, methodName);
             results[test.getName()].startTestMethod(test, methodName);
         }
 
-        override public function endTestMethod(test:Test, methodName:String):void {
+        override public function endTestMethod(test:Object, methodName:String):void {
             super.endTestMethod(test, methodName);
             results[test.getName()].endTestMethod(test, methodName);
         }
 
-        override public function addFailure(test:Test, t:AssertionFailedError):void {
+        override public function addFailure(test:Object, t:AssertionFailedError):void {
             super.addFailure(test, t);
             results[test.getName()].addFailure(test, t);
         }
 
-        override public function addError(test:Test, t:Error):void {
+        override public function addError(test:Object, t:Error):void {
             super.addError(test, t);
             results[test.getName()].addError(test, t);
         }
@@ -96,7 +96,7 @@ class XMLTestResult implements TestListener {
     private var methodHash:Dictionary;
     private var methods:Array;
 
-    public function XMLTestResult(test:Test) {
+    public function XMLTestResult(test:Object) {
         this.test = test;
         testName = test.getName().split("::").join(".");
         failures = new Array();
@@ -108,36 +108,36 @@ class XMLTestResult implements TestListener {
         methodHash = new Dictionary();
     }
 
-    public function startTest(test:Test):void {
+    public function startTest(test:Object):void {
         start = getTimer();
     }
 
-    public function run(test:Test):void {
+    public function run(test:Object):void {
     }
 
-    public function addError(test:Test, t:Error):void {
+    public function addError(test:Object, t:Error):void {
         var failure:ITestFailure = new TestFailure(test, t);
         errors.push(failure);
         errorHash[failure.failedMethod()] = failure;
     }
 
-    public function addFailure(test:Test, t:AssertionFailedError):void {
+    public function addFailure(test:Object, t:AssertionFailedError):void {
         var failure:ITestFailure = new TestFailure(test, t);
         failures.push(failure);
         failureHash[failure.failedMethod()] = failure;
     }
 
-    public function startTestMethod(test:Test, methodName:String):void {
+    public function startTestMethod(test:Object, methodName:String):void {
         var method:TestMethod = new TestMethod(test, methodName);
         methods.push(method);
         methodHash[method.getName()] = method;
     }
 
-    public function endTestMethod(test:Test, methodName:String):void {
+    public function endTestMethod(test:Object, methodName:String):void {
         methodHash[methodName].endTest(test);
     }
 
-    public function endTest(test:Test):void {
+    public function endTest(test:Object):void {
         _duration = (getTimer() - start) * .001;
     }
 

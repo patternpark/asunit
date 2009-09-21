@@ -5,7 +5,7 @@ package asunit.textui
     
     public class TestTime extends Object
     {
-        public static function create(test:Test, duration:int):TestTime
+        public static function create(test:Object, duration:int):TestTime
         {
             var asyncTest:AsynchronousTestCase = test as AsynchronousTestCase;
             if (asyncTest && asyncTest.remoteDurationIsValid())
@@ -25,7 +25,7 @@ package asunit.textui
             return _duration;
         }
         
-        public function TestTime(test:Test, duration:int, lock:Class)
+        public function TestTime(test:Object, duration:int, lock:Class)
         {
             super();
             if (lock != PrivateConstructorEnforcer)

@@ -31,7 +31,7 @@ package asunit.framework {
         /**
          * Adds a test instance to the suite.
          */
-        public function addTest(test:Test):void {
+        public function addTest(test:Object):void {
 			if (!test.getIsComplete())
             	fTests.push(test);
         }

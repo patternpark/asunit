@@ -17,7 +17,7 @@ package asunit.framework {
         /**
          * Constructs a TestMethod with a given Test and method name.
          */
-        public function TestMethod(test:Test, method:String) {
+        public function TestMethod(test:Object, method:String) {
             this.test = test;
             this.method = method;
             start = getTimer();
@@ -27,7 +27,7 @@ package asunit.framework {
             return method;
         }
         
-        public function endTest(test:Test):void {
+        public function endTest(test:Object):void {
             _duration = (getTimer() - start) * .001;
         }
         

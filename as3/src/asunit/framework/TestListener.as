@@ -6,22 +6,22 @@ package asunit.framework {
         /**
          * Run the provided Test.
          */
-        function run(test:Test):void;
+        function run(test:Object):void;
         /**
          * A test started.
          */
-        function startTest(test:Test):void;
+        function startTest(test:Object):void;
         /**
          * A test method has begun execution.
          */
-        function startTestMethod(test:Test, methodName:String):void;
+        function startTestMethod(test:Object, methodName:String):void;
         /**
          * A test method has completed.
          */
-        function endTestMethod(test:Test, methodName:String):void;
+        function endTestMethod(test:Object, methodName:String):void;
         /**
          * A test ended.
          */
-         function endTest(test:Test):void;
+         function endTest(test:Object):void;
     }
 }

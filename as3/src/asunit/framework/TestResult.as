@@ -91,7 +91,7 @@ package asunit.framework {
         /**
          * Runs a TestCase.
          */
-        public function run(test:Test):void {
+        public function run(test:Object):void {
             startTest(test);
             test.runBare();
         }
@@ -110,7 +110,7 @@ package asunit.framework {
         /**
          * Informs the result that a test will be started.
          */
-        public function startTest(test:Test):void {
+        public function startTest(test:Object):void {
             var count:int = test.countTestCases();
             _runTests += count;
 
@@ -122,7 +122,7 @@ package asunit.framework {
             }
         }
 
-        public function startTestMethod(test:Test, method:String):void {
+        public function startTestMethod(test:Object, method:String):void {
             var len:uint = _listeners.length;
             var item:TestListener;
             for(var i:uint; i < len; i++) {
@@ -131,7 +131,7 @@ package asunit.framework {
             }
         }
 
-        public function endTestMethod(test:Test, method:String):void {
+        public function endTestMethod(test:Object, method:String):void {
             var len:uint = _listeners.length;
             var item:TestListener;
             for(var i:uint; i < len; i++) {
@@ -143,7 +143,7 @@ package asunit.framework {
         /**
          * Informs the result that a test was completed.
          */
-        public function endTest(test:Test):void {
+        public function endTest(test:Object):void {
             var len:uint = _listeners.length;
             var item:TestListener;
             for(var i:uint; i < len; i++) {

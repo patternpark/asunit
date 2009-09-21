@@ -7,7 +7,7 @@ package asunit.framework {
      * the caught exception.
      * @see TestResult
      */
-    public class FreeTestFailure {
+    public class FreeTestFailure implements ITestFailure {
         protected var _failedTest:Object;
         protected var _failedMethod:String;
         protected var _thrownException:Error;

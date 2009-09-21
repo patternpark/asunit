@@ -1,5 +1,5 @@
 package asunit.framework {
-	import asunit.framework.async.FreeAsyncOperation;
+	import asunit.framework.async.TimeoutCommand;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.describeType;
@@ -48,6 +48,7 @@ package asunit.framework {
 		
 		public function run(test:Object):void {
 			currentTest = test;
+			currentMethodName = '';
 			methodsList = new ArrayIterator(getTestMethods(test));
 			
 			runNextMethod();
@@ -67,12 +68,12 @@ package asunit.framework {
 			
 			runMethodForTest(method, currentTest, currentMethodName, testResult);
 			
-			var operations:Array = Async.instance.getOperationsForTest(currentTest);
-			if (operations && operations.length) {
-				// find the async operations and listen to them
-				for each (var operation:FreeAsyncOperation in operations) {
-					operation.addEventListener(FreeAsyncOperation.CALLED, onAsyncCalled);
-					operation.addEventListener(ErrorEvent.ERROR, onAsyncTestFailed);
+			var commands:Array = Async.instance.getCommandsForTest(currentTest);
+			if (commands && commands.length) {
+				// find the async commands and listen to them
+				for each (var command:TimeoutCommand in commands) {
+					command.addEventListener(TimeoutCommand.CALLED, onAsyncMethodCalled);
+					command.addEventListener(ErrorEvent.ERROR, onAsyncMethodFailed);
 				}
 				return;
 			}
@@ -80,35 +81,29 @@ package asunit.framework {
 			if (currentTest.hasOwnProperty('tearDown'))
 				currentTest.tearDown();
 			
-			setTimeout(runNextMethod, 1); // Avoid escalating callstack.
+			// If setTimeout() were not used, the synchronous test methods
+			// would keep increasing the callstack.
+			setTimeout(runNextMethod, 1);
 		}
 		
-		protected function onAsyncCalled(e:Event):void {
-			var operation:FreeAsyncOperation = FreeAsyncOperation(e.currentTarget);
-			runMethodForTest(operation.execute, currentTest, currentMethodName, testResult);
-			onAsyncTestCompleted(e);
+		protected function onAsyncMethodCalled(e:Event):void {
+			var command:TimeoutCommand = TimeoutCommand(e.currentTarget);
+			runMethodForTest(command.execute, currentTest, currentMethodName, testResult);
+			onAsyncMethodCompleted(e);
 		}
 		
-		protected function onAsyncTestFailed(e:ErrorEvent):void {
-			// The AsyncOperation doesn't ever know the method name.
+		protected function onAsyncMethodFailed(e:ErrorEvent):void {
+			// The TimeoutCommand doesn't know the method name.
 			var testFailure:FreeTestFailure = new FreeTestFailure(currentTest, currentMethodName, e.error);
 			// Record the test failure.
 			testResult.addFailure(testFailure);
-			onAsyncTestCompleted(e);
+			onAsyncMethodCompleted(e);
 		}
 		
-		protected function onAsyncTestCompleted(e:Event):void {
-			//trace('onAsyncTestCompleted - ' + e);
-			//trace('  e.currentTarget: ' + e.currentTarget);
-			//trace('    currentTest: ' + currentTest);
-			//trace('      currentMethodName: ' + currentMethodName);
-			//trace('----------------------');
-			var operation:FreeAsyncOperation = FreeAsyncOperation(e.currentTarget);
-			operation.removeEventListener(FreeAsyncOperation.CALLED, onAsyncTestCompleted);
-			operation.removeEventListener(ErrorEvent.ERROR, onAsyncTestFailed);
-			
-			//var operations:Array = Async.instance.getOperationsForTest(currentTest);
-			//trace('operations: ' + operations);
+		protected function onAsyncMethodCompleted(e:Event):void {
+			var command:TimeoutCommand = TimeoutCommand(e.currentTarget);
+			command.removeEventListener(TimeoutCommand.CALLED,	onAsyncMethodCompleted);
+			command.removeEventListener(ErrorEvent.ERROR,		onAsyncMethodFailed);
 			
 			if (asyncsCompleted) {
 				onCompleted();
@@ -130,8 +125,8 @@ package asunit.framework {
 		
 		protected function get asyncsCompleted():Boolean {
 			//TODO: maybe have Async send an event instead of checking it
-			var operations:Array = Async.instance.getOperationsForTest(currentTest);
-			return (!operations || operations.length == 0);
+			var commands:Array = Async.instance.getCommandsForTest(currentTest);
+			return (!commands || commands.length == 0);
 		}
 		
 	}

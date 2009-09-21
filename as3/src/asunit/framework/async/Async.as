@@ -1,5 +1,5 @@
 ﻿package asunit.framework.async {
-	import asunit.framework.AsyncOperation;
+	import asunit.framework.async.TimeoutCommand;
 	import asunit.framework.ErrorEvent;
 	import flash.utils.Dictionary;
 	import flash.events.Event;
@@ -11,10 +11,10 @@
 		
 		private static var _instance:Async;
 		
-		public var operationsByTest:Dictionary;
+		public var commandsByTest:Dictionary;
 		
 		public function Async() {
-			operationsByTest = new Dictionary(true);
+			commandsByTest = new Dictionary(true);
 		}
 		
 		public static function get instance():Async {
@@ -22,44 +22,44 @@
 			return _instance;
 		}
 		
-		public function getOperationsForTest(test:Object):Array {
-			var operations:Array = operationsByTest[test];
+		public function getCommandsForTest(test:Object):Array {
+			var commands:Array = commandsByTest[test];
 			// Clone to prevent changing by reference.
-			return operations ? operations.concat() : null;
+			return commands ? commands.concat() : null;
 		}
 		
 		public function addAsync(test:Object, handler:Function, duration:Number):Function {
-			var operation:FreeAsyncOperation = new FreeAsyncOperation(test, handler, duration);
-			addOperationForTest(test, operation);
-			return operation.getCallback();
+			var command:TimeoutCommand = new TimeoutCommand(test, handler, duration);
+			addCommandForTest(test, command);
+			return command.getCallback();
 		}
 		
-		protected function addOperationForTest(test:Object, operation:FreeAsyncOperation):void {
-			if (!operationsByTest[test])
-				operationsByTest[test] = [];
+		protected function addCommandForTest(test:Object, command:TimeoutCommand):void {
+			if (!commandsByTest[test])
+				commandsByTest[test] = [];
 				
-			operationsByTest[test].push(operation);
-			operation.addEventListener(FreeAsyncOperation.CALLED,	onTestResult);
-			operation.addEventListener(ErrorEvent.ERROR, 			onTestResult);
+			commandsByTest[test].push(command);
+			command.addEventListener(TimeoutCommand.CALLED,	onTestResult);
+			command.addEventListener(ErrorEvent.ERROR, 			onTestResult);
 		}
 		
 		protected function onTestResult(e:Event):void {
-			var operation:FreeAsyncOperation = FreeAsyncOperation(e.currentTarget);
-			operation.removeEventListener(FreeAsyncOperation.CALLED,	onTestResult);
-			operation.removeEventListener(ErrorEvent.ERROR,				onTestResult);
+			var command:TimeoutCommand = TimeoutCommand(e.currentTarget);
+			command.removeEventListener(TimeoutCommand.CALLED,	onTestResult);
+			command.removeEventListener(ErrorEvent.ERROR,				onTestResult);
 			
-			removeOperationForTest(operation.scope, operation);
+			removeCommandForTest(command.scope, command);
 		}
 		
-		public function removeOperationForTest(test:Object, operation:FreeAsyncOperation):void {
-			var operations:Array = operationsByTest[test];
-			if (!operations) return;
+		public function removeCommandForTest(test:Object, command:TimeoutCommand):void {
+			var commands:Array = commandsByTest[test];
+			if (!commands) return;
 			
-			operations.splice(operations.indexOf(operation), 1);
+			commands.splice(commands.indexOf(command), 1);
 			// Remove the array when emptied.
-			if (!operations.length)
-				delete operationsByTest[test];
-			//TODO: maybe dispatch event when the last operation is removed
+			if (!commands.length)
+				delete commandsByTest[test];
+			//TODO: maybe dispatch event when the last command is removed
 		}
 		
 	}

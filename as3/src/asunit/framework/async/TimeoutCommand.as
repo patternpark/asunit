@@ -10,7 +10,7 @@ package asunit.framework.async {
 	[Event(name="called",	type="flash.events.Event")]
 	[Event(name="error",	type="asunit.framework.ErrorEvent")]
 
-	public class FreeAsyncOperation extends EventDispatcher implements Command {
+	public class TimeoutCommand extends EventDispatcher implements Command {
 		public static const CALLED:String = 'called';
 		public var scope:Object;
 		public var handler:Function; // public for now for testing
@@ -20,7 +20,7 @@ package asunit.framework.async {
 		protected var duration:Number;
 		protected var failureHandler:Function;
 
-		public function FreeAsyncOperation(scope:Object, handler:Function, duration:Number, failureHandler:Function=null){
+		public function TimeoutCommand(scope:Object, handler:Function, duration:Number, failureHandler:Function=null){
 			this.scope = scope;
 			this.handler = handler || function(...args):* {};
 			this.duration = duration;
@@ -46,7 +46,7 @@ package asunit.framework.async {
 		}
 		
 		protected function onTimeoutComplete(event:TimerEvent):void {
-			sendError(new IllegalOperationError('Async operation timed out.'));
+			sendError(new IllegalOperationError('Async Command timed out.'));
 		}
 		
 		protected function sendError(error:Error):void {
@@ -56,7 +56,7 @@ package asunit.framework.async {
 		}
 
 		override public function toString():String {
-			return '[FreeAsyncOperation scope=' + scope + ']';;
+			return '[TimeoutCommand scope=' + scope + ']';;
 		}
 		
 	}

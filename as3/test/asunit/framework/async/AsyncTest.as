@@ -18,12 +18,12 @@
 		public function test_addAsync_handler_can_be_retrieved_with_same_information():void {
 			var cancelTimeout:Function = asunit.framework.async.addAsync(this, foo, 111);
 			
-			var operations:Array = Async.instance.getOperationsForTest(this);
-			assertNotNull(operations);
-			var operation0:FreeAsyncOperation = operations[0];
+			var commands:Array = Async.instance.getCommandsForTest(this);
+			assertNotNull(commands);
+			var command0:TimeoutCommand = commands[0];
 			
 			// handler is public for now, for testing
-			assertSame(foo, operation0.handler);
+			assertSame(foo, command0.handler);
 			cancelTimeout();
 		}
 		

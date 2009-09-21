@@ -7,6 +7,7 @@ package asunit.textui {
     import asunit.framework.ITestResult;
     import asunit.runner.BaseTestRunner;
     import asunit.runner.Version;
+	import asunit.framework.FreeRunner;
 
     import flash.display.Sprite;
     import flash.events.*;
@@ -101,7 +102,7 @@ package asunit.textui {
          * API for use by textui.TestRunner
          */
 
-        public function run(test:Test):void {
+        public function run(test:Object):void {
         }
 
         public function printResult(result:ITestResult, runTime:Number):void {
@@ -215,35 +216,36 @@ package asunit.textui {
         /**
          * @see asunit.framework.TestListener#addError(Test, Throwable)
          */
-        public function addError(test:Test, t:Error):void {
+        public function addError(test:Object, t:Error):void {
             print("E");
         }
 
         /**
          * @see asunit.framework.TestListener#addFailure(Test, AssertionFailedError)
          */
-        public function addFailure(test:Test, t:AssertionFailedError):void {
+        public function addFailure(test:Object, t:AssertionFailedError):void {
             print("F");
         }
 
         /**
          * @see asunit.framework.TestListener#endTestMethod(test, testMethod);
          */
-        public function startTestMethod(test:Test, methodName:String):void {
+        public function startTestMethod(test:Object, methodName:String):void {
         }
 
         /**
          * @see asunit.framework.TestListener#endTestMethod(test, testMethod);
          */
-        public function endTestMethod(test:Test, methodName:String):void {
+        public function endTestMethod(test:Object, methodName:String):void {
         }
 
         /**
          * @see asunit.framework.TestListener#startTest(Test)
          */
-        public function startTest(test:Test):void {
+        public function startTest(test:Object):void {
             startTime = getTimer();
-            var count:uint = test.countTestCases();
+            var count:uint = FreeRunner.countTestMethods(test);
+			
             for(var i:uint; i < count; i++) {
                 print(".");
                 if (fColumn++ >= 80) {
@@ -256,7 +258,7 @@ package asunit.textui {
         /**
          * @see asunit.framework.TestListener#endTest(Test)
          */
-        public function endTest(test:Test):void {
+        public function endTest(test:Object):void {
             var duration:Number = getTimer() - startTime;
             testTimes.push(TestTime.create(test, duration));
         }

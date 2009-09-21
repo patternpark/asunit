@@ -46,7 +46,7 @@ package asunit.framework.async {
 		}
 		
 		protected function onTimeoutComplete(event:TimerEvent):void {
-			sendError(new IllegalOperationError('Asynchronous command timed out.'));
+			sendError(new IllegalOperationError("Timeout (" + duration + "ms) exceeded on an asynchronous operation."));
 		}
 		
 		protected function sendError(error:Error):void {

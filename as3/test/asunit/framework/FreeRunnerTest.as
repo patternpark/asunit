@@ -4,7 +4,7 @@ package asunit.framework {
 
 	public class FreeRunnerTest extends TestCase {
 		private var runner:FreeRunner;
-		private var spriteTest:SpriteTest;
+		private var spriteTest:SpriteFreeTest;
 
 		public function FreeRunnerTest(testMethod:String = null) {
 			super(testMethod);
@@ -12,7 +12,7 @@ package asunit.framework {
 
 		protected override function setUp():void {
 			runner = new FreeRunner();
-			spriteTest = new SpriteTest();
+			spriteTest = new SpriteFreeTest();
 		}
 
 		protected override function tearDown():void {
@@ -85,11 +85,11 @@ package asunit.framework {
 import flash.display.Sprite;
 import asunit.asserts.*;
 
-class SpriteTest {
+class SpriteFreeTest {
 	public var methodsCalled:Array;
 	protected var sprite:Sprite;
 	
-	public function SpriteTest() {
+	public function SpriteFreeTest() {
 		methodsCalled = [];
 	}
 	

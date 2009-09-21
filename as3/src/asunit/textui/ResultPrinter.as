@@ -145,7 +145,7 @@ package asunit.textui {
             }
             var i:uint;
             for each (var item:ITestFailure in booBoos) {
-                printDefect(TestFailure(item), i);
+                printDefect(item, i);
                 i++;
             }
         }

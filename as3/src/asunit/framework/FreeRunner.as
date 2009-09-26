@@ -101,7 +101,12 @@ package asunit.framework {
 			if (currentTest.hasOwnProperty('setUp'))
 				currentTest.setUp();
 			
-			runMethodForTest(method, currentTest, currentMethodName, result);
+			try {
+				method();
+			}
+			catch (error:Error) {
+				recordFailure(error);
+			}
 			
 			var commands:Array = Async.instance.getCommandsForTest(currentTest);
 			if (commands && commands.length) {
@@ -124,7 +129,12 @@ package asunit.framework {
 		
 		protected function onAsyncMethodCalled(e:Event):void {
 			var command:TimeoutCommand = TimeoutCommand(e.currentTarget);
-			runMethodForTest(command.execute, currentTest, currentMethodName, result);
+			try {
+				command.execute();
+			}
+			catch (error:Error) {
+				recordFailure(error);
+			}
 			onAsyncMethodCompleted(e);
 		}
 		
@@ -147,13 +157,8 @@ package asunit.framework {
 			}
 		}
 		
-		protected static function runMethodForTest(method:Function, test:Object, testMethodName:String, result:FreeTestResult):void {
-			try {
-				method();
-			}
-			catch (error:Error) {
-				result.addFailure(new FreeTestFailure(test, testMethodName, error));
-			}
+		protected function recordFailure(error:Error):void {
+			result.addFailure(new FreeTestFailure(currentTest, currentMethodName, error));
 		}
 		
 		protected function onCompleted():void {

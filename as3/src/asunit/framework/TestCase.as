@@ -3,9 +3,11 @@ package asunit.framework {
 	import flash.display.DisplayObjectContainer;
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
+	import flash.events.TimerEvent;
 	import flash.utils.describeType;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.setTimeout;
+	import flash.utils.Timer;
 
 	import asunit.errors.AssertionFailedError;
 	import asunit.util.ArrayIterator;
@@ -74,6 +76,7 @@ package asunit.framework {
 		protected var isComplete:Boolean;
 		protected var result:TestListener;
 		protected var testMethods:Array;
+		protected var timer:Timer;
 
 		private var asyncQueue:Array;
 		private var currentMethod:String;
@@ -105,6 +108,13 @@ package asunit.framework {
 			setName(className.toString());
 			resolveLayoutManager();
 			asyncQueue = [];
+			timer = new Timer(1, 1);
+			timer.addEventListener(TimerEvent.TIMER, onTick);
+		}
+		
+		// Not subscribing runBare() directly because that would require the Test interface to change.
+		protected function onTick(e:TimerEvent):void {
+			runBare();
 		}
 
 		private function resolveLayoutManager():void {
@@ -423,7 +433,9 @@ package asunit.framework {
 				tearDown();
 				layoutManager.resetAll();
 			}
-			setTimeout(runBare, 5);
+			// Use Timer instead of setTimeout to reduce the failure call stack.
+			timer.reset()
+			timer.start();
 		}
 
 		/**

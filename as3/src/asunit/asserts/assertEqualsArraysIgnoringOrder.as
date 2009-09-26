@@ -1,8 +1,5 @@
 ﻿package asunit.asserts {
 	import asunit.framework.Assert;
 	
-	public function assertEqualsArraysIgnoringOrder(...args:Array):void {
-		Assert.assertEqualsArraysIgnoringOrder.apply(null, args);
-	}
-	
+	public var assertEqualsArraysIgnoringOrder:Function = Assert.assertEqualsArraysIgnoringOrder;
 }

@@ -1,8 +1,5 @@
 ﻿package asunit.asserts {
 	import asunit.framework.Assert;
 	
-	public function assertEquals(...args:Array):void {
-		Assert.assertEquals.apply(null, args);
-	}
-	
+	public const assertEquals:Function = Assert.assertEquals;
 }

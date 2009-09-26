@@ -38,7 +38,7 @@ package asunit.framework {
             }
 
             if(!actual) {
-				failNotEquals(message, true, actual);
+				throw new AssertionFailedError(format(message, true, actual));
             }
         }
         /**
@@ -62,7 +62,7 @@ package asunit.framework {
             }
 
             if(actual) {
-				failNotEquals(message, false, actual);
+				throw new AssertionFailedError(format(message, false, actual));
             }
         }
         /**
@@ -100,11 +100,11 @@ package asunit.framework {
         static public function assertThrows(errorType:Class, block:Function):void {
             try {
                 block.call();
-                fail("assertThrows block did not throw an expected exception");
+                throw new AssertionFailedError("assertThrows block did not throw an expected exception");
             }
             catch(e:Error) {
                 if(!(e is errorType)) {
-                    fail("assertThrows did not throw the expected error type, instead threw: " + getQualifiedClassName(e));
+                    throw new AssertionFailedError("assertThrows did not throw the expected error type, instead threw: " + getQualifiedClassName(e));
                 }
             }
         }
@@ -160,7 +160,7 @@ package asunit.framework {
                 }
             }
 
-            failNotEquals(message, expected, actual);
+            throw new AssertionFailedError(format(message, expected, actual));
         }
         /**
          * Asserts that an object isn't null. If it is
@@ -168,21 +168,23 @@ package asunit.framework {
          */
         static public function assertNotNull(...args:Array):void {
             var message:String;
-            var object:Object;
+            var actual:Object;
 
             if(args.length == 1) {
                 message = "";
-                object = args[0];
+                actual = args[0];
             }
             else if(args.length == 2) {
                 message = args[0];
-                object = args[1];
+                actual = args[1];
             }
             else {
                 throw new IllegalOperationError("Invalid argument count");
             }
 
-            assertTrue(message, object != null);
+			if(actual == null) {
+				throw new AssertionFailedError("expected not null but was:<" + actual + ">");
+			}
         }
         /**
          * Asserts that an object is null.  If it is not
@@ -203,8 +205,10 @@ package asunit.framework {
             else {
                 throw new IllegalOperationError("Invalid argument count");
             }
-
-            assertEquals(message, null, actual);
+			
+			if(actual != null) {
+				throw new AssertionFailedError(format(message, null, actual));
+			}
         }
         /**
          * Asserts that two objects refer to the same object. If they are not
@@ -229,10 +233,9 @@ package asunit.framework {
                 throw new IllegalOperationError("Invalid argument count");
             }
 
-            if(expected === actual) {
-                return;
+            if(expected !== actual) {
+				throw new AssertionFailedError("expected same as:<" + expected + "> but was:<" + actual + ">");
             }
-            failNotSame(message, expected, actual);
         }
          /**
           * Asserts that two objects do not refer to the same object. If they do,
@@ -257,8 +260,9 @@ package asunit.framework {
                 throw new IllegalOperationError("Invalid argument count");
             }
 
-            if(expected === actual)
-                failSame(message);
+            if(expected === actual) {
+				throw new AssertionFailedError("expected not same but both were:<" + actual + ">");
+			}
         }
 
         /**
@@ -290,7 +294,7 @@ package asunit.framework {
             if(Math.abs(expected - actual) <= tolerance) {
                    return;
             }
-            failNotEquals(message, expected, actual);
+            throw new AssertionFailedError(format(message, expected, actual));
         }
 
         /**
@@ -385,23 +389,6 @@ package asunit.framework {
                     failNotEquals("Found no match for " + expectedMember + ";", expected, actual);
                 }
             }
-        }
-
-
-        static private function failSame(message:String):void {
-            var formatted:String = "";
-             if(message != null) {
-                 formatted = message + " ";
-             }
-             fail(formatted + "expected not same");
-        }
-
-        static private function failNotSame(message:String, expected:Object, actual:Object):void {
-            var formatted:String = "";
-            if(message != null) {
-                formatted = message + " ";
-            }
-            fail(formatted + "expected same:<" + expected + "> was not:<" + actual + ">");
         }
 
         static private function failNotEquals(message:String, expected:Object, actual:Object):void {

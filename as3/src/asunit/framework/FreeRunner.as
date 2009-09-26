@@ -4,6 +4,7 @@ package asunit.framework {
 	import asunit.textui.ResultPrinter;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.TimerEvent;
 	import flash.utils.describeType;
 	import asunit.errors.AssertionFailedError;
 	import asunit.util.ArrayIterator;
@@ -16,6 +17,7 @@ package asunit.framework {
 	import flash.display.DisplayObject;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
+	import flash.utils.Timer;
 
 	public class FreeRunner extends MovieClip implements ITestRunner {
 		protected var result:FreeTestResult;
@@ -24,10 +26,13 @@ package asunit.framework {
 		protected var currentMethodName:String;
 		protected var _printer:ResultPrinter;
 		protected var startTime:Number;
+		protected var timer:Timer;
 
 		public function FreeRunner(printer:ResultPrinter = null) {
 			result = new FreeTestResult();
 			this.printer = printer;
+			timer = new Timer(1, 1);
+			timer.addEventListener(TimerEvent.TIMER, runNextMethod);
 			configureListeners();
 		}
 		
@@ -89,7 +94,7 @@ package asunit.framework {
 			runNextMethod();
 		}
 		
-		protected function runNextMethod():void {
+		protected function runNextMethod(e:TimerEvent = null):void {
 			if (completed) {
 				onCompleted();
 				return;
@@ -122,9 +127,10 @@ package asunit.framework {
 				currentTest.tearDown();
 				
 			
-			// If setTimeout() were not used, the synchronous test methods
+			// If the asynchronous Timer were not used, the synchronous test methods
 			// would keep increasing the callstack.
-			setTimeout(runNextMethod, 1);
+			timer.reset();
+			timer.start();
 		}
 		
 		protected function onAsyncMethodCalled(e:Event):void {

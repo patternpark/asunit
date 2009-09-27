@@ -58,14 +58,15 @@ package asunit.framework {
 				result.addListener(_printer);
         }
 
-		protected static function getMethodsWithPrefixOrMetadata(object:Object, thePrefix:String, theMetadata:String):Array {
+		protected static function getMethodsWithPrefixOrMetadata(object:Object, theMetadata:String, thePrefix:String = ''):Array {
 			var description:XML = describeType(object);
 			var methodNodes:XMLList = description.method.( @name.indexOf(thePrefix) == 0
 				|| (hasOwnProperty("metadata") && metadata.@name == theMetadata) );
+			
 			var methodNames:XMLList = methodNodes.@name;
 			var testMethods:Array = [];
-			for each (var item:Object in methodNames) {
-				testMethods.push(String(item));
+			for each (var item:XML in methodNames) {
+				testMethods[testMethods.length] = String(item); // faster than push
 			}
 			// For now, enforce a consistent order to enable precise testing.
 			testMethods.sort();
@@ -73,20 +74,20 @@ package asunit.framework {
 		}
 		
 		public static function getBeforeMethods(test:Object):Array {
-			return getMethodsWithPrefixOrMetadata(test, "setUp", "Before");
+			return getMethodsWithPrefixOrMetadata(test, "Before", "setUp");
 		}
 		
 		/**
 		 *
 		 * @param	test	An instance of a class with test methods.
-		 * @return	An array of method names as strings.
+		 * @return	An array of test method names as strings.
 		 */
 		public static function getTestMethods(test:Object):Array {
-			return getMethodsWithPrefixOrMetadata(test, "test", "Test");
+			return getMethodsWithPrefixOrMetadata(test, "Test", "test");
 		}
 		
 		public static function getAfterMethods(test:Object):Array {
-			return getMethodsWithPrefixOrMetadata(test, "tearDown", "After");
+			return getMethodsWithPrefixOrMetadata(test, "After", "tearDown");
 		}
 		
 		public static function countTestMethods(test:Object):uint {

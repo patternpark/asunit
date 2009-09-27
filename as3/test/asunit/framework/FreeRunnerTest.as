@@ -75,7 +75,7 @@ package asunit.framework {
 			var failures:Array = e.testResult.failures;
 			assertEquals('one failure in testResult', 1, failures.length);
 			
-			var failure0:FreeTestFailure = failures[0] as FreeTestFailure;
+			var failure0:ITestFailure = failures[0] as FreeTestFailure;
 			assertSame(spriteTest, failure0.failedTest);
 		}
 		

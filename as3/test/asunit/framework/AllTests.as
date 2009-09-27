@@ -11,6 +11,7 @@ package asunit.framework {
 	import asunit.framework.FreeRunnerTest;
 	import asunit.framework.TestCaseTest;
 	import asunit.framework.TestFailureTest;
+	import asunit.framework.TestMethodMetadataTest;
 	import asunit.framework.VisualTestCaseTest;
 
 	public class AllTests extends TestSuite {
@@ -27,6 +28,7 @@ package asunit.framework {
 			addTest(new asunit.framework.FreeRunnerTest());
 			addTest(new asunit.framework.TestCaseTest());
 			addTest(new asunit.framework.TestFailureTest());
+			addTest(new asunit.framework.TestMethodMetadataTest());
 			addTest(new asunit.framework.VisualTestCaseTest());
 		}
 	}

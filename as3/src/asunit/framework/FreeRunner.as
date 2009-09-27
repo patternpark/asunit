@@ -20,13 +20,16 @@ package asunit.framework {
 	import flash.utils.Timer;
 
 	public class FreeRunner extends MovieClip implements ITestRunner {
-		protected var result:FreeTestResult;
-		protected var methodsList:Iterator;
+		protected var beforeMethodsList:Iterator;
+		protected var testMethodsList:Iterator;
+		protected var afterMethodsList:Iterator;
+		
 		protected var currentTest:Object;
 		protected var currentMethodName:String;
 		protected var _printer:ResultPrinter;
 		protected var startTime:Number;
 		protected var timer:Timer;
+		protected var result:FreeTestResult;
 
 		public function FreeRunner(printer:ResultPrinter = null) {
 			result = new FreeTestResult();
@@ -55,15 +58,10 @@ package asunit.framework {
 				result.addListener(_printer);
         }
 
-		
-		/**
-		 *
-		 * @param	test	An instance of a class with test methods.
-		 * @return	An array of method names as strings.
-		 */
-		public static function getTestMethods(test:Object):Array {
-			var description:XML = describeType(test);
-			var methodNodes:XMLList = description..method.(@name.match("^test"));
+		protected static function getMethodsWithPrefixOrMetadata(object:Object, thePrefix:String, theMetadata:String):Array {
+			var description:XML = describeType(object);
+			var methodNodes:XMLList = description.method.( @name.indexOf(thePrefix) == 0
+				|| (hasOwnProperty("metadata") && metadata.@name == theMetadata) );
 			var methodNames:XMLList = methodNodes.@name;
 			var testMethods:Array = [];
 			for each (var item:Object in methodNames) {
@@ -74,18 +72,37 @@ package asunit.framework {
 			return testMethods;
 		}
 		
+		public static function getBeforeMethods(test:Object):Array {
+			return getMethodsWithPrefixOrMetadata(test, "setUp", "Before");
+		}
+		
+		/**
+		 *
+		 * @param	test	An instance of a class with test methods.
+		 * @return	An array of method names as strings.
+		 */
+		public static function getTestMethods(test:Object):Array {
+			return getMethodsWithPrefixOrMetadata(test, "test", "Test");
+		}
+		
+		public static function getAfterMethods(test:Object):Array {
+			return getMethodsWithPrefixOrMetadata(test, "tearDown", "After");
+		}
+		
 		public static function countTestMethods(test:Object):uint {
 			return getTestMethods(test).length;
 		}
 		
 		protected function get completed():Boolean {
-			return (!methodsList || !methodsList.hasNext()) && asyncsCompleted;
+			return (!testMethodsList || !testMethodsList.hasNext()) && asyncsCompleted;
 		}
 		
 		public function run(test:Object):void {
 			currentTest = test;
 			currentMethodName = '';
-			methodsList = new ArrayIterator(getTestMethods(test));
+			beforeMethodsList = new ArrayIterator(getBeforeMethods(test));
+			testMethodsList   = new ArrayIterator(getTestMethods(test));
+			afterMethodsList  = new ArrayIterator(getAfterMethods(test));
 			
 			startTime = getTimer();
 			if (_printer)
@@ -100,11 +117,20 @@ package asunit.framework {
 				return;
 			}
 			
-			currentMethodName = String(methodsList.next());
+			currentMethodName = String(testMethodsList.next());
 			var method:Function = currentTest[currentMethodName] as Function;
 			
-			if (currentTest.hasOwnProperty('setUp'))
-				currentTest.setUp();
+			beforeMethodsList.reset();
+			var beforeMethod:Function;
+			while (beforeMethodsList.hasNext()) {
+				beforeMethod = currentTest[String(beforeMethodsList.next())];
+				try {
+					beforeMethod();
+				}
+				catch (error:Error) {
+					recordFailure(error);
+				}
+			}
 			
 			try {
 				method();
@@ -123,8 +149,17 @@ package asunit.framework {
 				return;
 			}
 			
-			if (currentTest.hasOwnProperty('tearDown'))
-				currentTest.tearDown();
+			afterMethodsList.reset();
+			var afterMethod:Function;
+			while (afterMethodsList.hasNext()) {
+				afterMethod = currentTest[String(afterMethodsList.next())];
+				try {
+					afterMethod();
+				}
+				catch (error:Error) {
+					recordFailure(error);
+				}
+			}
 				
 			
 			// If the asynchronous Timer were not used, the synchronous test methods

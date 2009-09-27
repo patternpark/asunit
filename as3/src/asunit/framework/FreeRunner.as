@@ -63,14 +63,14 @@ package asunit.framework {
 			var methodNodes:XMLList = description.method.( @name.indexOf(thePrefix) == 0
 				|| (hasOwnProperty("metadata") && metadata.@name == theMetadata) );
 			
-			var methodNames:XMLList = methodNodes.@name;
-			var testMethods:Array = [];
-			for each (var item:XML in methodNames) {
-				testMethods[testMethods.length] = String(item); // faster than push
+			var methodNamesList:XMLList = methodNodes.@name;
+			var methodNames:Array = [];
+			for each (var methodNameXML:XML in methodNamesList) {
+				methodNames[methodNames.length] = String(methodNameXML); // faster than push
 			}
 			// For now, enforce a consistent order to enable precise testing.
-			testMethods.sort();
-			return testMethods;
+			methodNames.sort();
+			return methodNames;
 		}
 		
 		public static function getBeforeMethods(test:Object):Array {

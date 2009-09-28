@@ -2,6 +2,7 @@ package asunit.framework {
 	import asunit.framework.async.TimeoutCommand;
 	import asunit.runner.ITestRunner;
 	import asunit.textui.ResultPrinter;
+	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
@@ -19,24 +20,25 @@ package asunit.framework {
 	import flash.display.StageScaleMode;
 	import flash.utils.Timer;
 
-	public class FreeRunner extends MovieClip implements ITestRunner {
+	public class FreeRunner extends EventDispatcher implements ITestRunner {
 		protected var beforeMethodsList:Iterator;
 		protected var testMethodsList:Iterator;
 		protected var afterMethodsList:Iterator;
 		
 		protected var currentTest:Object;
 		protected var currentMethodName:String;
+		protected var container:DisplayObjectContainer;
 		protected var _printer:ResultPrinter;
 		protected var startTime:Number;
 		protected var timer:Timer;
 		protected var result:FreeTestResult;
 
-		public function FreeRunner(printer:ResultPrinter = null) {
+		public function FreeRunner(container:DisplayObjectContainer = null, printer:ResultPrinter = null) {
+			this.container = container;
 			result = new FreeTestResult();
 			this.printer = printer;
 			timer = new Timer(1, 1);
 			timer.addEventListener(TimerEvent.TIMER, runNextMethod);
-			configureListeners();
 		}
 		
 		public function get printer():ResultPrinter { return _printer; }
@@ -45,15 +47,8 @@ package asunit.framework {
 			if (_printer && result)
 				result.removeListener(_printer);
 				
-			if (_printer is DisplayObject && getChildIndex(_printer)) {
-				removeChild(_printer);
-			}
-
 			_printer = printer;
 			
-			if (_printer is DisplayObject) {
-				addChild(_printer);
-			}
 			if (result)
 				result.addListener(_printer);
         }
@@ -207,6 +202,7 @@ package asunit.framework {
 			dispatchEvent(new TestResultEvent(TestResultEvent.NAME, result));
 			
 			if (!_printer) return;
+			//TODO: Move this out to view and use event instead.
 			_printer.endTest(currentTest);
 			var runTime:Number = getTimer() - startTime;
 			_printer.printResult(result, runTime);
@@ -218,31 +214,5 @@ package asunit.framework {
 			return (!commands || commands.length == 0);
 		}
 		
-		
-		//////////////////////////////////////////////////////
-		
-        private function configureListeners():void {
-            addEventListener(Event.ADDED_TO_STAGE, addedHandler);
-            addEventListener(Event.ADDED, addedHandler);
-        }
-
-        protected function addedHandler(event:Event):void {
-            if (!stage)
-            {
-                return;
-            }
-            if(event.target === _printer) {
-                stage.align = StageAlign.TOP_LEFT;
-                stage.scaleMode = StageScaleMode.NO_SCALE;
-                stage.addEventListener(Event.RESIZE, resizeHandler);
-                resizeHandler(new Event("resize"));
-            }
-        }
-
-        private function resizeHandler(event:Event):void {
-			if (!_printer) return;
-            _printer.width = stage.stageWidth;
-            _printer.height = stage.stageHeight;
-        }
 	}
 }

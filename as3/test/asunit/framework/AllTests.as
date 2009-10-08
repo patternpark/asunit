@@ -12,6 +12,8 @@ package asunit.framework {
 	import asunit.framework.FreeSuiteTest;
 	import asunit.framework.TestCaseTest;
 	import asunit.framework.TestFailureTest;
+	import asunit.framework.TestMethodIteratorMultiMethodTest;
+	import asunit.framework.TestMethodIteratorSingleMethodTest;
 	import asunit.framework.TestMethodMetadataTest;
 	import asunit.framework.VisualTestCaseTest;
 
@@ -30,6 +32,8 @@ package asunit.framework {
 			addTest(new asunit.framework.FreeSuiteTest());
 			addTest(new asunit.framework.TestCaseTest());
 			addTest(new asunit.framework.TestFailureTest());
+			addTest(new asunit.framework.TestMethodIteratorMultiMethodTest());
+			addTest(new asunit.framework.TestMethodIteratorSingleMethodTest());
 			addTest(new asunit.framework.TestMethodMetadataTest());
 			addTest(new asunit.framework.VisualTestCaseTest());
 		}

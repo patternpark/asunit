@@ -1,6 +1,5 @@
 package asunit.framework {
     import asunit.errors.AssertionFailedError;
-    import asunit.errors.InstanceNotFoundError;
 
     /**
      * A <code>TestResult</code> collects the results of executing

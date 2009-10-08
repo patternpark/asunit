@@ -1,24 +1,17 @@
 package asunit.framework {
-	import asunit.framework.async.TimeoutCommand;
-	import asunit.runner.ITestRunner;
-	import asunit.textui.ResultPrinter;
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
 	import flash.utils.describeType;
-	import asunit.errors.AssertionFailedError;
+	import flash.utils.getTimer;
+	import flash.utils.Timer;
+	import asunit.framework.async.Async;
+	import asunit.framework.async.TimeoutCommand;
+	import asunit.runner.ITestRunner;
+	import asunit.textui.ResultPrinter;
 	import asunit.util.ArrayIterator;
 	import asunit.util.Iterator;
-	import flash.utils.getTimer;
-	import flash.utils.setTimeout;
-	import asunit.framework.async.Async;
-	import flash.events.IEventDispatcher;
-	import flash.display.MovieClip;
-	import flash.display.DisplayObject;
-	import flash.display.StageAlign;
-	import flash.display.StageScaleMode;
-	import flash.utils.Timer;
 
 	public class FreeRunner extends EventDispatcher implements ITestRunner {
 		protected var beforeMethodsList:Iterator;

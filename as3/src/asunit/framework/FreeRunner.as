@@ -4,6 +4,7 @@ package asunit.framework {
 	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
 	import flash.utils.describeType;
+	import flash.utils.getDefinitionByName;
 	import flash.utils.getTimer;
 	import flash.utils.Timer;
 	import asunit.framework.async.Async;
@@ -47,8 +48,8 @@ package asunit.framework {
         }
 
 		protected static function getMethodsWithPrefixOrMetadata(object:Object, theMetadata:String, thePrefix:String = ''):Array {
-			var description:XML = describeType(object);
-			var methodNodes:XMLList = description.method.( @name.indexOf(thePrefix) == 0
+			var typeInfo:XML = describeType(object);
+			var methodNodes:XMLList = typeInfo.method.( @name.indexOf(thePrefix) == 0
 				|| (hasOwnProperty("metadata") && metadata.@name == theMetadata) );
 			
 			var methodNamesList:XMLList = methodNodes.@name;
@@ -60,6 +61,18 @@ package asunit.framework {
 			methodNames.sort();
 			return methodNames;
 		}
+	
+		public static function getTestClasses(suite:Object):Array {
+			var typeInfo:XML = describeType(suite);
+			trace('typeInfo: \n' + typeInfo);
+			if (typeInfo.@base == 'Class') typeInfo = typeInfo.factory[0];
+			var testClasses:Array = [];
+			for each (var variableType:XML in typeInfo.variable.@type) {
+				testClasses[testClasses.length] = getDefinitionByName(String(variableType)); // faster than push
+			}
+			return testClasses;
+		}
+		
 		
 		public static function getBeforeMethods(test:Object):Array {
 			return getMethodsWithPrefixOrMetadata(test, "Before", "setUp");
@@ -82,6 +95,17 @@ package asunit.framework {
 			return getTestMethods(test).length;
 		}
 		
+		public static function countTestClasses(testSuite:Object):uint {
+			return getTestClasses(testSuite).length;
+		}
+		
+		public static function isSuite(possibleTestSuite:Object):uint {
+			var typeInfo:XML = describeType(possibleTestSuite);
+			if (typeInfo.@base == 'Class') typeInfo = typeInfo.factory[0];
+			var suiteMetadata:XMLList = (typeInfo.@base == 'Class') ? typeInfo.factory.me : typeInfo.variable;
+			return null;
+		}
+	
 		protected function get completed():Boolean {
 			return (!testMethodsList || !testMethodsList.hasNext()) && asyncsCompleted;
 		}

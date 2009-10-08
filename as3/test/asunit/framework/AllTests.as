@@ -9,6 +9,7 @@ package asunit.framework {
 	import asunit.framework.FreeRunnerAsyncMethodTest;
 	import asunit.framework.FreeRunnerErrorMethodTest;
 	import asunit.framework.FreeRunnerTest;
+	import asunit.framework.FreeSuiteTest;
 	import asunit.framework.TestCaseTest;
 	import asunit.framework.TestFailureTest;
 	import asunit.framework.TestMethodMetadataTest;
@@ -26,6 +27,7 @@ package asunit.framework {
 			addTest(new asunit.framework.FreeRunnerAsyncMethodTest());
 			addTest(new asunit.framework.FreeRunnerErrorMethodTest());
 			addTest(new asunit.framework.FreeRunnerTest());
+			addTest(new asunit.framework.FreeSuiteTest());
 			addTest(new asunit.framework.TestCaseTest());
 			addTest(new asunit.framework.TestFailureTest());
 			addTest(new asunit.framework.TestMethodMetadataTest());

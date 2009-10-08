@@ -1,18 +1,24 @@
 package asunit.framework {
 	import asunit.framework.TestCase;
 	import flash.events.Event;
+	import flash.utils.describeType;
+	import asunit.framework.support.DoubleFailSuite;
+	import asunit.framework.support.FailAssertTrueTest;
+	import asunit.framework.support.FailAssertEqualsTest;
 
-	public class FreeRunnerTest extends TestCase {
+	public class FreeSuiteTest extends TestCase {
 		private var runner:FreeRunner;
-		private var spriteTest:SpriteFreeTest;
+		private var suite:Object;
 
-		public function FreeRunnerTest(testMethod:String = null) {
+		public function FreeSuiteTest(testMethod:String = null) {
 			super(testMethod);
 		}
 
 		protected override function setUp():void {
 			runner = new FreeRunner();
-			spriteTest = new SpriteFreeTest();
+			suite = new DoubleFailSuite();
+			//trace(describeType(suite));
+			//throw(new Error('sldkjlkjlj'));
 		}
 
 		protected override function tearDown():void {
@@ -23,24 +29,27 @@ package asunit.framework {
 			assertTrue("FreeRunner instantiated", runner is FreeRunner);
 		}
 		
-		public function test_free_test_does_not_extend_TestCase():void {
-			assertFalse(spriteTest is TestCase);
-		}
-
-		public function test_countTestMethods_of_free_test():void {
-			assertEquals(3, FreeRunner.countTestMethods(spriteTest));
+		public function test_countTestClasses_of_free_suite_class():void {
+			assertEquals(2, FreeRunner.countTestClasses(DoubleFailSuite));
 		}
 		
-		public function test_getTestMethods_of_free_test():void {
-			var testMethods:Array = FreeRunner.getTestMethods(spriteTest);
+		public function test_countTestClasses_of_free_suite_instance():void {
+			var suiteInstance:Object = new DoubleFailSuite();
+			assertEquals(2, FreeRunner.countTestClasses(suiteInstance));
+		}
+		
+		public function test_getTestClasses_of_free_suite_class():void {
+			var testClasses:Array = FreeRunner.getTestClasses(DoubleFailSuite);
 			
-			assertEquals(3, testMethods.length);
-			// In case the ordering is random, check that the array contains the method somewhere.
-			assertTrue(testMethods.indexOf('test_stage_is_null_by_default') >= 0);
-			assertTrue(testMethods.indexOf('test_numChildren_is_0_by_default') >= 0);
+			assertEquals(2, testClasses.length);
+			// In case the ordering is random, check that the array contains the class somewhere.
+			assertTrue(testClasses.indexOf(FailAssertTrueTest) >= 0);
+			assertTrue(testClasses.indexOf(FailAssertEqualsTest) >= 0);
 		}
 		//////
-		// For now, the test methods are sorted alphabetically to enable precise testing.
+		
+/*
+		
 		public function test_run_calls_setup_before_and_tearDown_after_each_test_method():void {
 			runner.addEventListener(TestResultEvent.NAME, addAsync(check_methodsCalled_after_run, 100));
 			runner.run(spriteTest);
@@ -77,44 +86,7 @@ package asunit.framework {
 			var failure0:ITestFailure = failures[0] as FreeTestFailure;
 			assertSame(spriteTest, failure0.failedTest);
 		}
-		
+*/
 	}
 }
-/////////////////////////////////////////
-import flash.display.Sprite;
-import asunit.asserts.*;
 
-class SpriteFreeTest {
-	public var methodsCalled:Array;
-	protected var sprite:Sprite;
-	
-	public function SpriteFreeTest() {
-		methodsCalled = [];
-	}
-	
-	public function setUp():void {
-		methodsCalled.push(arguments.callee);
-		sprite = new Sprite();
-	}
-	
-	public function tearDown():void {
-		methodsCalled.push(arguments.callee);
-		sprite = null;
-	}
-	
-	public function test_numChildren_is_0_by_default():void {
-		methodsCalled.push(arguments.callee);
-		assertEquals(0, sprite.numChildren);
-	}
-	
-	public function test_stage_is_null_by_default():void {
-		methodsCalled.push(arguments.callee);
-		assertNull(sprite.stage);
-	}
-	
-	public function test_fail_assertEquals():void {
-		methodsCalled.push(arguments.callee);
-		assertEquals('wrongName', sprite.name);
-	}
-	
-}

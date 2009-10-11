@@ -235,6 +235,17 @@ class asunit.framework.Assert extends EventDispatcher {
 		failNotEquals(message, expected, actual);
 	}
 
+	static public function assertThrows(errorType:Function, block:Function):Void {
+		try {
+			block.call();
+			fail("assertThrows block did not throw an expected exception");
+		}
+		catch(e:Error) {
+		if(!(e instanceof errorType)) {
+			fail("assertThrows did not throw the expected error type, instead threw: " + e);
+			}
+		}
+	}
 
 	static private function failSame(message:String):Void {
 		var formatted:String = "";

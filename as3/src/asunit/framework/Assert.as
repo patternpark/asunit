@@ -100,11 +100,12 @@ package asunit.framework {
         static public function assertThrows(errorType:Class, block:Function):void {
             try {
                 block.call();
-                throw new AssertionFailedError("assertThrows block did not throw an expected exception");
+                throw new AssertionFailedError("expected error type:<" + getQualifiedClassName(errorType) + "> but none was thrown." );
             }
             catch(e:Error) {
                 if(!(e is errorType)) {
-                    throw new AssertionFailedError("assertThrows did not throw the expected error type, instead threw: " + getQualifiedClassName(e));
+                    throw new AssertionFailedError("expected error type:<" + getQualifiedClassName(errorType)
+						+"> but was:<" + getQualifiedClassName(e) + ">");
                 }
             }
         }

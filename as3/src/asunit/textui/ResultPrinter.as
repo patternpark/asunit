@@ -1,6 +1,7 @@
 package asunit.textui {
     import asunit.errors.AssertionFailedError;
     import asunit.framework.Test;
+	import asunit.framework.TestCase;
     import asunit.framework.TestFailure;
     import asunit.framework.ITestFailure;
     import asunit.framework.TestListener;
@@ -249,7 +250,13 @@ package asunit.textui {
          */
         public function startTest(test:Object):void {
             startTime = getTimer();
-            var count:uint = TestMethodIterator.countTestMethods(test);
+			var count:uint;
+			if (test is Test) {
+				count = Test(test).countTestCases();
+			}
+			else {
+				count = TestMethodIterator.countTestMethods(test);
+			}
 			
             for(var i:uint; i < count; i++) {
                 print(".");

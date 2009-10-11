@@ -15,7 +15,6 @@ package asunit.framework {
 	import asunit.framework.TestIteratorTest;
 	import asunit.framework.TestMethodIteratorMultiMethodTest;
 	import asunit.framework.TestMethodIteratorSingleMethodTest;
-	import asunit.framework.TestMethodMetadataTest;
 	import asunit.framework.VisualTestCaseTest;
 
 	public class AllTests extends TestSuite {
@@ -36,7 +35,6 @@ package asunit.framework {
 			addTest(new asunit.framework.TestIteratorTest());
 			addTest(new asunit.framework.TestMethodIteratorMultiMethodTest());
 			addTest(new asunit.framework.TestMethodIteratorSingleMethodTest());
-			addTest(new asunit.framework.TestMethodMetadataTest());
 			addTest(new asunit.framework.VisualTestCaseTest());
 		}
 	}

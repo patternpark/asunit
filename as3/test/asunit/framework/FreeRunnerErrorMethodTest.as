@@ -40,7 +40,7 @@ package asunit.framework {
 			var failure0:FreeTestFailure = result.errors[0] as FreeTestFailure;
 			assertTrue('thrownException is correct type', failure0.thrownException is ArgumentError);
 			assertSame('failedTest reference', freeTest, failure0.failedTest);
-			assertSame('failedMethod name', 'test_throw_ArgumentError', failure0.failedMethod);
+			assertSame('failedMethod name', 'throw_ArgumentError', failure0.failedMethod);
 		}
 		
 	}

@@ -41,28 +41,34 @@ class SpriteFreeTest {
 	public function SpriteFreeTest() {
 	}
 	
-	public function setUp():void {
+	[Before]
+	public function before():void {
 		sprite = new Sprite();
 	}
 	
-	public function tearDown():void {
+	[After]
+	public function after():void {
 		sprite = null;
 	}
 	
-	public function test_numChildren_is_0_by_default():void {
+	[Test]
+	public function numChildren_is_0_by_default():void {
 		assertEquals(0, sprite.numChildren);
 	}
 	
-	public function test_stage_is_null_by_default():void {
+	[Test]
+	public function stage_is_null_by_default():void {
 		assertNull(sprite);
 		//assertTrue(null);
 	}
 	
-	public function test_fail_assertEquals():void {
+	[Test]
+	public function fail_assertEquals():void {
 		assertEquals('wrongName', sprite.name);
 	}
 	
-	public function test_throw_Error():void {
+	[Test]
+	public function throw_Error():void {
 		throw new Error('What happen?');
 	}
 	

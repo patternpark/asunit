@@ -2,38 +2,56 @@
 	import flash.display.Sprite;
 	import asunit.asserts.*;
 
-	public class FreeTestWithPrefixedMethods {
+	public class FreeTestWithSprite {
 		
 		public var methodsCalled:Array;
 		protected var sprite:Sprite;
 	
-		public function FreeTestWithPrefixedMethods() {
+		public function FreeTestWithSprite() {
 			methodsCalled = [];
 		}
-
-		public function setUp():void {
+		
+		[Before]
+		public function runBefore1():void {
 			methodsCalled.push(arguments.callee);
 			sprite = new Sprite();
 		}
 		
-		public function tearDown():void {
+		[Before]
+		public function runBefore2():void {
+			methodsCalled.push(arguments.callee);
+		}
+		
+		[After]
+		public function runAfter1():void {
 			methodsCalled.push(arguments.callee);
 			sprite = null;
 		}
 		
-		public function test_numChildren_is_0_by_default():void {
+		[After]
+		public function runAfter2():void {
+			methodsCalled.push(arguments.callee);
+		}
+		
+		[Test]
+		public function numChildren_is_0_by_default():void {
 			methodsCalled.push(arguments.callee);
 			assertEquals(0, sprite.numChildren);
 		}
 		
-		public function test_stage_is_null_by_default():void {
+		[Test]
+		public function stage_is_null_by_default():void {
 			methodsCalled.push(arguments.callee);
 			assertNull(sprite.stage);
 		}
 		
-		public function test_fail_assertEquals():void {
+		[Test]
+		public function fail_assertEquals():void {
 			methodsCalled.push(arguments.callee);
 			assertEquals('wrongName', sprite.name);
 		}
+		
+		
 	}
+
 }

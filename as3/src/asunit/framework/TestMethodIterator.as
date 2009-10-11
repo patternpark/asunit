@@ -16,27 +16,39 @@ package asunit.framework {
 			afterMethods  = new ArrayIterator(getAfterMethods(test));
 		}
 		
+		/**
+		 *
+		 * @param	test	An instance of a class with methods that either have [Before] metadata
+		 * or are named with the "tearDown" prefix.
+		 * @return	An array of test method names as strings.
+		 */
 		public static function getBeforeMethods(test:Object):Array {
-			return getMethodsWithPrefixOrMetadata(test, "Before", "setUp");
+			return getMethodsWithMetadata(test, "Before");
 		}
 		
 		/**
 		 *
-		 * @param	test	An instance of a class with test methods.
+		 * @param	test	An instance of a class with methods that either have [Test] metadata
+		 * or are named with the "test" prefix.
 		 * @return	An array of test method names as strings.
 		 */
 		public static function getTestMethods(test:Object):Array {
-			return getMethodsWithPrefixOrMetadata(test, "Test", "test");
+			return getMethodsWithMetadata(test, "Test");
 		}
 		
+		/**
+		 *
+		 * @param	test	An instance of a class with methods that either have [After] metadata
+		 * or are named with the "setUp" prefix.
+		 * @return	An array of test method names as strings.
+		 */
 		public static function getAfterMethods(test:Object):Array {
-			return getMethodsWithPrefixOrMetadata(test, "After", "tearDown");
+			return getMethodsWithMetadata(test, "After");
 		}
 		
-		protected static function getMethodsWithPrefixOrMetadata(object:Object, theMetadata:String, thePrefix:String = ''):Array {
+		protected static function getMethodsWithMetadata(object:Object, theMetadata:String):Array {
 			var typeInfo:XML = describeType(object);
-			var methodNodes:XMLList = typeInfo.method.( @name.indexOf(thePrefix) == 0
-				|| (hasOwnProperty("metadata") && metadata.@name == theMetadata) );
+			var methodNodes:XMLList = typeInfo.method.(hasOwnProperty("metadata") && metadata.@name == theMetadata);
 			
 			var methodNamesList:XMLList = methodNodes.@name;
 			var methodNames:Array = [];

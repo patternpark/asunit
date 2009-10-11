@@ -25,12 +25,13 @@ package asunit.framework {
 		
 		//////
 		
-		public function test_async_test_method_should_have_async_true():void {
+		public function test_async_test_method_should_have_async_true_and_timeout_value():void {
 			var testMethods:Array = TestMethodIterator.getTestMethods(successTest);
 			
 			assertEquals(1, testMethods.length);
 			var method0:Method = Method(testMethods[0]);
 			assertTrue(method0.async);
+			assertEquals('timeout value', 100, method0.timeout);
 		}
 
 		//////

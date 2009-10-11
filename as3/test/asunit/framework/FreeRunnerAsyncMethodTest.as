@@ -37,7 +37,7 @@ package asunit.framework {
 		
 		//////
 		
-		public function _test_run_with_too_slow_async_operation_triggers_result_with_IllegalOperationError():void {
+		public function test_run_with_too_slow_async_operation_triggers_result_with_IllegalOperationError():void {
 			runner.addEventListener(TestResultEvent.NAME, addAsync(check_TestResult_has_IllegalOperationError, 100));
 			runner.run(tooSlowTest);
 		}
@@ -47,7 +47,7 @@ package asunit.framework {
 			assertEquals('number of errors', 1, result.errors.length);
 			var failure0:FreeTestFailure = result.errors[0] as FreeTestFailure;
 			assertTrue('exception is IllegalOperationError', failure0.thrownException is IllegalOperationError);
-			assertEquals('failed method name', 'test_operation_too_slow_will_fail', failure0.failedMethod);
+			assertEquals('failed method name', 'operation_too_slow_will_fail', failure0.failedMethod);
 		}
 	}
 }
@@ -57,7 +57,8 @@ import asunit.framework.async.addAsync;
 
 class AsyncMethodSuccessTest {
 	
-	public function test_operation_delayed_but_fast_enough_will_succeed():void {
+	[Test]
+	public function operation_delayed_but_fast_enough_will_succeed():void {
 		var delegate:Function = asunit.framework.async.addAsync(this, onComplete, 100);
 		setTimeout(delegate, 10);
 	}
@@ -69,9 +70,10 @@ class AsyncMethodSuccessTest {
 
 class AsyncMethodTooSlowTest {
 	
-	public function _test_operation_too_slow_will_fail():void {
-		var delegate:Function = asunit.framework.async.addAsync(this, onComplete, 10);
-		setTimeout(delegate, 100);
+	[Test]
+	public function operation_too_slow_will_fail():void {
+		var delegate:Function = asunit.framework.async.addAsync(this, onComplete, 5);
+		setTimeout(delegate, 50);
 	}
 	
 	private function onComplete():void {

@@ -50,8 +50,6 @@ package asunit.framework {
 
 		protected function get completed():Boolean {
 			return (!allMethods.hasNext() && asyncsCompleted);
-			
-			//return (!testMethodsList || !testMethodsList.hasNext()) && asyncsCompleted;
 		}
 		
 		public function run(test:Object):void {
@@ -65,16 +63,34 @@ package asunit.framework {
 			if (_printer)
 				_printer.startTest(test);
 			
-			runNextMethod();
-		}
-		
-		protected function runNextMethod(e:TimerEvent = null):void {
-			if (completed) {
-				onCompleted();
+			// If any methods in the test are async, we must use a slower path.
+
+			if (allMethods.async) {
+				runNextMethod();
 				return;
 			}
 			
-			currentMethod = Method(allMethods.next());
+			// Since the test has no async methods, we can run a fast loop.
+
+			while (allMethods.hasNext()) {
+				//// This is in-lined from runMethod().
+				currentMethod = allMethods.next() as Method;
+				
+				try {
+					currentMethod.value();
+				}
+				catch (error:Error) {
+					recordFailure(error);
+				}
+				////
+			}
+			onCompleted();
+		}
+		
+/*
+		// In-lining this in two spots for now.
+		protected function runMethod(method:Method):void {
+			currentMethod = method;
 			
 			try {
 				currentMethod.value();
@@ -82,6 +98,24 @@ package asunit.framework {
 			catch (error:Error) {
 				recordFailure(error);
 			}
+		}
+*/
+		protected function runNextMethod(e:TimerEvent = null):void {
+			if (completed) {
+				onCompleted();
+				return;
+			}
+			
+			//// This is in-lined from runMethod().
+			currentMethod = allMethods.next() as Method;
+			
+			try {
+				currentMethod.value();
+			}
+			catch (error:Error) {
+				recordFailure(error);
+			}
+			////
 			
 			if (currentMethod.async) {
 				var commands:Array = Async.instance.getCommandsForTest(currentTest);
@@ -100,8 +134,8 @@ package asunit.framework {
 			runNextMethod();
 		}
 		
-		protected function onAsyncMethodCalled(e:Event):void {
-			var command:TimeoutCommand = TimeoutCommand(e.currentTarget);
+		protected function onAsyncMethodCalled(event:Event):void {
+			var command:TimeoutCommand = TimeoutCommand(event.currentTarget);
 			trace('onAsyncMethodCalled() - command: ' + command);
 			
 			try {
@@ -110,28 +144,26 @@ package asunit.framework {
 			catch (error:Error) {
 				recordFailure(error);
 			}
-			onAsyncMethodCompleted(e);
+			onAsyncMethodCompleted(event);
 		}
 		
-		protected function onAsyncMethodFailed(e:ErrorEvent):void {
-			trace('onAsyncMethodFailed() - currentMethod: ' + currentMethod.name + ' - e.error: ' + e.error);
-			// The TimeoutCommand doesn't know the method name.
-			var testFailure:FreeTestFailure = new FreeTestFailure(currentTest, currentMethod.name, e.error);
-			// Record the test failure.
-			result.addFailure(testFailure);
-				
-			onAsyncMethodCompleted(e);
+		protected function onAsyncMethodFailed(event:ErrorEvent):void {
+			trace('onAsyncMethodFailed() - currentMethod: ' + currentMethod.name + ' - event.error: ' + event.error);
+			
+			recordFailure(event.error);
+			onAsyncMethodCompleted(event);
 		}
 		
-		protected function onAsyncMethodCompleted(e:Event):void {
-			var command:TimeoutCommand = TimeoutCommand(e.currentTarget);
+		protected function onAsyncMethodCompleted(event:Event):void {
+			var command:TimeoutCommand = TimeoutCommand(event.currentTarget);
 			
 			trace('onAsyncMethodCompleted() - command: ' + command);
 			
 			command.removeEventListener(TimeoutCommand.CALLED,	onAsyncMethodCompleted);
 			command.removeEventListener(ErrorEvent.ERROR,		onAsyncMethodFailed);
 			
-			runNextMethod();
+			if (asyncsCompleted)
+				runNextMethod();
 		}
 		
 		protected function recordFailure(error:Error):void {

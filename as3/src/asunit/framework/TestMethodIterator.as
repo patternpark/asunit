@@ -4,6 +4,8 @@ package asunit.framework {
 	import flash.utils.describeType;
 
 	public class TestMethodIterator implements Iterator {
+		public var async:Boolean;
+		
 		protected var beforeMethods:Iterator;
 		protected var testMethods:Iterator;
 		protected var afterMethods:Iterator;
@@ -14,6 +16,7 @@ package asunit.framework {
 			beforeMethods = new ArrayIterator(getBeforeMethods(test));
 			testMethods   = new ArrayIterator(getTestMethods(test));
 			afterMethods  = new ArrayIterator(getAfterMethods(test));
+			async = isAsync(test);
 		}
 		
 		/**
@@ -49,6 +52,7 @@ package asunit.framework {
 		protected static function getMethodsWithMetadata(object:Object, theMetadata:String):Array {
 			var typeInfo:XML = describeType(object);
 			var methodNodes:XMLList = typeInfo.method.(hasOwnProperty("metadata") && metadata.@name == theMetadata);
+			//trace('________typeInfo: \n' + typeInfo);
 			
 			var methodNamesList:XMLList = methodNodes.@name;
 			var methods:Array = [];
@@ -62,6 +66,16 @@ package asunit.framework {
 		
 		public static function countTestMethods(test:Object):uint {
 			return getTestMethods(test).length;
+		}
+		
+		public static function isAsync(test:Object):Boolean {
+			var typeInfo:XML = describeType(test);
+			if (typeInfo.@base == 'Class') typeInfo = typeInfo.factory[0];
+
+			var asyncs:XMLList = typeInfo.method.(hasOwnProperty("metadata")
+				&& metadata.@name == 'Test').metadata.arg.(@value == 'async');
+
+			return asyncs.length() > 0;
 		}
 		
 		////////////////////////////////////////////////////////////////////////////

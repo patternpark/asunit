@@ -81,5 +81,10 @@ package asunit.framework {
 			assertTrue(iterator.hasNext());
 		}
 		
+		public function test_multiTest_iterator_is_not_async():void {
+			iterator  = new TestMethodIterator(multiTest);
+			assertFalse(iterator.async);
+		}
+		
 	}
 }

@@ -1,4 +1,5 @@
 package asunit.framework {
+	import asunit.framework.support.FailAssertTrueTest;
 	import asunit.framework.TestCase;
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
@@ -21,6 +22,21 @@ package asunit.framework {
 
 		protected override function tearDown():void {
 			runner = null;
+		}
+		
+		//////
+		
+		public function test_isAsync_is_true_for_async_tests():void {
+			assertTrue(TestMethodIterator.isAsync(successTest));
+			assertTrue(TestMethodIterator.isAsync(tooSlowTest));
+		}
+		
+		public function test_isAsync_is_false_for_non_async_test_instance():void {
+			assertFalse(TestMethodIterator.isAsync(new FailAssertTrueTest()));
+		}
+		
+		public function test_isAsync_is_false_for_null():void {
+			assertFalse(TestMethodIterator.isAsync(null));
 		}
 		
 		//////

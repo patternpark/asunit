@@ -4,6 +4,7 @@
 	import flash.display.MovieClip;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
+	import asunit.framework.TestResultEvent;
 	
 	/**
 	 * ...
@@ -11,18 +12,26 @@
 	 */
 	public class FreeRunnerDemo extends MovieClip {
 		private var runner:FreeRunner;
+		private var printer:ResultPrinter;
 		
 		public function FreeRunnerDemo() {
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			
-			var printer:ResultPrinter = new ResultPrinter();
+			printer = new ResultPrinter();
 			addChild(printer);
 			printer.width = stage.stageWidth;
 			printer.height = stage.stageHeight;
 
 			runner = new FreeRunner(this, printer);
+			runner.addEventListener(TestResultEvent.NAME, onTestResult);
 			runner.run(new SpriteFreeTest());
+		}
+		
+		private function onTestResult(e:TestResultEvent):void {
+			trace('onTestResult()');
+			//printer.endTest(currentTest);
+			printer.printResult(e.testResult, e.testResult.runTime);
 		}
 		
 	}

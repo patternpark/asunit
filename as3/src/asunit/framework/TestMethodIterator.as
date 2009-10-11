@@ -2,6 +2,7 @@ package asunit.framework {
 	import asunit.util.ArrayIterator;
 	import asunit.util.Iterator;
 	import flash.utils.describeType;
+	import flash.utils.getTimer;
 
 	public class TestMethodIterator implements Iterator {
 		public var async:Boolean;
@@ -60,7 +61,9 @@ package asunit.framework {
 				methods[methods.length] = new Method(object, methodNode.@name, methodNode.metadata);
 			}
 			// For now, enforce a consistent order to enable precise testing.
+			var startTime:Number = getTimer();
 			methods.sortOn('name');
+			trace('sort time: ' + (getTimer() - startTime));
 			return methods;
 		}
 		

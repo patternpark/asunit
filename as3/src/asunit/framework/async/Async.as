@@ -40,13 +40,13 @@
 				
 			commandsByTest[test].push(command);
 			command.addEventListener(TimeoutCommand.CALLED,	onTestResult);
-			command.addEventListener(ErrorEvent.ERROR, 			onTestResult);
+			command.addEventListener(ErrorEvent.ERROR, 		onTestResult);
 		}
 		
 		protected function onTestResult(e:Event):void {
 			var command:TimeoutCommand = TimeoutCommand(e.currentTarget);
 			command.removeEventListener(TimeoutCommand.CALLED,	onTestResult);
-			command.removeEventListener(ErrorEvent.ERROR,				onTestResult);
+			command.removeEventListener(ErrorEvent.ERROR,		onTestResult);
 			
 			removeCommandForTest(command.scope, command);
 		}

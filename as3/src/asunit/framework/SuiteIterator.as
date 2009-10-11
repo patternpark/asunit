@@ -4,9 +4,9 @@ package asunit.framework {
 	import flash.utils.describeType;
 	import flash.utils.getDefinitionByName;
 
-	public class TestIterator extends ArrayIterator implements Iterator {
+	public class SuiteIterator extends ArrayIterator implements Iterator {
 				
-		public function TestIterator(testSuite:Object) {
+		public function SuiteIterator(testSuite:Object) {
 			super(getTestClasses(testSuite));
 		}
 		

@@ -4,11 +4,11 @@ package asunit.framework {
 	import asunit.framework.support.FailAssertEqualsTest;
 	import asunit.framework.support.FailAssertTrueTest;
 
-	public class TestIteratorTest extends TestCase {
-		private var iterator:TestIterator;
+	public class SuiteIteratorTest extends TestCase {
+		private var iterator:SuiteIterator;
 		//private var suite:DoubleFailSuite;
 
-		public function TestIteratorTest(testMethod:String = null) {
+		public function SuiteIteratorTest(testMethod:String = null) {
 			super(testMethod);
 		}
 
@@ -20,33 +20,33 @@ package asunit.framework {
 		}
 
 		public function test_countTestClasses_of_free_suite_class():void {
-			assertEquals(2, TestIterator.countTestClasses(DoubleFailSuite));
+			assertEquals(2, SuiteIterator.countTestClasses(DoubleFailSuite));
 		}
 		
 		public function test_countTestClasses_of_free_suite_instance():void {
 			var suiteInstance:Object = new DoubleFailSuite();
-			assertEquals(2, TestIterator.countTestClasses(suiteInstance));
+			assertEquals(2, SuiteIterator.countTestClasses(suiteInstance));
 		}
 		
 		public function test_isSuite_with_free_suite_class():void {
-			assertTrue(TestIterator.isSuite(DoubleFailSuite));
+			assertTrue(SuiteIterator.isSuite(DoubleFailSuite));
 		}
 		
 		public function test_isSuite_with_free_suite_instance():void {
 			var suiteInstance:Object = new DoubleFailSuite();
-			assertTrue(TestIterator.isSuite(suiteInstance));
+			assertTrue(SuiteIterator.isSuite(suiteInstance));
 		}
 		
 		public function test_isSuite_false_with_non_suite_class():void {
-			assertFalse(TestIterator.isSuite(Date));
+			assertFalse(SuiteIterator.isSuite(Date));
 		}
 		
 		public function test_isSuite_false_with_non_suite_instance():void {
-			assertFalse(TestIterator.isSuite(new Date()));
+			assertFalse(SuiteIterator.isSuite(new Date()));
 		}
 		
 		public function test_getTestClasses_of_free_suite_class():void {
-			var testClasses:Array = TestIterator.getTestClasses(DoubleFailSuite);
+			var testClasses:Array = SuiteIterator.getTestClasses(DoubleFailSuite);
 			
 			assertEquals(2, testClasses.length);
 			// In case the ordering is random, check that the array contains the class somewhere.
@@ -55,27 +55,27 @@ package asunit.framework {
 		}
 		
 		public function test_iterator_for_null_yields_hasNext_false():void {
-			iterator = new TestIterator(null);
+			iterator = new SuiteIterator(null);
 			assertFalse(iterator.hasNext());
 		}
 		
 		public function test_iterator_for_non_suite_class_yields_hasNext_false():void {
-			iterator = new TestIterator(Date);
+			iterator = new SuiteIterator(Date);
 			assertFalse(iterator.hasNext());
 		}
 		
 		public function test_iterator_for_non_suite_instance_yields_hasNext_false():void {
-			iterator = new TestIterator(new Date());
+			iterator = new SuiteIterator(new Date());
 			assertFalse(iterator.hasNext());
 		}
 		
 		public function test_iterator_for_suite_class_with_2_tests_hasNext():void {
-			iterator = new TestIterator(DoubleFailSuite);
+			iterator = new SuiteIterator(DoubleFailSuite);
 			assertTrue(iterator.hasNext());
 		}
 		
 		public function test_iterator_next():void {
-			iterator = new TestIterator(DoubleFailSuite);
+			iterator = new SuiteIterator(DoubleFailSuite);
 			
 			assertSame(FailAssertEqualsTest,	iterator.next());
 			assertSame(FailAssertTrueTest, 		iterator.next());

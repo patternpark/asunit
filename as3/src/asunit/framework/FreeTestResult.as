@@ -11,6 +11,8 @@ package asunit.framework {
      * @see Test
      */
     public class FreeTestResult implements ITestResult {
+		public var runTime:Number;
+		
         protected var _failures:Array;
         protected var _errors:Array;
 		protected var _listeners:Array;

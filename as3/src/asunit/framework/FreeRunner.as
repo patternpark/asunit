@@ -13,6 +13,7 @@ package asunit.framework {
 	import asunit.textui.ResultPrinter;
 	import asunit.util.ArrayIterator;
 	import asunit.util.Iterator;
+	import asunit.framework.Assert;
 
 	public class FreeRunner extends EventDispatcher implements ITestRunner {
 		protected var beforeMethodsList:Iterator;
@@ -73,49 +74,40 @@ package asunit.framework {
 			// Since the test has no async methods, we can run a fast loop.
 
 			while (allMethods.hasNext()) {
-				//// This is in-lined from runMethod().
-				currentMethod = allMethods.next() as Method;
-				
+				runMethod(allMethods.next() as Method);
+			}
+			onCompleted();
+		}
+		
+		protected function runMethod(method:Method):void {
+			currentMethod = method;
+			
+			if (currentMethod.expects) {
+				var errorClass:Class = getDefinitionByName(currentMethod.expects) as Class;
+				try {
+					Assert.assertThrows(errorClass, currentMethod.value);
+				}
+				catch (error:Error) {
+					recordFailure(error);
+				}
+			}
+			else {
 				try {
 					currentMethod.value();
 				}
 				catch (error:Error) {
 					recordFailure(error);
 				}
-				////
-			}
-			onCompleted();
-		}
-		
-/*
-		// In-lining this in two spots for now.
-		protected function runMethod(method:Method):void {
-			currentMethod = method;
-			
-			try {
-				currentMethod.value();
-			}
-			catch (error:Error) {
-				recordFailure(error);
 			}
 		}
-*/
+
 		protected function runNextMethod(e:TimerEvent = null):void {
 			if (completed) {
 				onCompleted();
 				return;
 			}
 			
-			//// This is in-lined from runMethod().
-			currentMethod = allMethods.next() as Method;
-			
-			try {
-				currentMethod.value();
-			}
-			catch (error:Error) {
-				recordFailure(error);
-			}
-			////
+			runMethod(allMethods.next() as Method);
 			
 			if (currentMethod.async) {
 				var commands:Array = Async.instance.getCommandsForTest(currentTest);
@@ -172,13 +164,13 @@ package asunit.framework {
 		
 		protected function onCompleted():void {
 			trace('onCompleted()');
+			result.runTime = getTimer() - startTime;
 			dispatchEvent(new TestResultEvent(TestResultEvent.NAME, result));
 			
 			if (!_printer) return;
 			//TODO: Move this out to view and use event instead.
 			_printer.endTest(currentTest);
-			var runTime:Number = getTimer() - startTime;
-			_printer.printResult(result, runTime);
+			
 		}
 		
 		protected function get asyncsCompleted():Boolean {

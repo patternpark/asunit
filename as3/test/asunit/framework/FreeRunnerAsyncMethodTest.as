@@ -4,6 +4,7 @@ package asunit.framework {
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.utils.describeType;
+	import flash.utils.getQualifiedClassName;
 
 	public class FreeRunnerAsyncMethodTest extends TestCase {
 		private var runner:FreeRunner;
@@ -73,7 +74,7 @@ package asunit.framework {
 			var result:FreeTestResult = e.testResult;
 			assertEquals('number of errors', 1, result.errors.length);
 			var failure0:FreeTestFailure = result.errors[0] as FreeTestFailure;
-			assertTrue('exception is IllegalOperationError', failure0.thrownException is IllegalOperationError);
+			assertEquals('exception type', 'flash.errors::IllegalOperationError', getQualifiedClassName(failure0.thrownException));
 			assertEquals('failed method name', 'operation_too_slow_will_fail', failure0.failedMethod);
 		}
 	}
@@ -86,7 +87,7 @@ class AsyncMethodSuccessTest {
 	
 	[Test(async,timeout="100")]
 	public function operation_delayed_but_fast_enough_will_succeed():void {
-		var delegate:Function = asunit.framework.async.addAsync(this, onComplete, 100);
+		var delegate:Function = asunit.framework.async.addAsync(this, onComplete);
 		setTimeout(delegate, 10);
 	}
 	
@@ -99,7 +100,7 @@ class AsyncMethodTooSlowTest {
 	
 	[Test(async,timeout="5")]
 	public function operation_too_slow_will_fail():void {
-		var delegate:Function = asunit.framework.async.addAsync(this, onComplete, 5);
+		var delegate:Function = asunit.framework.async.addAsync(this, onComplete);
 		setTimeout(delegate, 50);
 	}
 	

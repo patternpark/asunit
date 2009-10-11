@@ -61,9 +61,7 @@ package asunit.framework {
 				methods[methods.length] = new Method(object, methodNode.@name, methodNode.metadata);
 			}
 			// For now, enforce a consistent order to enable precise testing.
-			var startTime:Number = getTimer();
 			methods.sortOn('name');
-			trace('sort time: ' + (getTimer() - startTime));
 			return methods;
 		}
 		

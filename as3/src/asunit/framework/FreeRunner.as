@@ -1,11 +1,14 @@
 package asunit.framework {
 	import flash.display.DisplayObjectContainer;
+	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
+	import flash.utils.clearTimeout;
 	import flash.utils.describeType;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getTimer;
+	import flash.utils.setTimeout;
 	import flash.utils.Timer;
 	import asunit.framework.async.Async;
 	import asunit.framework.async.TimeoutCommand;
@@ -27,7 +30,8 @@ package asunit.framework {
 		protected var startTime:Number;
 		protected var timer:Timer;
 		protected var result:FreeTestResult;
-		private var allMethods:TestMethodIterator;
+		protected var allMethods:TestMethodIterator;
+		protected var methodTimeoutID:int = -1;
 
 		public function FreeRunner(container:DisplayObjectContainer = null, printer:ResultPrinter = null) {
 			this.container = container;
@@ -49,7 +53,7 @@ package asunit.framework {
 				result.addListener(_printer);
         }
 
-		protected function get completed():Boolean {
+		protected function get testCompleted():Boolean {
 			return (!allMethods.hasNext() && asyncsCompleted);
 		}
 		
@@ -76,11 +80,18 @@ package asunit.framework {
 			while (allMethods.hasNext()) {
 				runMethod(allMethods.next() as Method);
 			}
-			onCompleted();
+			onTestCompleted();
 		}
 		
 		protected function runMethod(method:Method):void {
+			if (method == null) return;
 			currentMethod = method;
+			
+			trace('runMethod() - currentMethod: ' + currentMethod);
+			
+			if (currentMethod.timeout > 0) {
+				methodTimeoutID = setTimeout(onMethodTimeout, currentMethod.timeout);
+			}
 			
 			if (currentMethod.expects) {
 				var errorClass:Class = getDefinitionByName(currentMethod.expects) as Class;
@@ -102,8 +113,8 @@ package asunit.framework {
 		}
 
 		protected function runNextMethod(e:TimerEvent = null):void {
-			if (completed) {
-				onCompleted();
+			if (testCompleted) {
+				onTestCompleted();
 				return;
 			}
 			
@@ -126,6 +137,28 @@ package asunit.framework {
 			runNextMethod();
 		}
 		
+		protected function onMethodTimeout():void {
+			trace('@@@ onMethodTimeout(): ' + currentMethod.timeout + ' - ' + currentMethod);
+			recordFailure(new IllegalOperationError('Timeout (' + currentMethod.timeout + 'ms) exceeded during method ' + currentMethod.name));
+			onMethodCompleted();
+		}
+		
+		protected function onMethodCompleted():void {
+			trace('onMethodCompleted() - ' + currentMethod);
+			clearTimeout(methodTimeoutID);
+			if (currentMethod.async) {
+				var commands:Array = Async.instance.getCommandsForTest(currentTest);
+				// clean up all async listeners
+				for each (var command:TimeoutCommand in commands) {
+					command.cancel();
+					command.removeEventListener(TimeoutCommand.CALLED, onAsyncMethodCalled);
+					command.removeEventListener(ErrorEvent.ERROR, onAsyncMethodFailed);
+				}
+			}
+				
+			runNextMethod();
+		}
+		
 		protected function onAsyncMethodCalled(event:Event):void {
 			var command:TimeoutCommand = TimeoutCommand(event.currentTarget);
 			trace('onAsyncMethodCalled() - command: ' + command);
@@ -140,7 +173,7 @@ package asunit.framework {
 		}
 		
 		protected function onAsyncMethodFailed(event:ErrorEvent):void {
-			trace('onAsyncMethodFailed() - currentMethod: ' + currentMethod.name + ' - event.error: ' + event.error);
+			trace('onAsyncMethodFailed() - currentMethod: ' + currentMethod + ' - event.error: ' + event.error);
 			
 			recordFailure(event.error);
 			onAsyncMethodCompleted(event);
@@ -154,16 +187,17 @@ package asunit.framework {
 			command.removeEventListener(TimeoutCommand.CALLED,	onAsyncMethodCompleted);
 			command.removeEventListener(ErrorEvent.ERROR,		onAsyncMethodFailed);
 			
-			if (asyncsCompleted)
-				runNextMethod();
+			if (asyncsCompleted) {
+				onMethodCompleted();
+			}
 		}
 		
 		protected function recordFailure(error:Error):void {
 			result.addFailure(new FreeTestFailure(currentTest, currentMethod.name, error));
 		}
 		
-		protected function onCompleted():void {
-			trace('onCompleted()');
+		protected function onTestCompleted():void {
+			trace('onTestCompleted()');
 			result.runTime = getTimer() - startTime;
 			dispatchEvent(new TestResultEvent(TestResultEvent.NAME, result));
 			

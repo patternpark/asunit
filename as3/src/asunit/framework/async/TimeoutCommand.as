@@ -20,12 +20,13 @@ package asunit.framework.async {
 		protected var duration:Number;
 		protected var failureHandler:Function;
 
-		public function TimeoutCommand(scope:Object, handler:Function, duration:Number, failureHandler:Function=null){
+		public function TimeoutCommand(scope:Object, handler:Function, duration:Number=0, failureHandler:Function=null){
 			this.scope = scope;
 			this.handler = handler || function(...args):* {};
 			this.duration = duration;
 			this.failureHandler = failureHandler;
 			
+			if (duration == 0) return;
 			timeout = new Timer(duration, 1);
 			timeout.addEventListener(TimerEvent.TIMER_COMPLETE, onTimeoutComplete);
 			timeout.start();
@@ -39,8 +40,12 @@ package asunit.framework.async {
 			return callback;
 		}
 		
+		public function cancel():void {
+			if (timeout) timeout.stop();
+		}
+		
 		protected function callback(...params):* {
-			timeout.stop();
+			if (timeout) timeout.stop();
 			this.params = params;
 			dispatchEvent(new Event(CALLED));
 		}

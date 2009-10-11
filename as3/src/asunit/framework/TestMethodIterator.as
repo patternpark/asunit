@@ -51,13 +51,13 @@ package asunit.framework {
 			var methodNodes:XMLList = typeInfo.method.(hasOwnProperty("metadata") && metadata.@name == theMetadata);
 			
 			var methodNamesList:XMLList = methodNodes.@name;
-			var methodNames:Array = [];
+			var methods:Array = [];
 			for each (var methodNameXML:XML in methodNamesList) {
-				methodNames[methodNames.length] = String(methodNameXML); // faster than push
+				methods[methods.length] = new Method(object, String(methodNameXML));
 			}
 			// For now, enforce a consistent order to enable precise testing.
-			methodNames.sort();
-			return methodNames;
+			methods.sortOn('name');
+			return methods;
 		}
 		
 		public static function countTestMethods(test:Object):uint {

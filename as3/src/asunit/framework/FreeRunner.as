@@ -20,13 +20,13 @@ package asunit.framework {
 		protected var afterMethodsList:Iterator;
 		
 		protected var currentTest:Object;
-		protected var currentMethodName:String;
+		protected var currentMethod:Method;
 		protected var container:DisplayObjectContainer;
 		protected var _printer:ResultPrinter;
 		protected var startTime:Number;
 		protected var timer:Timer;
 		protected var result:FreeTestResult;
-		private var allMethodNames:TestMethodIterator;
+		private var allMethods:TestMethodIterator;
 
 		public function FreeRunner(container:DisplayObjectContainer = null, printer:ResultPrinter = null) {
 			this.container = container;
@@ -49,7 +49,7 @@ package asunit.framework {
         }
 
 		protected function get completed():Boolean {
-			return (!allMethodNames.hasNext() && asyncsCompleted);
+			return (!allMethods.hasNext() && asyncsCompleted);
 			
 			//return (!testMethodsList || !testMethodsList.hasNext()) && asyncsCompleted;
 		}
@@ -57,9 +57,9 @@ package asunit.framework {
 		public function run(test:Object):void {
 			trace('-------------------- run(): ' + test);
 			currentTest = test;
-			currentMethodName = '';
+			currentMethod = null;
 			
-			allMethodNames = new TestMethodIterator(test);
+			allMethods = new TestMethodIterator(test);
 			
 			startTime = getTimer();
 			if (_printer)
@@ -74,11 +74,10 @@ package asunit.framework {
 				return;
 			}
 			
-			currentMethodName = String(allMethodNames.next());
-			trace('currentMethodName: ' + currentMethodName);
-			var method:Function = currentTest[currentMethodName] as Function;
+			currentMethod = Method(allMethods.next());
+			
 			try {
-				method();
+				currentMethod.value();
 			}
 			catch (error:Error) {
 				recordFailure(error);
@@ -115,9 +114,9 @@ package asunit.framework {
 		}
 		
 		protected function onAsyncMethodFailed(e:ErrorEvent):void {
-			trace('onAsyncMethodFailed() - currentMethodName: ' + currentMethodName + ' - e.error: ' + e.error);
+			trace('onAsyncMethodFailed() - currentMethod: ' + currentMethod.name + ' - e.error: ' + e.error);
 			// The TimeoutCommand doesn't know the method name.
-			var testFailure:FreeTestFailure = new FreeTestFailure(currentTest, currentMethodName, e.error);
+			var testFailure:FreeTestFailure = new FreeTestFailure(currentTest, currentMethod.name, e.error);
 			// Record the test failure.
 			result.addFailure(testFailure);
 				
@@ -136,7 +135,7 @@ package asunit.framework {
 		}
 		
 		protected function recordFailure(error:Error):void {
-			result.addFailure(new FreeTestFailure(currentTest, currentMethodName, error));
+			result.addFailure(new FreeTestFailure(currentTest, currentMethod.name, error));
 		}
 		
 		protected function onCompleted():void {

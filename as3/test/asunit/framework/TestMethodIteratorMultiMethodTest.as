@@ -28,8 +28,8 @@ package asunit.framework {
 			
 			assertEquals(2, beforeMethods.length);
 			// In case the ordering is random, check that the array contains the method somewhere.
-			assertTrue(beforeMethods.indexOf('runBefore1') >= 0);
-			assertTrue(beforeMethods.indexOf('runBefore2') >= 0);
+			assertEquals(beforeMethods[0].name, 'runBefore1');
+			assertEquals(beforeMethods[1].name, 'runBefore2');
 		}
 		
 		public function test_get_test_methods_of_free_test_by_metadata():void {
@@ -37,9 +37,9 @@ package asunit.framework {
 			
 			assertEquals(3, testMethods.length);
 			// In case the ordering is random, check that the array contains the method somewhere.
-			assertTrue(testMethods.indexOf('stage_is_null_by_default') >= 0);
-			assertTrue(testMethods.indexOf('numChildren_is_0_by_default') >= 0);
-			assertTrue(testMethods.indexOf('fail_assertEquals') >= 0);
+			assertEquals(testMethods[0].name, 'fail_assertEquals');
+			assertEquals(testMethods[1].name, 'numChildren_is_0_by_default');
+			assertEquals(testMethods[2].name, 'stage_is_null_by_default');
 		}
 		
 		public function test_get_after_methods_of_free_test_by_metadata():void {
@@ -47,31 +47,31 @@ package asunit.framework {
 			
 			assertEquals(2, afterMethods.length);
 			// In case the ordering is random, check that the array contains the method somewhere.
-			assertTrue(afterMethods.indexOf('runAfter1') >= 0);
-			assertTrue(afterMethods.indexOf('runAfter2') >= 0);
+			assertEquals(afterMethods[0].name, 'runAfter1');
+			assertEquals(afterMethods[1].name, 'runAfter2');
 		}
 		
 
 		public function test_iterator_next():void {
 			iterator = new TestMethodIterator(multiTest);
 			
-			assertSame('runBefore1', 					iterator.next());
-			assertSame('runBefore2', 					iterator.next());
-			assertSame('fail_assertEquals',				iterator.next());
-			assertSame('runAfter1', 					iterator.next());
-			assertSame('runAfter2', 					iterator.next());
+			assertSame('runBefore1', 					iterator.next().name);
+			assertSame('runBefore2', 					iterator.next().name);
+			assertSame('fail_assertEquals',				iterator.next().name);
+			assertSame('runAfter1', 					iterator.next().name);
+			assertSame('runAfter2', 					iterator.next().name);
 
-			assertSame('runBefore1', 					iterator.next());
-			assertSame('runBefore2', 					iterator.next());
-			assertSame('numChildren_is_0_by_default',	iterator.next());
-			assertSame('runAfter1', 					iterator.next());
-			assertSame('runAfter2', 					iterator.next());
+			assertSame('runBefore1', 					iterator.next().name);
+			assertSame('runBefore2', 					iterator.next().name);
+			assertSame('numChildren_is_0_by_default',	iterator.next().name);
+			assertSame('runAfter1', 					iterator.next().name);
+			assertSame('runAfter2', 					iterator.next().name);
 			
-			assertSame('runBefore1', 					iterator.next());
-			assertSame('runBefore2', 					iterator.next());
-			assertSame('stage_is_null_by_default', 		iterator.next());
-			assertSame('runAfter1', 					iterator.next());
-			assertSame('runAfter2', 					iterator.next());
+			assertSame('runBefore1', 					iterator.next().name);
+			assertSame('runBefore2', 					iterator.next().name);
+			assertSame('stage_is_null_by_default', 		iterator.next().name);
+			assertSame('runAfter1', 					iterator.next().name);
+			assertSame('runAfter2', 					iterator.next().name);
 			
 			assertFalse('no methods left in iterator', iterator.hasNext());
 		}

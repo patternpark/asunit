@@ -36,9 +36,9 @@ package asunit.framework {
 		public function test_iterator_next():void {
 			iterator = new TestMethodIterator(singleTest);
 			
-			assertSame('runBefore', 		iterator.next());
-			assertSame('fail_assertTrue',	iterator.next());
-			assertSame('runAfter',			iterator.next());
+			assertEquals('runBefore', 		String(iterator.next()));
+			assertEquals('fail_assertTrue',	String(iterator.next()));
+			assertEquals('runAfter',		String(iterator.next()));
 			
 			assertFalse('no methods left in iterator', iterator.hasNext());
 		}

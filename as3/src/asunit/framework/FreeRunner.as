@@ -26,6 +26,7 @@ package asunit.framework {
 		protected var startTime:Number;
 		protected var timer:Timer;
 		protected var result:FreeTestResult;
+		private var allMethodNames:TestMethodIterator;
 
 		public function FreeRunner(container:DisplayObjectContainer = null, printer:ResultPrinter = null) {
 			this.container = container;
@@ -107,15 +108,20 @@ package asunit.framework {
 		}
 	
 		protected function get completed():Boolean {
-			return (!testMethodsList || !testMethodsList.hasNext()) && asyncsCompleted;
+			return (!allMethodNames.hasNext() && asyncsCompleted);
+			
+			//return (!testMethodsList || !testMethodsList.hasNext()) && asyncsCompleted;
 		}
 		
 		public function run(test:Object):void {
+			trace('-------------------- run(): ' + test);
 			currentTest = test;
 			currentMethodName = '';
-			beforeMethodsList = new ArrayIterator(getBeforeMethods(test));
-			testMethodsList   = new ArrayIterator(getTestMethods(test));
-			afterMethodsList  = new ArrayIterator(getAfterMethods(test));
+			//beforeMethodsList = new ArrayIterator(getBeforeMethods(test));
+			//testMethodsList   = new ArrayIterator(getTestMethods(test));
+			//afterMethodsList  = new ArrayIterator(getAfterMethods(test));
+			
+			allMethodNames = new TestMethodIterator(test);
 			
 			startTime = getTimer();
 			if (_printer)
@@ -130,21 +136,10 @@ package asunit.framework {
 				return;
 			}
 			
-			currentMethodName = String(testMethodsList.next());
+			currentMethodName = String(allMethodNames.next());
+			trace('currentMethodName: ' + currentMethodName);
+			
 			var method:Function = currentTest[currentMethodName] as Function;
-			
-			beforeMethodsList.reset();
-			var beforeMethod:Function;
-			while (beforeMethodsList.hasNext()) {
-				beforeMethod = currentTest[String(beforeMethodsList.next())];
-				try {
-					beforeMethod();
-				}
-				catch (error:Error) {
-					recordFailure(error);
-				}
-			}
-			
 			try {
 				method();
 			}
@@ -162,27 +157,17 @@ package asunit.framework {
 				return;
 			}
 			
-			afterMethodsList.reset();
-			var afterMethod:Function;
-			while (afterMethodsList.hasNext()) {
-				afterMethod = currentTest[String(afterMethodsList.next())];
-				try {
-					afterMethod();
-				}
-				catch (error:Error) {
-					recordFailure(error);
-				}
-			}
-				
+			// Start a new green thread.
+			//timer.reset();
+			//timer.start();
 			
-			// If the asynchronous Timer were not used, the synchronous test methods
-			// would keep increasing the callstack.
-			timer.reset();
-			timer.start();
+			runNextMethod();
 		}
 		
 		protected function onAsyncMethodCalled(e:Event):void {
 			var command:TimeoutCommand = TimeoutCommand(e.currentTarget);
+			trace('onAsyncMethodCalled() - command: ' + command);
+			
 			try {
 				command.execute();
 			}
@@ -193,6 +178,7 @@ package asunit.framework {
 		}
 		
 		protected function onAsyncMethodFailed(e:ErrorEvent):void {
+			trace('onAsyncMethodFailed() - currentMethodName: ' + currentMethodName + ' - e.error: ' + e.error);
 			// The TimeoutCommand doesn't know the method name.
 			var testFailure:FreeTestFailure = new FreeTestFailure(currentTest, currentMethodName, e.error);
 			// Record the test failure.
@@ -203,12 +189,13 @@ package asunit.framework {
 		
 		protected function onAsyncMethodCompleted(e:Event):void {
 			var command:TimeoutCommand = TimeoutCommand(e.currentTarget);
+			
+			trace('onAsyncMethodCompleted() - command: ' + command);
+			
 			command.removeEventListener(TimeoutCommand.CALLED,	onAsyncMethodCompleted);
 			command.removeEventListener(ErrorEvent.ERROR,		onAsyncMethodFailed);
 			
-			if (asyncsCompleted) {
-				onCompleted();
-			}
+			runNextMethod();
 		}
 		
 		protected function recordFailure(error:Error):void {
@@ -216,6 +203,7 @@ package asunit.framework {
 		}
 		
 		protected function onCompleted():void {
+			trace('onCompleted()');
 			dispatchEvent(new TestResultEvent(TestResultEvent.NAME, result));
 			
 			if (!_printer) return;

@@ -48,58 +48,6 @@ package asunit.framework {
 				result.addListener(_printer);
         }
 
-		protected static function getMethodsWithPrefixOrMetadata(object:Object, theMetadata:String, thePrefix:String = ''):Array {
-			var typeInfo:XML = describeType(object);
-			var methodNodes:XMLList = typeInfo.method.( @name.indexOf(thePrefix) == 0
-				|| (hasOwnProperty("metadata") && metadata.@name == theMetadata) );
-			
-			var methodNamesList:XMLList = methodNodes.@name;
-			var methodNames:Array = [];
-			for each (var methodNameXML:XML in methodNamesList) {
-				methodNames[methodNames.length] = String(methodNameXML); // faster than push
-			}
-			// For now, enforce a consistent order to enable precise testing.
-			methodNames.sort();
-			return methodNames;
-		}
-	
-		public static function getTestClasses(suite:Object):Array {
-			var typeInfo:XML = describeType(suite);
-			trace('typeInfo: \n' + typeInfo);
-			if (typeInfo.@base == 'Class') typeInfo = typeInfo.factory[0];
-			var testClasses:Array = [];
-			for each (var variableType:XML in typeInfo.variable.@type) {
-				testClasses[testClasses.length] = getDefinitionByName(String(variableType)); // faster than push
-			}
-			return testClasses;
-		}
-		
-		
-		public static function getBeforeMethods(test:Object):Array {
-			return getMethodsWithPrefixOrMetadata(test, "Before", "setUp");
-		}
-		
-		/**
-		 *
-		 * @param	test	An instance of a class with test methods.
-		 * @return	An array of test method names as strings.
-		 */
-		public static function getTestMethods(test:Object):Array {
-			return getMethodsWithPrefixOrMetadata(test, "Test", "test");
-		}
-		
-		public static function getAfterMethods(test:Object):Array {
-			return getMethodsWithPrefixOrMetadata(test, "After", "tearDown");
-		}
-		
-		public static function countTestMethods(test:Object):uint {
-			return getTestMethods(test).length;
-		}
-		
-		public static function countTestClasses(testSuite:Object):uint {
-			return getTestClasses(testSuite).length;
-		}
-		
 		public static function isSuite(possibleTestSuite:Object):uint {
 			var typeInfo:XML = describeType(possibleTestSuite);
 			if (typeInfo.@base == 'Class') typeInfo = typeInfo.factory[0];
@@ -117,9 +65,6 @@ package asunit.framework {
 			trace('-------------------- run(): ' + test);
 			currentTest = test;
 			currentMethodName = '';
-			//beforeMethodsList = new ArrayIterator(getBeforeMethods(test));
-			//testMethodsList   = new ArrayIterator(getTestMethods(test));
-			//afterMethodsList  = new ArrayIterator(getAfterMethods(test));
 			
 			allMethodNames = new TestMethodIterator(test);
 			

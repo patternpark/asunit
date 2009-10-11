@@ -1,10 +1,11 @@
 package asunit.framework {
+	import asunit.framework.support.FreeTestWithPrefixedMethods;
 	import asunit.framework.TestCase;
 	import flash.events.Event;
 
 	public class FreeRunnerTest extends TestCase {
 		private var runner:FreeRunner;
-		private var spriteTest:SpriteFreeTest;
+		private var spriteTest:FreeTestWithPrefixedMethods;
 
 		public function FreeRunnerTest(testMethod:String = null) {
 			super(testMethod);
@@ -12,7 +13,7 @@ package asunit.framework {
 
 		protected override function setUp():void {
 			runner = new FreeRunner();
-			spriteTest = new SpriteFreeTest();
+			spriteTest = new FreeTestWithPrefixedMethods();
 		}
 
 		protected override function tearDown():void {
@@ -27,18 +28,6 @@ package asunit.framework {
 			assertFalse(spriteTest is TestCase);
 		}
 
-		public function test_countTestMethods_of_free_test():void {
-			assertEquals(3, FreeRunner.countTestMethods(spriteTest));
-		}
-		
-		public function test_getTestMethods_of_free_test():void {
-			var testMethods:Array = FreeRunner.getTestMethods(spriteTest);
-			
-			assertEquals(3, testMethods.length);
-			// In case the ordering is random, check that the array contains the method somewhere.
-			assertTrue(testMethods.indexOf('test_stage_is_null_by_default') >= 0);
-			assertTrue(testMethods.indexOf('test_numChildren_is_0_by_default') >= 0);
-		}
 		//////
 		// For now, the test methods are sorted alphabetically to enable precise testing.
 		public function test_run_calls_setup_before_and_tearDown_after_each_test_method():void {
@@ -79,42 +68,4 @@ package asunit.framework {
 		}
 		
 	}
-}
-/////////////////////////////////////////
-import flash.display.Sprite;
-import asunit.asserts.*;
-
-class SpriteFreeTest {
-	public var methodsCalled:Array;
-	protected var sprite:Sprite;
-	
-	public function SpriteFreeTest() {
-		methodsCalled = [];
-	}
-	
-	public function setUp():void {
-		methodsCalled.push(arguments.callee);
-		sprite = new Sprite();
-	}
-	
-	public function tearDown():void {
-		methodsCalled.push(arguments.callee);
-		sprite = null;
-	}
-	
-	public function test_numChildren_is_0_by_default():void {
-		methodsCalled.push(arguments.callee);
-		assertEquals(0, sprite.numChildren);
-	}
-	
-	public function test_stage_is_null_by_default():void {
-		methodsCalled.push(arguments.callee);
-		assertNull(sprite.stage);
-	}
-	
-	public function test_fail_assertEquals():void {
-		methodsCalled.push(arguments.callee);
-		assertEquals('wrongName', sprite.name);
-	}
-	
 }

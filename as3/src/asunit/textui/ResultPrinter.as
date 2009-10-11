@@ -8,6 +8,7 @@ package asunit.textui {
     import asunit.runner.BaseTestRunner;
     import asunit.runner.Version;
 	import asunit.framework.FreeRunner;
+	import asunit.framework.TestMethodIterator;
 
     import flash.display.Sprite;
     import flash.events.*;
@@ -248,7 +249,7 @@ package asunit.textui {
          */
         public function startTest(test:Object):void {
             startTime = getTimer();
-            var count:uint = FreeRunner.countTestMethods(test);
+            var count:uint = TestMethodIterator.countTestMethods(test);
 			
             for(var i:uint; i < count; i++) {
                 print(".");

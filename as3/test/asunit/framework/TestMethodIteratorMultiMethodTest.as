@@ -1,22 +1,57 @@
 package asunit.framework {
 	import asunit.framework.TestCase;
-	import asunit.framework.support.SpriteMetadataTest;
+	import asunit.framework.support.FreeTestWithMetadataMethods;
+	import asunit.framework.support.FreeTestWithPrefixedMethods;
 
 	public class TestMethodIteratorMultiMethodTest extends TestCase {
 		private var iterator:TestMethodIterator;
-		private var multiTest:SpriteMetadataTest;
+		private var multiTest:FreeTestWithMetadataMethods;
+		private var testWithPrefixedMethods:FreeTestWithPrefixedMethods;
 
 		public function TestMethodIteratorMultiMethodTest(testMethod:String = null) {
 			super(testMethod);
 		}
 
 		protected override function setUp():void {
-			multiTest = new SpriteMetadataTest();
+			multiTest = new FreeTestWithMetadataMethods();
+			testWithPrefixedMethods = new FreeTestWithPrefixedMethods();
 		}
 
 		protected override function tearDown():void {
 			iterator = null;
 			multiTest = null;
+		}
+
+		public function test_countTestMethods_of_free_test():void {
+			assertEquals(3, TestMethodIterator.countTestMethods(multiTest));
+		}
+		
+		public function test_getTestMethods_of_free_test_with_prefixed_methods():void {
+			var testMethods:Array = TestMethodIterator.getTestMethods(testWithPrefixedMethods);
+			
+			assertEquals(3, testMethods.length);
+			// In case the ordering is random, check that the array contains the method somewhere.
+			assertTrue(testMethods.indexOf('test_stage_is_null_by_default') >= 0);
+			assertTrue(testMethods.indexOf('test_numChildren_is_0_by_default') >= 0);
+		}
+		
+		public function test_get_before_methods_of_free_test_by_metadata():void {
+			var beforeMethods:Array = TestMethodIterator.getBeforeMethods(multiTest);
+			
+			assertEquals(2, beforeMethods.length);
+			// In case the ordering is random, check that the array contains the method somewhere.
+			assertTrue(beforeMethods.indexOf('runBefore1') >= 0);
+			assertTrue(beforeMethods.indexOf('runBefore2') >= 0);
+		}
+		
+		public function test_get_test_methods_of_free_test_by_metadata():void {
+			var testMethods:Array = TestMethodIterator.getTestMethods(multiTest);
+			
+			assertEquals(3, testMethods.length);
+			// In case the ordering is random, check that the array contains the method somewhere.
+			assertTrue(testMethods.indexOf('stage_is_null_by_default') >= 0);
+			assertTrue(testMethods.indexOf('numChildren_is_0_by_default') >= 0);
+			assertTrue(testMethods.indexOf('fail_assertEquals') >= 0);
 		}
 
 		public function test_iterator_next():void {

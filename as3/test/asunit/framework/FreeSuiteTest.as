@@ -29,23 +29,6 @@ package asunit.framework {
 			assertTrue("FreeRunner instantiated", runner is FreeRunner);
 		}
 		
-		public function test_countTestClasses_of_free_suite_class():void {
-			assertEquals(2, FreeRunner.countTestClasses(DoubleFailSuite));
-		}
-		
-		public function test_countTestClasses_of_free_suite_instance():void {
-			var suiteInstance:Object = new DoubleFailSuite();
-			assertEquals(2, FreeRunner.countTestClasses(suiteInstance));
-		}
-		
-		public function test_getTestClasses_of_free_suite_class():void {
-			var testClasses:Array = FreeRunner.getTestClasses(DoubleFailSuite);
-			
-			assertEquals(2, testClasses.length);
-			// In case the ordering is random, check that the array contains the class somewhere.
-			assertTrue(testClasses.indexOf(FailAssertTrueTest) >= 0);
-			assertTrue(testClasses.indexOf(FailAssertEqualsTest) >= 0);
-		}
 		//////
 		
 /*

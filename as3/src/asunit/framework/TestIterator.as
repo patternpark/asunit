@@ -5,10 +5,8 @@ package asunit.framework {
 	import flash.utils.getDefinitionByName;
 
 	public class TestIterator extends ArrayIterator implements Iterator {
-		protected var testClasses:ArrayIterator;
 				
 		public function TestIterator(testSuite:Object) {
-			//testClasses = new ArrayIterator(getTestClasses(testSuite));
 			super(getTestClasses(testSuite));
 		}
 		
@@ -32,6 +30,13 @@ package asunit.framework {
 			return getTestClasses(testSuite).length;
 		}
 		
+		public static function isSuite(possibleTestSuite:Object):Boolean {
+			var typeInfo:XML = describeType(possibleTestSuite);
+			if (typeInfo.@base == 'Class') typeInfo = typeInfo.factory[0];
+			var metadataMatchingSuite:XMLList = typeInfo.metadata.(@name == 'Suite');
+			return metadataMatchingSuite.length() > 0;
+		}
+			
 	}
 }
 

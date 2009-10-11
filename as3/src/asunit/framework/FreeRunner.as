@@ -48,13 +48,6 @@ package asunit.framework {
 				result.addListener(_printer);
         }
 
-		public static function isSuite(possibleTestSuite:Object):uint {
-			var typeInfo:XML = describeType(possibleTestSuite);
-			if (typeInfo.@base == 'Class') typeInfo = typeInfo.factory[0];
-			var suiteMetadata:XMLList = (typeInfo.@base == 'Class') ? typeInfo.factory.me : typeInfo.variable;
-			return null;
-		}
-	
 		protected function get completed():Boolean {
 			return (!allMethodNames.hasNext() && asyncsCompleted);
 			
@@ -83,7 +76,6 @@ package asunit.framework {
 			
 			currentMethodName = String(allMethodNames.next());
 			trace('currentMethodName: ' + currentMethodName);
-			
 			var method:Function = currentTest[currentMethodName] as Function;
 			try {
 				method();

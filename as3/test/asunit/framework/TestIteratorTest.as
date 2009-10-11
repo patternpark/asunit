@@ -28,6 +28,23 @@ package asunit.framework {
 			assertEquals(2, TestIterator.countTestClasses(suiteInstance));
 		}
 		
+		public function test_isSuite_with_free_suite_class():void {
+			assertTrue(TestIterator.isSuite(DoubleFailSuite));
+		}
+		
+		public function test_isSuite_with_free_suite_instance():void {
+			var suiteInstance:Object = new DoubleFailSuite();
+			assertTrue(TestIterator.isSuite(suiteInstance));
+		}
+		
+		public function test_isSuite_false_with_non_suite_class():void {
+			assertFalse(TestIterator.isSuite(Date));
+		}
+		
+		public function test_isSuite_false_with_non_suite_instance():void {
+			assertFalse(TestIterator.isSuite(new Date()));
+		}
+		
 		public function test_getTestClasses_of_free_suite_class():void {
 			var testClasses:Array = TestIterator.getTestClasses(DoubleFailSuite);
 			
@@ -42,7 +59,12 @@ package asunit.framework {
 			assertFalse(iterator.hasNext());
 		}
 		
-		public function test_iterator_for_non_suite_yields_hasNext_false():void {
+		public function test_iterator_for_non_suite_class_yields_hasNext_false():void {
+			iterator = new TestIterator(Date);
+			assertFalse(iterator.hasNext());
+		}
+		
+		public function test_iterator_for_non_suite_instance_yields_hasNext_false():void {
 			iterator = new TestIterator(new Date());
 			assertFalse(iterator.hasNext());
 		}

@@ -83,8 +83,8 @@ package asunit.framework {
 				recordFailure(error);
 			}
 			
-			var commands:Array = Async.instance.getCommandsForTest(currentTest);
-			if (commands && commands.length) {
+			if (currentMethod.async) {
+				var commands:Array = Async.instance.getCommandsForTest(currentTest);
 				// find the async commands and listen to them
 				for each (var command:TimeoutCommand in commands) {
 					command.addEventListener(TimeoutCommand.CALLED, onAsyncMethodCalled);

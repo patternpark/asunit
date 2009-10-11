@@ -27,7 +27,6 @@ package asunit.framework {
 			var beforeMethods:Array = TestMethodIterator.getBeforeMethods(multiTest);
 			
 			assertEquals(2, beforeMethods.length);
-			// In case the ordering is random, check that the array contains the method somewhere.
 			assertEquals(beforeMethods[0].name, 'runBefore1');
 			assertEquals(beforeMethods[1].name, 'runBefore2');
 		}
@@ -36,7 +35,6 @@ package asunit.framework {
 			var testMethods:Array = TestMethodIterator.getTestMethods(multiTest);
 			
 			assertEquals(3, testMethods.length);
-			// In case the ordering is random, check that the array contains the method somewhere.
 			assertEquals(testMethods[0].name, 'fail_assertEquals');
 			assertEquals(testMethods[1].name, 'numChildren_is_0_by_default');
 			assertEquals(testMethods[2].name, 'stage_is_null_by_default');
@@ -46,7 +44,6 @@ package asunit.framework {
 			var afterMethods:Array = TestMethodIterator.getAfterMethods(multiTest);
 			
 			assertEquals(2, afterMethods.length);
-			// In case the ordering is random, check that the array contains the method somewhere.
 			assertEquals(afterMethods[0].name, 'runAfter1');
 			assertEquals(afterMethods[1].name, 'runAfter2');
 		}

@@ -52,8 +52,8 @@ package asunit.framework {
 			
 			var methodNamesList:XMLList = methodNodes.@name;
 			var methods:Array = [];
-			for each (var methodNameXML:XML in methodNamesList) {
-				methods[methods.length] = new Method(object, String(methodNameXML));
+			for each (var methodNode:XML in methodNodes) {
+				methods[methods.length] = new Method(object, methodNode.@name, methodNode.metadata);
 			}
 			// For now, enforce a consistent order to enable precise testing.
 			methods.sortOn('name');

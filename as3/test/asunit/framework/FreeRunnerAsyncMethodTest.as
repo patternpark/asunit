@@ -22,6 +22,16 @@ package asunit.framework {
 		protected override function tearDown():void {
 			runner = null;
 		}
+		
+		//////
+		
+		public function test_async_test_method_should_have_async_true():void {
+			var testMethods:Array = TestMethodIterator.getTestMethods(successTest);
+			
+			assertEquals(1, testMethods.length);
+			var method0:Method = Method(testMethods[0]);
+			assertTrue(method0.async);
+		}
 
 		//////
 		
@@ -57,7 +67,7 @@ import asunit.framework.async.addAsync;
 
 class AsyncMethodSuccessTest {
 	
-	[Test]
+	[Test(async,timeout="100")]
 	public function operation_delayed_but_fast_enough_will_succeed():void {
 		var delegate:Function = asunit.framework.async.addAsync(this, onComplete, 100);
 		setTimeout(delegate, 10);
@@ -70,7 +80,7 @@ class AsyncMethodSuccessTest {
 
 class AsyncMethodTooSlowTest {
 	
-	[Test]
+	[Test(async,timeout="5")]
 	public function operation_too_slow_will_fail():void {
 		var delegate:Function = asunit.framework.async.addAsync(this, onComplete, 5);
 		setTimeout(delegate, 50);

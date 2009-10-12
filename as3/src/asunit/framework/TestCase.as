@@ -108,7 +108,7 @@ package asunit.framework {
 			setName(className.toString());
 			resolveLayoutManager();
 			asyncQueue = [];
-			timer = new Timer(1, 1);
+			timer = new Timer(0, 1);
 			timer.addEventListener(TimerEvent.TIMER, onTick);
 		}
 		

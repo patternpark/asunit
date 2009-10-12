@@ -20,13 +20,13 @@ package asunit4.async {
 		protected var duration:Number;
 		protected var failureHandler:Function;
 
-		public function TimeoutCommand(scope:Object, handler:Function, duration:Number=0, failureHandler:Function=null){
+		public function TimeoutCommand(scope:Object, handler:Function, duration:Number = -1, failureHandler:Function=null){
 			this.scope = scope;
 			this.handler = handler || function(...args):* {};
 			this.duration = duration;
 			this.failureHandler = failureHandler;
 			
-			if (duration == 0) return;
+			if (duration < 0) return;
 			timeout = new Timer(duration, 1);
 			timeout.addEventListener(TimerEvent.TIMER_COMPLETE, onTimeoutComplete);
 			timeout.start();

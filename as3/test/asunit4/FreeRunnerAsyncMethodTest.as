@@ -90,7 +90,7 @@ class AsyncMethodSuccessTest {
 	[Test(async,timeout="100")]
 	public function operation_delayed_but_fast_enough_will_succeed():void {
 		var delegate:Function = asunit4.async.addAsync(this, onComplete);
-		setTimeout(delegate, 10);
+		setTimeout(delegate, 0);
 	}
 	
 	private function onComplete():void {
@@ -100,10 +100,10 @@ class AsyncMethodSuccessTest {
 
 class AsyncMethodTooSlowTest {
 	
-	[Test(async,timeout="5")]
+	[Test(async,timeout="0")]
 	public function operation_too_slow_will_fail():void {
 		var delegate:Function = asunit4.async.addAsync(this, onComplete);
-		setTimeout(delegate, 50);
+		setTimeout(delegate, 1);
 	}
 	
 	private function onComplete():void {

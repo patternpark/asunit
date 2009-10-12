@@ -6,7 +6,7 @@
 		public var value:Function;
 		public var metadata:XMLList;
 		public var async:Boolean;
-		public var timeout:Number = 0;
+		public var timeout:Number = -1;
 		public var expects:String;
 		
 		public function Method(scope:Object, name:String, metadata:XMLList = null) {

@@ -65,7 +65,7 @@ package asunit4 {
 			assertEquals('failures in testResult', 2, failures.length);
 			
 			var failure0:ITestFailure = failures[0] as ITestFailure;
-			assertSame('failure0 test class', FailAssertTrueTest, failure0.failedTest['constructor']);
+			assertSame('failure0 test class', FailAssertEqualsTest, failure0.failedTest['constructor']);
 			
 			var failure1:ITestFailure = failures[1] as ITestFailure;
 			assertSame('failure1 test class', FailAssertTrueTest, failure1.failedTest['constructor']);

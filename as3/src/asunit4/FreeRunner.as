@@ -89,7 +89,7 @@ package asunit4 {
 			
 			trace('runMethod() - currentMethod: ' + currentMethod);
 			
-			if (currentMethod.timeout > 0) {
+			if (currentMethod.timeout >= 0) {
 				methodTimeoutID = setTimeout(onMethodTimeout, currentMethod.timeout);
 			}
 			

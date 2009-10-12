@@ -5,7 +5,9 @@
 	 *
 	 */
 	public class TestResultEvent extends Event {
-		public static const NAME:String = 'asunit.framework.TestResultEvent';
+		public static const TEST_COMPLETED:String = 'asunit4.events.TestResultEvent.TEST_COMPLETED';
+		public static const SUITE_COMPLETED:String = 'asunit4.events.TestResultEvent.SUITE_COMPLETED';
+		
 		public var testResult:ITestResult;
 		
 		public function TestResultEvent(type:String, testResult:ITestResult) {

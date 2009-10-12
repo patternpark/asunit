@@ -4,7 +4,7 @@ package asunit4 {
 	import flash.utils.describeType;
 	import flash.utils.getTimer;
 
-	public class TestMethodIterator implements Iterator {
+	public class TestMethodIterator {
 		public var async:Boolean;
 		
 		protected var beforeMethods:Iterator;
@@ -85,17 +85,17 @@ package asunit4 {
             return testMethods.hasNext() || beforeMethods.hasNext() || afterMethods.hasNext();
         }
 
-        public function next():Object {
+        public function next():Method {
 			if (beforeMethods.hasNext())
-				return beforeMethods.next();
+				return Method(beforeMethods.next());
 			
 			if (!testMethodHasRunThisCycle && testMethods.hasNext()) {
 				testMethodHasRunThisCycle = true;
-				return testMethods.next();
+				return Method(testMethods.next());
 			}
 			
 			if (afterMethods.hasNext()) {
-				return afterMethods.next();
+				return Method(afterMethods.next());
 			}
 			
 			if (!testMethods.hasNext()) return null;

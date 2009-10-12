@@ -7,7 +7,7 @@ package asunit.framework {
         }
 
         public function testAssertTrue():void {
-            assertTrue(!true);
+            assertTrue(true);
         }
 
         public function testAssertFalse():void {

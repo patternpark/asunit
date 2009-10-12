@@ -24,8 +24,9 @@
 			printer.width = stage.stageWidth;
 			printer.height = stage.stageHeight;
 
-			runner = new FreeRunner(this, printer);
-			runner.addEventListener(TestResultEvent.NAME, onTestResult);
+			runner = new FreeRunner();
+			runner.printer = printer;
+			runner.addEventListener(TestResultEvent.TEST_COMPLETED, onTestResult);
 			runner.run(new SpriteFreeTest());
 		}
 		

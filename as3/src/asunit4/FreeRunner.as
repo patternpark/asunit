@@ -19,6 +19,7 @@ package asunit4 {
 	import asunit.framework.Assert;
 	import asunit4.events.TestResultEvent;
 	import asunit.framework.ErrorEvent;
+	import asunit.framework.ITestResult;
 
 	public class FreeRunner extends EventDispatcher implements ITestRunner {
 		protected var beforeMethodsList:Iterator;
@@ -27,18 +28,14 @@ package asunit4 {
 		
 		protected var currentTest:Object;
 		protected var currentMethod:Method;
-		protected var container:DisplayObjectContainer;
 		protected var _printer:ResultPrinter;
 		protected var startTime:Number;
 		protected var timer:Timer;
-		protected var result:FreeTestResult;
+		protected var result:ITestResult;
 		protected var allMethods:TestMethodIterator;
 		protected var methodTimeoutID:int = -1;
 
-		public function FreeRunner(container:DisplayObjectContainer = null, printer:ResultPrinter = null) {
-			this.container = container;
-			result = new FreeTestResult();
-			this.printer = printer;
+		public function FreeRunner() {
 			timer = new Timer(1, 1);
 			timer.addEventListener(TimerEvent.TIMER, runNextMethod);
 		}
@@ -59,10 +56,11 @@ package asunit4 {
 			return (!allMethods.hasNext() && asyncsCompleted);
 		}
 		
-		public function run(test:Object):void {
-			trace('-------------------- run(): ' + test);
+		public function run(test:Object, result:ITestResult = null):void {
+			trace('-------------------- run(): ' + test + ' - result: ' + result);
 			currentTest = test;
 			currentMethod = null;
+			this.result = result || new FreeTestResult();
 			
 			allMethods = new TestMethodIterator(test);
 			
@@ -80,7 +78,7 @@ package asunit4 {
 			// Since the test has no async methods, we can run a fast loop.
 
 			while (allMethods.hasNext()) {
-				runMethod(allMethods.next() as Method);
+				runMethod(allMethods.next());
 			}
 			onTestCompleted();
 		}
@@ -120,7 +118,7 @@ package asunit4 {
 				return;
 			}
 			
-			runMethod(allMethods.next() as Method);
+			runMethod(allMethods.next());
 			
 			if (currentMethod.async) {
 				var commands:Array = Async.instance.getCommandsForTest(currentTest);
@@ -200,8 +198,8 @@ package asunit4 {
 		
 		protected function onTestCompleted():void {
 			trace('onTestCompleted()');
-			result.runTime = getTimer() - startTime;
-			dispatchEvent(new TestResultEvent(TestResultEvent.NAME, result));
+			FreeTestResult(result).runTime = getTimer() - startTime;
+			dispatchEvent(new TestResultEvent(TestResultEvent.TEST_COMPLETED, result));
 			
 			if (!_printer) return;
 			//TODO: Move this out to view and use event instead.

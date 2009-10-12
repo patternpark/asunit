@@ -32,7 +32,7 @@ package asunit4 {
 		//////
 		
 		public function test_method_expects_specific_error_and_throws_it_yields_successful_test_result():void {
-			runner.addEventListener(TestResultEvent.NAME, addAsync(check_TestResult_has_no_errors, 100));
+			runner.addEventListener(TestResultEvent.TEST_COMPLETED, addAsync(check_TestResult_has_no_errors, 100));
 			runner.run(successTest);
 		}
 		
@@ -45,7 +45,7 @@ package asunit4 {
 		//////
 		
 		public function test_method_expects_specific_error_but_nothing_thrown_yields_assertion_failure():void {
-			runner.addEventListener(TestResultEvent.NAME, addAsync(check_TestResult_has_one_assertion_failure, 100));
+			runner.addEventListener(TestResultEvent.TEST_COMPLETED, addAsync(check_TestResult_has_one_assertion_failure, 100));
 			runner.run(throwNothingTest);
 		}
 		
@@ -65,7 +65,7 @@ package asunit4 {
 		//////
 		
 		public function test_method_expects_specific_error_but_wrong_one_thrown_yields_assertion_failure():void {
-			runner.addEventListener(TestResultEvent.NAME, addAsync(check_TestResult_has_one_assertion_failure, 100));
+			runner.addEventListener(TestResultEvent.TEST_COMPLETED, addAsync(check_TestResult_has_one_assertion_failure, 100));
 			runner.run(throwNothingTest);
 		}
 		

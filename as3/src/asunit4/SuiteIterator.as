@@ -4,10 +4,13 @@ package asunit4 {
 	import flash.utils.describeType;
 	import flash.utils.getDefinitionByName;
 
-	public class SuiteIterator extends ArrayIterator implements Iterator {
+	public class SuiteIterator {
+		
+        protected var list:Array;
+        protected var index:Number = 0;
 				
 		public function SuiteIterator(testSuite:Object) {
-			super(getTestClasses(testSuite));
+			list = getTestClasses(testSuite);
 		}
 		
 		/**
@@ -38,6 +41,20 @@ package asunit4 {
 			return metadataMatchingSuite.length() > 0;
 		}
 			
+        public function hasNext():Boolean {
+            return list[index] != null;
+        }
+
+        public function next():Class {
+            return Class(list[index++]);
+        }
+
+        public function reset():void {
+            index = 0;
+        }
+		
+		
+		
 	}
 }
 

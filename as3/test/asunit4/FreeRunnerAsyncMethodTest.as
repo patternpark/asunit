@@ -56,7 +56,7 @@ package asunit4 {
 		//////
 		
 		public function test_run_with_successful_async_operation_triggers_successful_TestResultEvent():void {
-			runner.addEventListener(TestResultEvent.NAME, addAsync(check_TestResult_wasSuccessful, 100));
+			runner.addEventListener(TestResultEvent.TEST_COMPLETED, addAsync(check_TestResult_wasSuccessful, 100));
 			runner.run(successTest);
 		}
 		
@@ -68,7 +68,7 @@ package asunit4 {
 		//////
 		
 		public function test_run_with_too_slow_async_operation_triggers_result_with_IllegalOperationError():void {
-			runner.addEventListener(TestResultEvent.NAME, addAsync(check_TestResult_has_IllegalOperationError, 100));
+			runner.addEventListener(TestResultEvent.TEST_COMPLETED, addAsync(check_TestResult_has_IllegalOperationError, 100));
 			runner.run(tooSlowTest);
 		}
 		

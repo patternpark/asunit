@@ -9,12 +9,7 @@ package asunit.textui {
     import flash.display.StageScaleMode;
     import flash.events.Event;
     import flash.system.fscommand;
-    import flash.utils.clearInterval;
-    import flash.utils.describeType;
     import flash.utils.getTimer;
-    import flash.utils.setInterval;
-    import flash.utils.Timer;
-    import flash.events.TimerEvent;
     import flash.display.DisplayObject;
 
     /**

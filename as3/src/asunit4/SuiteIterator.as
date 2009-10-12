@@ -9,7 +9,7 @@ package asunit4 {
         protected var list:Array;
         protected var index:Number = 0;
 				
-		public function SuiteIterator(testSuite:Object) {
+		public function SuiteIterator(testSuite:Class) {
 			list = getTestClasses(testSuite);
 		}
 		
@@ -18,26 +18,23 @@ package asunit4 {
 		 * @param	testSuite	A Class or instance that declares tests as instance variables.
 		 * @return	An array of Class references.
 		 */
-		public static function getTestClasses(testSuite:Object):Array {
+		public static function getTestClasses(testSuite:Class):Array {
 			var typeInfo:XML = describeType(testSuite);
-			if (typeInfo.@base == 'Class') typeInfo = typeInfo.factory[0];
 			var testClasses:Array = [];
-			for each (var variableType:XML in typeInfo.variable.@type) {
+			for each (var variableType:XML in typeInfo.factory[0].variable.@type) {
 				testClasses[testClasses.length] = getDefinitionByName(String(variableType)); // faster than push
 			}
 			testClasses.sort();
 			return testClasses;
 		}
 		
-		public static function countTestClasses(testSuite:Object):uint {
+		public static function countTestClasses(testSuite:Class):uint {
 			return getTestClasses(testSuite).length;
 		}
 		
-		public static function isSuite(possibleTestSuite:Object):Boolean {
+		public static function isSuite(possibleTestSuite:Class):Boolean {
 			var typeInfo:XML = describeType(possibleTestSuite);
-			if (typeInfo.@base == 'Class') typeInfo = typeInfo.factory[0];
-			
-			var metadataMatchingSuite:XMLList = typeInfo.metadata.(@name == 'Suite');
+			var metadataMatchingSuite:XMLList = typeInfo.factory[0].metadata.(@name == 'Suite');
 			return metadataMatchingSuite.length() > 0;
 		}
 			

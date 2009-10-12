@@ -9,7 +9,7 @@ package asunit.textui {
     import asunit.runner.BaseTestRunner;
     import asunit.runner.Version;
 	import asunit4.FreeRunner;
-	import asunit4.TestMethodIterator;
+	import asunit4.TestIterator;
 
     import flash.display.Sprite;
     import flash.events.*;
@@ -255,7 +255,7 @@ package asunit.textui {
 				count = Test(test).countTestCases();
 			}
 			else {
-				count = TestMethodIterator.countTestMethods(test);
+				count = TestIterator.countTestMethods(test);
 			}
 			
             for(var i:uint; i < count; i++) {

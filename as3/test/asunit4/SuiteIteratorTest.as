@@ -23,26 +23,12 @@ package asunit4 {
 			assertEquals(2, SuiteIterator.countTestClasses(DoubleFailSuite));
 		}
 		
-		public function test_countTestClasses_of_free_suite_instance():void {
-			var suiteInstance:Object = new DoubleFailSuite();
-			assertEquals(2, SuiteIterator.countTestClasses(suiteInstance));
-		}
-		
 		public function test_isSuite_with_free_suite_class():void {
 			assertTrue(SuiteIterator.isSuite(DoubleFailSuite));
 		}
 		
-		public function test_isSuite_with_free_suite_instance():void {
-			var suiteInstance:Object = new DoubleFailSuite();
-			assertTrue(SuiteIterator.isSuite(suiteInstance));
-		}
-		
 		public function test_isSuite_false_with_non_suite_class():void {
 			assertFalse(SuiteIterator.isSuite(Date));
-		}
-		
-		public function test_isSuite_false_with_non_suite_instance():void {
-			assertFalse(SuiteIterator.isSuite(new Date()));
 		}
 		
 		public function test_getTestClasses_of_free_suite_class():void {
@@ -54,18 +40,8 @@ package asunit4 {
 			assertTrue(testClasses.indexOf(FailAssertEqualsTest) >= 0);
 		}
 		
-		public function test_iterator_for_null_yields_hasNext_false():void {
-			iterator = new SuiteIterator(null);
-			assertFalse(iterator.hasNext());
-		}
-		
 		public function test_iterator_for_non_suite_class_yields_hasNext_false():void {
 			iterator = new SuiteIterator(Date);
-			assertFalse(iterator.hasNext());
-		}
-		
-		public function test_iterator_for_non_suite_instance_yields_hasNext_false():void {
-			iterator = new SuiteIterator(new Date());
 			assertFalse(iterator.hasNext());
 		}
 		

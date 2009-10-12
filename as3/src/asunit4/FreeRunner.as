@@ -32,7 +32,7 @@ package asunit4 {
 		protected var startTime:Number;
 		protected var timer:Timer;
 		protected var result:ITestResult;
-		protected var allMethods:TestMethodIterator;
+		protected var allMethods:TestIterator;
 		protected var methodTimeoutID:int = -1;
 
 		public function FreeRunner() {
@@ -62,7 +62,7 @@ package asunit4 {
 			currentMethod = null;
 			this.result = result || new FreeTestResult();
 			
-			allMethods = new TestMethodIterator(test);
+			allMethods = new TestIterator(test);
 			
 			startTime = getTimer();
 			if (_printer)

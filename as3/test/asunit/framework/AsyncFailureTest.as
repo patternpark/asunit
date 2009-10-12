@@ -45,9 +45,9 @@ package asunit.framework {
             function onFailure():void {
                 failed = true;
             }
-    
-            var handler:Function = addAsync(onAsync, 1000, onFailure);
-            var timer:Timer = new Timer(1500, 1);
+
+            var handler:Function = addAsync(onAsync, 0, onFailure);
+            var timer:Timer = new Timer(50, 1);
             timer.addEventListener(TimerEvent.TIMER, onDone);
             timer.start();
         }

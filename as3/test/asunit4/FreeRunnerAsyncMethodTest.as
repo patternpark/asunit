@@ -1,10 +1,12 @@
-package asunit.framework {
-	import asunit.framework.support.FailAssertTrueTest;
+package asunit4 {
+	import asunit4.support.FailAssertTrueTest;
 	import asunit.framework.TestCase;
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.utils.describeType;
 	import flash.utils.getQualifiedClassName;
+	import asunit4.events.TestResultEvent;
+	import asunit.framework.ITestResult;
 
 	public class FreeRunnerAsyncMethodTest extends TestCase {
 		private var runner:FreeRunner;
@@ -59,7 +61,7 @@ package asunit.framework {
 		}
 		
 		private function check_TestResult_wasSuccessful(e:TestResultEvent):void {
-			var result:FreeTestResult = e.testResult;
+			var result:ITestResult = e.testResult;
 			assertTrue(result.wasSuccessful);
 		}
 		
@@ -71,7 +73,7 @@ package asunit.framework {
 		}
 		
 		private function check_TestResult_has_IllegalOperationError(e:TestResultEvent):void {
-			var result:FreeTestResult = e.testResult;
+			var result:ITestResult = e.testResult;
 			assertEquals('number of errors', 1, result.errors.length);
 			var failure0:FreeTestFailure = result.errors[0] as FreeTestFailure;
 			assertEquals('exception type', 'flash.errors::IllegalOperationError', getQualifiedClassName(failure0.thrownException));
@@ -81,13 +83,13 @@ package asunit.framework {
 }
 //////////////////////////////////////////
 import flash.utils.setTimeout;
-import asunit.framework.async.addAsync;
+import asunit4.async.addAsync;
 
 class AsyncMethodSuccessTest {
 	
 	[Test(async,timeout="100")]
 	public function operation_delayed_but_fast_enough_will_succeed():void {
-		var delegate:Function = asunit.framework.async.addAsync(this, onComplete);
+		var delegate:Function = asunit4.async.addAsync(this, onComplete);
 		setTimeout(delegate, 10);
 	}
 	
@@ -100,7 +102,7 @@ class AsyncMethodTooSlowTest {
 	
 	[Test(async,timeout="5")]
 	public function operation_too_slow_will_fail():void {
-		var delegate:Function = asunit.framework.async.addAsync(this, onComplete);
+		var delegate:Function = asunit4.async.addAsync(this, onComplete);
 		setTimeout(delegate, 50);
 	}
 	

@@ -1,4 +1,4 @@
-package asunit.framework {
+package asunit4 {
 	import flash.display.DisplayObjectContainer;
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
@@ -10,13 +10,15 @@ package asunit.framework {
 	import flash.utils.getTimer;
 	import flash.utils.setTimeout;
 	import flash.utils.Timer;
-	import asunit.framework.async.Async;
-	import asunit.framework.async.TimeoutCommand;
+	import asunit4.async.Async;
+	import asunit4.async.TimeoutCommand;
 	import asunit.runner.ITestRunner;
 	import asunit.textui.ResultPrinter;
 	import asunit.util.ArrayIterator;
 	import asunit.util.Iterator;
 	import asunit.framework.Assert;
+	import asunit4.events.TestResultEvent;
+	import asunit.framework.ErrorEvent;
 
 	public class FreeRunner extends EventDispatcher implements ITestRunner {
 		protected var beforeMethodsList:Iterator;

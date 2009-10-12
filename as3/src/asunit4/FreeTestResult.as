@@ -1,5 +1,8 @@
-package asunit.framework {
+package asunit4 {
     import asunit.errors.AssertionFailedError;
+	import asunit.framework.ITestResult;
+	import asunit.framework.ITestFailure;
+	import asunit.framework.TestListener;
 
     /**
      * A <code>TestResult</code> collects the results of executing

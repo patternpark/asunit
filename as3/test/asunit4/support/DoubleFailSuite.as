@@ -1,4 +1,4 @@
-﻿package asunit.framework.support {
+﻿package asunit4.support {
 		
 	[Suite]
 	[RunWith("asunit.runner.FreeSuiteRunner")]

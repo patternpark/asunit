@@ -1,7 +1,9 @@
-package asunit.framework {
+package asunit4 {
 	import asunit.framework.TestCase;
 	import flash.events.Event;
-	import asunit.framework.support.FreeTestWithSprite;
+	import asunit4.support.FreeTestWithSprite;
+	import asunit4.events.TestResultEvent;
+	import asunit.framework.ITestFailure;
 
 	public class FreeRunnerTest extends TestCase {
 		private var runner:FreeRunner;

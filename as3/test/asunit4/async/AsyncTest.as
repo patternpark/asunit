@@ -1,4 +1,4 @@
-﻿package asunit.framework.async {
+﻿package asunit4.async {
 	import asunit.framework.TestCase;
 	import flash.events.Event;
 
@@ -16,7 +16,7 @@
 
 		//////
 		public function test_addAsync_handler_can_be_retrieved_with_same_information():void {
-			var cancelTimeout:Function = asunit.framework.async.addAsync(this, foo, 111);
+			var cancelTimeout:Function = asunit4.async.addAsync(this, foo, 111);
 			
 			var commands:Array = Async.instance.getCommandsForTest(this);
 			assertNotNull(commands);

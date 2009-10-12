@@ -8,8 +8,8 @@ package asunit.textui {
     import asunit.framework.ITestResult;
     import asunit.runner.BaseTestRunner;
     import asunit.runner.Version;
-	import asunit.framework.FreeRunner;
-	import asunit.framework.TestMethodIterator;
+	import asunit4.FreeRunner;
+	import asunit4.TestMethodIterator;
 
     import flash.display.Sprite;
     import flash.events.*;

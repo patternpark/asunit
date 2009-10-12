@@ -1,6 +1,7 @@
-package asunit.framework {
+package asunit4 {
     import asunit.errors.AssertionFailedError;
 	import flash.utils.getQualifiedClassName;
+	import asunit.framework.ITestFailure;
 
     /**
      * A <code>TestFailure</code> collects a failed test together with

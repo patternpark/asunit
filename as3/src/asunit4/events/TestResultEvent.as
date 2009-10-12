@@ -1,14 +1,14 @@
-﻿package asunit.framework {
+﻿package asunit4.events {
 	import flash.events.Event;
-	
+	import asunit.framework.ITestResult;
 	/**
 	 *
 	 */
 	public class TestResultEvent extends Event {
 		public static const NAME:String = 'asunit.framework.TestResultEvent';
-		public var testResult:FreeTestResult;
+		public var testResult:ITestResult;
 		
-		public function TestResultEvent(type:String, testResult:FreeTestResult) {
+		public function TestResultEvent(type:String, testResult:ITestResult) {
 			super(type);
 			this.testResult = testResult;
 		}

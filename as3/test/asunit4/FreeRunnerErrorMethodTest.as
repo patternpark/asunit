@@ -1,7 +1,9 @@
-package asunit.framework {
+package asunit4 {
 	import asunit.framework.TestCase;
 	import flash.events.Event;
-	import asunit.framework.support.ErrorInMethodTest;
+	import asunit4.support.ErrorInMethodTest;
+	import asunit4.events.TestResultEvent;
+	import asunit.framework.ITestResult;
 
 	public class FreeRunnerErrorMethodTest extends TestCase {
 		private var runner:FreeRunner;
@@ -31,7 +33,7 @@ package asunit.framework {
 		}
 		
 		private function check_TestResult_has_one_error(e:TestResultEvent):void {
-			var result:FreeTestResult = e.testResult;
+			var result:ITestResult = e.testResult;
 			assertFalse(result.wasSuccessful);
 			
 			assertEquals('one error in testResult',   1, result.errorCount);

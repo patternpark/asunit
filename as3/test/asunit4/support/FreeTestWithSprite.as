@@ -1,4 +1,4 @@
-﻿package asunit.framework.support {
+﻿package asunit4.support {
 	import flash.display.Sprite;
 	import asunit.asserts.*;
 

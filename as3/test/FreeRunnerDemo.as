@@ -1,10 +1,11 @@
 ﻿package  {
-	import asunit.framework.FreeRunner;
+	import asunit4.FreeRunner;
 	import asunit.textui.ResultPrinter;
 	import flash.display.MovieClip;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
-	import asunit.framework.TestResultEvent;
+	import asunit4.events.TestResultEvent;
+	import asunit4.FreeTestResult;
 	
 	/**
 	 * ...
@@ -31,7 +32,7 @@
 		private function onTestResult(e:TestResultEvent):void {
 			trace('onTestResult()');
 			//printer.endTest(currentTest);
-			printer.printResult(e.testResult, e.testResult.runTime);
+			printer.printResult(e.testResult, FreeTestResult(e.testResult).runTime);
 		}
 		
 	}

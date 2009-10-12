@@ -1,7 +1,9 @@
-package asunit.framework {
+package asunit4 {
 	import asunit.errors.AssertionFailedError;
 	import asunit.framework.TestCase;
 	import flash.events.Event;
+	import asunit4.events.TestResultEvent;
+	import asunit.framework.ITestResult;
 
 	public class FreeRunnerExpectsErrorTest extends TestCase {
 		private var runner:FreeRunner;
@@ -35,7 +37,7 @@ package asunit.framework {
 		}
 		
 		private function check_TestResult_has_no_errors(e:TestResultEvent):void {
-			var result:FreeTestResult = e.testResult;
+			var result:ITestResult = e.testResult;
 			assertEquals('no errors in testResult',   0, result.errorCount);
 			assertEquals('no failures in testResult', 0, result.failureCount);
 		}
@@ -48,7 +50,7 @@ package asunit.framework {
 		}
 		
 		private function check_TestResult_has_one_assertion_failure(e:TestResultEvent):void {
-			var result:FreeTestResult = e.testResult;
+			var result:ITestResult = e.testResult;
 			assertFalse(result.wasSuccessful);
 			
 			assertEquals('one failure in testResult', 1, result.failureCount);

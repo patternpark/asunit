@@ -1,11 +1,11 @@
-﻿package asunit.framework.support {
+﻿package asunit4.support {
 	import asunit.asserts.*;
-	
-	public class FailAssertEqualsTest {
 
+	public class FailAssertTrueTest {
+		
 		public var methodsCalled:Array;
 		
-		public function FailAssertEqualsTest() {
+		public function FailAssertTrueTest() {
 			methodsCalled = [];
 		}
 		
@@ -20,9 +20,11 @@
 		}
 		
 		[Test]
-		public function fail_assertEquals():void {
+		public function fail_assertTrue():void {
 			methodsCalled.push(arguments.callee);
-			assertEquals('right', 'wrong');
+			assertTrue(false);
 		}
+		
 	}
+
 }

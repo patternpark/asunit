@@ -1,4 +1,4 @@
-package asunit.framework {
+package asunit4 {
 	import asunit.util.ArrayIterator;
 	import asunit.util.Iterator;
 	import flash.utils.describeType;
@@ -33,6 +33,7 @@ package asunit.framework {
 		public static function isSuite(possibleTestSuite:Object):Boolean {
 			var typeInfo:XML = describeType(possibleTestSuite);
 			if (typeInfo.@base == 'Class') typeInfo = typeInfo.factory[0];
+			
 			var metadataMatchingSuite:XMLList = typeInfo.metadata.(@name == 'Suite');
 			return metadataMatchingSuite.length() > 0;
 		}

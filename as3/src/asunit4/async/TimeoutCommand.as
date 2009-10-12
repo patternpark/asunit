@@ -1,4 +1,4 @@
-package asunit.framework.async {
+package asunit4.async {
 	import asunit.framework.Command;
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;

@@ -1,6 +1,6 @@
-package asunit.framework {
+package asunit4 {
 	import asunit.framework.TestCase;
-	import asunit.framework.support.FailAssertTrueTest;
+	import asunit4.support.FailAssertTrueTest;
 
 	public class TestMethodIteratorSingleMethodTest extends TestCase {
 		private var iterator:TestMethodIterator;

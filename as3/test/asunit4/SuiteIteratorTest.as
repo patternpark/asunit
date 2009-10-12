@@ -1,8 +1,8 @@
-package asunit.framework {
+package asunit4 {
 	import asunit.framework.TestCase;
-	import asunit.framework.support.DoubleFailSuite;
-	import asunit.framework.support.FailAssertEqualsTest;
-	import asunit.framework.support.FailAssertTrueTest;
+	import asunit4.support.DoubleFailSuite;
+	import asunit4.support.FailAssertEqualsTest;
+	import asunit4.support.FailAssertTrueTest;
 
 	public class SuiteIteratorTest extends TestCase {
 		private var iterator:SuiteIterator;

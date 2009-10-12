@@ -1,6 +1,6 @@
-package asunit.framework {
+package asunit4 {
 	import asunit.framework.TestCase;
-	import asunit.framework.support.FreeTestWithSprite;
+	import asunit4.support.FreeTestWithSprite;
 
 	public class TestMethodIteratorMultiMethodTest extends TestCase {
 		private var iterator:TestMethodIterator;

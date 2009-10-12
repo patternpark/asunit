@@ -1,5 +1,5 @@
-﻿package asunit.framework.async {
-	import asunit.framework.async.TimeoutCommand;
+﻿package asunit4.async {
+	import asunit4.async.TimeoutCommand;
 	import asunit.framework.ErrorEvent;
 	import flash.utils.Dictionary;
 	import flash.events.Event;

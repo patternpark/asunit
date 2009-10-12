@@ -3,7 +3,7 @@ package asunit.framework {
     import flash.utils.setTimeout;
 
     public class AsyncMethodTest extends TestCase {
-        
+
         private var instance:Sprite;
         private var asyncInstance:Sprite;
 
@@ -15,7 +15,7 @@ package asunit.framework {
             instance = new Sprite();
             addChild(instance);
             var handler:Function = addAsync(asyncSetupHandler);
-            setTimeout(handler, 100);
+            setTimeout(handler, 0);
         }
 
         protected override function tearDown():void {
@@ -36,7 +36,7 @@ package asunit.framework {
 
         public function testAsyncMethod():void {
             var handler:Function = addAsync(asyncHandler);
-            setTimeout(handler, 100);
+            setTimeout(handler, 0);
         }
         
         private function asyncHandler():void {
@@ -45,7 +45,7 @@ package asunit.framework {
         
         public function testAsyncVisualEntity():void {
             var handler:Function = addAsync(spriteHandler);
-            setTimeout(handler, 100);
+            setTimeout(handler, 0);
         }
         
         private function spriteHandler():void {
@@ -54,14 +54,14 @@ package asunit.framework {
         
         public function testAsyncVisualEntity2():void {
             var handler:Function = addAsync(spriteHandler);
-            setTimeout(handler, 100);
+            setTimeout(handler, 0);
         }
         
         public function testMultipleAsyncMethod():void {
             var handler1:Function = addAsync(spriteHandler);
             var handler2:Function = addAsync(spriteHandler);
-            setTimeout(handler1, 100);
-            setTimeout(handler2, 200);
+            setTimeout(handler1, 0);
+            setTimeout(handler2, 0);
         }
         
         public function testAsyncSetup():void{

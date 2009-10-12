@@ -81,7 +81,7 @@ package asunit.framework {
             var dispatcher:EventDispatcher = new EventDispatcher();
             var handler:Function = addAsync(asyncHandler, 400);
             dispatcher.addEventListener(Event.COMPLETE, handler);
-            setTimeout(dispatcher.dispatchEvent, 200, new Event(Event.COMPLETE));
+            setTimeout(dispatcher.dispatchEvent, 0, new Event(Event.COMPLETE));
         }
         
         private function asyncHandler(event:Event):void {

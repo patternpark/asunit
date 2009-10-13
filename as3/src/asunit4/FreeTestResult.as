@@ -19,6 +19,7 @@ package asunit4 {
         protected var _failures:Array;
         protected var _errors:Array;
 		protected var _listeners:Array;
+		protected var _runCount:uint = 0;
 
         public function FreeTestResult() {
 			_failures	= new Array();
@@ -69,8 +70,11 @@ package asunit4 {
         }
 		
 		public function get runCount():uint {
-			//TODO: implement
-			return 1;
+			return _runCount;
+		}
+		
+		public function set runCount(value:uint):void {
+			_runCount = value;
 		}
 		
         /**

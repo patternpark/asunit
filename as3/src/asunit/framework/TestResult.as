@@ -15,14 +15,14 @@ package asunit.framework {
         protected var _failures:Array;
         protected var _errors:Array;
         protected var _listeners:Array;
-        protected var _runTests:int;
+        protected var _runCount:uint = 0;
         protected var _stop:Boolean;
 
         public function TestResult() {
             _failures  = new Array();
             _errors    = new Array();
             _listeners = new Array();
-            _runTests  = 0;
+            _runCount  = 0;
             _stop      = false;
         }
 		
@@ -99,8 +99,13 @@ package asunit.framework {
          * Gets the number of run tests.
          */
         public function get runCount():uint {
-            return _runTests;
+            return _runCount;
         }
+		
+        public function set runCount(value:uint):void {
+            _runCount = value;
+        }
+		
         /**
          * Checks whether the test run should stop
          */
@@ -112,7 +117,7 @@ package asunit.framework {
          */
         public function startTest(test:Object):void {
             var count:int = test.countTestCases();
-            _runTests += count;
+            _runCount += count;
 
             var len:uint = _listeners.length;
             var item:TestListener;

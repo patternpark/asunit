@@ -21,7 +21,7 @@ package asunit4 {
 	import asunit.framework.ErrorEvent;
 	import asunit.framework.ITestResult;
 
-	public class FreeRunner extends EventDispatcher implements ITestRunner {
+	public class FreeRunner extends EventDispatcher {
 		protected var beforeMethodsList:Iterator;
 		protected var testMethodsList:Iterator;
 		protected var afterMethodsList:Iterator;
@@ -36,7 +36,7 @@ package asunit4 {
 		protected var methodTimeoutID:int = -1;
 
 		public function FreeRunner() {
-			timer = new Timer(1, 1);
+			timer = new Timer(0, 1);
 			timer.addEventListener(TimerEvent.TIMER, runNextMethod);
 		}
 		
@@ -131,10 +131,10 @@ package asunit4 {
 			}
 			
 			// Start a new green thread.
-			//timer.reset();
-			//timer.start();
+			timer.reset();
+			timer.start();
 			
-			runNextMethod();
+			//runNextMethod();
 		}
 		
 		protected function onMethodTimeout():void {
@@ -146,6 +146,7 @@ package asunit4 {
 		protected function onMethodCompleted():void {
 			trace('onMethodCompleted() - ' + currentMethod);
 			clearTimeout(methodTimeoutID);
+			
 			if (currentMethod.async) {
 				var commands:Array = Async.instance.getCommandsForTest(currentTest);
 				// clean up all async listeners
@@ -155,7 +156,7 @@ package asunit4 {
 					command.removeEventListener(ErrorEvent.ERROR, onAsyncMethodFailed);
 				}
 			}
-				
+			result.runCount++;
 			runNextMethod();
 		}
 		

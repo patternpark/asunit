@@ -14,6 +14,7 @@
 		function get failureCount():uint;
 		
 		function get runCount():uint;
+		function set runCount(value:uint):void;
 		
 		function get wasSuccessful():Boolean;
 		

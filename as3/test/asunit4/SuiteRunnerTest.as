@@ -19,40 +19,15 @@ package asunit4 {
 		protected override function setUp():void {
 			suiteRunner = new SuiteRunner();
 			suiteClass = DoubleFailSuite;
-			//trace(describeType(suite));
 		}
 
 		protected override function tearDown():void {
 			suiteRunner = null;
 			suiteClass = null;
 		}
-
-		//////
-		
-/*
-		public function test_run_calls_setup_before_and_tearDown_after_each_test_method():void {
-			suiteRunner.addEventListener(TestResultEvent.TEST_COMPLETED, addAsync(check_methodsCalled_after_run, 100));
-			suiteRunner.run(spriteTest);
-		}
-		
-		private function check_methodsCalled_after_run(e:TestResultEvent):void {
-			assertEquals(9, spriteTest.methodsCalled.length);
-			
-			assertSame(spriteTest.setUp, 								spriteTest.methodsCalled[0]);
-			assertSame(spriteTest.test_fail_assertEquals,				spriteTest.methodsCalled[1]);
-			assertSame(spriteTest.tearDown, 							spriteTest.methodsCalled[2]);
-
-			assertSame(spriteTest.setUp, 								spriteTest.methodsCalled[3]);
-			assertSame(spriteTest.test_numChildren_is_0_by_default,		spriteTest.methodsCalled[4]);
-			assertSame(spriteTest.tearDown, 							spriteTest.methodsCalled[5]);
-			
-			assertSame(spriteTest.setUp,								spriteTest.methodsCalled[6]);
-			assertSame(spriteTest.test_stage_is_null_by_default, 		spriteTest.methodsCalled[7]);
-			assertSame(spriteTest.tearDown, 							spriteTest.methodsCalled[8]);
-		}
-*/
 		
 		//////
+		
 		public function test_run_triggers_TestResultEvent_with_wasSuccessful_false_and_failures():void {
 			suiteRunner.addEventListener(TestResultEvent.SUITE_COMPLETED, addAsync(check_TestResult_wasSuccessful_false, 100));
 			suiteRunner.run(suiteClass);

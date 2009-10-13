@@ -12,7 +12,7 @@ package asunit.runner {
 			// Remove local file paths to focus on the class names preceding them.
 			var localPathExp:RegExp = /([A-Z]:\\[^\/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^\/:\*\?<>\|]+\.\w{2,6})/g;
 			stack = stack.replace(localPathExp, '');
-            return stack
+            return stack;
         }
     }
  }

@@ -3,7 +3,6 @@
 	import flash.events.EventDispatcher;
 	import asunit4.events.TestResultEvent;
 	import flash.utils.getTimer;
-	import flash.utils.setTimeout;
 	import flash.utils.Timer;
 	import flash.events.TimerEvent;
 	
@@ -40,7 +39,8 @@
 		
 		protected function onTestCompleted(e:TestResultEvent):void {
 			trace('SuiteRunner.onTestCompleted() - e.testResult: ' + e.testResult);
-
+			dispatchEvent(e);
+			
 			// Start a new green thread.
 			timer.reset();
 			timer.start();

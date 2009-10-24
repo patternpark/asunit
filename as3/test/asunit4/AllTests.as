@@ -5,8 +5,9 @@ package asunit4 {
 	import asunit4.FreeRunnerErrorMethodTest;
 	import asunit4.FreeRunnerExpectsErrorTest;
 	import asunit4.FreeRunnerTest;
-	import asunit4.SuiteRunnerTest;
+	import asunit4.NestedSuiteIteratorTest;
 	import asunit4.SuiteIteratorTest;
+	import asunit4.SuiteRunnerTest;
 	import asunit4.TestMethodIteratorMultiMethodTest;
 	import asunit4.TestMethodIteratorSingleMethodTest;
 
@@ -18,8 +19,9 @@ package asunit4 {
 			addTest(new asunit4.FreeRunnerErrorMethodTest());
 			addTest(new asunit4.FreeRunnerExpectsErrorTest());
 			addTest(new asunit4.FreeRunnerTest());
-			addTest(new asunit4.SuiteRunnerTest());
+			addTest(new asunit4.NestedSuiteIteratorTest());
 			addTest(new asunit4.SuiteIteratorTest());
+			addTest(new asunit4.SuiteRunnerTest());
 			addTest(new asunit4.TestMethodIteratorMultiMethodTest());
 			addTest(new asunit4.TestMethodIteratorSingleMethodTest());
 		}

@@ -22,7 +22,14 @@ package asunit4 {
 			var typeInfo:XML = describeType(testSuite);
 			var testClasses:Array = [];
 			for each (var variableType:XML in typeInfo.factory[0].variable.@type) {
-				testClasses[testClasses.length] = getDefinitionByName(String(variableType)); // faster than push
+				var testClass:Class = Class( getDefinitionByName(String(variableType)) );
+				// Recurse through nested suites.
+				if (isSuite(testClass)) {
+					testClasses = testClasses.concat( getTestClasses(testClass) );
+				}
+				else {
+					testClasses[testClasses.length] = testClass;
+				}
 			}
 			testClasses.sort();
 			return testClasses;

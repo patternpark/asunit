@@ -1,4 +1,4 @@
-﻿package asunit4 {
+﻿package asunit4.runners {
 	import asunit4.IFreeTestResult;
 	import flash.events.EventDispatcher;
 	import asunit4.events.TestResultEvent;
@@ -6,9 +6,10 @@
 	import flash.utils.Timer;
 	import flash.events.TimerEvent;
 	import flash.events.Event;
+	import asunit4.SuiteIterator;
 	
 	public class SuiteRunner extends EventDispatcher {
-		protected var testRunner:FreeRunner;
+		protected var testRunner:TestRunner;
 		protected var suiteRunner:SuiteRunner;
 		protected var testClasses:SuiteIterator;
 		protected var timer:Timer;
@@ -19,7 +20,7 @@
 		}
 		
 		public function run(suite:Class):void {
-			testRunner = new FreeRunner();
+			testRunner = new TestRunner();
 			testRunner.addEventListener(TestResultEvent.TEST_COMPLETED, onTestCompleted);
 			testClasses = new SuiteIterator(suite);
 			

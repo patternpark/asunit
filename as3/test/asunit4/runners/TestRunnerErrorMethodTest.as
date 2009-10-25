@@ -1,20 +1,21 @@
-package asunit4 {
+package asunit4.runners {
 	import asunit.framework.TestCase;
 	import flash.events.Event;
 	import asunit4.support.ErrorInMethodTest;
 	import asunit4.events.TestResultEvent;
 	import asunit4.IFreeTestResult;
+	import asunit4.FreeTestFailure;
 
-	public class FreeRunnerErrorMethodTest extends TestCase {
-		private var runner:FreeRunner;
+	public class TestRunnerErrorMethodTest extends TestCase {
+		private var runner:TestRunner;
 		private var freeTest:ErrorInMethodTest;
 
-		public function FreeRunnerErrorMethodTest(testMethod:String = null) {
+		public function TestRunnerErrorMethodTest(testMethod:String = null) {
 			super(testMethod);
 		}
 
 		protected override function setUp():void {
-			runner = new FreeRunner();
+			runner = new TestRunner();
 			freeTest = new ErrorInMethodTest();
 		}
 
@@ -23,7 +24,7 @@ package asunit4 {
 		}
 
 		public function testInstantiated():void {
-			assertTrue("FreeRunner instantiated", runner is FreeRunner);
+			assertTrue("TestRunner instantiated", runner is TestRunner);
 		}
 		
 		//////

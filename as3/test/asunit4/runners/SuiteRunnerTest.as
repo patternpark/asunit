@@ -1,4 +1,4 @@
-package asunit4 {
+package asunit4.runners {
 	import asunit.framework.TestCase;
 	import flash.events.Event;
 	import flash.utils.describeType;

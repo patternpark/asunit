@@ -1,4 +1,4 @@
-package asunit4 {
+package asunit4.runners {
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -14,8 +14,13 @@ package asunit4 {
 	import asunit4.async.TimeoutCommand;
 	import asunit4.events.TestResultEvent;
 	import asunit4.IFreeTestResult;
+	import asunit4.Method;
+	import asunit4.TestIterator;
+	import asunit4.FreeTestResult;
+	import asunit4.TestSuccess;
+	import asunit4.FreeTestFailure;
 
-	public class FreeRunner extends EventDispatcher {
+	public class TestRunner extends EventDispatcher {
 		protected var currentTest:Object;
 		protected var currentMethod:Method;
 		protected var startTime:Number;
@@ -25,7 +30,7 @@ package asunit4 {
 		protected var methodTimeoutID:int = -1;
 		protected var methodPassed:Boolean = true;
 
-		public function FreeRunner() {
+		public function TestRunner() {
 			timer = new Timer(0, 1);
 			timer.addEventListener(TimerEvent.TIMER, runNextMethod);
 		}

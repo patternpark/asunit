@@ -1,22 +1,23 @@
-package asunit4 {
+package asunit4.runners {
 	import asunit.errors.AssertionFailedError;
 	import asunit.framework.TestCase;
 	import flash.events.Event;
 	import asunit4.events.TestResultEvent;
-	import asunit.framework.ITestResult;
+	import asunit4.IFreeTestResult;
+	import asunit4.FreeTestFailure;
 
-	public class FreeRunnerExpectsErrorTest extends TestCase {
-		private var runner:FreeRunner;
+	public class TestRunnerExpectsErrorTest extends TestCase {
+		private var runner:TestRunner;
 		private var successTest:TestExpectsArgumentErrorAndThrowsIt;
 		private var throwNothingTest:TestExpectsArgumentErrorButThrowsNothing;
 		private var throwWrongErrorTest:TestExpectsArgumentErrorButThrowsWrongError;
 
-		public function FreeRunnerExpectsErrorTest(testMethod:String = null) {
+		public function TestRunnerExpectsErrorTest(testMethod:String = null) {
 			super(testMethod);
 		}
 
 		protected override function setUp():void {
-			runner = new FreeRunner();
+			runner = new TestRunner();
 			successTest = new TestExpectsArgumentErrorAndThrowsIt();
 			throwNothingTest = new TestExpectsArgumentErrorButThrowsNothing();
 			throwWrongErrorTest = new TestExpectsArgumentErrorButThrowsWrongError();

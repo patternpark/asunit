@@ -1,20 +1,21 @@
-package asunit4 {
+package asunit4.runners {
 	import asunit.framework.TestCase;
 	import flash.events.Event;
 	import asunit4.support.FreeTestWithSprite;
 	import asunit4.events.TestResultEvent;
 	import asunit.framework.ITestFailure;
+	import asunit4.FreeTestFailure;
 
-	public class FreeRunnerTest extends TestCase {
-		private var runner:FreeRunner;
+	public class TestRunnerTest extends TestCase {
+		private var runner:TestRunner;
 		private var test:FreeTestWithSprite;
 
-		public function FreeRunnerTest(testMethod:String = null) {
+		public function TestRunnerTest(testMethod:String = null) {
 			super(testMethod);
 		}
 
 		protected override function setUp():void {
-			runner = new FreeRunner();
+			runner = new TestRunner();
 			test = new FreeTestWithSprite();
 		}
 
@@ -23,7 +24,7 @@ package asunit4 {
 		}
 
 		public function testInstantiated():void {
-			assertTrue("FreeRunner instantiated", runner is FreeRunner);
+			assertTrue("TestRunner instantiated", runner is TestRunner);
 		}
 		
 		public function test_free_test_does_not_extend_TestCase():void

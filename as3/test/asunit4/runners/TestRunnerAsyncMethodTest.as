@@ -1,4 +1,4 @@
-package asunit4 {
+package asunit4.runners {
 	import asunit4.support.FailAssertTrueTest;
 	import asunit.framework.TestCase;
 	import flash.errors.IllegalOperationError;
@@ -7,18 +7,21 @@ package asunit4 {
 	import flash.utils.getQualifiedClassName;
 	import asunit4.events.TestResultEvent;
 	import asunit4.IFreeTestResult;
+	import asunit4.TestIterator;
+	import asunit4.Method;
+	import asunit4.FreeTestFailure;
 
-	public class FreeRunnerAsyncMethodTest extends TestCase {
-		private var runner:FreeRunner;
+	public class TestRunnerAsyncMethodTest extends TestCase {
+		private var runner:TestRunner;
 		private var successTest:AsyncMethodSuccessTest;
 		private var tooSlowTest:AsyncMethodTooSlowTest;
 
-		public function FreeRunnerAsyncMethodTest(testMethod:String = null) {
+		public function TestRunnerAsyncMethodTest(testMethod:String = null) {
 			super(testMethod);
 		}
 
 		protected override function setUp():void {
-			runner = new FreeRunner();
+			runner = new TestRunner();
 			successTest = new AsyncMethodSuccessTest();
 			tooSlowTest = new AsyncMethodTooSlowTest();
 		}

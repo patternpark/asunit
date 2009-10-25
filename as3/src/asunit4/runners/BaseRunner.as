@@ -3,7 +3,7 @@ package asunit4.runners {
 	import asunit4.printers.IResultPrinter;
 	import asunit4.printers.FlashBuilderPrinter;
 	import asunit4.events.TestResultEvent;
-	import asunit4.SuiteRunner;
+	import asunit4.runners.SuiteRunner;
 	import flash.events.EventDispatcher;
 
 	public class BaseRunner extends EventDispatcher {

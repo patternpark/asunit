@@ -28,22 +28,13 @@ package asunit4 {
 		
 		//////
 		
-		public function test_run_triggers_TestResultEvent_with_wasSuccessful_false_and_failures():void {
-			suiteRunner.addEventListener(TestResultEvent.SUITE_COMPLETED, addAsync(check_TestResult_wasSuccessful_false, 100));
+		public function test_run_triggers_COMPLETE_Event():void {
+			suiteRunner.addEventListener(Event.COMPLETE, addAsync(check_TestResult_wasSuccessful_false, 100));
 			suiteRunner.run(suiteClass);
 		}
 		
-		private function check_TestResult_wasSuccessful_false(e:TestResultEvent):void {
-			assertFalse(e.testResult.wasSuccessful);
-			
-			var failures:Array = e.testResult.failures;
-			assertEquals('failures in testResult', 2, failures.length);
-			
-			var failure0:ITestFailure = failures[0] as ITestFailure;
-			assertSame('failure0 test class', FailAssertEqualsTest, failure0.failedTest['constructor']);
-			
-			var failure1:ITestFailure = failures[1] as ITestFailure;
-			assertSame('failure1 test class', FailAssertTrueTest, failure1.failedTest['constructor']);
+		private function check_TestResult_wasSuccessful_false(e:Event):void {
+			assertSame(suiteRunner, e.currentTarget);
 		}
 	}
 }

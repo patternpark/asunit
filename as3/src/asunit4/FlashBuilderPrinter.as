@@ -5,6 +5,9 @@
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
+	import asunit4.IFreeTestResult;
+	import asunit.framework.ITestFailure;
+	import flash.utils.getQualifiedClassName;
 	
 	public class FlashBuilderPrinter extends EventDispatcher
 	{
@@ -33,13 +36,59 @@
    	   		}
 		}
 		
+		public function startTestRun():void {
+			var projectName:String = 'FlexProjectSDK4';
+			var contextName:String = 'SomeContext';
+			sendMessage("<startTestRun totalTestCount='0' projectName='" + projectName + "' contextName='" + contextName +"' />");
+		}
 		
+		public function addTestResult(result:IFreeTestResult):void
+		{
+			if (!socket.connected) return;
+			
+			for each (var failure:ITestFailure in result.failures) {
+				var xmlMessage:String = createFailureMessage(
+					failure.failedMethod,
+					getQualifiedClassName(failure.failedTest),
+					getQualifiedClassName(failure.thrownException),
+					failure.exceptionMessage,
+					failure.thrownException.getStackTrace());
+				//trace('******** sending failedMethod: ' + failure.failedMethod);
+				sendMessage(xmlMessage);
+			}
+			//trace('######  result.successes: ' + result.successes);
+			for each (var success:ITestSuccess in result.successes) {
+				var xmlMessageSuccess:String = "<testCase name='" + success.method + "' testSuite='" + getQualifiedClassName(success.test) + "' status='success'/>";
+				//trace('->->->->->->->    xmlMessageSuccess: ' + xmlMessageSuccess);
+				sendMessage(xmlMessageSuccess);
+			}
+			
+		}
 		
+		public function endTestRun():void {
+			sendMessage('<endOfTestRun/>');
+		}
 		
+		protected function sendMessage(message:String):void {
+			if (!socket.connected) return;
+			socket.send(message);
+			//trace('sendMessage() - ' + message);
+		}
+		
+		protected function createFailureMessage( methodName:String, suite:String, type:String, message:String, stackTrace:String ):String {
+			var xml : String =
+				"<testCase name='"+methodName+"' testSuite='"+suite+"' status='failure'>"+
+				"<failure type='"+ type +"' >"+
+				"<messageInfo>"+xmlEscapeMessage(message)+ "</messageInfo>"+
+				"<stackTraceInfo>" +xmlEscapeMessage(stackTrace)+ "</stackTraceInfo>"+
+				"</failure>"+
+				"</testCase>";
+
+			return xml;
+		}
 		
 		protected function onConnect(event:Event):void
 		{
-			trace('onConnect()');
 			dispatchEvent(event);
 		}
 		
@@ -47,6 +96,16 @@
 		{
 			trace('onErrorEvent() - event: ' + event);
 		}
+		
+		
+		public static function xmlEscapeMessage(message:String):String {
+			if (!message) return '';
+			
+			var escape:XML = <escape/>;
+			escape.setChildren( message );
+			return escape.children()[0].toXMLString();
+		}
+		
 		
 	}
 }

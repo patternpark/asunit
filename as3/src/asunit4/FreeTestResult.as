@@ -1,7 +1,8 @@
 package asunit4 {
     import asunit.errors.AssertionFailedError;
-	import asunit.framework.ITestResult;
+	import asunit4.IFreeTestResult;
 	import asunit.framework.ITestFailure;
+	import asunit4.ITestSuccess;
 	import asunit.framework.TestListener;
 
     /**
@@ -13,18 +14,20 @@ package asunit4 {
      *
      * @see Test
      */
-    public class FreeTestResult implements ITestResult {
+    public class FreeTestResult implements IFreeTestResult {
 		public var runTime:Number;
 		
         protected var _failures:Array;
         protected var _errors:Array;
+        protected var _successes:Array;
 		protected var _listeners:Array;
 		protected var _runCount:uint = 0;
 
         public function FreeTestResult() {
-			_failures	= new Array();
-			_errors		= new Array();
-			_listeners  = new Array();
+			_failures	= [];
+			_errors		= [];
+			_successes	= [];
+			_listeners  = [];
         }
 		
         /**
@@ -40,6 +43,11 @@ package asunit4 {
 			if (_listeners[0])
 				_listeners[0].addError(failure);
         }
+		
+        public function addSuccess(success:ITestSuccess):void {
+			_successes.push(success);
+		}
+		
 		
         /**
          * Gets the number of detected errors.
@@ -67,6 +75,10 @@ package asunit4 {
          */
         public function get failures():Array {
             return _failures;
+        }
+		
+        public function get successes():Array {
+            return _successes;
         }
 		
 		public function get runCount():uint {

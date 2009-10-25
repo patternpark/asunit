@@ -1,7 +1,7 @@
 ﻿package asunit4.ui {
 	import asunit.errors.AssertionFailedError;
 	import asunit.framework.ITestFailure;
-	import asunit.framework.ITestResult;
+	import asunit4.IFreeTestResult;
 	import asunit4.events.TestResultEvent;
 	import com.bit101.components.*;
 	import flash.display.Sprite;
@@ -66,7 +66,7 @@
 			
 		}
 		
-		public function addTestResult(result:ITestResult):void {
+		public function addTestResult(result:IFreeTestResult):void {
 			dots.text += '.';
 			
 			var failures:Array = result.errors.concat(result.failures);
@@ -93,7 +93,7 @@
 			
 		}
 		
-		public function setFinalResult(result:ITestResult):void {
+		public function setFinalResult(result:IFreeTestResult):void {
 				//"Tests run: " + result.runCount +
 				//",  Failures: " + result.failureCount +
 				//",  Errors: " + result.errorCount

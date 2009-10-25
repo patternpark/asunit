@@ -56,9 +56,5 @@ package asunit4 {
         public function reset():void {
             index = 0;
         }
-		
-		
-		
 	}
 }
-

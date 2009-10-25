@@ -37,7 +37,7 @@ package asunit4 {
 		}
 		
 		private function check_TestResult_has_no_errors(e:TestResultEvent):void {
-			var result:ITestResult = e.testResult;
+			var result:IFreeTestResult = e.testResult;
 			assertEquals('no errors in testResult',   0, result.errorCount);
 			assertEquals('no failures in testResult', 0, result.failureCount);
 		}
@@ -50,7 +50,7 @@ package asunit4 {
 		}
 		
 		private function check_TestResult_has_one_assertion_failure(e:TestResultEvent):void {
-			var result:ITestResult = e.testResult;
+			var result:IFreeTestResult = e.testResult;
 			assertFalse(result.wasSuccessful);
 			
 			assertEquals('one failure in testResult', 1, result.failureCount);

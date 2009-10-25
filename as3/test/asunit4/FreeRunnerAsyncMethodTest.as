@@ -6,7 +6,7 @@ package asunit4 {
 	import flash.utils.describeType;
 	import flash.utils.getQualifiedClassName;
 	import asunit4.events.TestResultEvent;
-	import asunit.framework.ITestResult;
+	import asunit4.IFreeTestResult;
 
 	public class FreeRunnerAsyncMethodTest extends TestCase {
 		private var runner:FreeRunner;
@@ -66,7 +66,7 @@ package asunit4 {
 		}
 		
 		private function check_TestResult_wasSuccessful(e:TestResultEvent):void {
-			var result:ITestResult = e.testResult;
+			var result:IFreeTestResult = e.testResult;
 			assertTrue(result.wasSuccessful);
 		}
 		
@@ -78,7 +78,7 @@ package asunit4 {
 		}
 		
 		private function check_TestResult_has_IllegalOperationError(e:TestResultEvent):void {
-			var result:ITestResult = e.testResult;
+			var result:IFreeTestResult = e.testResult;
 			assertEquals('number of errors', 1, result.errors.length);
 			var failure0:FreeTestFailure = result.errors[0] as FreeTestFailure;
 			assertEquals('exception type', 'flash.errors::IllegalOperationError', getQualifiedClassName(failure0.thrownException));

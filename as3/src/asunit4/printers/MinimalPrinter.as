@@ -4,6 +4,7 @@
 	import asunit4.IFreeTestResult;
 	import asunit4.events.TestResultEvent;
 	import com.bit101.components.*;
+	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.display.StageAlign;
@@ -19,6 +20,7 @@
 		private var times:Text;
 		private var header:Text;
 		private var dots:Text;
+		private var backgroundFill:Shape;
 
 		public function MinimalPrinter() {
 			if (stage)
@@ -68,9 +70,16 @@
 		
 		protected function onStageResize(e:Event):void {
 			failuresField.width = stage.stageWidth;
+			backgroundFill.width = stage.stageWidth;
+			backgroundFill.height = stage.stageHeight;
 		}
 		
 		protected function initUI():void {
+			backgroundFill = new Shape();
+			backgroundFill.graphics.beginFill(0x333333);
+			backgroundFill.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+			addChild(backgroundFill);
+			
 			Style.LABEL_TEXT = 0xFFFFFF;
 			
 			var vbox:VBox = new VBox(this);

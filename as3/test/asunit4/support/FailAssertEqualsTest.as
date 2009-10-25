@@ -22,7 +22,7 @@
 		[Test]
 		public function fail_assertEquals():void {
 			methodsCalled.push(arguments.callee);
-			assertEquals('right', 'wrong');
+			assertEquals('Words should be equal', 'right', 'wrong');
 		}
 	}
 }

@@ -22,7 +22,7 @@
 		[Test]
 		public function fail_assertTrue():void {
 			methodsCalled.push(arguments.callee);
-			assertTrue(false);
+			assertTrue('Law of non-contradiction', false);
 		}
 		
 	}

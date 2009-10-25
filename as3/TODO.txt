@@ -1,0 +1,31 @@
+﻿=================
+  AsUnit 4 TODO
+=================
+
+High Priority
+-------------
+- Rename FreeRunner.
+- [Ignore]
+- [BeforeClass]/[AfterClass]
+- Method ordering, e.g. [Before(order=1)]
+-
+
+
+Medium Priority
+---------------
+- Test async Before/After methods.
+- Increase test coverage.
+- [RunWith]
+- Refactor AsUnit 3 using AsUnit 4 code.
+  - Enable async in setUp()/tearDown().
+  - Get rid of flakiness in async test results (wrong method names, etc.).
+  - Use EventDispatcher instead of Java-style listeners.
+  - Unify interfaces.
+  - Unify printers.
+
+Low Priority
+------------
+- User-defined metadata, e.g. [Test(description="Watch out for this one",issueID="12345")]
+- UIImpersonator
+- Theories
+

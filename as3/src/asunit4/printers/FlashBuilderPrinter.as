@@ -34,32 +34,18 @@
 		
 		public function addTestResult(result:IFreeTestResult):void {
 			var failure:ITestFailure;
+			
 			for each (failure in result.errors) {
-				var xmlMessage:String = createErrorMessage(
-					failure.failedMethod,
-					getQualifiedClassName(failure.failedTest),
-					getQualifiedClassName(failure.thrownException),
-					failure.exceptionMessage,
-					failure.thrownException.getStackTrace());
-				//trace('******** sending failedMethod: ' + failure.failedMethod);
-				sendMessage(xmlMessage);
+				sendMessage(getFailureMessage(failure));
 			}
 			
 			for each (failure in result.failures) {
-				var xmlMessage2:String = createFailureMessage(
-					failure.failedMethod,
-					getQualifiedClassName(failure.failedTest),
-					getQualifiedClassName(failure.thrownException),
-					failure.exceptionMessage,
-					failure.thrownException.getStackTrace());
-				//trace('******** sending failedMethod: ' + failure.failedMethod);
-				sendMessage(xmlMessage2);
+				sendMessage(getFailureMessage(failure));
 			}
 			
-			//trace('######  result.successes: ' + result.successes);
 			for each (var success:ITestSuccess in result.successes) {
-				var xmlMessageSuccess:String = "<testCase name='" + success.method + "' testSuite='" + getQualifiedClassName(success.test) + "' status='success'/>";
-				//trace('->->->->->->->    xmlMessageSuccess: ' + xmlMessageSuccess);
+				var xmlMessageSuccess:String = "<testCase name='" + success.method
+					+ "' testSuite='" + getQualifiedClassName(success.test) + "' status='success'/>";
 				sendMessage(xmlMessageSuccess);
 			}
 		}
@@ -95,31 +81,18 @@
 				return;
 			}
 			socket.send(message);
-			trace('+++++++++ sendMessage() - \n' + message + '\n');
+			//trace('+++++++++ sendMessage() - \n' + message + '\n');
 		}
 		
-		protected function createFailureMessage(methodName:String, suite:String, type:String, message:String, stackTrace:String):String {
+		protected function getFailureMessage(failure:ITestFailure):String {
+			var status:String = failure.isFailure ? 'failure' : 'error';
 			var xml:String =
-				"<testCase name='" + methodName
-				+ "' testSuite='" + suite
-				+ "' status='failure'>"
-					+ "<failure type='" + type + "' >"
-						+ "<messageInfo>" + xmlEscapeMessage(message) + "</messageInfo>"
-						+ "<stackTraceInfo>" + xmlEscapeMessage(stackTrace) + "</stackTraceInfo>" +
-					"</failure>"
-				+ "</testCase>";
-
-			return xml;
-		}
-		
-		protected function createErrorMessage(methodName:String, suite:String, type:String, message:String, stackTrace:String):String {
-			var xml:String =
-				"<testCase name='" + methodName
-				+ "' testSuite='" + suite
-				+ "' status='error'>"
-					+ "<failure type='" + type + "' >"
-						+ "<messageInfo>" + xmlEscapeMessage(message) + "</messageInfo>"
-						+ "<stackTraceInfo>" + xmlEscapeMessage(stackTrace) + "</stackTraceInfo>" +
+				"<testCase name='" + failure.failedMethod
+				+ "' testSuite='" + getQualifiedClassName(failure.failedTest)
+				+ "' status='" + status + "'>"
+					+ "<failure type='" + getQualifiedClassName(failure.thrownException) + "' >"
+						+ "<messageInfo>" + xmlEscapeMessage(failure.exceptionMessage) + "</messageInfo>"
+						+ "<stackTraceInfo>" + xmlEscapeMessage(failure.thrownException.getStackTrace()) + "</stackTraceInfo>" +
 					"</failure>"
 				+ "</testCase>";
 

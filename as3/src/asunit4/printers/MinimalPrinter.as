@@ -1,4 +1,4 @@
-﻿package asunit4.ui {
+﻿package asunit4.printers {
 	import asunit.errors.AssertionFailedError;
 	import asunit.framework.ITestFailure;
 	import asunit4.IFreeTestResult;
@@ -12,7 +12,7 @@
 	import flash.utils.getQualifiedClassName;
 	import flash.system.Capabilities;
 
-	public class MinimalUI extends Sprite {
+	public class MinimalPrinter extends Sprite implements IResultPrinter {
 		protected static const localPathPattern:RegExp = /([A-Z]:\\[^\/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^\/:\*\?<>\|]+\.\w{2,6})/g;
 
 		private var failuresField:Text;
@@ -20,11 +20,44 @@
 		private var header:Text;
 		private var dots:Text;
 
-		public function MinimalUI() {
+		public function MinimalPrinter() {
 			if (stage)
 				initUI();
 			else
 				addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+		}
+		
+		public function startTestRun():void {
+		}
+		
+		public function addTestResult(result:IFreeTestResult):void {
+			dots.text += '.';
+			
+			var failures:Array = result.errors.concat(result.failures);
+			//var failures:Array = result.failures;
+			var s:String = '';
+			var stack:String = '';
+			for each (var failure:ITestFailure in failures) {
+				s += getQualifiedClassName(failure.failedTest);
+				s += '.' + failure.failedMethod + ' : ';
+				
+				//if (failure.thrownException['constructor'] != AssertionFailedError) {
+					//s += getQualifiedClassName(failure.thrownException);
+				//}
+				
+				//s += failure.exceptionMessage + '\n';
+				stack = failure.thrownException.getStackTrace();
+				
+				stack = stack.replace(localPathPattern, '');
+				stack = stack.replace(/AssertionFailedError: /, '');
+
+				s += stack + '\n\n';
+			}
+			failuresField.text += s;
+			
+		}
+		
+		public function endTestRun():void {
 		}
 		
 		protected function onAddedToStage(e:Event):void {
@@ -63,40 +96,7 @@
 			times.width = 400;
 			times.height = 200;
 			times.editable = false;
-			
 		}
 		
-		public function addTestResult(result:IFreeTestResult):void {
-			dots.text += '.';
-			
-			var failures:Array = result.errors.concat(result.failures);
-			//var failures:Array = result.failures;
-			var s:String = '';
-			var stack:String = '';
-			for each (var failure:ITestFailure in failures) {
-				s += getQualifiedClassName(failure.failedTest);
-				s += '.' + failure.failedMethod + ' : ';
-				
-				//if (failure.thrownException['constructor'] != AssertionFailedError) {
-					//s += getQualifiedClassName(failure.thrownException);
-				//}
-				
-				//s += failure.exceptionMessage + '\n';
-				stack = failure.thrownException.getStackTrace();
-				
-				stack = stack.replace(localPathPattern, '');
-				stack = stack.replace(/AssertionFailedError: /, '');
-
-				s += stack + '\n\n';
-			}
-			failuresField.text += s;
-			
-		}
-		
-		public function setFinalResult(result:IFreeTestResult):void {
-				//"Tests run: " + result.runCount +
-				//",  Failures: " + result.failureCount +
-				//",  Errors: " + result.errorCount
-		}
 	}
 }

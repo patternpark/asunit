@@ -4,11 +4,9 @@
 
 High Priority
 -------------
-- Rename FreeRunner.
 - [Ignore]
 - [BeforeClass]/[AfterClass]
 - Method ordering, e.g. [Before(order=1)]
--
 
 
 Medium Priority

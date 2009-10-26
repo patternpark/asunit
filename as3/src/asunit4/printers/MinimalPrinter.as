@@ -1,7 +1,7 @@
 ﻿package asunit4.printers {
 	import asunit.errors.AssertionFailedError;
 	import asunit.framework.ITestFailure;
-	import asunit4.IFreeTestResult;
+	import asunit4.framework.IFreeTestResult;
 	import asunit4.events.TestResultEvent;
 	import com.bit101.components.*;
 	import flash.display.Shape;

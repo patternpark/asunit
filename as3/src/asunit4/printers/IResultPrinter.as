@@ -1,6 +1,6 @@
 ﻿package asunit4.printers {
 	
-	import asunit4.IFreeTestResult;
+	import asunit4.framework.IFreeTestResult;
 	
 	public interface IResultPrinter {
 		

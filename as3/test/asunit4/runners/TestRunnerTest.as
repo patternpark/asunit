@@ -4,7 +4,7 @@ package asunit4.runners {
 	import asunit4.support.FreeTestWithSprite;
 	import asunit4.events.TestResultEvent;
 	import asunit.framework.ITestFailure;
-	import asunit4.FreeTestFailure;
+	import asunit4.framework.FreeTestFailure;
 
 	public class TestRunnerTest extends TestCase {
 		private var runner:TestRunner;

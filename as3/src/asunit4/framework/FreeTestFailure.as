@@ -1,4 +1,4 @@
-package asunit4 {
+package asunit4.framework {
     import asunit.errors.AssertionFailedError;
 	import flash.utils.getQualifiedClassName;
 	import asunit.framework.ITestFailure;

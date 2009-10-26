@@ -1,4 +1,4 @@
-package asunit4 {
+package asunit4.framework {
 	import asunit.framework.TestCase;
 	import asunit4.support.FreeTestWithSprite;
 

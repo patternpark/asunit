@@ -1,4 +1,4 @@
-﻿package asunit4 {
+﻿package asunit4.framework {
 	
 	public class Method {
 		public var scope:Object;

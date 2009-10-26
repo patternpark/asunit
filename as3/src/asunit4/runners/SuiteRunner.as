@@ -1,12 +1,12 @@
 ﻿package asunit4.runners {
-	import asunit4.IFreeTestResult;
+	import asunit4.framework.IFreeTestResult;
 	import flash.events.EventDispatcher;
 	import asunit4.events.TestResultEvent;
 	import flash.utils.getTimer;
 	import flash.utils.Timer;
 	import flash.events.TimerEvent;
 	import flash.events.Event;
-	import asunit4.SuiteIterator;
+	import asunit4.framework.SuiteIterator;
 	
 	public class SuiteRunner extends EventDispatcher {
 		protected var testRunner:TestRunner;

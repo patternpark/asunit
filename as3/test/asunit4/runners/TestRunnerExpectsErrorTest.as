@@ -3,8 +3,8 @@ package asunit4.runners {
 	import asunit.framework.TestCase;
 	import flash.events.Event;
 	import asunit4.events.TestResultEvent;
-	import asunit4.IFreeTestResult;
-	import asunit4.FreeTestFailure;
+	import asunit4.framework.IFreeTestResult;
+	import asunit4.framework.FreeTestFailure;
 
 	public class TestRunnerExpectsErrorTest extends TestCase {
 		private var runner:TestRunner;

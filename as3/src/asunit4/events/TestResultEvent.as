@@ -1,6 +1,6 @@
 ﻿package asunit4.events {
 	import flash.events.Event;
-	import asunit4.IFreeTestResult;
+	import asunit4.framework.IFreeTestResult;
 	/**
 	 *
 	 */

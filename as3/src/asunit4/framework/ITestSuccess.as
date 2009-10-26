@@ -1,5 +1,4 @@
-﻿package asunit4
-{
+﻿package asunit4.framework {
 
 	/**
      *

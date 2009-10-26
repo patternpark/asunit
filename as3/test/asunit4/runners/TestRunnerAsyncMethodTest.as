@@ -6,10 +6,10 @@ package asunit4.runners {
 	import flash.utils.describeType;
 	import flash.utils.getQualifiedClassName;
 	import asunit4.events.TestResultEvent;
-	import asunit4.IFreeTestResult;
-	import asunit4.TestIterator;
-	import asunit4.Method;
-	import asunit4.FreeTestFailure;
+	import asunit4.framework.IFreeTestResult;
+	import asunit4.framework.TestIterator;
+	import asunit4.framework.Method;
+	import asunit4.framework.FreeTestFailure;
 
 	public class TestRunnerAsyncMethodTest extends TestCase {
 		private var runner:TestRunner;

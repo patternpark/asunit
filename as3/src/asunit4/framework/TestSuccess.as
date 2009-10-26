@@ -1,4 +1,4 @@
-package asunit4 {
+package asunit4.framework {
 	import flash.utils.getQualifiedClassName;
 
     /**

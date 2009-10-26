@@ -1,8 +1,8 @@
-package asunit4 {
+package asunit4.framework {
     import asunit.errors.AssertionFailedError;
-	import asunit4.IFreeTestResult;
+	import asunit4.framework.IFreeTestResult;
 	import asunit.framework.ITestFailure;
-	import asunit4.ITestSuccess;
+	import asunit4.framework.ITestSuccess;
 	import asunit.framework.TestListener;
 
     /**

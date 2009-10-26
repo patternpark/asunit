@@ -9,7 +9,7 @@ package asunit.textui {
     import asunit.runner.BaseTestRunner;
     import asunit.runner.Version;
 	import asunit4.runners.TestRunner;
-	import asunit4.TestIterator;
+	import asunit4.framework.TestIterator;
 
     import flash.display.Sprite;
     import flash.events.*;

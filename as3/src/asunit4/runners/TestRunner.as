@@ -13,12 +13,12 @@ package asunit4.runners {
 	import asunit4.async.Async;
 	import asunit4.async.TimeoutCommand;
 	import asunit4.events.TestResultEvent;
-	import asunit4.IFreeTestResult;
-	import asunit4.Method;
-	import asunit4.TestIterator;
-	import asunit4.FreeTestResult;
-	import asunit4.TestSuccess;
-	import asunit4.FreeTestFailure;
+	import asunit4.framework.IFreeTestResult;
+	import asunit4.framework.Method;
+	import asunit4.framework.TestIterator;
+	import asunit4.framework.FreeTestResult;
+	import asunit4.framework.TestSuccess;
+	import asunit4.framework.FreeTestFailure;
 
 	public class TestRunner extends EventDispatcher {
 		protected var currentTest:Object;

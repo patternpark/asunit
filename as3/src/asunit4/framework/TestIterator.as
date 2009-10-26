@@ -1,4 +1,4 @@
-package asunit4 {
+package asunit4.framework {
 	import asunit.util.ArrayIterator;
 	import asunit.util.Iterator;
 	import flash.utils.describeType;

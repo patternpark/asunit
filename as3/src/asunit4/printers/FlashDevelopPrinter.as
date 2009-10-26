@@ -17,21 +17,10 @@
 		
 		protected static const lineNumberPattern:RegExp = /:[0-9]*\]/;
 		
-		protected var messageQueue:Array;
-		protected var socket:XMLSocket;
-		
 		public function FlashDevelopPrinter() {
-			messageQueue = [];
-			socket = new XMLSocket();
-	      	socket.addEventListener(Event.CONNECT, onConnect);
-			socket.addEventListener(IOErrorEvent.IO_ERROR, onErrorEvent);
-			socket.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onErrorEvent);
-   	   		socket.addEventListener(Event.CLOSE, onErrorEvent);
-			connect();
 		}
 		
 		public function startTestRun():void {
-			
 		}
 		
 		public function addTestResult(result:IFreeTestResult):void {
@@ -50,37 +39,13 @@
 		
 		public function endTestRun():void {
 		}
-		
-		protected function connect(ip:String = '127.0.0.1', port:uint = 1978):void {
-   	   		try {
-   	   			socket.connect(ip, port);
-   	   		}
-			catch (e:Error) {
-   	   			trace('## Error connecting to Flash Develop socket: ' + e.message);
-   	   		}
-		}
-		
-		protected function onConnect(event:Event):void {
-			dispatchEvent(event);
-			sendQueuedMessages();
-		}
-		
-		protected function sendQueuedMessages():void
-		{
-			while (messageQueue.length) {
-				sendMessage(messageQueue.shift());
-			}
-		}
-		
+				
 		protected function sendMessage(message:String):void {
-			if (!socket.connected) {
-				messageQueue.push(message);
-				return;
-			}
-			socket.send(message);
+			trace(message);
 		}
 		
 		protected function getFailureMessage(failure:ITestFailure):String {
+			var status:String = (failure.isFailure) ? 'F' : 'E';
 			var stack:String = failure.thrownException.getStackTrace();
 			var lines:Array = stack.split('\n');
 			var methodPattern:RegExp = new RegExp(failure.failedMethod);
@@ -100,15 +65,10 @@
 			// Take off the colon and bracket (I need to get better at regex).
 			var lineNumber:String = lineNumberRaw.slice(1, -1);
 			
-			var message:String = filePath + '('+lineNumber+'): '
+			var message:String = filePath + '('+lineNumber+'): ' + status + ' '
 				+ (failure.failedMethod + '(): ' + failure.exceptionMessage);
 				
 			return message;
 		}
-		
-		protected function onErrorEvent(event:Event):void {
-			trace('onErrorEvent() - event: ' + event);
-		}
-		
 	}
 }

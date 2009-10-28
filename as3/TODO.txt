@@ -7,6 +7,7 @@ High Priority
 - [BeforeClass]/[AfterClass]
 - [Ignore]
 - Method ordering, e.g. [Before(order=1)]
+- Restore headers/footers to MinimalPrinter.
 
 
 Medium Priority
@@ -14,12 +15,24 @@ Medium Priority
 - [RunWith]
 - Test async Before/After/BeforeClass/AfterClass methods.
 - Increase test coverage.
+- Probably move from MinimalComps back to textfields for MinimalPrinter.
 
 
 Low Priority
 ------------
 - User-defined metadata, e.g. [Test(description="Watch out for this one",issueID="12345")]
 - Theories
+
+
+=================
+  Tooling TODO
+=================
+
+- Project Sprouts integration (for Luke to do, not Robert).
+- AIR app to generate class/test stubs.
+- Mechanism for running all tests in a folder without manually creating a suite.
+- AIR runner with more features like running only failed tests.
+- Monkey-patching to trick Flash Builder UI into using AsUnit.
 
 
 =================

@@ -8,6 +8,7 @@ High Priority
 - [Ignore]
 - Method ordering, e.g. [Before(order=1)]
 - Restore headers/footers to MinimalPrinter.
+- Mirror FlexUnit's Async.proceedOnEvent(), etc.
 
 
 Medium Priority

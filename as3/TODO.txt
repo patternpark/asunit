@@ -4,26 +4,31 @@
 
 High Priority
 -------------
-- [Ignore]
 - [BeforeClass]/[AfterClass]
+- [Ignore]
 - Method ordering, e.g. [Before(order=1)]
 
 
 Medium Priority
 ---------------
-- Test async Before/After methods.
-- Increase test coverage.
 - [RunWith]
-- Refactor AsUnit 3 using AsUnit 4 code.
-  - Enable async in setUp()/tearDown().
-  - Get rid of flakiness in async test results (wrong method names, etc.).
-  - Use EventDispatcher instead of Java-style listeners.
-  - Unify interfaces.
-  - Unify printers.
+- Test async Before/After/BeforeClass/AfterClass methods.
+- Increase test coverage.
+
 
 Low Priority
 ------------
 - User-defined metadata, e.g. [Test(description="Watch out for this one",issueID="12345")]
-- UIImpersonator
 - Theories
 
+
+=================
+  AsUnit 3 TODO
+=================
+
+Refactor AsUnit 3 using AsUnit 4 code.
+- Enable async in setUp()/tearDown().
+- Get rid of flakiness in async test results (wrong method names, etc.).
+- Use EventDispatcher instead of Java-style listeners.
+- Unify interfaces.
+- Unify printers.

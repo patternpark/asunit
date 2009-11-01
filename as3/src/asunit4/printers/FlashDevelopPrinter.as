@@ -5,10 +5,10 @@
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
-	import asunit4.IFreeTestResult;
+	import asunit4.framework.ITestResult;
 	import asunit.framework.ITestFailure;
 	import flash.utils.getQualifiedClassName;
-	import asunit4.ITestSuccess;
+	import asunit4.framework.ITestSuccess;
 	
 	public class FlashDevelopPrinter extends EventDispatcher implements IResultPrinter
 	{
@@ -23,7 +23,7 @@
 		public function startTestRun():void {
 		}
 		
-		public function addTestResult(result:IFreeTestResult):void {
+		public function addTestResult(result:ITestResult):void {
 			var failure:ITestFailure;
 			
 			for each (failure in result.errors) {

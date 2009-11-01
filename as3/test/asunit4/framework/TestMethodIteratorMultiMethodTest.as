@@ -1,17 +1,17 @@
 package asunit4.framework {
 	import asunit.framework.TestCase;
-	import asunit4.support.FreeTestWithSprite;
+	import asunit4.support.TestWithSprite;
 
 	public class TestMethodIteratorMultiMethodTest extends TestCase {
 		private var iterator:TestIterator;
-		private var multiTest:FreeTestWithSprite;
+		private var multiTest:TestWithSprite;
 
 		public function TestMethodIteratorMultiMethodTest(testMethod:String = null) {
 			super(testMethod);
 		}
 
 		protected override function setUp():void {
-			multiTest = new FreeTestWithSprite();
+			multiTest = new TestWithSprite();
 		}
 
 		protected override function tearDown():void {
@@ -32,7 +32,7 @@ package asunit4.framework {
 		}
 		
 		public function test_get_before_methods_of_test_class():void {
-			var beforeMethods:Array = TestIterator.getBeforeMethods(FreeTestWithSprite);
+			var beforeMethods:Array = TestIterator.getBeforeMethods(TestWithSprite);
 			
 			assertEquals(2, beforeMethods.length);
 			assertEquals(beforeMethods[0].name, 'runBefore1');
@@ -49,7 +49,7 @@ package asunit4.framework {
 		}
 		
 		public function test_get_test_methods_of_test_class():void {
-			var testMethods:Array = TestIterator.getTestMethods(FreeTestWithSprite);
+			var testMethods:Array = TestIterator.getTestMethods(TestWithSprite);
 			
 			assertEquals(3, testMethods.length);
 			assertEquals(testMethods[0].name, 'fail_assertEquals');
@@ -66,7 +66,7 @@ package asunit4.framework {
 		}
 		
 		public function test_get_after_methods_of_test_class():void {
-			var afterMethods:Array = TestIterator.getAfterMethods(FreeTestWithSprite);
+			var afterMethods:Array = TestIterator.getAfterMethods(TestWithSprite);
 			
 			assertEquals(2, afterMethods.length);
 			assertEquals(afterMethods[0].name, 'runAfter1');
@@ -79,7 +79,7 @@ package asunit4.framework {
 		}
 		
 		public function test_iterator_next_with_test_class():void {
-			iterator = new TestIterator(FreeTestWithSprite);
+			iterator = new TestIterator(TestWithSprite);
 			checkAllNextCalls(iterator);
 		}
 		

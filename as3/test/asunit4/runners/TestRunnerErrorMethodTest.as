@@ -3,8 +3,8 @@ package asunit4.runners {
 	import flash.events.Event;
 	import asunit4.support.ErrorInMethodTest;
 	import asunit4.events.TestResultEvent;
-	import asunit4.framework.IFreeTestResult;
-	import asunit4.framework.FreeTestFailure;
+	import asunit4.framework.ITestResult;
+	import asunit4.framework.TestFailure;
 
 	public class TestRunnerErrorMethodTest extends TestCase {
 		private var runner:TestRunner;
@@ -34,13 +34,13 @@ package asunit4.runners {
 		}
 		
 		private function check_TestResult_has_one_error(e:TestResultEvent):void {
-			var result:IFreeTestResult = e.testResult;
+			var result:ITestResult = e.testResult;
 			assertFalse(result.wasSuccessful);
 			
 			assertEquals('one error in testResult',   1, result.errorCount);
 			assertEquals('no failures in testResult', 0, result.failureCount);
 			
-			var failure0:FreeTestFailure = result.errors[0] as FreeTestFailure;
+			var failure0:TestFailure = result.errors[0] as TestFailure;
 			assertTrue('thrownException is correct type', failure0.thrownException is ArgumentError);
 			assertSame('failedTest reference', freeTest, failure0.failedTest);
 			assertSame('failedMethod name', 'throw_ArgumentError', failure0.failedMethod);

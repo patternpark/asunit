@@ -6,10 +6,10 @@ package asunit4.runners {
 	import flash.utils.describeType;
 	import flash.utils.getQualifiedClassName;
 	import asunit4.events.TestResultEvent;
-	import asunit4.framework.IFreeTestResult;
+	import asunit4.framework.ITestResult;
 	import asunit4.framework.TestIterator;
 	import asunit4.framework.Method;
-	import asunit4.framework.FreeTestFailure;
+	import asunit4.framework.TestFailure;
 
 	public class TestRunnerAsyncMethodTest extends TestCase {
 		private var runner:TestRunner;
@@ -69,7 +69,7 @@ package asunit4.runners {
 		}
 		
 		private function check_TestResult_wasSuccessful(e:TestResultEvent):void {
-			var result:IFreeTestResult = e.testResult;
+			var result:ITestResult = e.testResult;
 			assertTrue(result.wasSuccessful);
 		}
 		
@@ -81,9 +81,9 @@ package asunit4.runners {
 		}
 		
 		private function check_TestResult_has_IllegalOperationError(e:TestResultEvent):void {
-			var result:IFreeTestResult = e.testResult;
+			var result:ITestResult = e.testResult;
 			assertEquals('number of errors', 1, result.errors.length);
-			var failure0:FreeTestFailure = result.errors[0] as FreeTestFailure;
+			var failure0:TestFailure = result.errors[0] as TestFailure;
 			assertEquals('exception type', 'flash.errors::IllegalOperationError', getQualifiedClassName(failure0.thrownException));
 			assertEquals('failed method name', 'operation_too_slow_will_fail', failure0.failedMethod);
 		}

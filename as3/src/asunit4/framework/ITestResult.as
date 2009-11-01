@@ -6,7 +6,7 @@
 	/**
 	 *
 	 */
-	public interface IFreeTestResult {
+	public interface ITestResult {
 		
 		function addFailure(failure:ITestFailure):void;
 		function addSuccess(success:ITestSuccess):void;

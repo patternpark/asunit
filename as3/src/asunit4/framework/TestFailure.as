@@ -8,15 +8,15 @@ package asunit4.framework {
      * the caught exception.
      * @see TestResult
      */
-    public class FreeTestFailure implements ITestFailure {
+    public class TestFailure implements ITestFailure {
         protected var _failedTest:Object;
         protected var _failedMethod:String;
         protected var _thrownException:Error;
 
         /**
-         * Constructs a FreeTestFailure with the given test and exception.
+         * Constructs a TestFailure with the given test and exception.
          */
-        public function FreeTestFailure(failedTest:Object, methodName:String, thrownException:Error) {
+        public function TestFailure(failedTest:Object, methodName:String, thrownException:Error) {
             _failedTest = failedTest;
             _failedMethod = methodName;
             _thrownException = thrownException;

@@ -1,7 +1,7 @@
 ﻿package asunit4.printers {
 	import asunit.errors.AssertionFailedError;
 	import asunit.framework.ITestFailure;
-	import asunit4.framework.IFreeTestResult;
+	import asunit4.framework.ITestResult;
 	import asunit4.events.TestResultEvent;
 	import com.bit101.components.*;
 	import flash.display.Shape;
@@ -32,7 +32,7 @@
 		public function startTestRun():void {
 		}
 		
-		public function addTestResult(result:IFreeTestResult):void {
+		public function addTestResult(result:ITestResult):void {
 			dots.text += '.';
 			
 			var failures:Array = result.errors.concat(result.failures);

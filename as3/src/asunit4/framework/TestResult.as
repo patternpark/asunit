@@ -1,6 +1,6 @@
 package asunit4.framework {
     import asunit.errors.AssertionFailedError;
-	import asunit4.framework.IFreeTestResult;
+	import asunit4.framework.ITestResult;
 	import asunit.framework.ITestFailure;
 	import asunit4.framework.ITestSuccess;
 	import asunit.framework.TestListener;
@@ -14,7 +14,7 @@ package asunit4.framework {
      *
      * @see Test
      */
-    public class FreeTestResult implements IFreeTestResult {
+    public class TestResult implements ITestResult {
 		public var runTime:Number;
 		
         protected var _failures:Array;
@@ -23,7 +23,7 @@ package asunit4.framework {
 		protected var _listeners:Array;
 		protected var _runCount:uint = 0;
 
-        public function FreeTestResult() {
+        public function TestResult() {
 			_failures	= [];
 			_errors		= [];
 			_successes	= [];

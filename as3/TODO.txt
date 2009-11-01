@@ -4,6 +4,7 @@
 
 High Priority
 -------------
+- Make printers listen to the result instead of the runner.
 - [BeforeClass]/[AfterClass]
 - [Ignore]
 - Method ordering, e.g. [Before(order=1)]

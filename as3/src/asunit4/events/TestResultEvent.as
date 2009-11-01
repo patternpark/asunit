@@ -1,6 +1,6 @@
 ﻿package asunit4.events {
 	import flash.events.Event;
-	import asunit4.framework.IFreeTestResult;
+	import asunit4.framework.ITestResult;
 	/**
 	 *
 	 */
@@ -8,9 +8,9 @@
 		public static const TEST_COMPLETED:String = 'asunit4.events.TestResultEvent.TEST_COMPLETED';
 		public static const SUITE_COMPLETED:String = 'asunit4.events.TestResultEvent.SUITE_COMPLETED';
 		
-		public var testResult:IFreeTestResult;
+		public var testResult:ITestResult;
 		
-		public function TestResultEvent(type:String, testResult:IFreeTestResult) {
+		public function TestResultEvent(type:String, testResult:ITestResult) {
 			super(type);
 			this.testResult = testResult;
 		}

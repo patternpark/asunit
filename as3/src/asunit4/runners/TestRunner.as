@@ -13,19 +13,19 @@ package asunit4.runners {
 	import asunit4.async.Async;
 	import asunit4.async.TimeoutCommand;
 	import asunit4.events.TestResultEvent;
-	import asunit4.framework.IFreeTestResult;
+	import asunit4.framework.ITestResult;
 	import asunit4.framework.Method;
 	import asunit4.framework.TestIterator;
-	import asunit4.framework.FreeTestResult;
+	import asunit4.framework.TestResult;
 	import asunit4.framework.TestSuccess;
-	import asunit4.framework.FreeTestFailure;
+	import asunit4.framework.TestFailure;
 
 	public class TestRunner extends EventDispatcher {
 		protected var currentTest:Object;
 		protected var currentMethod:Method;
 		protected var startTime:Number;
 		protected var timer:Timer;
-		protected var result:IFreeTestResult;
+		protected var result:ITestResult;
 		protected var allMethods:TestIterator;
 		protected var methodTimeoutID:int = -1;
 		protected var methodPassed:Boolean = true;
@@ -43,7 +43,7 @@ package asunit4.runners {
 			trace('-------------------- run(): ' + test + ' - result: ' + result);
 			currentTest = test;
 			currentMethod = null;
-			result = new FreeTestResult();
+			result = new TestResult();
 			
 			allMethods = new TestIterator(test);
 			
@@ -183,12 +183,12 @@ package asunit4.runners {
 		
 		protected function recordFailure(error:Error):void {
 			methodPassed = false;
-			result.addFailure(new FreeTestFailure(currentTest, currentMethod.name, error));
+			result.addFailure(new TestFailure(currentTest, currentMethod.name, error));
 		}
 		
 		protected function onTestCompleted():void {
 			trace('FreeRunner.onTestCompleted()');
-			FreeTestResult(result).runTime = getTimer() - startTime;
+			TestResult(result).runTime = getTimer() - startTime;
 			dispatchEvent(new TestResultEvent(TestResultEvent.TEST_COMPLETED, result));
 		}
 		

@@ -2,12 +2,12 @@
 	import flash.display.Sprite;
 	import asunit.asserts.*;
 
-	public class FreeTestWithSprite {
+	public class TestWithSprite {
 		
 		public var methodsCalled:Array;
 		protected var sprite:Sprite;
 	
-		public function FreeTestWithSprite() {
+		public function TestWithSprite() {
 			methodsCalled = [];
 		}
 		

@@ -1,5 +1,5 @@
 ﻿package asunit4.runners {
-	import asunit4.framework.IFreeTestResult;
+	import asunit4.framework.ITestResult;
 	import flash.events.EventDispatcher;
 	import asunit4.events.TestResultEvent;
 	import flash.utils.getTimer;

@@ -3,8 +3,8 @@ package asunit4.runners {
 	import asunit.framework.TestCase;
 	import flash.events.Event;
 	import asunit4.events.TestResultEvent;
-	import asunit4.framework.IFreeTestResult;
-	import asunit4.framework.FreeTestFailure;
+	import asunit4.framework.ITestResult;
+	import asunit4.framework.TestFailure;
 
 	public class TestRunnerExpectsErrorTest extends TestCase {
 		private var runner:TestRunner;
@@ -38,7 +38,7 @@ package asunit4.runners {
 		}
 		
 		private function check_TestResult_has_no_errors(e:TestResultEvent):void {
-			var result:IFreeTestResult = e.testResult;
+			var result:ITestResult = e.testResult;
 			assertEquals('no errors in testResult',   0, result.errorCount);
 			assertEquals('no failures in testResult', 0, result.failureCount);
 		}
@@ -51,13 +51,13 @@ package asunit4.runners {
 		}
 		
 		private function check_TestResult_has_one_assertion_failure(e:TestResultEvent):void {
-			var result:IFreeTestResult = e.testResult;
+			var result:ITestResult = e.testResult;
 			assertFalse(result.wasSuccessful);
 			
 			assertEquals('one failure in testResult', 1, result.failureCount);
 			assertEquals('no errors in testResult',   0, result.errorCount);
 			
-			var failure0:FreeTestFailure = result.failures[0] as FreeTestFailure;
+			var failure0:TestFailure = result.failures[0] as TestFailure;
 			assertTrue('thrownException is correct type', failure0.thrownException is AssertionFailedError);
 			assertSame('failedTest reference', throwNothingTest, failure0.failedTest);
 			assertSame('failedMethod name', 'fail_by_throwing_nothing', failure0.failedMethod);

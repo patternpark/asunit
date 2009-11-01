@@ -1,14 +1,14 @@
 package asunit4.runners {
 	import asunit.framework.TestCase;
 	import flash.events.Event;
-	import asunit4.support.FreeTestWithSprite;
+	import asunit4.support.TestWithSprite;
 	import asunit4.events.TestResultEvent;
 	import asunit.framework.ITestFailure;
-	import asunit4.framework.FreeTestFailure;
+	import asunit4.framework.TestFailure;
 
 	public class TestRunnerTest extends TestCase {
 		private var runner:TestRunner;
-		private var test:FreeTestWithSprite;
+		private var test:TestWithSprite;
 
 		public function TestRunnerTest(testMethod:String = null) {
 			super(testMethod);
@@ -16,7 +16,7 @@ package asunit4.runners {
 
 		protected override function setUp():void {
 			runner = new TestRunner();
-			test = new FreeTestWithSprite();
+			test = new TestWithSprite();
 		}
 
 		protected override function tearDown():void {
@@ -73,7 +73,7 @@ package asunit4.runners {
 			var failures:Array = e.testResult.failures;
 			assertEquals('one failure in testResult', 1, failures.length);
 			
-			var failure0:ITestFailure = failures[0] as FreeTestFailure;
+			var failure0:ITestFailure = failures[0] as TestFailure;
 			assertSame(test, failure0.failedTest);
 		}
 		

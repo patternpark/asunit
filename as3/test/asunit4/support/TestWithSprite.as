@@ -4,11 +4,20 @@
 
 	public class TestWithSprite {
 		
-		public var methodsCalled:Array;
+		public static var methodsCalled:Array;
 		protected var sprite:Sprite;
 	
 		public function TestWithSprite() {
-			methodsCalled = [];
+		}
+		
+		[BeforeClass]
+		public static function runBeforeClass1():void {
+			methodsCalled.push(arguments.callee);
+		}
+		
+		[BeforeClass]
+		public static function runBeforeClass2():void {
+			methodsCalled.push(arguments.callee);
 		}
 		
 		[Before]
@@ -49,6 +58,16 @@
 		public function fail_assertEquals():void {
 			methodsCalled.push(arguments.callee);
 			assertEquals('wrongName', sprite.name);
+		}
+		
+		[AfterClass]
+		public static function runAfterClass1():void {
+			methodsCalled.push(arguments.callee);
+		}
+		
+		[AfterClass]
+		public static function runAfterClass2():void {
+			methodsCalled.push(arguments.callee);
 		}
 		
 		

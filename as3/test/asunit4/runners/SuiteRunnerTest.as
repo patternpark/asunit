@@ -6,7 +6,6 @@ package asunit4.runners {
 	import asunit4.support.DoubleFailSuite;
 	import asunit4.support.FailAssertTrueTest;
 	import asunit4.support.FailAssertEqualsTest;
-	import asunit4.events.ResultEvent;
 	import asunit.framework.ITestFailure;
 
 	public class SuiteRunnerTest extends TestCase {

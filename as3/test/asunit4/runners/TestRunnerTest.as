@@ -3,7 +3,6 @@ package asunit4.runners {
 	import asunit4.framework.Result;
 	import flash.events.Event;
 	import asunit4.support.TestWithSprite;
-	import asunit4.events.ResultEvent;
 	import asunit.framework.ITestFailure;
 	import asunit4.framework.TestFailure;
 
@@ -19,11 +18,13 @@ package asunit4.runners {
 		protected override function setUp():void {
 			runner = new TestRunner();
 			runnerResult = new Result();
+			TestWithSprite.methodsCalled = [];
 			test = new TestWithSprite();
 		}
 
 		protected override function tearDown():void {
 			runner = null;
+			TestWithSprite.methodsCalled = null;
 		}
 
 		public function testInstantiated():void {
@@ -43,25 +44,29 @@ package asunit4.runners {
 		}
 		
 		private function check_methodsCalled_after_run(e:Event):void {
-			assertEquals(15, test.methodsCalled.length);
+			assertEquals(19, TestWithSprite.methodsCalled.length);
+			var i:uint = 0;
 			
-			assertSame(test.runBefore1, 						test.methodsCalled[0]);
-			assertSame(test.runBefore2, 						test.methodsCalled[1]);
-			assertSame(test.fail_assertEquals,					test.methodsCalled[2]);
-			assertSame(test.runAfter1, 							test.methodsCalled[3]);
-			assertSame(test.runAfter2, 							test.methodsCalled[4]);
+			assertSame(TestWithSprite.runBeforeClass1, 			TestWithSprite.methodsCalled[i++]);
+			assertSame(TestWithSprite.runBeforeClass2, 			TestWithSprite.methodsCalled[i++]);
+			
+			assertSame(test.runBefore1, 						TestWithSprite.methodsCalled[i++]);
+			assertSame(test.runBefore2, 						TestWithSprite.methodsCalled[i++]);
+			assertSame(test.fail_assertEquals,					TestWithSprite.methodsCalled[i++]);
+			assertSame(test.runAfter1, 							TestWithSprite.methodsCalled[i++]);
+			assertSame(test.runAfter2, 							TestWithSprite.methodsCalled[i++]);
 
-			assertSame(test.runBefore1, 						test.methodsCalled[5]);
-			assertSame(test.runBefore2, 						test.methodsCalled[6]);
-			assertSame(test.numChildren_is_0_by_default,		test.methodsCalled[7]);
-			assertSame(test.runAfter1, 							test.methodsCalled[8]);
-			assertSame(test.runAfter2, 							test.methodsCalled[9]);
+			assertSame(test.runBefore1, 						TestWithSprite.methodsCalled[i++]);
+			assertSame(test.runBefore2, 						TestWithSprite.methodsCalled[i++]);
+			assertSame(test.numChildren_is_0_by_default,		TestWithSprite.methodsCalled[i++]);
+			assertSame(test.runAfter1, 							TestWithSprite.methodsCalled[i++]);
+			assertSame(test.runAfter2, 							TestWithSprite.methodsCalled[i++]);
 			
-			assertSame(test.runBefore1, 						test.methodsCalled[10]);
-			assertSame(test.runBefore2, 						test.methodsCalled[11]);
-			assertSame(test.stage_is_null_by_default, 			test.methodsCalled[12]);
-			assertSame(test.runAfter1, 							test.methodsCalled[13]);
-			assertSame(test.runAfter2, 							test.methodsCalled[14]);
+			assertSame(test.runBefore1, 						TestWithSprite.methodsCalled[i++]);
+			assertSame(test.runBefore2, 						TestWithSprite.methodsCalled[i++]);
+			assertSame(test.stage_is_null_by_default, 			TestWithSprite.methodsCalled[i++]);
+			assertSame(test.runAfter1, 							TestWithSprite.methodsCalled[i++]);
+			assertSame(test.runAfter2, 							TestWithSprite.methodsCalled[i++]);
 		}
 		//////
 		public function test_run_triggers_ResultEvent_with_wasSuccessful_false_and_failures():void {

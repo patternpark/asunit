@@ -10,10 +10,10 @@
 		public var expects:String;
 		public var isTest:Boolean;
 		
-		public function Method(scope:Object, name:String, metadata:XMLList = null) {
+		public function Method(scope:Object, name:String, value:Function, metadata:XMLList = null) {
 			this.scope = scope;
 			this.name = name;
-			this.value = scope[name];
+			this.value = value; // scope ? scope[name] : null;
 			this.metadata = metadata;
 
 			var testMetadata:XMLList = metadata.(@name == 'Test');

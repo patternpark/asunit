@@ -7,7 +7,6 @@ package asunit4.runners {
 	import flash.events.Event;
 	import flash.utils.describeType;
 	import flash.utils.getQualifiedClassName;
-	import asunit4.events.ResultEvent;
 	import asunit4.framework.IResult;
 	import asunit4.framework.TestIterator;
 	import asunit4.framework.Method;

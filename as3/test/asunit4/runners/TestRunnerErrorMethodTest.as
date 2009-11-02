@@ -3,7 +3,6 @@ package asunit4.runners {
 	import asunit4.framework.Result;
 	import flash.events.Event;
 	import asunit4.support.ErrorInMethodTest;
-	import asunit4.events.ResultEvent;
 	import asunit4.framework.IResult;
 	import asunit4.framework.TestFailure;
 

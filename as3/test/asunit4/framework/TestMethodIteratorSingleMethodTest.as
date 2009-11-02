@@ -18,9 +18,8 @@ package asunit4.framework {
 			iterator = null;
 		}
 
-		public function test_iterator_for_null_yields_hasNext_false():void {
-			iterator = new TestIterator(null);
-			assertFalse(iterator.hasNext());
+		public function test_iterator_for_null_throws_TypeError():void {
+			assertThrows(TypeError, function():void { iterator = new TestIterator(null); });
 		}
 		
 		public function test_iterator_for_non_test_yields_hasNext_false():void {
@@ -43,8 +42,4 @@ package asunit4.framework {
 			assertFalse('no methods left in iterator', iterator.hasNext());
 		}
 	}
-}
-
-class NoBeforeOrAfterTest {
-	
 }

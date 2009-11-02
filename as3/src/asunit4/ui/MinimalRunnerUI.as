@@ -1,4 +1,7 @@
 package asunit4.ui {
+	import asunit4.framework.IResult;
+	import asunit4.framework.Result;
+	import asunit4.printers.FlashDevelopPrinter;
 	import asunit4.printers.MinimalPrinter;
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
@@ -10,6 +13,7 @@ package asunit4.ui {
 		
 		protected var printer:MinimalPrinter;
 		protected var runner:BaseRunner;
+		protected var result:IResult;
 		
 		public function MinimalRunnerUI() {
 			if (stage) {
@@ -18,11 +22,16 @@ package asunit4.ui {
 			}
 		}
 		
-		public function start(suite:Class):void {
+		public function run(suite:Class):void {
 			printer = new MinimalPrinter();
 			addChild(printer);
-			runner = new BaseRunner(printer);
-			runner.start(suite);
+			
+			result = new Result();
+			result.addListener(printer);
+			result.addListener(new FlashDevelopPrinter());
+			
+			runner = new BaseRunner();
+			runner.run(suite, result);
 		}
 	}
 }

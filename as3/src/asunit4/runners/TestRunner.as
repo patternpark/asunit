@@ -12,11 +12,10 @@ package asunit4.runners {
 	import asunit.framework.ErrorEvent;
 	import asunit4.async.Async;
 	import asunit4.async.TimeoutCommand;
-	import asunit4.events.TestResultEvent;
-	import asunit4.framework.ITestResult;
+	import asunit4.framework.IResult;
 	import asunit4.framework.Method;
 	import asunit4.framework.TestIterator;
-	import asunit4.framework.TestResult;
+	import asunit4.framework.Result;
 	import asunit4.framework.TestSuccess;
 	import asunit4.framework.TestFailure;
 
@@ -25,7 +24,7 @@ package asunit4.runners {
 		protected var currentMethod:Method;
 		protected var startTime:Number;
 		protected var timer:Timer;
-		protected var result:ITestResult;
+		protected var result:IResult;
 		protected var allMethods:TestIterator;
 		protected var methodTimeoutID:int = -1;
 		protected var methodPassed:Boolean = true;
@@ -39,11 +38,11 @@ package asunit4.runners {
 			return (!allMethods.hasNext() && asyncsCompleted);
 		}
 		
-		public function run(test:Object):void {
-			trace('-------------------- run(): ' + test + ' - result: ' + result);
+		public function run(test:Object, result:IResult):void {
+			trace('-------------------- TestRunner.run(): ' + test + ' - result: ' + result);
 			currentTest = test;
+			this.result = result;
 			currentMethod = null;
-			result = new TestResult();
 			
 			allMethods = new TestIterator(test);
 			
@@ -66,7 +65,7 @@ package asunit4.runners {
 		}
 		
 		protected function runMethod(method:Method):void {
-			if (method == null) return;
+			if (!method) return;
 			currentMethod = method;
 			methodPassed = true; // innocent until proven guilty by recordFailure()
 			
@@ -113,11 +112,9 @@ package asunit4.runners {
 				return;
 			}
 			
-			// Start a new green thread.
+			// green thread for runNextMethod()
 			timer.reset();
 			timer.start();
-			
-			//runNextMethod();
 		}
 		
 		protected function onMethodTimeout():void {
@@ -144,16 +141,16 @@ package asunit4.runners {
 		}
 		
 		protected function onMethodCompleted():void {
+			// currentMethod can be a non-test method like [Before], [After].
 			if (!currentMethod.isTest) return;
 			if (methodPassed) {
 				result.addSuccess(new TestSuccess(currentTest, currentMethod.name));
 			}
-			result.runCount++;
 		}
 		
 		protected function onAsyncMethodCalled(event:Event):void {
 			var command:TimeoutCommand = TimeoutCommand(event.currentTarget);
-			trace('onAsyncMethodCalled() - command: ' + command);
+			//trace('onAsyncMethodCalled() - command: ' + command);
 			
 			try {
 				command.execute();
@@ -187,9 +184,9 @@ package asunit4.runners {
 		}
 		
 		protected function onTestCompleted():void {
-			trace('FreeRunner.onTestCompleted()');
-			TestResult(result).runTime = getTimer() - startTime;
-			dispatchEvent(new TestResultEvent(TestResultEvent.TEST_COMPLETED, result));
+			//trace('TestRunner.onTestCompleted()');
+			Result(result).runTime = getTimer() - startTime;
+			dispatchEvent(new Event(Event.COMPLETE));
 		}
 		
 		protected function get asyncsCompleted():Boolean {

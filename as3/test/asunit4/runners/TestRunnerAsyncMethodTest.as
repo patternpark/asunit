@@ -1,18 +1,21 @@
 package asunit4.runners {
+	import asunit4.framework.IRunListener;
+	import asunit4.framework.Result;
 	import asunit4.support.FailAssertTrueTest;
 	import asunit.framework.TestCase;
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.utils.describeType;
 	import flash.utils.getQualifiedClassName;
-	import asunit4.events.TestResultEvent;
-	import asunit4.framework.ITestResult;
+	import asunit4.events.ResultEvent;
+	import asunit4.framework.IResult;
 	import asunit4.framework.TestIterator;
 	import asunit4.framework.Method;
 	import asunit4.framework.TestFailure;
 
 	public class TestRunnerAsyncMethodTest extends TestCase {
 		private var runner:TestRunner;
+		private var runnerResult:Result;
 		private var successTest:AsyncMethodSuccessTest;
 		private var tooSlowTest:AsyncMethodTooSlowTest;
 
@@ -22,12 +25,14 @@ package asunit4.runners {
 
 		protected override function setUp():void {
 			runner = new TestRunner();
+			runnerResult = new Result();
 			successTest = new AsyncMethodSuccessTest();
 			tooSlowTest = new AsyncMethodTooSlowTest();
 		}
 
 		protected override function tearDown():void {
 			runner = null;
+			runnerResult = null;
 		}
 		
 		//////
@@ -63,33 +68,35 @@ package asunit4.runners {
 
 		//////
 		
-		public function test_run_with_successful_async_operation_triggers_successful_TestResultEvent():void {
-			runner.addEventListener(TestResultEvent.TEST_COMPLETED, addAsync(check_TestResult_wasSuccessful, 100));
-			runner.run(successTest);
+		public function test_run_with_successful_async_operation():void {
+			runner.addEventListener(Event.COMPLETE, addAsync(check_runner_result_wasSuccessful, 100));
+			runner.run(successTest, runnerResult);
 		}
-		
-		private function check_TestResult_wasSuccessful(e:TestResultEvent):void {
-			var result:ITestResult = e.testResult;
-			assertTrue(result.wasSuccessful);
+				
+		private function check_runner_result_wasSuccessful(e:Event):void {
+			assertTrue(runnerResult.wasSuccessful);
 		}
 		
 		//////
 		
 		public function test_run_with_too_slow_async_operation_triggers_result_with_IllegalOperationError():void {
-			runner.addEventListener(TestResultEvent.TEST_COMPLETED, addAsync(check_TestResult_has_IllegalOperationError, 100));
-			runner.run(tooSlowTest);
+			runner.addEventListener(Event.COMPLETE, addAsync(check_Result_has_IllegalOperationError, 100));
+			runner.run(tooSlowTest, runnerResult);
 		}
 		
-		private function check_TestResult_has_IllegalOperationError(e:TestResultEvent):void {
-			var result:ITestResult = e.testResult;
-			assertEquals('number of errors', 1, result.errors.length);
-			var failure0:TestFailure = result.errors[0] as TestFailure;
+		private function check_Result_has_IllegalOperationError(e:Event):void {
+			assertEquals('number of errors', 1, runnerResult.errors.length);
+			var failure0:TestFailure = runnerResult.errors[0] as TestFailure;
 			assertEquals('exception type', 'flash.errors::IllegalOperationError', getQualifiedClassName(failure0.thrownException));
 			assertEquals('failed method name', 'operation_too_slow_will_fail', failure0.failedMethod);
 		}
 	}
 }
 //////////////////////////////////////////
+import asunit.framework.ITestFailure;
+import asunit4.framework.IResult;
+import asunit4.framework.IRunListener;
+import asunit4.framework.ITestSuccess;
 import flash.utils.setTimeout;
 import asunit4.async.addAsync;
 
@@ -118,3 +125,22 @@ class AsyncMethodTooSlowTest {
 	}
 	
 }
+/*
+class DelegateListener implements IRunListener {
+	public var _onTestFailure:Function;
+	public var _onTestSuccess:Function;
+	public var _onRunCompleted:Function;
+	
+	public function onTestFailure(failure:ITestFailure):void {
+		if (_onTestFailure != null) _onTestFailure(failure);
+	}
+	
+	public function onTestSuccess(success:ITestSuccess):void {
+		if (_onTestSuccess != null) _onTestSuccess(success);
+	}
+	
+	public function onRunCompleted(result:IResult):void {
+		if (_onRunCompleted != null) _onRunCompleted(result);
+	}
+}
+*/

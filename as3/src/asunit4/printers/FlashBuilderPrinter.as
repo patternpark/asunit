@@ -1,16 +1,15 @@
 ﻿package asunit4.printers
 {
-	import flash.events.EventDispatcher;
 	import flash.net.XMLSocket;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
-	import asunit4.ITestResult;
+	import asunit4.IResult;
 	import asunit.framework.ITestFailure;
 	import flash.utils.getQualifiedClassName;
 	import asunit4.ITestSuccess;
 	
-	public class FlashBuilderPrinter extends EventDispatcher implements IResultPrinter
+	public class FlashBuilderPrinter
 	{
 		protected var messageQueue:Array;
 		protected var socket:XMLSocket;
@@ -32,7 +31,7 @@
 				+ "' contextName='" + contextName +"' />");
 		}
 		
-		public function addTestResult(result:ITestResult):void {
+		public function addResult(result:IResult):void {
 			var failure:ITestFailure;
 			
 			for each (failure in result.errors) {

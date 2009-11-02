@@ -5,7 +5,7 @@
 	public class AsUnit4MinimalExample extends MinimalRunnerUI {
 		
 		public function AsUnit4MinimalExample() {
-			start(DoubleNestedSuite);
+			run(DoubleNestedSuite);
 		}
 	}
 }

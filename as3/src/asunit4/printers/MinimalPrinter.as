@@ -1,8 +1,9 @@
 ﻿package asunit4.printers {
 	import asunit.errors.AssertionFailedError;
 	import asunit.framework.ITestFailure;
-	import asunit4.framework.ITestResult;
-	import asunit4.events.TestResultEvent;
+	import asunit4.framework.IResult;
+	import asunit4.framework.IRunListener;
+	import asunit4.framework.ITestSuccess;
 	import com.bit101.components.*;
 	import flash.display.Shape;
 	import flash.display.Sprite;
@@ -13,7 +14,7 @@
 	import flash.utils.getQualifiedClassName;
 	import flash.system.Capabilities;
 
-	public class MinimalPrinter extends Sprite implements IResultPrinter {
+	public class MinimalPrinter extends Sprite implements IRunListener {
 		protected static const localPathPattern:RegExp = /([A-Z]:\\[^\/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^\/:\*\?<>\|]+\.\w{2,6})/g;
 
 		private var failuresField:Text;
@@ -32,7 +33,12 @@
 		public function startTestRun():void {
 		}
 		
-		public function addTestResult(result:ITestResult):void {
+		public function addResult(result:IResult):void {
+			
+			return;
+			
+			
+			
 			dots.text += '.';
 			
 			var failures:Array = result.errors.concat(result.failures);
@@ -40,6 +46,8 @@
 			var s:String = '';
 			var stack:String = '';
 			for each (var failure:ITestFailure in failures) {
+				
+				
 				s += getQualifiedClassName(failure.failedTest);
 				s += '.' + failure.failedMethod + ' : ';
 				
@@ -59,7 +67,33 @@
 			
 		}
 		
-		public function endTestRun():void {
+		public function onTestFailure(failure:ITestFailure):void {
+			var s:String = '';
+			var stack:String = '';
+			//for each (var failure:ITestFailure in failures) {
+				s += getQualifiedClassName(failure.failedTest);
+				s += '.' + failure.failedMethod + ' : ';
+				
+				//if (failure.thrownException['constructor'] != AssertionFailedError) {
+					//s += getQualifiedClassName(failure.thrownException);
+				//}
+				
+				//s += failure.exceptionMessage + '\n';
+				stack = failure.thrownException.getStackTrace();
+				
+				stack = stack.replace(localPathPattern, '');
+				stack = stack.replace(/AssertionFailedError: /, '');
+
+				s += stack + '\n\n';
+			//}
+			failuresField.text += s;
+		}
+		
+		public function onTestSuccess(success:ITestSuccess):void {
+			
+		}
+		
+		public function onRunCompleted(result:IResult):void {
 		}
 		
 		protected function onAddedToStage(e:Event):void {

@@ -1,7 +1,7 @@
 ﻿package asunit4.runners {
-	import asunit4.framework.ITestResult;
+	import asunit4.framework.IResult;
+	import asunit4.framework.Result;
 	import flash.events.EventDispatcher;
-	import asunit4.events.TestResultEvent;
 	import flash.utils.getTimer;
 	import flash.utils.Timer;
 	import flash.events.TimerEvent;
@@ -13,15 +13,18 @@
 		protected var suiteRunner:SuiteRunner;
 		protected var testClasses:SuiteIterator;
 		protected var timer:Timer;
+		protected var result:IResult;
 		
 		public function SuiteRunner() {
 			timer = new Timer(0, 1);
 			timer.addEventListener(TimerEvent.TIMER, runNextTest);
 		}
 		
-		public function run(suite:Class):void {
+		public function run(suite:Class, result:IResult = null):void {
+			this.result = result || new Result();
 			testRunner = new TestRunner();
-			testRunner.addEventListener(TestResultEvent.TEST_COMPLETED, onTestCompleted);
+			testRunner.addEventListener(Event.COMPLETE, onTestCompleted);
+			testRunner.dispatchEvent(new Event(Event.COMPLETE));
 			testClasses = new SuiteIterator(suite);
 			
 			runNextTest();
@@ -34,22 +37,18 @@
 			}
 			
 			var testClass:Class = testClasses.next();
-			testRunner.run(new testClass());
+			testRunner.run(new testClass(), result);
 		}
 		
-		protected function onSuiteCompleted():void {
-			testRunner.removeEventListener(TestResultEvent.TEST_COMPLETED, onTestCompleted);
-			dispatchEvent(new Event(Event.COMPLETE));
-		}
-		
-		protected function onTestCompleted(e:TestResultEvent):void {
-			trace('SuiteRunner.onTestCompleted() - e.testResult: ' + e.testResult);
-			dispatchEvent(e);
-			
+		protected function onTestCompleted(e:Event):void {
 			// Start a new green thread.
 			timer.reset();
 			timer.start();
 		}
 		
+		protected function onSuiteCompleted():void {
+			dispatchEvent(new Event(Event.COMPLETE));
+		}
+				
 	}
 }

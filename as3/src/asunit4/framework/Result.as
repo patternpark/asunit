@@ -1,12 +1,14 @@
 package asunit4.framework {
     import asunit.errors.AssertionFailedError;
-	import asunit4.framework.ITestResult;
+	import asunit4.framework.IResult;
 	import asunit.framework.ITestFailure;
 	import asunit4.framework.ITestSuccess;
 	import asunit.framework.TestListener;
+	import flash.events.EventDispatcher;
+	import flash.events.IEventDispatcher;
 
     /**
-     * A <code>TestResult</code> collects the results of executing
+     * A <code>Result</code> collects the results of executing
      * a test case. It is an instance of the Collecting Parameter pattern.
      * The test framework distinguishes between <i>failures</i> and <i>errors</i>.
      * A failure is anticipated and checked for with assertions. Errors are
@@ -14,38 +16,60 @@ package asunit4.framework {
      *
      * @see Test
      */
-    public class TestResult implements ITestResult {
+    public class Result extends EventDispatcher implements IResult {
 		public var runTime:Number;
 		
         protected var _failures:Array;
         protected var _errors:Array;
         protected var _successes:Array;
-		protected var _listeners:Array;
 		protected var _runCount:uint = 0;
+		protected var listeners:Array;
 
-        public function TestResult() {
+        public function Result() {
 			_failures	= [];
 			_errors		= [];
 			_successes	= [];
-			_listeners  = [];
+			listeners	= [];
         }
+		
+		public function addListener(listener:IRunListener):void {
+			if (listeners.indexOf(listener) >= 0) return;
+			listeners.push(listener);
+		}
+		
+		public function removeListener(listener:IRunListener):void {
+			listeners.splice(listeners.indexOf(listener), 1);
+		}
+		
+		public function endRun():void {
+			trace('Result.endRun()');
+			for each (var listener:IRunListener in listeners) {
+				listener.onRunCompleted(this);
+			}
+		}
 		
         /**
          * Adds a failure to the list of failures. The passed in exception
          * caused the failure.
          */
         public function addFailure(failure:ITestFailure):void {
+			trace('Result.addFailure() - ' + failure);
 			if (failure.isFailure)
 				_failures.push(failure);
 			else
 				_errors.push(failure);
 				
-			if (_listeners[0])
-				_listeners[0].addError(failure);
+			for each (var listener:IRunListener in listeners) {
+				listener.onTestFailure(failure);
+			}
         }
 		
         public function addSuccess(success:ITestSuccess):void {
 			_successes.push(success);
+			
+			for each (var listener:IRunListener in listeners) {
+				listener.onTestSuccess(success);
+			}
 		}
 		
 		
@@ -82,11 +106,9 @@ package asunit4.framework {
         }
 		
 		public function get runCount():uint {
-			return _runCount;
-		}
-		
-		public function set runCount(value:uint):void {
-			_runCount = value;
+			return NaN;
+			//TODO: write test for this
+			//return errorCount + failureCount + _successes.length;
 		}
 		
         /**
@@ -94,29 +116,6 @@ package asunit4.framework {
          */
         public function get wasSuccessful():Boolean {
             return failureCount == 0 && errorCount == 0;
-        }
-		
-        /**
-         * Registers a TestListener
-         */
-		//TODO: use EventDispatcher instead
-        public function addListener(listener:TestListener):void {
-            _listeners.push(listener);
-        }
-		
-        /**
-         * Unregisters a TestListener
-         */
-        public function removeListener(listener:TestListener):void {
-			//TODO: use _listener.indexOf()
-            var len:uint = _listeners.length;
-            for(var i:uint; i < len; i++) {
-                if(_listeners[i] == listener) {
-                    _listeners.splice(i, 1);
-                    return;
-                }
-            }
-            //throw new InstanceNotFoundError("removeListener called without listener in list");
         }
 		
 		

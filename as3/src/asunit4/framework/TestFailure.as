@@ -6,7 +6,7 @@ package asunit4.framework {
     /**
      * A <code>TestFailure</code> collects a failed test together with
      * the caught exception.
-     * @see TestResult
+     * @see Result
      */
     public class TestFailure implements ITestFailure {
         protected var _failedTest:Object;
@@ -50,7 +50,7 @@ package asunit4.framework {
          * Returns a short description of the failure.
          */
         public function toString():String {
-            return "";
+            return '[TestFailure ' + failedMethod + ']';
         }
 
         public function get exceptionMessage():String {
@@ -60,5 +60,6 @@ package asunit4.framework {
         public function get isFailure():Boolean {
             return thrownException is AssertionFailedError;
         }
+		
     }
 }

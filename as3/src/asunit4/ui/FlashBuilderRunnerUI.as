@@ -15,8 +15,8 @@
 			runner.addEventListener(Event.COMPLETE, onRunnerComplete);
 		}
 		
-		public function start(suite:Class):void {
-			runner.start(suite);
+		public function run(suite:Class):void {
+			runner.run(suite);
 		}
 		
 		protected function onRunnerComplete(e:Event):void {

@@ -2,11 +2,15 @@
 	import asunit4.framework.ITestSuccess;
 	import asunit.framework.ITestFailure;
 	import asunit.framework.TestListener;
+	import asunit4.framework.IRunListener;
 	
 	/**
 	 *
 	 */
-	public interface ITestResult {
+	public interface IResult {
+		
+		function addListener(listener:IRunListener):void;
+		function removeListener(listener:IRunListener):void;
 		
 		function addFailure(failure:ITestFailure):void;
 		function addSuccess(success:ITestSuccess):void;
@@ -21,12 +25,9 @@
 		//function get successCount():uint;
 		
 		function get runCount():uint;
-		function set runCount(value:uint):void;
 		
 		function get wasSuccessful():Boolean;
 		
-		function addListener(listener:TestListener):void;
-		function removeListener(listener:TestListener):void;
+		function endRun():void;
 	}
-	
 }

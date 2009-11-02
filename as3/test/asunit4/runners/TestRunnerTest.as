@@ -1,13 +1,15 @@
 package asunit4.runners {
 	import asunit.framework.TestCase;
+	import asunit4.framework.Result;
 	import flash.events.Event;
 	import asunit4.support.TestWithSprite;
-	import asunit4.events.TestResultEvent;
+	import asunit4.events.ResultEvent;
 	import asunit.framework.ITestFailure;
 	import asunit4.framework.TestFailure;
 
 	public class TestRunnerTest extends TestCase {
 		private var runner:TestRunner;
+		private var runnerResult:Result;
 		private var test:TestWithSprite;
 
 		public function TestRunnerTest(testMethod:String = null) {
@@ -16,6 +18,7 @@ package asunit4.runners {
 
 		protected override function setUp():void {
 			runner = new TestRunner();
+			runnerResult = new Result();
 			test = new TestWithSprite();
 		}
 
@@ -35,11 +38,11 @@ package asunit4.runners {
 		//////
 		// For now, the test methods are sorted alphabetically to enable precise testing.
 		public function test_run_calls_setup_before_and_tearDown_after_each_test_method():void {
-			runner.addEventListener(TestResultEvent.TEST_COMPLETED, addAsync(check_methodsCalled_after_run, 100));
-			runner.run(test);
+			runner.addEventListener(Event.COMPLETE, addAsync(check_methodsCalled_after_run, 100));
+			runner.run(test, runnerResult);
 		}
 		
-		private function check_methodsCalled_after_run(e:TestResultEvent):void {
+		private function check_methodsCalled_after_run(e:Event):void {
 			assertEquals(15, test.methodsCalled.length);
 			
 			assertSame(test.runBefore1, 						test.methodsCalled[0]);
@@ -61,16 +64,15 @@ package asunit4.runners {
 			assertSame(test.runAfter2, 							test.methodsCalled[14]);
 		}
 		//////
-		public function test_run_triggers_TestResultEvent_with_wasSuccessful_false_and_failures():void {
-			runner.addEventListener(TestResultEvent.TEST_COMPLETED, addAsync(check_TestResult_wasSuccessful_false, 100));
-			runner.run(test);
+		public function test_run_triggers_ResultEvent_with_wasSuccessful_false_and_failures():void {
+			runner.addEventListener(Event.COMPLETE, addAsync(check_Result_wasSuccessful_false, 100));
+			runner.run(test, runnerResult);
 		}
 		
-		private function check_TestResult_wasSuccessful_false(e:TestResultEvent):void {
-			//trace('failures: ' + e.testResult.failures());
-			assertFalse(e.testResult.wasSuccessful);
+		private function check_Result_wasSuccessful_false(e:Event):void {
+			assertFalse(runnerResult.wasSuccessful);
 			
-			var failures:Array = e.testResult.failures;
+			var failures:Array = runnerResult.failures;
 			assertEquals('one failure in testResult', 1, failures.length);
 			
 			var failure0:ITestFailure = failures[0] as TestFailure;

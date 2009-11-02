@@ -5,7 +5,7 @@
 	public class AsUnit4ToFlashBuilderExample extends FlashBuilderRunnerUI {
 		
 		public function AsUnit4ToFlashBuilderExample() {
-			start(DoubleNestedSuite);
+			run(DoubleNestedSuite);
 		}
 	}
 }

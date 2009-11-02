@@ -1,15 +1,17 @@
 package asunit4.runners {
 	import asunit.framework.TestCase;
+	import asunit4.framework.Result;
 	import flash.events.Event;
 	import asunit4.support.ErrorInMethodTest;
-	import asunit4.events.TestResultEvent;
-	import asunit4.framework.ITestResult;
+	import asunit4.events.ResultEvent;
+	import asunit4.framework.IResult;
 	import asunit4.framework.TestFailure;
 
 	public class TestRunnerErrorMethodTest extends TestCase {
 		private var runner:TestRunner;
 		private var freeTest:ErrorInMethodTest;
-
+		private var runnerResult:Result;
+		
 		public function TestRunnerErrorMethodTest(testMethod:String = null) {
 			super(testMethod);
 		}
@@ -17,10 +19,13 @@ package asunit4.runners {
 		protected override function setUp():void {
 			runner = new TestRunner();
 			freeTest = new ErrorInMethodTest();
+			runnerResult = new Result();
 		}
 
 		protected override function tearDown():void {
 			runner = null;
+			freeTest = null;
+			runnerResult = null;
 		}
 
 		public function testInstantiated():void {
@@ -28,19 +33,18 @@ package asunit4.runners {
 		}
 		
 		//////
-		public function test_runTest_triggers_TestResultEvent_with_errors():void {
-			runner.addEventListener(TestResultEvent.TEST_COMPLETED, addAsync(check_TestResult_has_one_error, 100));
-			runner.run(freeTest);
+		public function test_run_with_errors():void {
+			runner.addEventListener(Event.COMPLETE, addAsync(check_Result_has_one_error, 100));
+			runner.run(freeTest, runnerResult);
 		}
 		
-		private function check_TestResult_has_one_error(e:TestResultEvent):void {
-			var result:ITestResult = e.testResult;
-			assertFalse(result.wasSuccessful);
+		private function check_Result_has_one_error(e:Event):void {
+			assertFalse('runnerResult.wasSuccessful', runnerResult.wasSuccessful);
 			
-			assertEquals('one error in testResult',   1, result.errorCount);
-			assertEquals('no failures in testResult', 0, result.failureCount);
+			assertEquals('one error in testResult',   1, runnerResult.errorCount);
+			assertEquals('no failures in testResult', 0, runnerResult.failureCount);
 			
-			var failure0:TestFailure = result.errors[0] as TestFailure;
+			var failure0:TestFailure = runnerResult.errors[0] as TestFailure;
 			assertTrue('thrownException is correct type', failure0.thrownException is ArgumentError);
 			assertSame('failedTest reference', freeTest, failure0.failedTest);
 			assertSame('failedMethod name', 'throw_ArgumentError', failure0.failedMethod);

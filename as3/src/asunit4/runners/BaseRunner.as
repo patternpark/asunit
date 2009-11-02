@@ -1,36 +1,28 @@
 package asunit4.runners {
+	import asunit4.framework.IRunListener;
+	import asunit4.framework.IResult;
 	import flash.events.Event;
-	import asunit4.printers.IResultPrinter;
-	import asunit4.printers.FlashBuilderPrinter;
-	import asunit4.events.TestResultEvent;
 	import asunit4.runners.SuiteRunner;
 	import flash.events.EventDispatcher;
 
 	public class BaseRunner extends EventDispatcher {
 		protected var suiteRunner:SuiteRunner;
-		protected var printer:IResultPrinter;
+		protected var listener:IRunListener;
+		protected var result:IResult;
 		
-		public function BaseRunner(printer:IResultPrinter) {
+		public function BaseRunner() {
 			suiteRunner = new SuiteRunner();
-			this.printer = printer;
 		}
 		
-		public function start(suite:Class):void {
-			printer.startTestRun();
-			
-			suiteRunner.addEventListener(TestResultEvent.TEST_COMPLETED, onTestCompleted);
+		public function run(suite:Class, result:IResult):void {
+			this.result = result;
 			suiteRunner.addEventListener(Event.COMPLETE, onSuiteCompleted);
-			suiteRunner.run(suite);
-		}
-		
-		protected function onTestCompleted(e:TestResultEvent):void {
-			printer.addTestResult(e.testResult);
+			suiteRunner.run(suite, result);
 		}
 		
 		protected function onSuiteCompleted(e:Event):void {
-			printer.endTestRun();
-			suiteRunner.removeEventListener(TestResultEvent.TEST_COMPLETED, onTestCompleted);
 			suiteRunner.removeEventListener(Event.COMPLETE, onSuiteCompleted);
+			result.endRun();
 			dispatchEvent(e);
 		}
 	}

@@ -5,7 +5,7 @@
 	public class AsUnit4ToFlashDevelopExample extends FlashDevelopRunnerUI {
 		
 		public function AsUnit4ToFlashDevelopExample() {
-			start(DoubleNestedSuite);
+			run(DoubleNestedSuite);
 		}
 	}
 }

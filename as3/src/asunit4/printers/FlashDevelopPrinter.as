@@ -1,16 +1,17 @@
 ﻿package asunit4.printers
 {
-	import flash.events.EventDispatcher;
+	import asunit.framework.ITestResult;
+	import asunit4.framework.IRunListener;
 	import flash.net.XMLSocket;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
-	import asunit4.framework.ITestResult;
+	import asunit4.framework.IResult;
 	import asunit.framework.ITestFailure;
 	import flash.utils.getQualifiedClassName;
 	import asunit4.framework.ITestSuccess;
 	
-	public class FlashDevelopPrinter extends EventDispatcher implements IResultPrinter
+	public class FlashDevelopPrinter implements IRunListener
 	{
 		protected static const localPathPattern:RegExp =
 			/([A-Z]:\\[^\/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^\/:\*\?<>\|]+\.\w{2,6})/g;
@@ -23,21 +24,17 @@
 		public function startTestRun():void {
 		}
 		
-		public function addTestResult(result:ITestResult):void {
-			var failure:ITestFailure;
-			
-			for each (failure in result.errors) {
-				sendMessage(getFailureMessage(failure));
-			}
-			
-			for each (failure in result.failures) {
-				sendMessage(getFailureMessage(failure));
-			}
-			
-			// Don't send successes.
+		// works for both errors and failures
+		public function onTestFailure(failure:ITestFailure):void {
+			sendMessage(getFailureMessage(failure));
 		}
 		
-		public function endTestRun():void {
+		public function onTestSuccess(success:ITestSuccess):void {
+			// don't send success to FlashDevelop Panel
+		}
+		
+		
+		public function onRunCompleted(result:IResult):void {
 		}
 				
 		protected function sendMessage(message:String):void {
@@ -65,7 +62,7 @@
 			// Take off the colon and bracket (I need to get better at regex).
 			var lineNumber:String = lineNumberRaw.slice(1, -1);
 			
-			var message:String = filePath + '('+lineNumber+'): ' + status + ' '
+			var message:String = filePath + ':'+lineNumber+': ' + status + ' '
 				+ (failure.failedMethod + '(): ' + failure.exceptionMessage);
 				
 			return message;

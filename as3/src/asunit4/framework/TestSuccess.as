@@ -2,7 +2,7 @@ package asunit4.framework {
 	import flash.utils.getQualifiedClassName;
 
     /**
-     * @see TestResult
+     * @see Result
      */
     public class TestSuccess implements ITestSuccess {
         protected var _test:Object;

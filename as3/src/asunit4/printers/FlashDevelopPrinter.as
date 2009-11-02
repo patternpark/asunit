@@ -21,7 +21,7 @@
 		public function FlashDevelopPrinter() {
 		}
 		
-		public function startTestRun():void {
+		public function onRunStarted():void {
 		}
 		
 		// works for both errors and failures
@@ -32,7 +32,6 @@
 		public function onTestSuccess(success:ITestSuccess):void {
 			// don't send success to FlashDevelop Panel
 		}
-		
 		
 		public function onRunCompleted(result:IResult):void {
 		}

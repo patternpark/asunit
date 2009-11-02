@@ -30,40 +30,7 @@
 				addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 		
-		public function startTestRun():void {
-		}
-		
-		public function addResult(result:IResult):void {
-			
-			return;
-			
-			
-			
-			dots.text += '.';
-			
-			var failures:Array = result.errors.concat(result.failures);
-			//var failures:Array = result.failures;
-			var s:String = '';
-			var stack:String = '';
-			for each (var failure:ITestFailure in failures) {
-				
-				
-				s += getQualifiedClassName(failure.failedTest);
-				s += '.' + failure.failedMethod + ' : ';
-				
-				//if (failure.thrownException['constructor'] != AssertionFailedError) {
-					//s += getQualifiedClassName(failure.thrownException);
-				//}
-				
-				//s += failure.exceptionMessage + '\n';
-				stack = failure.thrownException.getStackTrace();
-				
-				stack = stack.replace(localPathPattern, '');
-				stack = stack.replace(/AssertionFailedError: /, '');
-
-				s += stack + '\n\n';
-			}
-			failuresField.text += s;
+		public function onRunStarted():void {
 			
 		}
 		

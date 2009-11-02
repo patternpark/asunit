@@ -41,6 +41,13 @@ package asunit4.framework {
 			listeners.splice(listeners.indexOf(listener), 1);
 		}
 		
+		public function startRun():void {
+			trace('Result.startRun()');
+			for each (var listener:IRunListener in listeners) {
+				listener.onRunStarted();
+			}
+		}
+		
 		public function endRun():void {
 			trace('Result.endRun()');
 			for each (var listener:IRunListener in listeners) {

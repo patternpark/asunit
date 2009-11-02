@@ -1,20 +1,26 @@
 ﻿package asunit4.printers
 {
+	import asunit4.framework.IRunListener;
 	import flash.net.XMLSocket;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
-	import asunit4.IResult;
+	import asunit4.framework.IResult;
 	import asunit.framework.ITestFailure;
 	import flash.utils.getQualifiedClassName;
-	import asunit4.ITestSuccess;
+	import asunit4.framework.ITestSuccess;
+	import asunit4.framework.IResult;
 	
-	public class FlashBuilderPrinter
+	public class FlashBuilderPrinter implements IRunListener
 	{
+		protected var projectName:String;
+		protected var contextName:String;
 		protected var messageQueue:Array;
 		protected var socket:XMLSocket;
 		
-		public function FlashBuilderPrinter() {
+		public function FlashBuilderPrinter(projectName:String = '', contextName:String = '') {
+			this.projectName = projectName;
+			this.contextName = contextName;
 			messageQueue = [];
 			socket = new XMLSocket();
 	      	socket.addEventListener(Event.CONNECT, onConnect);
@@ -24,9 +30,7 @@
 			connect();
 		}
 		
-		public function startTestRun():void {
-			var projectName:String = 'FlexProjectSDK4';
-			var contextName:String = 'SomeContext';
+		public function onRunStarted():void {
 			sendMessage("<startTestRun totalTestCount='0' projectName='" + projectName
 				+ "' contextName='" + contextName +"' />");
 		}
@@ -49,8 +53,20 @@
 			}
 		}
 		
-		public function endTestRun():void {
+		// works for both errors and failures
+		public function onTestFailure(failure:ITestFailure):void {
+			sendMessage(getFailureMessage(failure));
+		}
+		
+		public function onTestSuccess(success:ITestSuccess):void {
+			var xmlMessageSuccess:String = "<testCase name='" + success.method
+				+ "' testSuite='" + getQualifiedClassName(success.test) + "' status='success'/>";
+			sendMessage(xmlMessageSuccess);
+		}
+		
+		public function onRunCompleted(result:IResult):void {
 			sendMessage('<endOfTestRun/>');
+			socket.close();
 		}
 		
 		protected function connect(ip:String = '127.0.0.1', port:uint = 8765):void {
@@ -63,12 +79,10 @@
 		}
 		
 		protected function onConnect(event:Event):void {
-			dispatchEvent(event);
 			sendQueuedMessages();
 		}
 		
-		protected function sendQueuedMessages():void
-		{
+		protected function sendQueuedMessages():void {
 			while (messageQueue.length) {
 				sendMessage(messageQueue.shift());
 			}
@@ -90,16 +104,21 @@
 				+ "' testSuite='" + getQualifiedClassName(failure.failedTest)
 				+ "' status='" + status + "'>"
 					+ "<failure type='" + getQualifiedClassName(failure.thrownException) + "' >"
-						+ "<messageInfo>" + xmlEscapeMessage(failure.exceptionMessage) + "</messageInfo>"
-						+ "<stackTraceInfo>" + xmlEscapeMessage(failure.thrownException.getStackTrace()) + "</stackTraceInfo>" +
-					"</failure>"
+					
+						+ "<messageInfo>" + xmlEscapeMessage(failure.exceptionMessage)
+						+ "</messageInfo>"
+						
+						+ "<stackTraceInfo>" + xmlEscapeMessage(failure.thrownException.getStackTrace())
+						+ "</stackTraceInfo>"
+						
+					+ "</failure>"
 				+ "</testCase>";
 
 			return xml;
 		}
 		
 		protected function onErrorEvent(event:Event):void {
-			trace('onErrorEvent() - event: ' + event);
+			trace('FlashBuilderPrinter::onErrorEvent() - event: ' + event);
 		}
 		
 		protected static function xmlEscapeMessage(message:String):String {

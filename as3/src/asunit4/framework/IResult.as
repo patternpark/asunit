@@ -28,6 +28,7 @@
 		
 		function get wasSuccessful():Boolean;
 		
+		function startRun():void;
 		function endRun():void;
 	}
 }

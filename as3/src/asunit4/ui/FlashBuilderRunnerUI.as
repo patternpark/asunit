@@ -1,4 +1,6 @@
 ﻿package asunit4.ui {
+	import asunit4.framework.IResult;
+	import asunit4.framework.Result;
 	import flash.display.MovieClip;
 	import asunit4.runners.BaseRunner;
 	import asunit4.printers.FlashBuilderPrinter;
@@ -11,12 +13,14 @@
 		protected var runner:BaseRunner;
 		
 		public function FlashBuilderRunnerUI() {
-			runner = new BaseRunner(new FlashBuilderPrinter());
+			runner = new BaseRunner();
 			runner.addEventListener(Event.COMPLETE, onRunnerComplete);
 		}
 		
 		public function run(suite:Class):void {
-			runner.run(suite);
+			var result:IResult = new Result();
+			result.addListener(new FlashBuilderPrinter());
+			runner.run(suite, result);
 		}
 		
 		protected function onRunnerComplete(e:Event):void {

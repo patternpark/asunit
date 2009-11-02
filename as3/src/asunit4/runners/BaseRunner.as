@@ -17,6 +17,7 @@ package asunit4.runners {
 		public function run(suite:Class, result:IResult):void {
 			this.result = result;
 			suiteRunner.addEventListener(Event.COMPLETE, onSuiteCompleted);
+			result.startRun();
 			suiteRunner.run(suite, result);
 		}
 		

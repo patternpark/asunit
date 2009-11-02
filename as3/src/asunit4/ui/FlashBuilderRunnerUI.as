@@ -17,9 +17,9 @@
 			runner.addEventListener(Event.COMPLETE, onRunnerComplete);
 		}
 		
-		public function run(suite:Class):void {
+		public function run(suite:Class, projectName:String = ""):void {
 			var result:IResult = new Result();
-			result.addListener(new FlashBuilderPrinter());
+			result.addListener(new FlashBuilderPrinter(projectName));
 			runner.run(suite, result);
 		}
 		

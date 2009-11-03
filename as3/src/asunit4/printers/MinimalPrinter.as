@@ -13,6 +13,7 @@
 	import flash.text.TextField;
 	import flash.utils.getQualifiedClassName;
 	import flash.system.Capabilities;
+	import asunit4.framework.Method;
 
 	public class MinimalPrinter extends Sprite implements IRunListener {
 		protected static const localPathPattern:RegExp = /([A-Z]:\\[^\/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^\/:\*\?<>\|]+\.\w{2,6})/g;
@@ -37,27 +38,26 @@
 		public function onTestFailure(failure:ITestFailure):void {
 			var s:String = '';
 			var stack:String = '';
-			//for each (var failure:ITestFailure in failures) {
-				s += getQualifiedClassName(failure.failedTest);
-				s += '.' + failure.failedMethod + ' : ';
-				
-				//if (failure.thrownException['constructor'] != AssertionFailedError) {
-					//s += getQualifiedClassName(failure.thrownException);
-				//}
-				
-				//s += failure.exceptionMessage + '\n';
-				stack = failure.thrownException.getStackTrace();
-				
-				stack = stack.replace(localPathPattern, '');
-				stack = stack.replace(/AssertionFailedError: /, '');
+			s += getQualifiedClassName(failure.failedTest);
+			s += '.' + failure.failedMethod + ' : ';
+			
+			stack = failure.thrownException.getStackTrace();
+			
+			stack = stack.replace(localPathPattern, '');
+			stack = stack.replace(/AssertionFailedError: /, '');
 
-				s += stack + '\n\n';
-			//}
+			s += stack + '\n\n';
+			
 			failuresField.text += s;
+			dots.text += failure.isFailure ? 'F' : 'E';
 		}
 		
 		public function onTestSuccess(success:ITestSuccess):void {
-			
+			dots.text += '.';
+		}
+		
+		public function onTestIgnored(method:Method):void {
+			dots.text += 'I';
 		}
 		
 		public function onRunCompleted(result:IResult):void {

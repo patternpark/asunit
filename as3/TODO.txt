@@ -4,15 +4,14 @@
 
 High Priority
 -------------
-- [BeforeClass]/[AfterClass]
-- [Ignore]
-- Method ordering, e.g. [Before(order=1)]
+- run a single test method by name
 - Restore headers/footers to MinimalPrinter.
 - Mirror FlexUnit's Async.proceedOnEvent(), etc.
 
 
 Medium Priority
 ---------------
+- Method ordering, e.g. [Before(order=1)]
 - [RunWith]
 - Test async Before/After/BeforeClass/AfterClass methods.
 - Increase test coverage.
@@ -29,7 +28,7 @@ Low Priority
   Tooling TODO
 =================
 
-- Project Sprouts integration (for Luke to do, not Robert).
+- Project Sprouts integration (for someone else to do).
 - AIR app to generate class/test stubs.
 - Mechanism for running all tests in a folder without manually creating a suite.
 - AIR runner with more features like running only failed tests.

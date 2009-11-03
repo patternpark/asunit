@@ -1,6 +1,7 @@
 ﻿package asunit4.printers
 {
 	import asunit4.framework.IRunListener;
+	import asunit4.framework.Method;
 	import flash.net.XMLSocket;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -64,6 +65,12 @@
 			sendMessage(xmlMessageSuccess);
 		}
 		
+		public function onTestIgnored(method:Method):void {
+			var xmlMessageIgnore:String = "<testCase name='" + method.name
+				+ "' testSuite='" + getQualifiedClassName(method.scope) + "' status='ignore'/>";
+			sendMessage(xmlMessageIgnore);
+		}
+		
 		public function onRunCompleted(result:IResult):void {
 			sendMessage('<endOfTestRun/>');
 			socket.close();
@@ -119,6 +126,7 @@
 		
 		protected function onErrorEvent(event:Event):void {
 			trace('FlashBuilderPrinter::onErrorEvent() - event: ' + event);
+			//throw new Error('FlashBuilderPrinter::onErrorEvent() - event: ' + event);
 		}
 		
 		protected static function xmlEscapeMessage(message:String):String {

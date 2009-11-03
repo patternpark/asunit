@@ -14,6 +14,7 @@
 		
 		function addFailure(failure:ITestFailure):void;
 		function addSuccess(success:ITestSuccess):void;
+		function addIgnoredTest(method:Method):void;
 		
 		function get errors():Array;
 		function get errorCount():uint;
@@ -30,5 +31,8 @@
 		
 		function startRun():void;
 		function endRun():void;
+		
+		function get runTime():Number;
+		function set runTime(value:Number):void;
 	}
 }

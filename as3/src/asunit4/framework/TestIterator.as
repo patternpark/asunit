@@ -18,9 +18,12 @@ package asunit4.framework {
 		public function TestIterator(test:Object) {
 			if (test is Class) throw new ArgumentError("test argument cannot be a Class");
 			
+			var testMethodsArray:Array = getTestMethods(test);
+			if (!testMethodsArray.length) return;
+			
+			testMethods   		= new ArrayIterator(testMethodsArray);
 			beforeClassMethods 	= new ArrayIterator(getBeforeClassMethods(test));
 			beforeMethods 		= new ArrayIterator(getBeforeMethods(test));
-			testMethods   		= new ArrayIterator(getTestMethods(test));
 			afterMethods  		= new ArrayIterator(getAfterMethods(test));
 			afterClassMethods 	= new ArrayIterator(getAfterClassMethods(test));
 			
@@ -63,11 +66,26 @@ package asunit4.framework {
 			return getMethodsWithMetadata(test, "After");
 		}
 		
-		protected static function getMethodsWithMetadata(object:Object, theMetadata:String, useStatic:Boolean = false):Array {
+		/**
+		 *
+		 * @param	test	An instance of a class with methods that have [After] metadata.
+		 * @return	An array of Method instances.
+		 */
+		public static function getIgnoredMethods(test:Object):Array {
+			return getMethodsWithMetadata(test, "Ignore");
+		}
+		
+		protected static function getMethodsWithMetadata(object:Object, metadataName:String, useStatic:Boolean = false):Array {
+			//trace('========== ' + metadataName);
 			var typeInfo:XML = describeType(object);
 			if (!useStatic && typeInfo.@base == 'Class') typeInfo = typeInfo.factory[0];
+			//trace('typeInfo: ' + typeInfo);
 			
-			var methodNodes:XMLList = typeInfo.method.(hasOwnProperty("metadata") && metadata.@name == theMetadata);
+			var methodNodes:XMLList = typeInfo.method.(hasOwnProperty("metadata")
+				&& metadata.(@name == metadataName).length() > 0);
+				
+			//trace('methodNodes: ' + methodNodes.toXMLString());
+			
 			var methods:Array = [];
 			for each (var methodNode:XML in methodNodes) {
 				var methodValue:Function = object[methodNode.@name];
@@ -91,6 +109,10 @@ package asunit4.framework {
 			return getTestMethods(test).length;
 		}
 		
+		public static function isTest(test:Object):Boolean {
+			return getTestMethods(test).length > 0;
+		}
+		
 		public static function isAsync(test:Object):Boolean {
 			var typeInfo:XML = describeType(test);
 			if (typeInfo.@base == 'Class') typeInfo = typeInfo.factory[0];
@@ -104,6 +126,8 @@ package asunit4.framework {
 		////////////////////////////////////////////////////////////////////////////
 		
         public function hasNext():Boolean {
+			if (!testMethods) return false;
+			
             return testMethods.hasNext()
 				|| beforeMethods.hasNext()
 				|| afterMethods.hasNext()
@@ -112,6 +136,8 @@ package asunit4.framework {
        }
 
         public function next():Method {
+			if (!testMethods) return null;
+
 			if (beforeClassMethods.hasNext())
 				return Method(beforeClassMethods.next());
 				
@@ -127,7 +153,6 @@ package asunit4.framework {
 				return Method(afterMethods.next());
 			}
 			
-			
 			if (!testMethods.hasNext()) {
 				if (afterClassMethods.hasNext()) {
 					return Method(afterClassMethods.next());
@@ -142,6 +167,8 @@ package asunit4.framework {
         }
 
         public function reset():void {
+			if (!testMethods) return;
+			
 			beforeClassMethods.reset();
 			beforeMethods.reset();
 			testMethods.reset();

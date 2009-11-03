@@ -2,11 +2,11 @@ package asunit4.framework {
 	import asunit.framework.TestCase;
 	import asunit4.support.TestWithSprite;
 
-	public class TestMethodIteratorMultiMethodTest extends TestCase {
+	public class TestIteratorMultiMethodTest extends TestCase {
 		private var iterator:TestIterator;
 		private var multiTest:TestWithSprite;
 
-		public function TestMethodIteratorMultiMethodTest(testMethod:String = null) {
+		public function TestIteratorMultiMethodTest(testMethod:String = null) {
 			super(testMethod);
 		}
 
@@ -19,7 +19,7 @@ package asunit4.framework {
 			multiTest = null;
 		}
 
-		public function test_countTestMethods_of_free_test():void {
+		public function test_countTestMethods_of_test():void {
 			assertEquals(3, TestIterator.countTestMethods(multiTest));
 		}
 		
@@ -62,31 +62,32 @@ package asunit4.framework {
 		}
 		
 		public function test_get_test_methods_of_test_instance():void {
-			var testMethods:Array = TestIterator.getTestMethods(multiTest);
+			//NOTE: TestCase has protected testMethods property.
+			var theTestMethods:Array = TestIterator.getTestMethods(multiTest);
 			
-			assertEquals(3, testMethods.length);
-			assertEquals(testMethods[0].name, 'fail_assertEquals');
-			assertEquals(testMethods[1].name, 'numChildren_is_0_by_default');
-			assertEquals(testMethods[2].name, 'stage_is_null_by_default');
+			assertEquals(3, theTestMethods.length);
+			assertEquals(theTestMethods[0].name, 'fail_assertEquals');
+			assertEquals(theTestMethods[1].name, 'numChildren_is_0_by_default');
+			assertEquals(theTestMethods[2].name, 'stage_is_null_by_default');
 			
-			assertEquals(multiTest.fail_assertEquals, 			testMethods[0].value);
-			assertEquals(multiTest.numChildren_is_0_by_default,	testMethods[1].value);
-			assertEquals(multiTest.stage_is_null_by_default, 	testMethods[2].value);
+			assertEquals(multiTest.fail_assertEquals, 			theTestMethods[0].value);
+			assertEquals(multiTest.numChildren_is_0_by_default,	theTestMethods[1].value);
+			assertEquals(multiTest.stage_is_null_by_default, 	theTestMethods[2].value);
 		}
 		
 		public function test_get_test_methods_of_test_class():void {
-			var testMethods:Array = TestIterator.getTestMethods(TestWithSprite);
+			var theTestMethods:Array = TestIterator.getTestMethods(TestWithSprite);
 			
-			assertEquals(3, testMethods.length);
-			assertEquals(testMethods[0].name, 'fail_assertEquals');
-			assertEquals(testMethods[1].name, 'numChildren_is_0_by_default');
-			assertEquals(testMethods[2].name, 'stage_is_null_by_default');
+			assertEquals(3, theTestMethods.length);
+			assertEquals(theTestMethods[0].name, 'fail_assertEquals');
+			assertEquals(theTestMethods[1].name, 'numChildren_is_0_by_default');
+			assertEquals(theTestMethods[2].name, 'stage_is_null_by_default');
 			
 			// method.value is null when the class is passed of an instance
 			//TODO: perhaps throw an Error instead to force not to pass a class
-			assertNull(testMethods[0].value);
-			assertNull(testMethods[1].value);
-			assertNull(testMethods[2].value);
+			assertNull(theTestMethods[0].value);
+			assertNull(theTestMethods[1].value);
+			assertNull(theTestMethods[2].value);
 		}
 		
 		public function test_get_after_methods_of_test_instance():void {

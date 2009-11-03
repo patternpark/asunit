@@ -69,6 +69,10 @@ package asunit4.runners {
 			currentMethod = method;
 			methodPassed = true; // innocent until proven guilty by recordFailure()
 			
+			if (currentMethod.ignore) {
+				result.addIgnoredTest(currentMethod);
+				return;
+			}
 			//trace('runMethod() - currentMethod: ' + currentMethod);
 			
 			if (currentMethod.timeout >= 0) {
@@ -142,10 +146,10 @@ package asunit4.runners {
 		
 		protected function onMethodCompleted():void {
 			// currentMethod can be a non-test method like [Before], [After].
-			if (!currentMethod.isTest) return;
-			if (methodPassed) {
-				result.addSuccess(new TestSuccess(currentTest, currentMethod.name));
-			}
+			if (!currentMethod.isTest || currentMethod.ignore || !methodPassed)
+				return;
+			
+			result.addSuccess(new TestSuccess(currentTest, currentMethod.name));
 		}
 		
 		protected function onAsyncMethodCalled(event:Event):void {
@@ -185,7 +189,7 @@ package asunit4.runners {
 		
 		protected function onTestCompleted():void {
 			//trace('TestRunner.onTestCompleted()');
-			Result(result).runTime = getTimer() - startTime;
+			result.runTime = getTimer() - startTime;
 			dispatchEvent(new Event(Event.COMPLETE));
 		}
 		

@@ -9,18 +9,19 @@
 		public var timeout:Number = -1;
 		public var expects:String;
 		public var isTest:Boolean;
+		public var ignore:Boolean;
 		
 		public function Method(scope:Object, name:String, value:Function, metadata:XMLList = null) {
 			this.scope = scope;
 			this.name = name;
 			this.value = value; // scope ? scope[name] : null;
 			this.metadata = metadata;
-
 			var testMetadata:XMLList = metadata.(@name == 'Test');
 			this.isTest = (testMetadata.length() == 1);
+			this.ignore = (metadata.(@name == 'Ignore').length() > 0);
 			
 			var testArgs:XMLList = testMetadata.arg;
-			this.async = testArgs.(@value == 'async').length() > 0;
+			this.async = (testArgs.(@value == 'async').length() > 0);
 
 			var timeoutXML:XMLList = testArgs.(@key == 'timeout');
 			if (timeoutXML.length() == 1)

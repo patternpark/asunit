@@ -4,7 +4,7 @@
 
 	public class TestWithSprite {
 		
-		public static var methodsCalled:Array;
+		public static var methodsCalled:Array = [];
 		protected var sprite:Sprite;
 	
 		public function TestWithSprite() {

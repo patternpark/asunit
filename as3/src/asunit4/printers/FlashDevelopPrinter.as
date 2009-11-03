@@ -2,6 +2,7 @@
 {
 	import asunit.framework.ITestResult;
 	import asunit4.framework.IRunListener;
+	import asunit4.framework.Method;
 	import flash.net.XMLSocket;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -31,6 +32,10 @@
 		
 		public function onTestSuccess(success:ITestSuccess):void {
 			// don't send success to FlashDevelop Panel
+		}
+		
+		public function onTestIgnored(method:Method):void {
+			// don't send ignored test to FlashDevelop Panel
 		}
 		
 		public function onRunCompleted(result:IResult):void {

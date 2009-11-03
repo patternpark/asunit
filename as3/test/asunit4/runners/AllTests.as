@@ -4,6 +4,7 @@ package asunit4.runners {
 	import asunit4.runners.TestRunnerAsyncMethodTest;
 	import asunit4.runners.TestRunnerErrorMethodTest;
 	import asunit4.runners.TestRunnerExpectsErrorTest;
+	import asunit4.runners.TestRunnerIgnoredMethodTest;
 	import asunit4.runners.TestRunnerTest;
 
 	public class AllTests extends TestSuite {
@@ -13,6 +14,7 @@ package asunit4.runners {
 			addTest(new asunit4.runners.TestRunnerAsyncMethodTest());
 			addTest(new asunit4.runners.TestRunnerErrorMethodTest());
 			addTest(new asunit4.runners.TestRunnerExpectsErrorTest());
+			addTest(new asunit4.runners.TestRunnerIgnoredMethodTest());
 			addTest(new asunit4.runners.TestRunnerTest());
 		}
 	}

@@ -7,6 +7,6 @@
 		function onRunCompleted(result:IResult):void;
 		function onTestFailure(failure:ITestFailure):void;
 		function onTestSuccess(success:ITestSuccess):void;
-		//function onTestIgnored():void;
+		function onTestIgnored(method:Method):void;
 	}
 }

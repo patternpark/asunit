@@ -40,8 +40,7 @@ Low Priority
 =================
 
 Refactor AsUnit 3 using AsUnit 4 code.
-- Enable async in setUp()/tearDown().
+- Move iteration and running logic out of TestCase as much as possible.
 - Get rid of flakiness in async test results (wrong method names, etc.).
-- Use EventDispatcher instead of Java-style listeners.
 - Unify interfaces.
 - Unify printers.

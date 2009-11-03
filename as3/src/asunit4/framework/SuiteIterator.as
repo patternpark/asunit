@@ -19,6 +19,9 @@ package asunit4.framework {
 		 * @return	An array of Class references.
 		 */
 		public static function getTestClasses(testSuite:Class):Array {
+			if (!isSuite(testSuite) && TestIterator.isTest(testSuite))
+				return [testSuite];
+			
 			var typeInfo:XML = describeType(testSuite);
 			var testClasses:Array = [];
 			for each (var variableType:XML in typeInfo.factory[0].variable.@type) {

@@ -7,14 +7,14 @@ package asunit.framework {
      * @see TestResult
      */
     public class TestFailure implements ITestFailure {
-        protected var fFailedTest:Test;
+        protected var fFailedTest:Object;
         protected var fFailedTestMethod:String;
         protected var fThrownException:Error;
 
         /**
          * Constructs a TestFailure with the given test and exception.
          */
-        public function TestFailure(failedTest:Test, thrownException:Error) {
+        public function TestFailure(failedTest:Object, thrownException:Error) {
             fFailedTest = failedTest;
             fFailedTestMethod = failedTest.getCurrentMethod();
             fThrownException = thrownException;

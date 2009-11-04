@@ -4,6 +4,8 @@ package asunit.textui {
     import asunit.framework.Test;
     import asunit.framework.TestListener;
     import asunit.framework.TestResult;
+	import asunit.framework.ITestResult;
+	import asunit.framework.ITestFailure;
     import flash.utils.setTimeout;
     import flash.utils.Dictionary;
 
@@ -47,14 +49,14 @@ package asunit.textui {
             results[test.getName()].endTestMethod(test, methodName);
         }
 
-        override public function addFailure(test:Object, t:AssertionFailedError):void {
-            super.addFailure(test, t);
-            results[test.getName()].addFailure(test, t);
+        override public function addFailure(failure:ITestFailure):void {
+            super.addFailure(failure);
+            results[failure.failedTest.getName()].addFailure(failure);
         }
 
-        override public function addError(test:Object, t:Error):void {
-            super.addError(test, t);
-            results[test.getName()].addError(test, t);
+        override public function addError(failure:ITestFailure):void {
+            super.addError(failure);
+            results[failure.failedTest.getName()].addError(failure);
         }
 
         override public function printResult(result:ITestResult, runTime:Number):void {
@@ -62,7 +64,7 @@ package asunit.textui {
             trace("<XMLResultPrinter>");
             trace("<?xml version='1.0' encoding='UTF-8'?>");
             trace("<testsuites>");
-            trace("<testsuite name='AllTests' errors='" + result.errorCount() + "' failures='" + result.failureCount() + "' tests='" + result.runCount() + "' time='" + elapsedTimeAsString(runTime) + "'>");
+            trace("<testsuite name='AllTests' errors='" + result.errorCount + "' failures='" + result.failureCount + "' tests='" + result.runCount + "' time='" + elapsedTimeAsString(runTime) + "'>");
             var xmlTestResult:XMLTestResult;
             for each(xmlTestResult in results) {
                 trace(xmlTestResult.toString());
@@ -76,6 +78,7 @@ package asunit.textui {
 
 import asunit.framework.Test;
 import asunit.framework.TestFailure;
+import asunit.framework.ITestFailure;
 import flash.utils.getQualifiedClassName;
 import flash.utils.getTimer;
 import asunit.framework.TestListener;
@@ -87,7 +90,7 @@ class XMLTestResult implements TestListener {
 
     private var _duration:Number;
     private var start:Number;
-    private var test:Test;
+    private var test:Object;
     private var testName:String;
     private var failureHash:Dictionary;
     private var failures:Array;
@@ -115,16 +118,14 @@ class XMLTestResult implements TestListener {
     public function run(test:Object):void {
     }
 
-    public function addError(test:Object, t:Error):void {
-        var failure:ITestFailure = new TestFailure(test, t);
+    public function addError(failure:ITestFailure):void {
         errors.push(failure);
-        errorHash[failure.failedMethod()] = failure;
+        errorHash[failure.failedMethod] = failure;
     }
 
-    public function addFailure(test:Object, t:AssertionFailedError):void {
-        var failure:ITestFailure = new TestFailure(test, t);
+    public function addFailure(failure:ITestFailure):void {
         failures.push(failure);
-        failureHash[failure.failedMethod()] = failure;
+        failureHash[failure.failedMethod] = failure;
     }
 
     public function startTestMethod(test:Object, methodName:String):void {
@@ -174,11 +175,11 @@ class XMLTestResult implements TestListener {
     }
 
     private function renderError(failure:ITestFailure):String {
-        return "<error type='" + getQualifiedClassName(failure.thrownException()).split("::").join(".") + "'><![CDATA[\n" + failure.thrownException().getStackTrace() + "\n]]></error>\n";
+        return "<error type='" + getQualifiedClassName(failure.thrownException).split("::").join(".") + "'><![CDATA[\n" + failure.thrownException.getStackTrace() + "\n]]></error>\n";
     }
 
     private function renderFailure(failure:ITestFailure):String {
-        return "<failure type='" + getQualifiedClassName(failure.thrownException()).split("::").join(".") + "'><![CDATA[\n" + failure.thrownException().getStackTrace() + "\n]]></failure>\n";
+        return "<failure type='" + getQualifiedClassName(failure.thrownException).split("::").join(".") + "'><![CDATA[\n" + failure.thrownException.getStackTrace() + "\n]]></failure>\n";
     }
 
     private function renderTestCloser():String {

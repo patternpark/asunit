@@ -46,7 +46,7 @@
 			
 			command = Async.instance.getCommandsForTest(this)[0];
 			
-			// Using AsUnit 3's addAsync() to verify onAsyncMethodCalled is called.
+			// Use AsUnit 3's addAsync() to verify onAsyncMethodCalled is called.
 			command.addEventListener(TimeoutCommand.CALLED, addAsync(onAsyncMethodCalled));
 			
 			// If all goes well, the ErrorEvent won't be dispatched.

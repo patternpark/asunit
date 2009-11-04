@@ -36,6 +36,11 @@
 			return command.getCallback();
 		}
 		
+		public static function proceedOnEvent(test:Object, target:IEventDispatcher, eventName:String, timeout:int = 500, timeoutHandler:Function = null):void {
+			
+			target.addEventListener(eventName, addAsync(test, null, timeout), false, 0, true);
+		}
+		
 		protected function addCommandForTest(test:Object, command:TimeoutCommand):void {
 			if (!commandsByTest[test])
 				commandsByTest[test] = [];

@@ -47,6 +47,7 @@ package asunit4.runners {
 			allMethods = new TestIterator(test);
 			
 			startTime = getTimer();
+			this.result.startTest(currentTest);
 			
 			// If any methods in the test are async, we must use a slower path.
 
@@ -189,7 +190,11 @@ package asunit4.runners {
 		
 		protected function onTestCompleted():void {
 			//trace('TestRunner.onTestCompleted()');
-			result.runTime = getTimer() - startTime;
+			this.result.endTest(currentTest);
+			
+			//TODO: move out because runTime is for whole run, not one test
+			//result.runTime = getTimer() - startTime;
+			
 			dispatchEvent(new Event(Event.COMPLETE));
 		}
 		

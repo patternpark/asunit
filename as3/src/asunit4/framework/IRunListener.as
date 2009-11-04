@@ -5,6 +5,8 @@
 	public interface IRunListener {
 		function onRunStarted():void;
 		function onRunCompleted(result:IResult):void;
+		function onTestStarted(test:Object):void;
+		function onTestCompleted(test:Object):void;
 		function onTestFailure(failure:ITestFailure):void;
 		function onTestSuccess(success:ITestSuccess):void;
 		function onTestIgnored(method:Method):void;

@@ -32,6 +32,9 @@
 		function startRun():void;
 		function endRun():void;
 		
+		function startTest(test:Object):void;
+		function endTest(test:Object):void;
+		
 		function get runTime():Number;
 		function set runTime(value:Number):void;
 	}

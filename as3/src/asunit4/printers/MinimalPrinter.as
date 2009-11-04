@@ -14,17 +14,23 @@
 	import flash.utils.getQualifiedClassName;
 	import flash.system.Capabilities;
 	import asunit4.framework.Method;
+	import flash.utils.getTimer;
 
 	public class MinimalPrinter extends Sprite implements IRunListener {
 		protected static const localPathPattern:RegExp = /([A-Z]:\\[^\/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^\/:\*\?<>\|]+\.\w{2,6})/g;
 
-		private var failuresField:Text;
-		private var times:Text;
-		private var header:Text;
-		private var dots:Text;
-		private var backgroundFill:Shape;
+		protected var header:Text;
+		protected var dots:Text;
+		protected var failuresField:Text;
+		protected var footer:Text;
+		protected var backgroundFill:Shape;
+		
+        protected var testTimes:Array;
+		protected var startTime:Number;
 
 		public function MinimalPrinter() {
+			testTimes = [];
+			
 			if (stage)
 				initUI();
 			else
@@ -60,8 +66,51 @@
 			dots.text += 'I';
 		}
 		
-		public function onRunCompleted(result:IResult):void {
+		public function onTestStarted(test:Object):void {
+			startTime = getTimer();
 		}
+		
+		public function onTestCompleted(test:Object):void {
+            var duration:Number = getTimer() - startTime;
+            testTimes.push({test:test, duration:duration});
+        }
+		
+		public function onRunCompleted(result:IResult):void {
+            if (result.wasSuccessful) {
+                print("OK");
+                println (" (" + result.runCount + " test" + (result.runCount == 1 ? "": "s") + ")");
+            }
+			else {
+                println("FAILURES!!!");
+                println("Tests run: " + result.runCount+
+                             ",  Failures: "+result.failureCount+
+                             ",  Errors: "+result.errorCount);
+            }
+			printTimeSummary();
+		}
+		
+		protected function print(string:String):void {
+			footer.text += string;
+		}
+		
+		protected function println(string:String = ""):void {
+			print(string+'\n');
+		}
+		
+        protected function printTimeSummary():void {
+            testTimes.sortOn('duration', Array.NUMERIC | Array.DESCENDING);
+            println();
+            println();
+            println('Time Summary:');
+            println();
+            var len:Number = testTimes.length;
+            for (var i:Number = 0; i < len; i++) {
+				var testTime:Object = testTimes[i];
+				
+                println(testTime.duration + ' ms : ' + getQualifiedClassName(testTime.test));
+            }
+        }
+		
 		
 		protected function onAddedToStage(e:Event):void {
 			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
@@ -102,10 +151,10 @@
 			failuresField.height = 300;
 			failuresField.editable = false;
 			
-			times = new Text(vbox);
-			times.width = 400;
-			times.height = 200;
-			times.editable = false;
+			footer = new Text(vbox);
+			footer.width = 400;
+			footer.height = 200;
+			footer.editable = false;
 		}
 		
 	}

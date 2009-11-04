@@ -91,6 +91,20 @@ package asunit4.framework {
 				listener.onRunCompleted(this);
 			}
 		}
+	
+		public function startTest(test:Object):void {
+			//trace('Result.startTest() ' + test);
+			for each (var listener:IRunListener in listeners) {
+				listener.onTestStarted(test);
+			}
+		}
+		
+		public function endTest(test:Object):void {
+			//trace('Result.endTest() ' + test);
+			for each (var listener:IRunListener in listeners) {
+				listener.onTestCompleted(test);
+			}
+		}
 		
         /**
          * Adds a failure to the list of failures. The passed in exception

@@ -25,6 +25,12 @@
 		public function onRunStarted():void {
 		}
 		
+		public function onTestStarted(test:Object):void {
+		}
+		
+		public function onTestCompleted(test:Object):void {
+        }
+		
 		// works for both errors and failures
 		public function onTestFailure(failure:ITestFailure):void {
 			sendMessage(getFailureMessage(failure));

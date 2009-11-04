@@ -36,6 +36,12 @@
 				+ "' contextName='" + contextName +"' />");
 		}
 		
+		public function onTestStarted(test:Object):void {
+		}
+		
+		public function onTestCompleted(test:Object):void {
+        }
+		
 		public function addResult(result:IResult):void {
 			var failure:ITestFailure;
 			

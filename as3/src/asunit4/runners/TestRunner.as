@@ -39,7 +39,7 @@ package asunit4.runners {
 		}
 		
 		public function run(test:Object, result:IResult):void {
-			trace('-------------------- TestRunner.run(): ' + test + ' - result: ' + result);
+			//trace('-------------------- TestRunner.run(): ' + test + ' - result: ' + result);
 			currentTest = test;
 			this.result = result;
 			currentMethod = null;
@@ -107,7 +107,7 @@ package asunit4.runners {
 			runMethod(allMethods.next());
 			
 			if (currentMethod.async) {
-				var commands:Array = Async.instance.getCommandsForTest(currentTest);
+				var commands:Array = Async.instance.getPendingForTest(currentTest);
 				// find the async commands and listen to them
 				for each (var command:TimeoutCommand in commands) {
 					command.addEventListener(TimeoutCommand.CALLED, onAsyncMethodCalled);
@@ -132,7 +132,7 @@ package asunit4.runners {
 			clearTimeout(methodTimeoutID);
 			
 			if (currentMethod.async) {
-				var commands:Array = Async.instance.getCommandsForTest(currentTest);
+				var commands:Array = Async.instance.getPendingForTest(currentTest);
 				// clean up all async listeners
 				for each (var command:TimeoutCommand in commands) {
 					command.cancel();
@@ -195,7 +195,7 @@ package asunit4.runners {
 		
 		protected function get asyncsCompleted():Boolean {
 			//TODO: maybe have Async send an event instead of checking it
-			var commands:Array = Async.instance.getCommandsForTest(currentTest);
+			var commands:Array = Async.instance.getPendingForTest(currentTest);
 			return (!commands || commands.length == 0);
 		}
 	}

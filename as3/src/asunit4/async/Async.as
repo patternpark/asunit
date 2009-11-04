@@ -13,10 +13,10 @@
 		
 		private static var _instance:Async;
 		
-		public var commandsByTest:Dictionary;
+		public var pendingForTest:Dictionary;
 		
 		public function Async() {
-			commandsByTest = new Dictionary(true);
+			pendingForTest = new Dictionary(true);
 		}
 		
 		public static function get instance():Async {
@@ -24,15 +24,15 @@
 			return _instance;
 		}
 		
-		public function getCommandsForTest(test:Object):Array {
-			var commands:Array = commandsByTest[test];
+		public function getPendingForTest(test:Object):Array {
+			var commands:Array = pendingForTest[test];
 			// Clone to prevent changing by reference.
 			return commands ? commands.concat() : [];
 		}
 		
 		public function addAsync(test:Object, handler:Function, duration:int):Function {
 			var command:TimeoutCommand = new TimeoutCommand(test, handler, duration);
-			addCommandForTest(test, command);
+			addPendingForTest(test, command);
 			return command.getCallback();
 		}
 		
@@ -41,11 +41,11 @@
 			target.addEventListener(eventName, addAsync(test, null, timeout), false, 0, true);
 		}
 		
-		protected function addCommandForTest(test:Object, command:TimeoutCommand):void {
-			if (!commandsByTest[test])
-				commandsByTest[test] = [];
+		protected function addPendingForTest(test:Object, command:TimeoutCommand):void {
+			if (!pendingForTest[test])
+				pendingForTest[test] = [];
 				
-			commandsByTest[test].push(command);
+			pendingForTest[test].push(command);
 			command.addEventListener(TimeoutCommand.CALLED,	onTestResult);
 			command.addEventListener(ErrorEvent.ERROR, 		onTestResult);
 		}
@@ -55,17 +55,17 @@
 			command.removeEventListener(TimeoutCommand.CALLED,	onTestResult);
 			command.removeEventListener(ErrorEvent.ERROR,		onTestResult);
 			
-			removeCommandForTest(command.scope, command);
+			removePendingForTest(command.scope, command);
 		}
 		
-		public function removeCommandForTest(test:Object, command:TimeoutCommand):void {
-			var commands:Array = commandsByTest[test];
+		public function removePendingForTest(test:Object, command:TimeoutCommand):void {
+			var commands:Array = pendingForTest[test];
 			if (!commands) return;
 			
 			commands.splice(commands.indexOf(command), 1);
 			// Remove the array when emptied.
 			if (!commands.length)
-				delete commandsByTest[test];
+				delete pendingForTest[test];
 			//TODO: maybe dispatch event when the last command is removed
 		}
 		

@@ -27,7 +27,7 @@
 		public function test_addAsync_handler_can_be_retrieved_by_test_instance():void {
 			var cancelTimeout:Function = asunit4.async.addAsync(this, foo, 111);
 			
-			var commands:Array = Async.instance.getCommandsForTest(this);
+			var commands:Array = Async.instance.getPendingForTest(this);
 			assertEquals("one command for test after addAsync()", 1, commands.length);
 			
 			var command:TimeoutCommand = commands[0];
@@ -36,7 +36,7 @@
 			cancelTimeout();
 			
 			assertEquals("no commands for test after handler called",
-				0, Async.instance.getCommandsForTest(this).length);
+				0, Async.instance.getPendingForTest(this).length);
 		}
 		
 		protected function foo():void { }
@@ -44,7 +44,7 @@
 		public function test_addAsync_sends_CALLED_Event_if_delegate_called_in_time():void {
 			var cancelTimeout:Function = asunit4.async.addAsync(this, foo, 10);
 			
-			command = Async.instance.getCommandsForTest(this)[0];
+			command = Async.instance.getPendingForTest(this)[0];
 			
 			// Use AsUnit 3's addAsync() to verify onAsyncMethodCalled is called.
 			command.addEventListener(TimeoutCommand.CALLED, addAsync(onAsyncMethodCalled));
@@ -64,7 +64,7 @@
 			// set an extremely short timeout
 			var cancelTimeout:Function = asunit4.async.addAsync(this, foo, 0);
 			
-			command = Async.instance.getCommandsForTest(this)[0];
+			command = Async.instance.getPendingForTest(this)[0];
 			command.addEventListener(TimeoutCommand.CALLED, failIfCalled);
 			command.addEventListener(ErrorEvent.ERROR, addAsync(onAsyncMethodFailed));
 

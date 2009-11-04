@@ -3,6 +3,8 @@
 	import asunit.framework.ErrorEvent;
 	import flash.utils.Dictionary;
 	import flash.events.Event;
+	import flash.events.IEventDispatcher;
+	import asunit.framework.Assert;
 	
 	/**
 	 *
@@ -25,10 +27,10 @@
 		public function getCommandsForTest(test:Object):Array {
 			var commands:Array = commandsByTest[test];
 			// Clone to prevent changing by reference.
-			return commands ? commands.concat() : null;
+			return commands ? commands.concat() : [];
 		}
 		
-		public function addAsync(test:Object, handler:Function, duration:Number):Function {
+		public function addAsync(test:Object, handler:Function, duration:int):Function {
 			var command:TimeoutCommand = new TimeoutCommand(test, handler, duration);
 			addCommandForTest(test, command);
 			return command.getCallback();

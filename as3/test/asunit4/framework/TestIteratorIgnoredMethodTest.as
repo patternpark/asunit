@@ -20,19 +20,10 @@ package asunit4.framework {
 
 		public function test_iterator_for_test_with_one_ignored_test_method_hasNext_true():void {
 			iterator = new TestIterator(ignoredTest);
-			//trace(iterator.next());
 			assertTrue(iterator.hasNext());
 		}
-/*
-		public function test_ignored_test_should_yield_no_test_methods():void {
-			trace('test_ignored_test_should_yield_no_test_methods()');
-			var theTestMethods:Array = TestIterator.getTestMethods(ignoredTest);
-			
-			assertEquals(0, theTestMethods.length);
-		}
-*/
+		
 		public function test_getTestMethods_should_return_ignored_test():void {
-			trace('test_ignored_test_should_yield_no_test_methods()');
 			var theTestMethods:Array = TestIterator.getTestMethods(ignoredTest);
 			
 			assertEquals(1, theTestMethods.length);
@@ -40,14 +31,6 @@ package asunit4.framework {
 			assertTrue('method.ignore', Method(theTestMethods[0]).ignore);
 		}
 		
-/*
-		public function test_get_ignored_methods():void {
-			trace('test_get_ignored_methods()');
-			var ignoredMethods:Array = TestIterator.getIgnoredMethods(ignoredTest);
-			assertEquals(1, testMethods.length);
-			assertEquals('should_be_ignored', Method(ignoredMethods[0]).name);
-		}
-*/
 		
 	}
 }

@@ -24,7 +24,6 @@
 			this.result = result || new Result();
 			testRunner = new TestRunner();
 			testRunner.addEventListener(Event.COMPLETE, onTestCompleted);
-			testRunner.dispatchEvent(new Event(Event.COMPLETE));
 			testClasses = new SuiteIterator(suite);
 			
 			runNextTest();

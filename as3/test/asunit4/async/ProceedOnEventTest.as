@@ -32,14 +32,14 @@
 		public function test_proceedOnEvent_then_dispatch_correct_event_clears_pending_commands_for_test():void {
 			Async.proceedOnEvent(this, dispatcher, Event.COMPLETE, 10);
 			
-			var commands:Array = Async.instance.getPendingForTest(this);
+			var commands:Array = Async.instance.getPending();
 			assertEquals("one pending command for test after proceedOnEvent()", 1, commands.length);
 			
 			// send the correct event synchronously
 			dispatchCompleteEvent();
 			
 			assertEquals("no pending commands for test after correct Event dispatched",
-				0, Async.instance.getPendingForTest(this).length);
+				0, Async.instance.getPending().length);
 		}
 		
 		protected function dispatchCompleteEvent():void {
@@ -49,7 +49,7 @@
 		public function test_proceedOnEvent_then_dispatch_correct_event_too_slowly_sends_ErrorEvent():void {
 			Async.proceedOnEvent(this, dispatcher, Event.COMPLETE, 0);
 			
-			var commands:Array = Async.instance.getPendingForTest(this);
+			var commands:Array = Async.instance.getPending();
 			var command:TimeoutCommand = commands[0];
 			command.addEventListener(ErrorEvent.ERROR, addAsync(onAsyncMethodFailed));
 			
@@ -65,7 +65,7 @@
 		public function test_proceedOnEvent_then_dispatch_correct_event_in_time_sends_CALLED_Event():void {
 			Async.proceedOnEvent(this, dispatcher, Event.COMPLETE, 10);
 			
-			command = Async.instance.getPendingForTest(this)[0];
+			command = Async.instance.getPending()[0];
 			
 			// Use AsUnit 3's addAsync() to verify onAsyncMethodCalled is called.
 			command.addEventListener(TimeoutCommand.CALLED, addAsync(onAsyncMethodCalled));

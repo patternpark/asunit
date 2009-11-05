@@ -17,6 +17,7 @@ package asunit4.runners {
 		private var runnerResult:Result;
 		private var successTest:AsyncMethodSuccessTest;
 		private var tooSlowTest:AsyncMethodTooSlowTest;
+		private var syncTest:AsyncDelegateCalledSynchronouslyTest;
 
 		public function TestRunnerAsyncMethodTest(testMethod:String = null) {
 			super(testMethod);
@@ -26,6 +27,7 @@ package asunit4.runners {
 			runner = new TestRunner();
 			runnerResult = new Result();
 			successTest = new AsyncMethodSuccessTest();
+			syncTest = new AsyncDelegateCalledSynchronouslyTest();
 			tooSlowTest = new AsyncMethodTooSlowTest();
 		}
 
@@ -73,7 +75,19 @@ package asunit4.runners {
 		}
 				
 		private function check_runner_result_wasSuccessful(e:Event):void {
-			assertTrue(runnerResult.wasSuccessful);
+			assertTrue('runner result was successful', runnerResult.wasSuccessful);
+		}
+		
+		//////
+		
+		public function test_run_synchronous_call_of_async_delegate():void {
+			runner.addEventListener(Event.COMPLETE, addAsync(check_runner_result_wasSuccessful2, 100));
+			runner.run(syncTest, runnerResult);
+		}
+		
+		private function check_runner_result_wasSuccessful2(e:Event):void {
+			trace('->->->->->-> ' + runnerResult.failures);
+			assertTrue('runner result was successful222', runnerResult.wasSuccessful);
 		}
 		
 		//////
@@ -98,6 +112,7 @@ import asunit4.framework.IRunListener;
 import asunit4.framework.ITestSuccess;
 import flash.utils.setTimeout;
 import asunit4.async.addAsync;
+import asunit.asserts.*;
 
 class AsyncMethodSuccessTest {
 	
@@ -124,6 +139,24 @@ class AsyncMethodTooSlowTest {
 	}
 	
 }
+
+class AsyncDelegateCalledSynchronouslyTest {
+	
+	private var handlerWasCalled:Boolean = false;
+	
+	[Test(async,timeout="10")]
+	public function calling_delegate_synchronously_should_succeed():void {
+		var delegate:Function = asunit4.async.addAsync(this, onComplete);
+		delegate();
+		assertTrue(handlerWasCalled);
+	}
+	
+	private function onComplete():void {
+		handlerWasCalled = true;
+	}
+	
+}
+
 /*
 class DelegateListener implements IRunListener {
 	public var _onTestFailure:Function;

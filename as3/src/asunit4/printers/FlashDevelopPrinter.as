@@ -65,10 +65,11 @@
 				}
 			}
 			//trace('\n' + lineWithMethod + '\n');
-			
+						
 			var filePath:String = String(lineWithMethod.match(localPathPattern)[0]);
 			// Find the line number between : and ], e.g. :25].
-			var lineNumberRaw:String = lineWithMethod.match(lineNumberPattern)[0];
+			var matches:Array = lineWithMethod.match(lineNumberPattern);
+			var lineNumberRaw:String = matches ? matches[0] : '';
 			// Take off the colon and bracket (I need to get better at regex).
 			var lineNumber:String = lineNumberRaw.slice(1, -1);
 			

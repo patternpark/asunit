@@ -45,7 +45,7 @@ package asunit4.framework {
 			assertTrue(testClasses.indexOf(FailAssertEqualsTest) >= 0);
 		}
 		
-		public function test_getTestClasses_on_test_class_to_should_return_array_with_test():void {
+		public function test_getTestClasses_on_test_class_should_return_array_with_test():void {
 			var testClasses:Array = SuiteIterator.getTestClasses(FailAssertTrueTest);
 			
 			assertEquals(1, testClasses.length);

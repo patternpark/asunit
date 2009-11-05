@@ -108,14 +108,21 @@ package asunit4.runners {
 			runMethod(allMethods.next());
 			
 			if (currentMethod.async) {
-				var commands:Array = Async.instance.getPendingForTest(currentTest);
+				var commands:Array = Async.instance.getPending();
+				//trace('pending commands: ' + commands);
+				if (!commands.length) {
+					onAsyncMethodCompleted();
+					return;
+				}
 				// find the async commands and listen to them
 				for each (var command:TimeoutCommand in commands) {
-					command.addEventListener(TimeoutCommand.CALLED, onAsyncMethodCalled);
-					command.addEventListener(ErrorEvent.ERROR, onAsyncMethodFailed);
+					command.addEventListener(TimeoutCommand.CALLED,	onAsyncMethodCalled);
+					command.addEventListener(ErrorEvent.ERROR,		onAsyncMethodFailed);
 				}
 				return;
 			}
+			
+			onMethodCompleted();
 			
 			// green thread for runNextMethod()
 			timer.reset();
@@ -133,12 +140,12 @@ package asunit4.runners {
 			clearTimeout(methodTimeoutID);
 			
 			if (currentMethod.async) {
-				var commands:Array = Async.instance.getPendingForTest(currentTest);
+				var commands:Array = Async.instance.getPending();
 				// clean up all async listeners
 				for each (var command:TimeoutCommand in commands) {
 					command.cancel();
-					command.removeEventListener(TimeoutCommand.CALLED, onAsyncMethodCalled);
-					command.removeEventListener(ErrorEvent.ERROR, onAsyncMethodFailed);
+					command.removeEventListener(TimeoutCommand.CALLED,	onAsyncMethodCalled);
+					command.removeEventListener(ErrorEvent.ERROR, 		onAsyncMethodFailed);
 				}
 			}
 			onMethodCompleted();
@@ -153,9 +160,13 @@ package asunit4.runners {
 			result.addSuccess(new TestSuccess(currentTest, currentMethod.name));
 		}
 		
+		//TODO: consider a custom event or at least a more descriptive type string.
 		protected function onAsyncMethodCalled(event:Event):void {
+			// Prevent the default behavior of the command calling execute().
+			event.preventDefault();
+			
 			var command:TimeoutCommand = TimeoutCommand(event.currentTarget);
-			//trace('onAsyncMethodCalled() - command: ' + command);
+			//trace('*** onAsyncMethodCalled() - command: ' + command);
 			
 			try {
 				command.execute();
@@ -167,16 +178,18 @@ package asunit4.runners {
 		}
 		
 		protected function onAsyncMethodFailed(event:ErrorEvent):void {
-			//trace('onAsyncMethodFailed() - currentMethod: ' + currentMethod + ' - event.error: ' + event.error);
+			//trace('!!! onAsyncMethodFailed() - currentMethod: ' + currentMethod + ' - event.error: ' + event.error);
 			recordFailure(event.error);
 			onAsyncMethodCompleted(event);
 		}
 		
-		protected function onAsyncMethodCompleted(event:Event):void {
-			var command:TimeoutCommand = TimeoutCommand(event.currentTarget);
-			//trace('onAsyncMethodCompleted() - command: ' + command);
-			command.removeEventListener(TimeoutCommand.CALLED,	onAsyncMethodCompleted);
-			command.removeEventListener(ErrorEvent.ERROR,		onAsyncMethodFailed);
+		protected function onAsyncMethodCompleted(event:Event = null):void {
+			if (event) {
+				var command:TimeoutCommand = TimeoutCommand(event.currentTarget);
+				//trace('onAsyncMethodCompleted() - command: ' + command);
+				command.removeEventListener(TimeoutCommand.CALLED,	onAsyncMethodCalled);
+				command.removeEventListener(ErrorEvent.ERROR,		onAsyncMethodFailed);
+			}
 			
 			if (asyncsCompleted) {
 				onAllAsyncsCompleted();
@@ -200,7 +213,7 @@ package asunit4.runners {
 		
 		protected function get asyncsCompleted():Boolean {
 			//TODO: maybe have Async send an event instead of checking it
-			var commands:Array = Async.instance.getPendingForTest(currentTest);
+			var commands:Array = Async.instance.getPending();
 			return (!commands || commands.length == 0);
 		}
 	}

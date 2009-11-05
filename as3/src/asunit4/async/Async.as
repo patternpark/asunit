@@ -13,10 +13,10 @@
 		
 		private static var _instance:Async;
 		
-		public var pendingForTest:Dictionary;
+		public var pending:Array;
 		
 		public function Async() {
-			pendingForTest = new Dictionary(true);
+			pending = [];
 		}
 		
 		public static function get instance():Async {
@@ -24,15 +24,14 @@
 			return _instance;
 		}
 		
-		public function getPendingForTest(test:Object):Array {
-			var commands:Array = pendingForTest[test];
+		public function getPending():Array {
 			// Clone to prevent changing by reference.
-			return commands ? commands.concat() : [];
+			return pending.concat();
 		}
 		
 		public function addAsync(test:Object, handler:Function, duration:int):Function {
 			var command:TimeoutCommand = new TimeoutCommand(test, handler, duration);
-			addPendingForTest(test, command);
+			addPending(command);
 			return command.getCallback();
 		}
 		
@@ -41,11 +40,8 @@
 			target.addEventListener(eventName, addAsync(test, null, timeout), false, 0, true);
 		}
 		
-		protected function addPendingForTest(test:Object, command:TimeoutCommand):void {
-			if (!pendingForTest[test])
-				pendingForTest[test] = [];
-				
-			pendingForTest[test].push(command);
+		protected function addPending(command:TimeoutCommand):void {
+			pending.push(command);
 			command.addEventListener(TimeoutCommand.CALLED,	onTestResult);
 			command.addEventListener(ErrorEvent.ERROR, 		onTestResult);
 		}
@@ -55,17 +51,11 @@
 			command.removeEventListener(TimeoutCommand.CALLED,	onTestResult);
 			command.removeEventListener(ErrorEvent.ERROR,		onTestResult);
 			
-			removePendingForTest(command.scope, command);
+			removePending(command);
 		}
 		
-		public function removePendingForTest(test:Object, command:TimeoutCommand):void {
-			var commands:Array = pendingForTest[test];
-			if (!commands) return;
-			
-			commands.splice(commands.indexOf(command), 1);
-			// Remove the array when emptied.
-			if (!commands.length)
-				delete pendingForTest[test];
+		protected function removePending(command:TimeoutCommand):void {
+			pending.splice(pending.indexOf(command), 1);
 			//TODO: maybe dispatch event when the last command is removed
 		}
 		

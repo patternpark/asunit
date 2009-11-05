@@ -33,6 +33,7 @@ package asunit4.async {
 		}
 		
 		public function execute():* {
+			//trace('TimeoutCommand.execute()');
 			return handler.apply(scope, params);
 		}
 		
@@ -47,7 +48,18 @@ package asunit4.async {
 		protected function callback(...params):* {
 			if (timeout) timeout.stop();
 			this.params = params;
-			dispatchEvent(new Event(CALLED));
+			//trace('TimeoutCommand.callback - params: ' + params);
+			// make cancelable event
+			var event:Event = new Event(CALLED, false, true);
+			dispatchEvent(event);
+			
+			// Prevent execute() from being called twice when this is async.
+			if (event.isDefaultPrevented()) return;
+			
+			// If callback is called synchronously, it's still in the call stack
+			// of the test method and the TestRunner isn't listening to it,
+			// so call it here. Any exceptions will bubble in the test method call stack.
+			execute();
 		}
 		
 		protected function onTimeoutComplete(event:TimerEvent):void {

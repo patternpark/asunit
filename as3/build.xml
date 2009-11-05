@@ -12,7 +12,7 @@
 	<property name="test.dir" location="${root.dir}/test"/>
 	<property name="libs.dir" location="${root.dir}/lib"/>
 	<property name="output.dir" location="${root.dir}/bin"/>
-	<property name="output.swc" location="${output.dir}/AsUnit.swc"/>
+	<property name="output.swc" location="${output.dir}/asunit.swc"/>
 			
 	<target name="swc" depends="" description="Compile AS3 code into a SWC">
 		<echo>Using Flex SDK at: ${FLEX_HOME}</echo>

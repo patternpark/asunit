@@ -23,7 +23,10 @@
 		function get failureCount():uint;
 		
 		function get successes():Array;
-		//function get successCount():uint;
+		function get successCount():uint;
+		
+		function get ignoredTests():Array;
+		function get ignoredTestCount():uint;
 		
 		function get runCount():uint;
 		

@@ -57,12 +57,15 @@ package asunit4.framework {
 		
         public function get successes():Array { return _successes; }
 		
+        public function get successCount():uint { return _successes.length; }
+		
         public function get ignoredTests():Array { return _ignoredTests; }
 		
+        public function get ignoredTestCount():uint { return _ignoredTests.length; }
+		
 		public function get runCount():uint {
-			return NaN;
 			//TODO: write test for this
-			//return errorCount + failureCount + _successes.length + _ignoredTests.length;
+			return errorCount + failureCount + successCount;
 		}
 		
 		public function get runTime():Number { return _runTime; }
@@ -123,6 +126,7 @@ package asunit4.framework {
         }
 		
         public function addSuccess(success:ITestSuccess):void {
+			//trace('Result.addSuccess() - ' + success);
 			_successes.push(success);
 			
 			for each (var listener:IRunListener in listeners) {
@@ -144,7 +148,7 @@ package asunit4.framework {
          * Returns whether the entire test was successful or not.
          */
         public function get wasSuccessful():Boolean {
-            return failureCount == 0 && errorCount == 0;
+            return (failureCount == 0 && errorCount == 0);
         }
 		
     }

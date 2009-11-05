@@ -67,6 +67,7 @@
 		}
 		
 		public function onTestStarted(test:Object):void {
+			//trace('MinimalPrinter.onTestStarted() - test: ' + test);
 			startTime = getTimer();
 		}
 		
@@ -76,15 +77,18 @@
         }
 		
 		public function onRunCompleted(result:IResult):void {
+			//trace('???? result.wasSuccessful: ' + result.wasSuccessful);
             if (result.wasSuccessful) {
                 print("OK");
                 println (" (" + result.runCount + " test" + (result.runCount == 1 ? "": "s") + ")");
             }
 			else {
                 println("FAILURES!!!");
-                println("Tests run: " + result.runCount+
-                             ",  Failures: "+result.failureCount+
-                             ",  Errors: "+result.errorCount);
+                println("Tests run: " + result.runCount
+					+ ",  Failures: " + result.failureCount
+					+ ",  Errors: " + result.errorCount
+					+ ",  Ignored: " + result.ignoredTestCount
+					);
             }
 			printTimeSummary();
 		}

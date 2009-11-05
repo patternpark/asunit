@@ -29,15 +29,15 @@
 			return pending.concat();
 		}
 		
-		public function addAsync(test:Object, handler:Function, duration:int):Function {
-			var command:TimeoutCommand = new TimeoutCommand(test, handler, duration);
+		public function addAsync(handler:Function, duration:int):Function {
+			var command:TimeoutCommand = new TimeoutCommand(null, handler, duration);
 			addPending(command);
 			return command.getCallback();
 		}
 		
 		public static function proceedOnEvent(test:Object, target:IEventDispatcher, eventName:String, timeout:int = 500, timeoutHandler:Function = null):void {
 			
-			target.addEventListener(eventName, addAsync(test, null, timeout), false, 0, true);
+			target.addEventListener(eventName, addAsync(null, timeout), false, 0, true);
 		}
 		
 		protected function addPending(command:TimeoutCommand):void {

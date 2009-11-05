@@ -25,7 +25,7 @@
 		//////
 		
 		public function test_addAsync_handler_can_be_retrieved_by_test_instance():void {
-			var cancelTimeout:Function = asunit4.async.addAsync(this, foo, 111);
+			var cancelTimeout:Function = asunit4.async.addAsync(foo, 111);
 			
 			var commands:Array = Async.instance.getPending();
 			assertEquals("one command for test after addAsync()", 1, commands.length);
@@ -42,7 +42,7 @@
 		protected function foo():void { }
 		
 		public function test_addAsync_sends_CALLED_Event_if_delegate_called_in_time():void {
-			var cancelTimeout:Function = asunit4.async.addAsync(this, foo, 10);
+			var cancelTimeout:Function = asunit4.async.addAsync(foo, 10);
 			
 			command = Async.instance.getPending()[0];
 			
@@ -62,7 +62,7 @@
 		
 		public function test_addAsync_sends_ErrorEvent_if_delegate_not_called_in_time():void {
 			// set an extremely short timeout
-			var cancelTimeout:Function = asunit4.async.addAsync(this, foo, 0);
+			var cancelTimeout:Function = asunit4.async.addAsync(foo, 0);
 			
 			command = Async.instance.getPending()[0];
 			command.addEventListener(TimeoutCommand.CALLED, failIfCalled);

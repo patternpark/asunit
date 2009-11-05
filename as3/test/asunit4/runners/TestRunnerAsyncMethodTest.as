@@ -118,7 +118,7 @@ class AsyncMethodSuccessTest {
 	
 	[Test(async,timeout="100")]
 	public function operation_delayed_but_fast_enough_will_succeed():void {
-		var delegate:Function = asunit4.async.addAsync(this, onComplete);
+		var delegate:Function = asunit4.async.addAsync(onComplete);
 		setTimeout(delegate, 0);
 	}
 	
@@ -131,7 +131,7 @@ class AsyncMethodTooSlowTest {
 	
 	[Test(async,timeout="0")]
 	public function operation_too_slow_will_fail():void {
-		var delegate:Function = asunit4.async.addAsync(this, onComplete);
+		var delegate:Function = asunit4.async.addAsync(onComplete);
 		setTimeout(delegate, 1);
 	}
 	
@@ -146,7 +146,7 @@ class AsyncDelegateCalledSynchronouslyTest {
 	
 	[Test(async,timeout="10")]
 	public function calling_delegate_synchronously_should_succeed():void {
-		var delegate:Function = asunit4.async.addAsync(this, onComplete);
+		var delegate:Function = asunit4.async.addAsync(onComplete);
 		delegate();
 		assertTrue(handlerWasCalled);
 	}

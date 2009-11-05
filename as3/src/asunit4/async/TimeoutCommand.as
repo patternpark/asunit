@@ -45,9 +45,10 @@ package asunit4.async {
 			if (timeout) timeout.stop();
 		}
 		
-		protected function callback(...params):* {
+		protected function callback(a:* = null):* {
 			if (timeout) timeout.stop();
-			this.params = params;
+			//this.params = [a].concat(rest);
+			this.params = arguments;
 			//trace('TimeoutCommand.callback - params: ' + params);
 			// make cancelable event
 			var event:Event = new Event(CALLED, false, true);

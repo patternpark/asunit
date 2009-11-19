@@ -15,6 +15,7 @@
   <classpaths>
     <class path="src" />
     <class path="test" />
+    <class path="examples" />
   </classpaths>
   <!-- Build options -->
   <build>
@@ -68,7 +69,10 @@
   </compileTargets>
   <!-- Paths to exclude from the Project Explorer tree -->
   <hiddenPaths>
-    <!-- example: <hidden path="..." /> -->
+    <hidden path="lib" />
+    <hidden path="src\AsUnit.as" />
+    <hidden path="rakefile.rb" />
+    <hidden path="bin" />
   </hiddenPaths>
   <!-- Executed before build -->
   <preBuildCommand />

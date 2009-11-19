@@ -86,7 +86,6 @@ package asunit4.runners {
 		}
 		
 		private function check_runner_result_wasSuccessful2(e:Event):void {
-			trace('->->->->->-> ' + runnerResult.failures);
 			assertTrue('runner result was successful222', runnerResult.wasSuccessful);
 		}
 		

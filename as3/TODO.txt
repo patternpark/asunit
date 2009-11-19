@@ -4,15 +4,15 @@
 
 High Priority
 -------------
-- run a single test method by name
-- Restore headers/footers to MinimalPrinter.
-- Mirror FlexUnit's Async.proceedOnEvent(), etc.
+- Run a single test method by name.
+- Restore headers/footers and green/red bar to MinimalPrinter.
+- Mirror FlexUnit's Async methods handleEvent(), etc.
 
 
 Medium Priority
 ---------------
 - Method ordering, e.g. [Before(order=1)]
-- [RunWith]
+- [RunWith] support.
 - Test async Before/After/BeforeClass/AfterClass methods.
 - Increase test coverage.
 - Probably move from MinimalComps back to textfields for MinimalPrinter.

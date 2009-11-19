@@ -1,17 +1,17 @@
 package asunit4.framework {
 	import asunit.framework.TestCase;
-	import asunit4.support.TestWithSprite;
+	import asunit4.support.MultiMethodTest;
 
 	public class TestIteratorMultiMethodTest extends TestCase {
 		private var iterator:TestIterator;
-		private var multiTest:TestWithSprite;
+		private var multiTest:MultiMethodTest;
 
 		public function TestIteratorMultiMethodTest(testMethod:String = null) {
 			super(testMethod);
 		}
 
 		protected override function setUp():void {
-			multiTest = new TestWithSprite();
+			multiTest = new MultiMethodTest();
 		}
 
 		protected override function tearDown():void {
@@ -30,8 +30,8 @@ package asunit4.framework {
 			assertEquals(beforeClassMethods[0].name, 'runBeforeClass1');
 			assertEquals(beforeClassMethods[1].name, 'runBeforeClass2');
 			
-			assertEquals(beforeClassMethods[0].value, TestWithSprite.runBeforeClass1);
-			assertEquals(beforeClassMethods[1].value, TestWithSprite.runBeforeClass2);
+			assertEquals(beforeClassMethods[0].value, MultiMethodTest.runBeforeClass1);
+			assertEquals(beforeClassMethods[1].value, MultiMethodTest.runBeforeClass2);
 		}
 		
 		public function test_get_AfterClass_methods_of_test_instance():void {
@@ -41,8 +41,8 @@ package asunit4.framework {
 			assertEquals(afterClassMethods[0].name, 'runAfterClass1');
 			assertEquals(afterClassMethods[1].name, 'runAfterClass2');
 			
-			assertEquals(afterClassMethods[0].value, TestWithSprite.runAfterClass1);
-			assertEquals(afterClassMethods[1].value, TestWithSprite.runAfterClass2);
+			assertEquals(afterClassMethods[0].value, MultiMethodTest.runAfterClass1);
+			assertEquals(afterClassMethods[1].value, MultiMethodTest.runAfterClass2);
 		}
 		
 		public function test_get_before_methods_of_test_instance():void {
@@ -54,7 +54,7 @@ package asunit4.framework {
 		}
 		
 		public function test_get_before_methods_of_test_class():void {
-			var beforeMethods:Array = TestIterator.getBeforeMethods(TestWithSprite);
+			var beforeMethods:Array = TestIterator.getBeforeMethods(MultiMethodTest);
 			
 			assertEquals(2, beforeMethods.length);
 			assertEquals(beforeMethods[0].name, 'runBefore1');
@@ -76,7 +76,7 @@ package asunit4.framework {
 		}
 		
 		public function test_get_test_methods_of_test_class():void {
-			var theTestMethods:Array = TestIterator.getTestMethods(TestWithSprite);
+			var theTestMethods:Array = TestIterator.getTestMethods(MultiMethodTest);
 			
 			assertEquals(3, theTestMethods.length);
 			assertEquals(theTestMethods[0].name, 'fail_assertEquals');
@@ -102,7 +102,7 @@ package asunit4.framework {
 		}
 		
 		public function test_get_after_methods_of_test_class():void {
-			var afterMethods:Array = TestIterator.getAfterMethods(TestWithSprite);
+			var afterMethods:Array = TestIterator.getAfterMethods(MultiMethodTest);
 			
 			assertEquals(2, afterMethods.length);
 			assertEquals(afterMethods[0].name, 'runAfter1');
@@ -115,7 +115,7 @@ package asunit4.framework {
 		}
 		
 		public function test_creating_iterator_test_class_throws_Error():void {
-			assertThrows(ArgumentError, function():void { new TestIterator(TestWithSprite); } );
+			assertThrows(ArgumentError, function():void { new TestIterator(MultiMethodTest); } );
 		}
 		
 		private function checkAllNextCalls(iterator:TestIterator):void {

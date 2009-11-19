@@ -2,12 +2,12 @@
 	import flash.display.Sprite;
 	import asunit.asserts.*;
 
-	public class TestWithSprite {
+	public class MultiMethodTest {
 		
 		public static var methodsCalled:Array = [];
 		protected var sprite:Sprite;
 	
-		public function TestWithSprite() {
+		public function MultiMethodTest() {
 		}
 		
 		[BeforeClass]

@@ -2,14 +2,14 @@ package asunit4.runners {
 	import asunit.framework.TestCase;
 	import asunit4.framework.Result;
 	import flash.events.Event;
-	import asunit4.support.TestWithSprite;
+	import asunit4.support.MultiMethodTest;
 	import asunit.framework.ITestFailure;
 	import asunit4.framework.TestFailure;
 
 	public class TestRunnerTest extends TestCase {
 		private var runner:TestRunner;
 		private var runnerResult:Result;
-		private var test:TestWithSprite;
+		private var test:MultiMethodTest;
 
 		public function TestRunnerTest(testMethod:String = null) {
 			super(testMethod);
@@ -18,13 +18,13 @@ package asunit4.runners {
 		protected override function setUp():void {
 			runner = new TestRunner();
 			runnerResult = new Result();
-			TestWithSprite.methodsCalled = [];
-			test = new TestWithSprite();
+			MultiMethodTest.methodsCalled = [];
+			test = new MultiMethodTest();
 		}
 
 		protected override function tearDown():void {
 			runner = null;
-			TestWithSprite.methodsCalled = null;
+			MultiMethodTest.methodsCalled = null;
 		}
 
 		public function testInstantiated():void {
@@ -44,29 +44,29 @@ package asunit4.runners {
 		}
 		
 		private function check_methodsCalled_after_run(e:Event):void {
-			assertEquals(19, TestWithSprite.methodsCalled.length);
+			assertEquals(19, MultiMethodTest.methodsCalled.length);
 			var i:uint = 0;
 			
-			assertSame(TestWithSprite.runBeforeClass1, 			TestWithSprite.methodsCalled[i++]);
-			assertSame(TestWithSprite.runBeforeClass2, 			TestWithSprite.methodsCalled[i++]);
+			assertSame(MultiMethodTest.runBeforeClass1, 		MultiMethodTest.methodsCalled[i++]);
+			assertSame(MultiMethodTest.runBeforeClass2, 		MultiMethodTest.methodsCalled[i++]);
 			
-			assertSame(test.runBefore1, 						TestWithSprite.methodsCalled[i++]);
-			assertSame(test.runBefore2, 						TestWithSprite.methodsCalled[i++]);
-			assertSame(test.fail_assertEquals,					TestWithSprite.methodsCalled[i++]);
-			assertSame(test.runAfter1, 							TestWithSprite.methodsCalled[i++]);
-			assertSame(test.runAfter2, 							TestWithSprite.methodsCalled[i++]);
+			assertSame(test.runBefore1, 						MultiMethodTest.methodsCalled[i++]);
+			assertSame(test.runBefore2, 						MultiMethodTest.methodsCalled[i++]);
+			assertSame(test.fail_assertEquals,					MultiMethodTest.methodsCalled[i++]);
+			assertSame(test.runAfter1, 							MultiMethodTest.methodsCalled[i++]);
+			assertSame(test.runAfter2, 							MultiMethodTest.methodsCalled[i++]);
 
-			assertSame(test.runBefore1, 						TestWithSprite.methodsCalled[i++]);
-			assertSame(test.runBefore2, 						TestWithSprite.methodsCalled[i++]);
-			assertSame(test.numChildren_is_0_by_default,		TestWithSprite.methodsCalled[i++]);
-			assertSame(test.runAfter1, 							TestWithSprite.methodsCalled[i++]);
-			assertSame(test.runAfter2, 							TestWithSprite.methodsCalled[i++]);
+			assertSame(test.runBefore1, 						MultiMethodTest.methodsCalled[i++]);
+			assertSame(test.runBefore2, 						MultiMethodTest.methodsCalled[i++]);
+			assertSame(test.numChildren_is_0_by_default,		MultiMethodTest.methodsCalled[i++]);
+			assertSame(test.runAfter1, 							MultiMethodTest.methodsCalled[i++]);
+			assertSame(test.runAfter2, 							MultiMethodTest.methodsCalled[i++]);
 			
-			assertSame(test.runBefore1, 						TestWithSprite.methodsCalled[i++]);
-			assertSame(test.runBefore2, 						TestWithSprite.methodsCalled[i++]);
-			assertSame(test.stage_is_null_by_default, 			TestWithSprite.methodsCalled[i++]);
-			assertSame(test.runAfter1, 							TestWithSprite.methodsCalled[i++]);
-			assertSame(test.runAfter2, 							TestWithSprite.methodsCalled[i++]);
+			assertSame(test.runBefore1, 						MultiMethodTest.methodsCalled[i++]);
+			assertSame(test.runBefore2, 						MultiMethodTest.methodsCalled[i++]);
+			assertSame(test.stage_is_null_by_default, 			MultiMethodTest.methodsCalled[i++]);
+			assertSame(test.runAfter1, 							MultiMethodTest.methodsCalled[i++]);
+			assertSame(test.runAfter2, 							MultiMethodTest.methodsCalled[i++]);
 		}
 		//////
 		public function test_run_triggers_ResultEvent_with_wasSuccessful_false_and_failures():void {

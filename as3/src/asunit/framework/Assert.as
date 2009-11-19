@@ -177,7 +177,7 @@ package asunit.framework {
                 actual = args[0];
             }
             else if(args.length == 2) {
-                message = args[0];
+                message = args[0] + " ";
                 actual = args[1];
             }
             else {
@@ -185,7 +185,7 @@ package asunit.framework {
             }
 
 			if(actual == null) {
-				throw new AssertionFailedError("expected not null but was:<" + actual + ">");
+				throw new AssertionFailedError(message + "expected not null but was:<" + actual + ">");
 			}
         }
         /**
@@ -227,7 +227,7 @@ package asunit.framework {
                 actual = args[1];
             }
             else if(args.length == 3) {
-                message = args[0];
+                message = args[0] + " ";
                 expected = args[1];
                 actual = args[2];
             }
@@ -236,7 +236,7 @@ package asunit.framework {
             }
 
             if(expected !== actual) {
-				throw new AssertionFailedError("expected same as:<" + expected + "> but was:<" + actual + ">");
+				throw new AssertionFailedError(message + "expected same as:<" + expected + "> but was:<" + actual + ">");
             }
         }
          /**
@@ -254,7 +254,7 @@ package asunit.framework {
                 actual = args[1];
             }
             else if(args.length == 3) {
-                message = args[0];
+                message = args[0] + " ";
                 expected = args[1];
                 actual = args[2];
             }
@@ -263,7 +263,7 @@ package asunit.framework {
             }
 
             if(expected === actual) {
-				throw new AssertionFailedError("expected not same but both were:<" + actual + ">");
+				throw new AssertionFailedError(message + "expected not same but both were:<" + actual + ">");
 			}
         }
 

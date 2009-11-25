@@ -38,26 +38,6 @@ package asunit4.runners {
 		
 		//////
 		
-		public function test_isAsync_is_true_for_async_test_instances():void {
-			assertTrue(TestIterator.isAsync(successTest));
-			assertTrue(TestIterator.isAsync(tooSlowTest));
-		}
-		
-		public function test_isAsync_is_true_for_async_test_classes():void {
-			assertTrue(TestIterator.isAsync(AsyncMethodSuccessTest));
-			assertTrue(TestIterator.isAsync(AsyncMethodTooSlowTest));
-		}
-		
-		public function test_isAsync_is_false_for_non_async_test_instance():void {
-			assertFalse(TestIterator.isAsync(new FailAssertTrueTest()));
-		}
-		
-		public function test_isAsync_is_false_for_null():void {
-			assertFalse(TestIterator.isAsync(null));
-		}
-		
-		//////
-		
 		public function test_async_test_method_should_have_async_true_and_timeout_value():void {
 			var testMethods:Array = TestIterator.getTestMethods(successTest);
 			

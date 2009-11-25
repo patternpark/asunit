@@ -118,7 +118,13 @@ package asunit4.framework {
 			if (typeInfo.@base == 'Class') typeInfo = typeInfo.factory[0];
 
 			var asyncs:XMLList = typeInfo.method.(hasOwnProperty("metadata")
-				&& metadata.@name == 'Test').metadata.arg.(@value == 'async');
+				&&
+				(  metadata.@name == 'Test'
+				|| metadata.@name == 'Before'
+				|| metadata.@name == 'After'
+				|| metadata.@name == 'BeforeClass'
+				|| metadata.@name == 'AfterClass')
+				).metadata.arg.(@value == 'async');
 
 			return asyncs.length() > 0;
 		}

@@ -2,6 +2,7 @@ package asunit4.framework {
 	import asunit.framework.TestSuite;
 	import asunit4.framework.NestedSuiteIteratorTest;
 	import asunit4.framework.SuiteIteratorTest;
+	import asunit4.framework.TestIteratorAsyncMethodTest;
 	import asunit4.framework.TestIteratorIgnoredMethodTest;
 	import asunit4.framework.TestIteratorMultiMethodTest;
 	import asunit4.framework.TestIteratorSingleMethodTest;
@@ -11,6 +12,7 @@ package asunit4.framework {
 		public function AllTests() {
 			addTest(new asunit4.framework.NestedSuiteIteratorTest());
 			addTest(new asunit4.framework.SuiteIteratorTest());
+			addTest(new asunit4.framework.TestIteratorAsyncMethodTest());
 			addTest(new asunit4.framework.TestIteratorIgnoredMethodTest());
 			addTest(new asunit4.framework.TestIteratorMultiMethodTest());
 			addTest(new asunit4.framework.TestIteratorSingleMethodTest());

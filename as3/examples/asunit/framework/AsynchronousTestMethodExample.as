@@ -1,14 +1,14 @@
-Assume we have a feature that performs some asynchronous action:
+//Assume we have a feature that performs some asynchronous action:
 
 package net {
-    
+
     import flash.events.Event;
     import flash.events.EventDispatcher;
     import flash.utils.setTimeout;
-    
+
     [Event(name="complete", type="flash.events.Event")]
     public class AsyncMethod extends EventDispatcher {
-        
+
         public function doSomething():void {
             setTimeout(function():void {
                 dispatchEvent(new Event(Event.COMPLETE));
@@ -17,7 +17,7 @@ package net {
     }
 }
 
-We can test this feature with the following test case:
+//We can test this feature with the following test case:
 package net {
 
     import asunit.framework.TestCase;

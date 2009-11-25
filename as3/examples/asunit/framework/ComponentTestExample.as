@@ -1,5 +1,7 @@
+/*
 And finally, the test case that will validate the ViewComponent class and
 it's goToHalfSize method.
+*/
 
 package controls {
 

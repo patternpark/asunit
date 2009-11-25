@@ -1,10 +1,12 @@
+/*
 For the purpose of the following test example, we'll be using a Runner that
 looks like this:
+*/
 
 package {
     import asunit.textui.TestRunner;
     import controls.ViewComponentTest;
-    
+
     public class SomeProjectRunner extends TestRunner {
 
         public function SomeProjectRunner() {

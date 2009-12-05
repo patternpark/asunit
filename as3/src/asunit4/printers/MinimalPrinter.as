@@ -1,19 +1,19 @@
-﻿package asunit4.printers {
-	import asunit.errors.AssertionFailedError;
+﻿package asunit4.printers 
+{
 	import asunit.framework.ITestFailure;
+
 	import asunit4.framework.IResult;
 	import asunit4.framework.IRunListener;
 	import asunit4.framework.ITestSuccess;
+	import asunit4.framework.Method;
+
 	import com.bit101.components.*;
+
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import flash.display.StageAlign;
-	import flash.display.StageScaleMode;
-	import flash.text.TextField;
-	import flash.utils.getQualifiedClassName;
 	import flash.system.Capabilities;
-	import asunit4.framework.Method;
+	import flash.utils.getQualifiedClassName;
 	import flash.utils.getTimer;
 
 	public class MinimalPrinter extends Sprite implements IRunListener {

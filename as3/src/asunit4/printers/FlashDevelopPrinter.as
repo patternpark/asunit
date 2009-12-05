@@ -1,17 +1,12 @@
 ﻿package asunit4.printers
 {
-	import asunit.framework.ITestResult;
-	import asunit4.framework.IRunListener;
-	import asunit4.framework.Method;
-	import flash.net.XMLSocket;
-	import flash.events.Event;
-	import flash.events.IOErrorEvent;
-	import flash.events.SecurityErrorEvent;
-	import asunit4.framework.IResult;
 	import asunit.framework.ITestFailure;
-	import flash.utils.getQualifiedClassName;
+
+	import asunit4.framework.IResult;
+	import asunit4.framework.IRunListener;
 	import asunit4.framework.ITestSuccess;
-	
+	import asunit4.framework.Method;
+
 	public class FlashDevelopPrinter implements IRunListener
 	{
 		protected static const localPathPattern:RegExp =

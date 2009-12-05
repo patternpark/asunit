@@ -1,23 +1,25 @@
-package asunit4.runners {
-	import flash.errors.IllegalOperationError;
-	import flash.events.Event;
-	import flash.events.EventDispatcher;
-	import flash.events.TimerEvent;
-	import flash.utils.clearTimeout;
-	import flash.utils.getDefinitionByName;
-	import flash.utils.getTimer;
-	import flash.utils.setTimeout;
-	import flash.utils.Timer;
+package asunit4.runners 
+{
 	import asunit.framework.Assert;
 	import asunit.framework.ErrorEvent;
+
 	import asunit4.async.Async;
 	import asunit4.async.TimeoutCommand;
 	import asunit4.framework.IResult;
 	import asunit4.framework.Method;
-	import asunit4.framework.TestIterator;
-	import asunit4.framework.Result;
-	import asunit4.framework.TestSuccess;
 	import asunit4.framework.TestFailure;
+	import asunit4.framework.TestIterator;
+	import asunit4.framework.TestSuccess;
+
+	import flash.errors.IllegalOperationError;
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
+	import flash.utils.clearTimeout;
+	import flash.utils.getDefinitionByName;
+	import flash.utils.getTimer;
+	import flash.utils.setTimeout;
 
 	public class TestRunner extends EventDispatcher {
 		protected var currentTest:Object;

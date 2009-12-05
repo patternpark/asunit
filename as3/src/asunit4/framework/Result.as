@@ -1,13 +1,10 @@
-package asunit4.framework {
-    import asunit.errors.AssertionFailedError;
-	import asunit4.framework.IResult;
+package asunit4.framework 
+{
 	import asunit.framework.ITestFailure;
-	import asunit4.framework.ITestSuccess;
-	import asunit.framework.TestListener;
-	import flash.events.EventDispatcher;
-	import flash.events.IEventDispatcher;
 
-    /**
+	import flash.events.EventDispatcher;
+
+	/**
      * A <code>Result</code> collects the results of executing
      * a test case. It is an instance of the Collecting Parameter pattern.
      * The test framework distinguishes between <i>failures</i> and <i>errors</i>.

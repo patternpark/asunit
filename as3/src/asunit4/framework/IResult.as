@@ -1,9 +1,7 @@
-﻿package asunit4.framework {
-	import asunit4.framework.ITestSuccess;
+﻿package asunit4.framework 
+{
 	import asunit.framework.ITestFailure;
-	import asunit.framework.TestListener;
-	import asunit4.framework.IRunListener;
-	
+
 	/**
 	 *
 	 */

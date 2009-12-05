@@ -1,8 +1,9 @@
-package asunit4.framework {
+package asunit4.framework 
+{
 	import asunit.util.ArrayIterator;
 	import asunit.util.Iterator;
+
 	import flash.utils.describeType;
-	import flash.utils.getTimer;
 
 	public class TestIterator {
 		public var async:Boolean;

@@ -1,17 +1,18 @@
 ﻿package asunit4.printers
 {
+	import asunit.framework.ITestFailure;
+
+	import asunit4.framework.IResult;
 	import asunit4.framework.IRunListener;
+	import asunit4.framework.ITestSuccess;
 	import asunit4.framework.Method;
-	import flash.net.XMLSocket;
+
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
-	import asunit4.framework.IResult;
-	import asunit.framework.ITestFailure;
+	import flash.net.XMLSocket;
 	import flash.utils.getQualifiedClassName;
-	import asunit4.framework.ITestSuccess;
-	import asunit4.framework.IResult;
-	
+
 	public class FlashBuilderPrinter implements IRunListener
 	{
 		protected var projectName:String;

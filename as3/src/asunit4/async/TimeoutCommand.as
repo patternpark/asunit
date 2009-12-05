@@ -38,17 +38,34 @@ package asunit4.async {
 		}
 		
 		public function getCallback():Function{
-			return callback;
+			return wrapHandlerWithCorrectNumberOfArgs();
 		}
 		
 		public function cancel():void {
 			if (timeout) timeout.stop();
 		}
 		
-		protected function callback(a:* = null):* {
+		protected function wrapHandlerWithCorrectNumberOfArgs():Function
+		{
+			switch (handler.length)
+			{
+				case 0: return function():* { return callback(); };
+				case 1: return function(a:*=null):* { return callback(a); };
+				case 2: return function(a:*=null, b:*=null):* { return callback(a, b); };
+				case 3: return function(a:*=null, b:*=null, c:*=null):* { return callback(a, b, c); };
+				case 4: return function(a:*=null, b:*=null, c:*=null, d:*=null):* { return callback(a, b, c, d); };
+				case 5: return function(a:*=null, b:*=null, c:*=null, d:*=null, e:*=null):* { return callback(a, b, c, d, e); };
+				case 6: return function(a:*=null, b:*=null, c:*=null, d:*=null, e:*=null, f:*=null):* { return callback(a, b, c, d, e, f); };
+				case 7: return function(a:*=null, b:*=null, c:*=null, d:*=null, e:*=null, f:*=null, g:*=null):* { return callback(a, b, c, d, e, f, g); };
+				case 8: return function(a:*=null, b:*=null, c:*=null, d:*=null, e:*=null, f:*=null, g:*=null, h:*=null):* { return callback(a, b, c, d, e, f, g, h); };
+				case 9: return function(a:*=null, b:*=null, c:*=null, d:*=null, e:*=null, f:*=null, g:*=null, h:*=null, i:*=null):* { return callback(a, b, c, d, e, f, g, h, i); };
+			}
+			return callback;
+		}
+		
+		protected function callback(...args):* {
 			if (timeout) timeout.stop();
-			//this.params = [a].concat(rest);
-			this.params = arguments;
+			this.params = args;
 			//trace('TimeoutCommand.callback - params: ' + params);
 			// make cancelable event
 			var event:Event = new Event(CALLED, false, true);

@@ -1,11 +1,10 @@
-﻿package asunit4.async {
-	import asunit4.async.TimeoutCommand;
+﻿package asunit4.async 
+{
 	import asunit.framework.ErrorEvent;
-	import flash.utils.Dictionary;
+
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
-	import asunit.framework.Assert;
-	
+
 	/**
 	 *
 	 */

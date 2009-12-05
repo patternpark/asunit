@@ -1,10 +1,7 @@
 package asunit4.framework {
 	import asunit.framework.TestCase;
-	import asunit4.support.IgnoredMethodTest;
 
 	public class TestIteratorAsyncMethodTest extends TestCase {
-		private var iterator:TestIterator;
-		private var ignoredTest:IgnoredMethodTest;
 
 		public function TestIteratorAsyncMethodTest(testMethod:String = null) {
 			super(testMethod);

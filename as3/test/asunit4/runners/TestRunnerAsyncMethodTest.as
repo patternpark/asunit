@@ -1,16 +1,14 @@
-package asunit4.runners {
-	import asunit4.framework.IRunListener;
-	import asunit4.framework.Result;
-	import asunit4.support.FailAssertTrueTest;
+package asunit4.runners 
+{
 	import asunit.framework.TestCase;
-	import flash.errors.IllegalOperationError;
-	import flash.events.Event;
-	import flash.utils.describeType;
-	import flash.utils.getQualifiedClassName;
-	import asunit4.framework.IResult;
-	import asunit4.framework.TestIterator;
+
 	import asunit4.framework.Method;
+	import asunit4.framework.Result;
 	import asunit4.framework.TestFailure;
+	import asunit4.framework.TestIterator;
+
+	import flash.events.Event;
+	import flash.utils.getQualifiedClassName;
 
 	public class TestRunnerAsyncMethodTest extends TestCase {
 		private var runner:TestRunner;
@@ -84,14 +82,14 @@ package asunit4.runners {
 		}
 	}
 }
-//////////////////////////////////////////
-import asunit.framework.ITestFailure;
-import asunit4.framework.IResult;
-import asunit4.framework.IRunListener;
-import asunit4.framework.ITestSuccess;
-import flash.utils.setTimeout;
-import asunit4.async.addAsync;
+
 import asunit.asserts.*;
+
+import asunit4.async.addAsync;
+
+import flash.utils.setTimeout;
+
+//////////////////////////////////////////
 
 class AsyncMethodSuccessTest {
 	

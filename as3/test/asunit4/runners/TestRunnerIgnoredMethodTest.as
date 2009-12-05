@@ -1,11 +1,11 @@
-package asunit4.runners {
+package asunit4.runners 
+{
 	import asunit.framework.TestCase;
+
 	import asunit4.framework.Result;
 	import asunit4.support.IgnoredMethodTest;
+
 	import flash.events.Event;
-	import asunit4.support.ErrorInMethodTest;
-	import asunit4.framework.IResult;
-	import asunit4.framework.TestFailure;
 
 	public class TestRunnerIgnoredMethodTest extends TestCase {
 		private var runner:TestRunner;

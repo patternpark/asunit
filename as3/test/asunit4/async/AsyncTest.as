@@ -2,8 +2,8 @@
 	import asunit.framework.TestCase;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import asunit.framework.ErrorEvent;
 	import flash.utils.setTimeout;
+	import asunit4.events.TimeoutCommandEvent;
 
 	public class AsyncTest extends TestCase {
 		private var dispatcher:EventDispatcher;
@@ -47,17 +47,17 @@
 			command = Async.instance.getPending()[0];
 			
 			// Use AsUnit 3's addAsync() to verify onAsyncMethodCalled is called.
-			command.addEventListener(TimeoutCommand.CALLED, addAsync(onAsyncMethodCalled));
+			command.addEventListener(TimeoutCommandEvent.CALLED, addAsync(onAsyncMethodCalled));
 			
 			// If all goes well, the ErrorEvent won't be dispatched.
-			command.addEventListener(ErrorEvent.ERROR, failIfCalled);
+			command.addEventListener(TimeoutCommandEvent.TIMED_OUT, failIfCalled);
 
 			// cancelTimeout is called faster than asunit4.async.addAsync duration
 			setTimeout(cancelTimeout, 0);
 		}
 		
 		protected function onAsyncMethodCalled(e:Event):void {
-			assertEquals("event type", TimeoutCommand.CALLED, e.type);
+			assertEquals("event type", TimeoutCommandEvent.CALLED, e.type);
 		}
 		
 		public function test_addAsync_sends_ErrorEvent_if_delegate_not_called_in_time():void {
@@ -65,17 +65,17 @@
 			var cancelTimeout:Function = asunit4.async.addAsync(foo, 0);
 			
 			command = Async.instance.getPending()[0];
-			command.addEventListener(TimeoutCommand.CALLED, failIfCalled);
-			command.addEventListener(ErrorEvent.ERROR, addAsync(onAsyncMethodFailed));
+			command.addEventListener(TimeoutCommandEvent.CALLED, failIfCalled);
+			command.addEventListener(TimeoutCommandEvent.TIMED_OUT, addAsync(onAsyncMethodFailed));
 
 			// cancelTimeout isn't called fast enough
 			setTimeout(cancelTimeout, 10);
 		}
 		
-		protected function onAsyncMethodFailed(e:ErrorEvent):void {
-			assertEquals("event type", ErrorEvent.ERROR, e.type);
-			command.removeEventListener(TimeoutCommand.CALLED, failIfCalled);
-			command.removeEventListener(ErrorEvent.ERROR, onAsyncMethodFailed);
+		protected function onAsyncMethodFailed(e:TimeoutCommandEvent):void {
+			assertEquals("event type", TimeoutCommandEvent.TIMED_OUT, e.type);
+			command.removeEventListener(TimeoutCommandEvent.CALLED, failIfCalled);
+			command.removeEventListener(TimeoutCommandEvent.TIMED_OUT, onAsyncMethodFailed);
 		}
 		
 		protected function failIfCalled(e:Event = null):void {

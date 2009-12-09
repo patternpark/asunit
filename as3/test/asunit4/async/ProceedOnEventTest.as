@@ -5,6 +5,7 @@
 	import asunit.framework.ErrorEvent;
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
+	import asunit4.events.TimeoutCommandEvent;
 
 	public class ProceedOnEventTest extends TestCase {
 		private var dispatcher:EventDispatcher;
@@ -46,19 +47,20 @@
 			dispatcher.dispatchEvent(new Event(Event.COMPLETE));
 		}
 		
-		public function test_proceedOnEvent_then_dispatch_correct_event_too_slowly_sends_ErrorEvent():void {
+		public function test_proceedOnEvent_then_dispatch_correct_event_too_slowly_sends_timed_out_Event():void {
 			Async.proceedOnEvent(this, dispatcher, Event.COMPLETE, 0);
 			
 			var commands:Array = Async.instance.getPending();
 			var command:TimeoutCommand = commands[0];
-			command.addEventListener(ErrorEvent.ERROR, addAsync(onAsyncMethodFailed));
+			//command.addEventListener(ErrorEvent.ERROR, addAsync(onAsyncMethodFailed));
+			command.addEventListener(TimeoutCommandEvent.TIMED_OUT, addAsync(onAsyncMethodFailed));
 			
 			// send the correct event too slowly
 			timeoutID = setTimeout(dispatchCompleteEvent, 10);
 		}
 		
-		protected function onAsyncMethodFailed(e:ErrorEvent):void {
-			assertEquals("event type", ErrorEvent.ERROR, e.type);
+		protected function onAsyncMethodFailed(e:TimeoutCommandEvent):void {
+			assertEquals("event type", TimeoutCommandEvent.TIMED_OUT, e.type);
 			clearTimeout(timeoutID);
 		}
 		
@@ -68,7 +70,7 @@
 			command = Async.instance.getPending()[0];
 			
 			// Use AsUnit 3's addAsync() to verify onAsyncMethodCalled is called.
-			command.addEventListener(TimeoutCommand.CALLED, addAsync(onAsyncMethodCalled));
+			command.addEventListener(TimeoutCommandEvent.CALLED, addAsync(onAsyncMethodCalled));
 			
 			// If all goes well, the ErrorEvent won't be dispatched.
 			command.addEventListener(ErrorEvent.ERROR, failIfCalled);
@@ -78,7 +80,7 @@
 		}
 		
 		protected function onAsyncMethodCalled(e:Event):void {
-			assertEquals("event type", TimeoutCommand.CALLED, e.type);
+			assertEquals("event type", TimeoutCommandEvent.CALLED, e.type);
 		}
 		
 		protected function failIfCalled(e:Event = null):void {

@@ -1,10 +1,10 @@
-package asunit4.runners 
+package asunit4.runners
 {
 	import asunit.framework.Assert;
 	import asunit.framework.ErrorEvent;
+	import asunit4.events.TimeoutCommandEvent;
 
 	import asunit4.async.Async;
-	import asunit4.async.TimeoutCommand;
 	import asunit4.framework.IResult;
 	import asunit4.framework.Method;
 	import asunit4.framework.TestFailure;
@@ -36,35 +36,29 @@ package asunit4.runners
 			timer.addEventListener(TimerEvent.TIMER, runNextMethod);
 		}
 		
-		protected function get testCompleted():Boolean {
-			return (!allMethods.hasNext() && asyncsCompleted);
-		}
-		
 		public function run(test:Object, result:IResult):void {
-			//trace('-------------------- TestRunner.run(): ' + test + ' - result: ' + result);
 			currentTest = test;
 			this.result = result;
 			currentMethod = null;
 			
 			allMethods = new TestIterator(test);
 			
+			Async.instance.addEventListener(TimeoutCommandEvent.CALLED,		onAsyncMethodCalled);
+			Async.instance.addEventListener(TimeoutCommandEvent.TIMED_OUT,	onAsyncMethodTimedOut);
+			
 			startTime = getTimer();
 			this.result.startTest(currentTest);
 			
-			// If any methods in the test are async, we must use a slower path.
-
-			if (allMethods.async) {
-				runNextMethod();
+			runNextMethod();
+		}
+		
+		protected function runNextMethod(e:TimerEvent = null):void {
+			if (testCompleted) {
+				onTestCompleted();
 				return;
 			}
 			
-			// Since the test has no async methods, we can run a fast loop.
-
-			while (allMethods.hasNext()) {
-				runMethod(allMethods.next());
-				onMethodCompleted();
-			}
-			onTestCompleted();
+			runMethod(allMethods.next());
 		}
 		
 		protected function runMethod(method:Method):void {
@@ -74,9 +68,9 @@ package asunit4.runners
 			
 			if (currentMethod.ignore) {
 				result.addIgnoredTest(currentMethod);
+				onMethodCompleted();
 				return;
 			}
-			//trace('runMethod() - currentMethod: ' + currentMethod);
 			
 			if (currentMethod.timeout >= 0) {
 				methodTimeoutID = setTimeout(onMethodTimeout, currentMethod.timeout);
@@ -99,79 +93,35 @@ package asunit4.runners
 					recordFailure(error);
 				}
 			}
+			
+			if (Async.instance.hasPending) return;
+			onMethodCompleted();
 		}
 
-		protected function runNextMethod(e:TimerEvent = null):void {
-			if (testCompleted) {
-				onTestCompleted();
-				return;
-			}
-			
-			runMethod(allMethods.next());
-			
-			if (currentMethod.async) {
-				var commands:Array = Async.instance.getPending();
-				//trace('pending commands: ' + commands);
-				if (!commands.length) {
-					onAsyncMethodCompleted();
-					return;
-				}
-				// find the async commands and listen to them
-				for each (var command:TimeoutCommand in commands) {
-					command.addEventListener(TimeoutCommand.CALLED,	onAsyncMethodCalled);
-					command.addEventListener(ErrorEvent.ERROR,		onAsyncMethodFailed);
-				}
-				return;
-			}
-			
+		protected function onMethodTimeout():void {
+			recordFailure(new IllegalOperationError('Timeout (' + currentMethod.timeout + 'ms) exceeded during method ' + currentMethod.name));
 			onMethodCompleted();
+		}
+		
+		protected function onMethodCompleted():void {
+			clearTimeout(methodTimeoutID);
+			Async.instance.cancelPending();
+			
+			if (currentMethod.isTest && methodPassed && !currentMethod.ignore) {
+				result.addSuccess(new TestSuccess(currentTest, currentMethod.name));
+			}
+
+			// Calling synchronously is slightly faster but keeps adding to the call stack.
+			//runNextMethod();
 			
 			// green thread for runNextMethod()
 			timer.reset();
 			timer.start();
 		}
 		
-		protected function onMethodTimeout():void {
-			//trace('@@@ onMethodTimeout(): ' + currentMethod.timeout + ' - ' + currentMethod);
-			recordFailure(new IllegalOperationError('Timeout (' + currentMethod.timeout + 'ms) exceeded during method ' + currentMethod.name));
-			onAllAsyncsCompleted();
-		}
-		
-		protected function onAllAsyncsCompleted():void {
-			//trace('onAllAsyncsCompleted() - ' + currentMethod);
-			clearTimeout(methodTimeoutID);
-			
-			if (currentMethod.async) {
-				var commands:Array = Async.instance.getPending();
-				// clean up all async listeners
-				for each (var command:TimeoutCommand in commands) {
-					command.cancel();
-					command.removeEventListener(TimeoutCommand.CALLED,	onAsyncMethodCalled);
-					command.removeEventListener(ErrorEvent.ERROR, 		onAsyncMethodFailed);
-				}
-			}
-			onMethodCompleted();
-			runNextMethod();
-		}
-		
-		protected function onMethodCompleted():void {
-			// currentMethod can be a non-test method like [Before], [After].
-			if (!currentMethod.isTest || currentMethod.ignore || !methodPassed)
-				return;
-			
-			result.addSuccess(new TestSuccess(currentTest, currentMethod.name));
-		}
-		
-		//TODO: consider a custom event or at least a more descriptive type string.
-		protected function onAsyncMethodCalled(event:Event):void {
-			// Prevent the default behavior of the command calling execute().
-			event.preventDefault();
-			
-			var command:TimeoutCommand = TimeoutCommand(event.currentTarget);
-			//trace('*** onAsyncMethodCalled() - command: ' + command);
-			
+		protected function onAsyncMethodCalled(event:TimeoutCommandEvent):void {
 			try {
-				command.execute();
+				event.command.execute();
 			}
 			catch (error:Error) {
 				recordFailure(error);
@@ -179,23 +129,10 @@ package asunit4.runners
 			onAsyncMethodCompleted(event);
 		}
 		
-		protected function onAsyncMethodFailed(event:ErrorEvent):void {
-			//trace('!!! onAsyncMethodFailed() - currentMethod: ' + currentMethod + ' - event.error: ' + event.error);
-			recordFailure(event.error);
+		protected function onAsyncMethodTimedOut(event:TimeoutCommandEvent):void {
+			var error:IllegalOperationError = new IllegalOperationError("Timeout (" + event.command.duration + "ms) exceeded on an asynchronous operation.");
+			recordFailure(error);
 			onAsyncMethodCompleted(event);
-		}
-		
-		protected function onAsyncMethodCompleted(event:Event = null):void {
-			if (event) {
-				var command:TimeoutCommand = TimeoutCommand(event.currentTarget);
-				//trace('onAsyncMethodCompleted() - command: ' + command);
-				command.removeEventListener(TimeoutCommand.CALLED,	onAsyncMethodCalled);
-				command.removeEventListener(ErrorEvent.ERROR,		onAsyncMethodFailed);
-			}
-			
-			if (asyncsCompleted) {
-				onAllAsyncsCompleted();
-			}
 		}
 		
 		protected function recordFailure(error:Error):void {
@@ -203,8 +140,17 @@ package asunit4.runners
 			result.addFailure(new TestFailure(currentTest, currentMethod.name, error));
 		}
 		
+		protected function onAsyncMethodCompleted(event:Event = null):void {
+			if (!Async.instance.hasPending) {
+				onMethodCompleted();
+			}
+		}
+		
 		protected function onTestCompleted():void {
-			//trace('TestRunner.onTestCompleted()');
+			Async.instance.removeEventListener(TimeoutCommandEvent.CALLED,		onAsyncMethodCalled);
+			Async.instance.removeEventListener(TimeoutCommandEvent.TIMED_OUT,	onAsyncMethodTimedOut);
+			Async.instance.cancelPending();
+			
 			this.result.endTest(currentTest);
 			
 			//TODO: move out because runTime is for whole run, not one test
@@ -213,10 +159,8 @@ package asunit4.runners
 			dispatchEvent(new Event(Event.COMPLETE));
 		}
 		
-		protected function get asyncsCompleted():Boolean {
-			//TODO: maybe have Async send an event instead of checking it
-			var commands:Array = Async.instance.getPending();
-			return (!commands || commands.length == 0);
+		protected function get testCompleted():Boolean {
+			return (!allMethods.hasNext() && !Async.instance.hasPending);
 		}
 	}
 }

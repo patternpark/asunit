@@ -22,7 +22,7 @@
 		}
 		
 		[Test]
-		public function orderZeroByDefault():void {
+		public function zeroIsDefaultOrder():void {
 			methodsCalled.push(arguments.callee);
 		}
 		

@@ -1,4 +1,4 @@
-package asunit4.runners 
+package asunit4.runners
 {
 	import asunit.framework.TestCase;
 
@@ -31,7 +31,7 @@ package asunit4.runners
 		//////
 		
 		public function test_run_triggers_COMPLETE_Event():void {
-			suiteRunner.addEventListener(Event.COMPLETE, addAsync(check_Result_wasSuccessful_false, 100));
+			suiteRunner.addEventListener(Event.COMPLETE, addAsync(check_Result_wasSuccessful_false, 500));
 			suiteRunner.run(suiteClass, runnerResult);
 		}
 		

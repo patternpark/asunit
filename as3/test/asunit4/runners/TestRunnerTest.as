@@ -39,7 +39,7 @@ package asunit4.runners {
 		//////
 		// For now, the test methods are sorted alphabetically to enable precise testing.
 		public function test_run_calls_setup_before_and_tearDown_after_each_test_method():void {
-			runner.addEventListener(Event.COMPLETE, addAsync(check_methodsCalled_after_run, 100));
+			runner.addEventListener(Event.COMPLETE, addAsync(check_methodsCalled_after_run, 500));
 			runner.run(test, runnerResult);
 		}
 		
@@ -70,7 +70,7 @@ package asunit4.runners {
 		}
 		//////
 		public function test_run_triggers_ResultEvent_with_wasSuccessful_false_and_failures():void {
-			runner.addEventListener(Event.COMPLETE, addAsync(check_Result_wasSuccessful_false, 100));
+			runner.addEventListener(Event.COMPLETE, addAsync(check_Result_wasSuccessful_false, 500));
 			runner.run(test, runnerResult);
 		}
 		

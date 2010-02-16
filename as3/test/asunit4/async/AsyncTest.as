@@ -42,7 +42,7 @@
 		protected function foo():void { }
 		
 		public function test_addAsync_sends_CALLED_Event_if_delegate_called_in_time():void {
-			var cancelTimeout:Function = asunit4.async.addAsync(foo, 10);
+			var cancelTimeout:Function = asunit4.async.addAsync(foo, 50);
 			
 			command = Async.instance.getPending()[0];
 			

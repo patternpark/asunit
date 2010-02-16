@@ -16,15 +16,14 @@
 		
 		private static var _instance:Async;
 		
-		public var pending:Array;
+		protected var pending:Array;
 		
 		public function Async() {
 			pending = [];
 		}
 		
 		public static function get instance():Async {
-			if (!_instance) _instance = new Async();
-			return _instance;
+			return _instance || (_instance = new Async());
 		}
 		
 		public function get hasPending():Boolean {
@@ -52,9 +51,10 @@
 			}
 		}
 		
+		// Partially opened for testing purposes.
 		internal function getPending():Array {
 			// Clone to prevent changing by reference.
-			return pending.concat();
+			return pending.slice();
 		}
 		
 		protected function addPending(command:TimeoutCommand):void {

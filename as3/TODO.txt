@@ -14,6 +14,7 @@ Medium Priority
 - Test async Before/After/BeforeClass/AfterClass methods.
 - Increase test coverage.
 - Probably move from MinimalComps back to textfields for MinimalPrinter.
+- Make interfaces for TestRunner, etc. and type to them instead of implementations.
 
 
 Low Priority

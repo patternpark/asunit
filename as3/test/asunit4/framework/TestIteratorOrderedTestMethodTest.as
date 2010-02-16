@@ -29,12 +29,12 @@ package asunit4.framework {
 			
 			assertEquals(4, theTestMethods.length);
 			assertEquals(theTestMethods[0].name, 'negativeOrderIsAllowed');
-			assertEquals(theTestMethods[1].name, 'orderZeroByDefault');
+			assertEquals(theTestMethods[1].name, 'zeroIsDefaultOrder');
 			assertEquals(theTestMethods[2].name, 'two');
 			assertEquals(theTestMethods[3].name, 'three');
 			
 			assertEquals(orderedTest.negativeOrderIsAllowed, 	theTestMethods[0].value);
-			assertEquals(orderedTest.orderZeroByDefault,		theTestMethods[1].value);
+			assertEquals(orderedTest.zeroIsDefaultOrder,		theTestMethods[1].value);
 			assertEquals(orderedTest.two, 						theTestMethods[2].value);
 			assertEquals(orderedTest.three, 					theTestMethods[3].value);
 		}
@@ -46,7 +46,7 @@ package asunit4.framework {
 		
 		private function checkAllNextCalls(iterator:TestIterator):void {
 			assertSame('negativeOrderIsAllowed',	iterator.next().name);
-			assertSame('orderZeroByDefault', 		iterator.next().name);
+			assertSame('zeroIsDefaultOrder', 		iterator.next().name);
 			assertSame('two', 						iterator.next().name);
 			assertSame('three', 					iterator.next().name);
 			

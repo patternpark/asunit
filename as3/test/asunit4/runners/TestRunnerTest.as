@@ -18,6 +18,7 @@ package asunit4.runners {
 		protected override function setUp():void {
 			runner = new TestRunner();
 			runnerResult = new Result();
+			// Yes, statics are ugly, but we're testing that static methods are called, e.g. [BeforeClass].
 			MultiMethodTest.methodsCalled = [];
 			test = new MultiMethodTest();
 		}
@@ -38,13 +39,12 @@ package asunit4.runners {
 
 		//////
 		// For now, the test methods are sorted alphabetically to enable precise testing.
-		public function test_run_calls_setup_before_and_tearDown_after_each_test_method():void {
-			runner.addEventListener(Event.COMPLETE, addAsync(check_methodsCalled_after_run, 500));
+		public function test_run_test_instance_executes_proper_method_sequence():void {
+			runner.addEventListener(Event.COMPLETE, addAsync(check_methodsCalled_after_running_test_instance, 500));
 			runner.run(test, runnerResult);
 		}
 		
-		private function check_methodsCalled_after_run(e:Event):void {
-			assertEquals(19, MultiMethodTest.methodsCalled.length);
+		private function check_methodsCalled_after_running_test_instance(e:Event):void {
 			var i:uint = 0;
 			
 			assertSame(MultiMethodTest.runBeforeClass1, 		MultiMethodTest.methodsCalled[i++]);
@@ -67,10 +67,16 @@ package asunit4.runners {
 			assertSame(test.stage_is_null_by_default, 			MultiMethodTest.methodsCalled[i++]);
 			assertSame(test.runAfter1, 							MultiMethodTest.methodsCalled[i++]);
 			assertSame(test.runAfter2, 							MultiMethodTest.methodsCalled[i++]);
+			
+			assertSame(MultiMethodTest.runAfterClass1, 			MultiMethodTest.methodsCalled[i++]);
+			assertSame(MultiMethodTest.runAfterClass2, 			MultiMethodTest.methodsCalled[i++]);
+			
+			assertEquals('checked all methodsCalled', MultiMethodTest.methodsCalled.length, i);
 		}
 		//////
 		public function test_run_triggers_ResultEvent_with_wasSuccessful_false_and_failures():void {
 			runner.addEventListener(Event.COMPLETE, addAsync(check_Result_wasSuccessful_false, 500));
+			
 			runner.run(test, runnerResult);
 		}
 		
@@ -83,6 +89,30 @@ package asunit4.runners {
 			var failure0:ITestFailure = failures[0] as TestFailure;
 			assertSame(test, failure0.failedTest);
 		}
+		//////
+		public function test_run_test_method_by_name_executes_proper_method_sequence():void {
+			runner.addEventListener(Event.COMPLETE, addAsync(check_methodsCalled_after_running_test_method_by_name, 500));
+			
+			var testMethodName:String = 'stage_is_null_by_default';
+			runner.run(test, runnerResult, testMethodName);
+		}
 		
+		private function check_methodsCalled_after_running_test_method_by_name(e:Event):void {
+			var i:uint = 0;
+			
+			assertSame(MultiMethodTest.runBeforeClass1, 		MultiMethodTest.methodsCalled[i++]);
+			assertSame(MultiMethodTest.runBeforeClass2, 		MultiMethodTest.methodsCalled[i++]);
+			
+			assertSame(test.runBefore1, 						MultiMethodTest.methodsCalled[i++]);
+			assertSame(test.runBefore2, 						MultiMethodTest.methodsCalled[i++]);
+			assertSame(test.stage_is_null_by_default, 			MultiMethodTest.methodsCalled[i++]);
+			assertSame(test.runAfter1, 							MultiMethodTest.methodsCalled[i++]);
+			assertSame(test.runAfter2, 							MultiMethodTest.methodsCalled[i++]);
+			
+			assertSame(MultiMethodTest.runAfterClass1, 			MultiMethodTest.methodsCalled[i++]);
+			assertSame(MultiMethodTest.runAfterClass2, 			MultiMethodTest.methodsCalled[i++]);
+			
+			assertEquals('checked all methodsCalled', MultiMethodTest.methodsCalled.length, i);
+		}
 	}
 }

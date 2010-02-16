@@ -16,11 +16,20 @@ package asunit4.framework
 		
 		protected var testMethodHasRunThisCycle:Boolean;
 		
-		public function TestIterator(test:Object) {
+		public function TestIterator(test:Object, testMethodName:String = "") {
 			if (test is Class) throw new ArgumentError("test argument cannot be a Class");
 			
 			var testMethodsArray:Array = getTestMethods(test);
 			if (!testMethodsArray.length) return;
+			
+			if (testMethodName)
+			{
+				testMethodsArray = testMethodsArray.filter(
+					function(item:Object, index:int, array:Array):Boolean {
+						return (item.name == testMethodName);
+					}
+				);
+			}
 			
 			testMethods   		= new ArrayIterator(testMethodsArray);
 			beforeClassMethods 	= new ArrayIterator(getBeforeClassMethods(test));
@@ -97,7 +106,7 @@ package asunit4.framework
 			methods.sortOn('order');
 			return methods;
 		}
-		
+				
 		/**
 		 *
 		 * @param	test	An instance of a class with methods that have [Before] metadata.

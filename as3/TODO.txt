@@ -4,8 +4,6 @@
 
 High Priority
 -------------
-- Method ordering, e.g. [Before(order=1)]
-- Run a single test method by name.
 - Restore headers/footers and green/red bar to MinimalPrinter.
 - Mirror FlexUnit's Async methods handleEvent(), etc.
 

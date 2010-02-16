@@ -27,7 +27,7 @@ package asunit4.runners
 		protected var startTime:Number;
 		protected var timer:Timer;
 		protected var result:IResult;
-		protected var allMethods:TestIterator;
+		protected var methodsToRun:TestIterator;
 		protected var methodTimeoutID:int = -1;
 		protected var methodPassed:Boolean = true;
 
@@ -36,19 +36,18 @@ package asunit4.runners
 			timer.addEventListener(TimerEvent.TIMER, runNextMethod);
 		}
 		
-		public function run(test:Object, result:IResult):void {
+		public function run(test:Object, result:IResult, testMethodName:String = ""):void {
 			currentTest = test;
 			this.result = result;
 			currentMethod = null;
-			
-			allMethods = new TestIterator(test);
-			
+						
 			Async.instance.addEventListener(TimeoutCommandEvent.CALLED,		onAsyncMethodCalled);
 			Async.instance.addEventListener(TimeoutCommandEvent.TIMED_OUT,	onAsyncMethodTimedOut);
 			
 			startTime = getTimer();
 			this.result.startTest(currentTest);
 			
+			methodsToRun = new TestIterator(test, testMethodName);
 			runNextMethod();
 		}
 		
@@ -58,7 +57,7 @@ package asunit4.runners
 				return;
 			}
 			
-			runMethod(allMethods.next());
+			runMethod(methodsToRun.next());
 		}
 		
 		protected function runMethod(method:Method):void {
@@ -160,7 +159,7 @@ package asunit4.runners
 		}
 		
 		protected function get testCompleted():Boolean {
-			return (!allMethods.hasNext() && !Async.instance.hasPending);
+			return (!methodsToRun.hasNext() && !Async.instance.hasPending);
 		}
 	}
 }

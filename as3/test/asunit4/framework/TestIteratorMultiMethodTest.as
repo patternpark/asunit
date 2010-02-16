@@ -62,7 +62,7 @@ package asunit4.framework {
 		}
 		
 		public function test_get_test_methods_of_test_instance():void {
-			//NOTE: TestCase has protected testMethods property.
+			//NOTE: Avoid naming variables the same as testMethods property in asunit.framework.TestCase.
 			var theTestMethods:Array = TestIterator.getTestMethods(multiTest);
 			
 			assertEquals(3, theTestMethods.length);

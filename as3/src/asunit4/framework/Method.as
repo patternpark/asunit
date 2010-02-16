@@ -10,6 +10,7 @@
 		public var expects:String;
 		public var isTest:Boolean;
 		public var ignore:Boolean;
+		public var order:int = 0;
 		
 		public function Method(scope:Object, name:String, value:Function, metadata:XMLList = null) {
 			this.scope = scope;
@@ -30,6 +31,10 @@
 			var expectsXML:XMLList = testArgs.(@key == 'expects');
 			if (expectsXML.length() == 1)
 				this.expects = String(expectsXML[0].@value);
+				
+			var orderXML:XMLList = testArgs.(@key == 'order');
+			if (orderXML.length() == 1)
+				this.order = int(orderXML[0].@value);
 		}
 		
 		public function toString():String {

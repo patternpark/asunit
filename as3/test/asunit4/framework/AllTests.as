@@ -5,6 +5,7 @@ package asunit4.framework {
 	import asunit4.framework.TestIteratorAsyncMethodTest;
 	import asunit4.framework.TestIteratorIgnoredMethodTest;
 	import asunit4.framework.TestIteratorMultiMethodTest;
+	import asunit4.framework.TestIteratorOrderedTestMethodTest;
 	import asunit4.framework.TestIteratorSingleMethodTest;
 
 	public class AllTests extends TestSuite {
@@ -15,6 +16,7 @@ package asunit4.framework {
 			addTest(new asunit4.framework.TestIteratorAsyncMethodTest());
 			addTest(new asunit4.framework.TestIteratorIgnoredMethodTest());
 			addTest(new asunit4.framework.TestIteratorMultiMethodTest());
+			addTest(new asunit4.framework.TestIteratorOrderedTestMethodTest());
 			addTest(new asunit4.framework.TestIteratorSingleMethodTest());
 		}
 	}

@@ -1,4 +1,4 @@
-package asunit4.framework 
+package asunit4.framework
 {
 	import asunit.util.ArrayIterator;
 	import asunit.util.Iterator;
@@ -94,6 +94,7 @@ package asunit4.framework
 			}
 			// For now, enforce a consistent order to enable precise testing.
 			methods.sortOn('name');
+			methods.sortOn('order');
 			return methods;
 		}
 		

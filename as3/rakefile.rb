@@ -21,6 +21,15 @@ mxmlc 'bin/AsUnitRunner.swf' do |t|
   t.source_path << 'src'
   t.input = 'test/AsUnitRunner.as'
   t.debug = true
+  t.appended_args = []
+  t.appended_args << "-keep-as3-metadata += Test"
+  t.appended_args << "-keep-as3-metadata += Suite"
+  t.appended_args << "-keep-as3-metadata += Before"
+  t.appended_args << "-keep-as3-metadata += After"
+  t.appended_args << "-keep-as3-metadata += Ignore"
+  t.appended_args << "-keep-as3-metadata += BeforeClass"
+  t.appended_args << "-keep-as3-metadata += AfterClass"
+  t.appended_args << "-keep-as3-metadata += RunWith"
 end
 
 ##########################################

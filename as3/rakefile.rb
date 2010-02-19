@@ -1,16 +1,31 @@
 require 'sprout'
 sprout 'as3'
 
-ASUNIT_VERSION = '2.8'
+ASUNIT_VERSION = '4.1'
 
 ##########################################
 # To build from this file, install Ruby (http://ruby-lang.org)
 # and RubyGems (http://rubygems.org/), then run:
-#   gem install sprout
 #   gem install rake
+#   gem install sprout
 #   rake
 # This should walk you through the installation
 # of required gems, compilers and vms
+
+##########################################
+# Define the known Meta Data tags for
+# Flex 3 SDK inclusion:
+
+def as3_meta_data_args
+  ["-compiler.keep-as3-metadata += Test",
+  "-compiler.keep-as3-metadata += Suite",
+  "-compiler.keep-as3-metadata += Before",
+  "-compiler.keep-as3-metadata += After",
+  "-compiler.keep-as3-metadata += Ignore",
+  "-compiler.keep-as3-metadata += BeforeClass",
+  "-compiler.keep-as3-metadata += AfterClass",
+  "-compiler.keep-as3-metadata += RunWith"]
+end
 
 ##########################################
 # Compile the Test Harness
@@ -21,16 +36,42 @@ mxmlc 'bin/AsUnitRunner.swf' do |t|
   t.source_path << 'src'
   t.input = 'test/AsUnitRunner.as'
   t.debug = true
-  t.appended_args = []
-  t.appended_args << "-keep-as3-metadata += Test"
-  t.appended_args << "-keep-as3-metadata += Suite"
-  t.appended_args << "-keep-as3-metadata += Before"
-  t.appended_args << "-keep-as3-metadata += After"
-  t.appended_args << "-keep-as3-metadata += Ignore"
-  t.appended_args << "-keep-as3-metadata += BeforeClass"
-  t.appended_args << "-keep-as3-metadata += AfterClass"
-  t.appended_args << "-keep-as3-metadata += RunWith"
+  t.gem_name = 'sprout-flex4sdk-tool'
+  t.prepended_args = as3_meta_data_args
 end
+
+##########################################
+# Compile the SWC
+
+compc 'bin/AsUnit4.swc' do |t|
+  t.include_sources << 'src'
+  t.source_path << 'src'
+  t.prepended_args = as3_meta_data_args
+end
+
+# TODO: The :swc task should also call
+# this task to build the AIR-support
+# version of the SWC
+# Had trouble creating a SWC with 
+# AIR dependencies without including
+# a bunch of AIR-only classes.
+compc 'bin/AsUnit4-AIR.swc' do |t|
+  t.gem_name = 'sprout-flex4sdk-tool'
+  t.prepended_args = as3_meta_data_args
+  t.include_sources << 'src'
+  t.include_sources << 'air'
+  t.source_path << 'src'
+  t.source_path << 'air'
+  
+  # Include air swcs to avoid failures
+  # on AirRunner:
+  t.include_libraries << 'lib/airglobal.swc'
+  t.include_libraries << 'lib/airframework.swc'
+end
+
+desc "Compile the AsUnit swc"
+#task :swc => ['bin/AsUnit4.swc', 'bin/AsUnit4-AIR.swc']
+task :swc => 'bin/AsUnit4.swc'
 
 ##########################################
 # Generate documentation
@@ -54,17 +95,36 @@ desc "Compile and run the test harness"
 flashplayer :run => 'bin/AsUnitRunner.swf'
 
 ##########################################
-# Package framework ZIPs and SWCs
+# Package framework ZIPs
 
 archive = "bin/asunit3.#{ASUNIT_VERSION}.zip"
 
-zip archive do |t|
-  t.input = 'src/asunit'
-  puts "Created zip archive at: #{archive}"
+# Create the dist package so that we can 
+# distribute src and examples packages.
+file 'dist' => :swc do
+  FileUtils.mkdir_p 'dist'
+  FileUtils.mkdir_p 'dist/libs'
+  
+  FileUtils.cp_r 'bin/AsUnit4.swc', 'dist/libs/'
+  FileUtils.cp_r 'src', 'dist/src'
+  FileUtils.cp_r 'examples', 'dist/examples'
+  FileUtils.cp_r 'air/asunit/textui/AirRunner.as', 'dist/src/asunit/textui/AirRunner.as'
 end
 
+# Remove the dist package
+task :remove_dist do
+  FileUtils.rm_rf 'dist'
+end
+
+zip archive do |t|
+  t.input = 'dist'
+end
+
+CLEAN.add 'bin/*.zip'
+CLEAN.add 'dist'
+
 desc "Create zip archives"
-task :zip => archive
+task :zip => [:clean, 'dist', archive, :remove_dist]
 
 ##########################################
 # Set up task wrappers

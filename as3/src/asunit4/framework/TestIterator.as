@@ -6,7 +6,6 @@ package asunit4.framework
 	import flash.utils.describeType;
 
 	public class TestIterator {
-		public var async:Boolean;
 		
 		protected var beforeClassMethods:Iterator;
 		protected var beforeMethods:Iterator;
@@ -36,8 +35,6 @@ package asunit4.framework
 			beforeMethods 		= new ArrayIterator(getBeforeMethods(test));
 			afterMethods  		= new ArrayIterator(getAfterMethods(test));
 			afterClassMethods 	= new ArrayIterator(getAfterClassMethods(test));
-			
-			async = isAsync(test);
 		}
 		
 		/**
@@ -122,22 +119,6 @@ package asunit4.framework
 		
 		public static function isTest(test:Object):Boolean {
 			return getTestMethods(test).length > 0;
-		}
-		
-		public static function isAsync(test:Object):Boolean {
-			var typeInfo:XML = describeType(test);
-			if (typeInfo.@base == 'Class') typeInfo = typeInfo.factory[0];
-
-			var asyncs:XMLList = typeInfo.method.(hasOwnProperty("metadata")
-				&&
-				(  metadata.@name == 'Test'
-				|| metadata.@name == 'Before'
-				|| metadata.@name == 'After'
-				|| metadata.@name == 'BeforeClass'
-				|| metadata.@name == 'AfterClass')
-				).metadata.arg.(@value == 'async');
-
-			return asyncs.length() > 0;
 		}
 		
 		////////////////////////////////////////////////////////////////////////////

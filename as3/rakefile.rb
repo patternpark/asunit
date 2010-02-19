@@ -20,6 +20,7 @@ mxmlc 'bin/AsUnitRunner.swf' do |t|
   t.default_size = '1000 600'
   t.source_path << 'src'
   t.input = 'test/AsUnitRunner.as'
+  t.debug = true
 end
 
 ##########################################

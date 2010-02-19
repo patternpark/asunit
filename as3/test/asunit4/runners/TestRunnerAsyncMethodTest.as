@@ -92,7 +92,7 @@ import flash.utils.setTimeout;
 
 class AsyncMethodSuccessTest {
 	
-	[Test(async,timeout="100")]
+	[Test(timeout="100")]
 	public function operation_delayed_but_fast_enough_will_succeed():void {
 		var delegate:Function = asunit4.async.addAsync(onComplete);
 		setTimeout(delegate, 0);
@@ -105,7 +105,7 @@ class AsyncMethodSuccessTest {
 
 class AsyncMethodTooSlowTest {
 	
-	[Test(async,timeout="0")]
+	[Test(timeout="0")]
 	public function operation_too_slow_will_fail():void {
 		var delegate:Function = asunit4.async.addAsync(onComplete);
 		setTimeout(delegate, 1);
@@ -120,7 +120,7 @@ class AsyncDelegateCalledSynchronouslyTest {
 	
 	private var handlerWasCalled:Boolean = false;
 	
-	[Test(async,timeout="10")]
+	[Test(timeout="10")]
 	public function calling_delegate_synchronously_should_succeed():void {
 		var delegate:Function = asunit4.async.addAsync(onComplete);
 		delegate();
@@ -133,22 +133,3 @@ class AsyncDelegateCalledSynchronouslyTest {
 	
 }
 
-/*
-class DelegateListener implements IRunListener {
-	public var _onTestFailure:Function;
-	public var _onTestSuccess:Function;
-	public var _onRunCompleted:Function;
-	
-	public function onTestFailure(failure:ITestFailure):void {
-		if (_onTestFailure != null) _onTestFailure(failure);
-	}
-	
-	public function onTestSuccess(success:ITestSuccess):void {
-		if (_onTestSuccess != null) _onTestSuccess(success);
-	}
-	
-	public function onRunCompleted(result:IResult):void {
-		if (_onRunCompleted != null) _onRunCompleted(result);
-	}
-}
-*/

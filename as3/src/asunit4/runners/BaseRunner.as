@@ -17,13 +17,13 @@ package asunit4.runners {
 		public function run(suite:Class, result:IResult):void {
 			this.result = result;
 			suiteRunner.addEventListener(Event.COMPLETE, onSuiteCompleted);
-			result.startRun();
+			result.onRunStarted();
 			suiteRunner.run(suite, result);
 		}
 		
 		protected function onSuiteCompleted(e:Event):void {
 			suiteRunner.removeEventListener(Event.COMPLETE, onSuiteCompleted);
-			result.endRun();
+			result.onRunCompleted();
 			dispatchEvent(e);
 		}
 	}

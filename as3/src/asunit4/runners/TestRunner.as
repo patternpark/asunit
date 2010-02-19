@@ -45,7 +45,7 @@ package asunit4.runners
 			Async.instance.addEventListener(TimeoutCommandEvent.TIMED_OUT,	onAsyncMethodTimedOut);
 			
 			startTime = getTimer();
-			this.result.startTest(currentTest);
+			this.result.onTestStarted(currentTest);
 			
 			methodsToRun = new TestIterator(test, testMethodName);
 			runNextMethod();
@@ -150,7 +150,7 @@ package asunit4.runners
 			Async.instance.removeEventListener(TimeoutCommandEvent.TIMED_OUT,	onAsyncMethodTimedOut);
 			Async.instance.cancelPending();
 			
-			this.result.endTest(currentTest);
+			this.result.onTestCompleted(currentTest);
 			
 			//TODO: move out because runTime is for whole run, not one test
 			//result.runTime = getTimer() - startTime;

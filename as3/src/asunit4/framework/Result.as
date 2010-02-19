@@ -1,4 +1,4 @@
-package asunit4.framework 
+package asunit4.framework
 {
 	import asunit.framework.ITestFailure;
 
@@ -78,29 +78,25 @@ package asunit4.framework
 			listeners.splice(listeners.indexOf(listener), 1);
 		}
 		
-		public function startRun():void {
-			//trace('Result.startRun()');
+		public function onRunStarted():void {
 			for each (var listener:IRunListener in listeners) {
 				listener.onRunStarted();
 			}
 		}
 		
-		public function endRun():void {
-			//trace('Result.endRun()');
+		public function onRunCompleted():void {
 			for each (var listener:IRunListener in listeners) {
 				listener.onRunCompleted(this);
 			}
 		}
 	
-		public function startTest(test:Object):void {
-			//trace('Result.startTest() ' + test);
+		public function onTestStarted(test:Object):void {
 			for each (var listener:IRunListener in listeners) {
 				listener.onTestStarted(test);
 			}
 		}
 		
-		public function endTest(test:Object):void {
-			//trace('Result.endTest() ' + test);
+		public function onTestCompleted(test:Object):void {
 			for each (var listener:IRunListener in listeners) {
 				listener.onTestCompleted(test);
 			}
@@ -111,7 +107,6 @@ package asunit4.framework
          * caused the failure.
          */
         public function addFailure(failure:ITestFailure):void {
-			//trace('Result.addFailure() - ' + failure);
 			if (failure.isFailure)
 				_failures.push(failure);
 			else
@@ -123,7 +118,6 @@ package asunit4.framework
         }
 		
         public function addSuccess(success:ITestSuccess):void {
-			//trace('Result.addSuccess() - ' + success);
 			_successes.push(success);
 			
 			for each (var listener:IRunListener in listeners) {

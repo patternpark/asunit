@@ -1,4 +1,4 @@
-﻿package asunit4.framework 
+﻿package asunit4.framework
 {
 	import asunit.framework.ITestFailure;
 
@@ -30,11 +30,11 @@
 		
 		function get wasSuccessful():Boolean;
 		
-		function startRun():void;
-		function endRun():void;
+		function onRunStarted():void;
+		function onRunCompleted():void;
 		
-		function startTest(test:Object):void;
-		function endTest(test:Object):void;
+		function onTestStarted(test:Object):void;
+		function onTestCompleted(test:Object):void;
 		
 		function get runTime():Number;
 		function set runTime(value:Number):void;

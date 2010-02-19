@@ -7,7 +7,6 @@ package asunit4.runners {
 
 	public class BaseRunner extends EventDispatcher {
 		protected var suiteRunner:SuiteRunner;
-		protected var listener:IRunListener;
 		protected var result:IResult;
 		
 		public function BaseRunner() {
@@ -23,7 +22,7 @@ package asunit4.runners {
 		
 		protected function onSuiteCompleted(e:Event):void {
 			suiteRunner.removeEventListener(Event.COMPLETE, onSuiteCompleted);
-			result.onRunCompleted();
+			result.onRunCompleted(result);
 			dispatchEvent(e);
 		}
 	}

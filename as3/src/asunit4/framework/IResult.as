@@ -5,14 +5,10 @@
 	/**
 	 *
 	 */
-	public interface IResult {
+	public interface IResult extends IRunListener, ITestListener {
 		
 		function addListener(listener:IRunListener):void;
 		function removeListener(listener:IRunListener):void;
-		
-		function addFailure(failure:ITestFailure):void;
-		function addSuccess(success:ITestSuccess):void;
-		function addIgnoredTest(method:Method):void;
 		
 		function get errors():Array;
 		function get errorCount():uint;
@@ -29,12 +25,6 @@
 		function get runCount():uint;
 		
 		function get wasSuccessful():Boolean;
-		
-		function onRunStarted():void;
-		function onRunCompleted():void;
-		
-		function onTestStarted(test:Object):void;
-		function onTestCompleted(test:Object):void;
 		
 		function get runTime():Number;
 		function set runTime(value:Number):void;

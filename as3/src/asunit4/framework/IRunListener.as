@@ -2,13 +2,8 @@
 	import asunit.framework.ITestFailure;
 	import asunit4.framework.IResult;
 	
-	public interface IRunListener {
+	public interface IRunListener extends ITestListener {
 		function onRunStarted():void;
 		function onRunCompleted(result:IResult):void;
-		function onTestStarted(test:Object):void;
-		function onTestCompleted(test:Object):void;
-		function onTestFailure(failure:ITestFailure):void;
-		function onTestSuccess(success:ITestSuccess):void;
-		function onTestIgnored(method:Method):void;
 	}
 }

@@ -84,7 +84,7 @@ package asunit4.framework
 			}
 		}
 		
-		public function onRunCompleted():void {
+		public function onRunCompleted(result:IResult):void {
 			for each (var listener:IRunListener in listeners) {
 				listener.onRunCompleted(this);
 			}
@@ -106,7 +106,7 @@ package asunit4.framework
          * Adds a failure to the list of failures. The passed in exception
          * caused the failure.
          */
-        public function addFailure(failure:ITestFailure):void {
+        public function onTestFailure(failure:ITestFailure):void {
 			if (failure.isFailure)
 				_failures.push(failure);
 			else
@@ -117,7 +117,7 @@ package asunit4.framework
 			}
         }
 		
-        public function addSuccess(success:ITestSuccess):void {
+        public function onTestSuccess(success:ITestSuccess):void {
 			_successes.push(success);
 			
 			for each (var listener:IRunListener in listeners) {
@@ -125,7 +125,7 @@ package asunit4.framework
 			}
 		}
 		
-        public function addIgnoredTest(method:Method):void {
+        public function onTestIgnored(method:Method):void {
 			_ignoredTests.push(method);
 			
 			for each (var listener:IRunListener in listeners) {

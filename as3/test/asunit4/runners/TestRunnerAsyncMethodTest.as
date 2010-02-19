@@ -1,4 +1,4 @@
-package asunit4.runners 
+package asunit4.runners
 {
 	import asunit.framework.TestCase;
 
@@ -36,12 +36,11 @@ package asunit4.runners
 		
 		//////
 		
-		public function test_async_test_method_should_have_async_true_and_timeout_value():void {
+		public function test_async_test_method_should_have_timeout_value():void {
 			var testMethods:Array = TestIterator.getTestMethods(successTest);
 			
 			assertEquals(1, testMethods.length);
 			var method0:Method = Method(testMethods[0]);
-			assertTrue(method0.async);
 			assertEquals('timeout value', 100, method0.timeout);
 		}
 

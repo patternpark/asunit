@@ -5,7 +5,6 @@
 		public var name:String;
 		public var value:Function;
 		public var metadata:XMLList;
-		public var async:Boolean;
 		public var timeout:Number = -1;
 		public var expects:String;
 		public var isTest:Boolean;
@@ -22,7 +21,6 @@
 			this.ignore = (metadata.(@name == 'Ignore').length() > 0);
 			
 			var testArgs:XMLList = testMetadata.arg;
-			this.async = (testArgs.(@value == 'async').length() > 0);
 
 			var timeoutXML:XMLList = testArgs.(@key == 'timeout');
 			if (timeoutXML.length() == 1)

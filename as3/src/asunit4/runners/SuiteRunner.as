@@ -1,7 +1,6 @@
-﻿package asunit4.runners 
+﻿package asunit4.runners
 {
 	import asunit4.framework.IResult;
-	import asunit4.framework.Result;
 	import asunit4.framework.SuiteIterator;
 
 	import flash.events.Event;
@@ -10,6 +9,9 @@
 	import flash.utils.Timer;
 
 	public class SuiteRunner extends EventDispatcher {
+		/** Can be changed at runtime. */
+		public static var DEFAULT_TEST_RUNNER:Class = TestRunner;
+		
 		protected var testRunner:TestRunner;
 		protected var suiteRunner:SuiteRunner;
 		protected var testClasses:SuiteIterator;
@@ -18,14 +20,14 @@
 		
 		public function SuiteRunner() {
 			timer = new Timer(0, 1);
-			timer.addEventListener(TimerEvent.TIMER, runNextTest);
 		}
 		
-		public function run(suite:Class, result:IResult = null):void {
-			this.result = result || new Result();
-			testRunner = new TestRunner();
+		public function run(suite:Class, result:IResult):void {
+			this.result = result;
+			testRunner = new DEFAULT_TEST_RUNNER();
 			testRunner.addEventListener(Event.COMPLETE, onTestCompleted);
 			testClasses = new SuiteIterator(suite);
+			timer.addEventListener(TimerEvent.TIMER, runNextTest);
 			
 			runNextTest();
 		}
@@ -47,6 +49,7 @@
 		}
 		
 		protected function onSuiteCompleted():void {
+			timer.removeEventListener(TimerEvent.TIMER, runNextTest);
 			dispatchEvent(new Event(Event.COMPLETE));
 		}
 				

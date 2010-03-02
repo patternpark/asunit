@@ -32,6 +32,7 @@ package asunit4.runners
 		protected var methodsToRun:TestIterator;
 		protected var methodTimeoutID:int = -1;
 		protected var methodPassed:Boolean = true;
+		protected var methodIsExecuting:Boolean = false;
 
 		public function TestRunner() {
 			timer = new Timer(0, 1);
@@ -77,6 +78,9 @@ package asunit4.runners
 				methodTimeoutID = setTimeout(onMethodTimeout, currentMethod.timeout);
 			}
 			
+			// This is used to prevent async callbacks from triggering onMethodCompleted too early.
+			methodIsExecuting = true;
+			
 			if (currentMethod.expects) {
 				var errorClass:Class = getDefinitionByName(currentMethod.expects) as Class;
 				try {
@@ -95,6 +99,8 @@ package asunit4.runners
 				}
 			}
 			
+			methodIsExecuting = false;
+			
 			if (Async.instance.hasPending) return;
 			onMethodCompleted();
 		}
@@ -112,12 +118,13 @@ package asunit4.runners
 				testListener.onTestSuccess(new TestSuccess(currentTest, currentMethod.name));
 			}
 
-			// Calling synchronously is slightly faster but keeps adding to the call stack.
-			//runNextMethod();
+			// Calling synchronously is faster but keeps adding to the call stack.
+			runNextMethod();
 			
 			// green thread for runNextMethod()
-			timer.reset();
-			timer.start();
+			// This runs much slower in Flash Player 10.1.
+			//timer.reset();
+			//timer.start();
 		}
 		
 		protected function onAsyncMethodCalled(event:TimeoutCommandEvent):void {
@@ -142,7 +149,7 @@ package asunit4.runners
 		}
 		
 		protected function onAsyncMethodCompleted(event:Event = null):void {
-			if (!Async.instance.hasPending) {
+			if (!methodIsExecuting && !Async.instance.hasPending) {
 				onMethodCompleted();
 			}
 		}

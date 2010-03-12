@@ -1,9 +1,12 @@
 ﻿package asunit4.async {
+
 	import asunit.framework.TestCase;
+
+	import asunit4.events.TimeoutCommandEvent;
+
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.setTimeout;
-	import asunit4.events.TimeoutCommandEvent;
 
 	public class AsyncTest extends TestCase {
 		private var dispatcher:EventDispatcher;
@@ -21,9 +24,7 @@
 			dispatcher = null;
 			command = null;
 		}
-
-		//////
-		
+        
 		public function test_addAsync_handler_can_be_retrieved_by_test_instance():void {
 			var cancelTimeout:Function = asunit4.async.addAsync(foo, 111);
 			

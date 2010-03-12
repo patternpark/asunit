@@ -1,8 +1,8 @@
-﻿package asunit4.runners
-{
+﻿package asunit4.runners {
+
 	import asunit4.framework.IResult;
 	import asunit4.framework.SuiteIterator;
-
+    
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;

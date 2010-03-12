@@ -1,15 +1,12 @@
-﻿package asunit4.async
-{
+﻿package asunit4.async {
+
 	import asunit.framework.ErrorEvent;
 	import asunit4.events.TimeoutCommandEvent;
-	import flash.events.EventDispatcher;
 
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 
-	/**
-	 *
-	 */
 	public class Async extends EventDispatcher {
 		
 		public static var DEFAULT_TIMEOUT:uint = 50;

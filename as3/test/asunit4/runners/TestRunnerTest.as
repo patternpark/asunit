@@ -1,10 +1,12 @@
 package asunit4.runners {
+
+	import asunit.framework.ITestFailure;
 	import asunit.framework.TestCase;
 	import asunit4.framework.Result;
-	import flash.events.Event;
-	import asunit4.support.MultiMethodTest;
-	import asunit.framework.ITestFailure;
 	import asunit4.framework.TestFailure;
+	import asunit4.support.MultiMethodTest;
+    
+	import flash.events.Event;
 
 	public class TestRunnerTest extends TestCase {
 		private var runner:TestRunner;
@@ -32,8 +34,7 @@ package asunit4.runners {
 			assertTrue("TestRunner instantiated", runner is TestRunner);
 		}
 		
-		public function test_free_test_does_not_extend_TestCase():void
-		{
+		public function test_free_test_does_not_extend_TestCase():void {
 			assertFalse(test is TestCase);
 		}
 
@@ -73,7 +74,7 @@ package asunit4.runners {
 			
 			assertEquals('checked all methodsCalled', MultiMethodTest.methodsCalled.length, i);
 		}
-		//////
+
 		public function test_run_triggers_ResultEvent_with_wasSuccessful_false_and_failures():void {
 			runner.addEventListener(Event.COMPLETE, addAsync(check_Result_wasSuccessful_false, 500));
 			
@@ -89,7 +90,7 @@ package asunit4.runners {
 			var failure0:ITestFailure = failures[0] as TestFailure;
 			assertSame(test, failure0.failedTest);
 		}
-		//////
+
 		public function test_run_test_method_by_name_executes_proper_method_sequence():void {
 			runner.addEventListener(Event.COMPLETE, addAsync(check_methodsCalled_after_running_test_method_by_name, 500));
 			

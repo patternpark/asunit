@@ -35,7 +35,11 @@ package asunit4.runners {
 			timer.addEventListener(TimerEvent.TIMER, runNextMethod);
 		}
 		
-		public function run(test:Class, testListener:ITestListener, testMethodName:String = ""):void {
+		public function run(test:Class, testListener:ITestListener):void {
+			runMethodByName(test, testListener, "");
+		}
+		
+		public function runMethodByName(test:Class, testListener:ITestListener, testMethodName:String):void {
 			currentTest = new test();
 			this.testListener = testListener;
 			currentMethod = null;
@@ -47,7 +51,7 @@ package asunit4.runners {
 			this.testListener.onTestStarted(currentTest);
 			
 			methodsToRun = new TestIterator(currentTest, testMethodName);
-			runNextMethod();
+			runNextMethod();			
 		}
 		
 		protected function runNextMethod(e:TimerEvent = null):void {

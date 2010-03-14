@@ -96,7 +96,7 @@ package asunit4.runners {
 			runner.addEventListener(Event.COMPLETE, delegate);
 			
 			var testMethodName:String = 'stage_is_null_by_default';
-			runner.run(test, runnerResult, testMethodName);
+			runner.runMethodByName(test, runnerResult, testMethodName);
 		}
 		
 		private function check_methodsCalled_after_running_test_method_by_name(e:Event):void {

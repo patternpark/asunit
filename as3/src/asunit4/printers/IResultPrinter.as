@@ -1,7 +1,6 @@
-﻿package asunit4.printers {
-	
+package asunit4.printers {
 	import asunit4.framework.IResult;
-	
+
 	public interface IResultPrinter {
 		
 		function startTestRun():void;

@@ -1,5 +1,4 @@
-package asunit4.ui 
-{
+package asunit4.ui {
 	import asunit4.framework.IResult;
 	import asunit4.framework.Result;
 	import asunit4.printers.FlashDevelopPrinter;

@@ -1,5 +1,4 @@
-﻿package asunit4.printers
-{
+package asunit4.printers {
 	import asunit.framework.ITestFailure;
 
 	import asunit4.framework.IResult;
@@ -13,8 +12,7 @@
 	import flash.net.XMLSocket;
 	import flash.utils.getQualifiedClassName;
 
-	public class FlashBuilderPrinter implements IRunListener
-	{
+	public class FlashBuilderPrinter implements IRunListener {
 		protected var projectName:String;
 		protected var contextName:String;
 		protected var messageQueue:Array;

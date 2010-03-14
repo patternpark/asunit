@@ -1,13 +1,13 @@
 package asunit4.async {
 	import asunit.framework.Command;
-	import flash.errors.IllegalOperationError;
+
+	import asunit4.events.TimeoutCommandEvent;
+
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
-	import asunit.framework.ErrorEvent;
-	import asunit4.events.TimeoutCommandEvent;
-	
+
 	[Event(name="called",	type="flash.events.TimeoutCommandEvent")]
 	[Event(name="timedOut",	type="flash.events.TimeoutCommandEvent")]
 

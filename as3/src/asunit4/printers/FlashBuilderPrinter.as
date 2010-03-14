@@ -41,24 +41,6 @@ package asunit4.printers {
 		public function onTestCompleted(test:Object):void {
         }
 		
-		public function addResult(result:IResult):void {
-			var failure:ITestFailure;
-			
-			for each (failure in result.errors) {
-				sendMessage(getFailureMessage(failure));
-			}
-			
-			for each (failure in result.failures) {
-				sendMessage(getFailureMessage(failure));
-			}
-			
-			for each (var success:ITestSuccess in result.successes) {
-				var xmlMessageSuccess:String = "<testCase name='" + success.method
-					+ "' testSuite='" + getQualifiedClassName(success.test) + "' status='success'/>";
-				sendMessage(xmlMessageSuccess);
-			}
-		}
-		
 		// works for both errors and failures
 		public function onTestFailure(failure:ITestFailure):void {
 			sendMessage(getFailureMessage(failure));

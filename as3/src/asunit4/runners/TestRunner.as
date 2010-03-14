@@ -3,7 +3,8 @@ package asunit4.runners {
 
 	import asunit4.async.Async;
 	import asunit4.events.TimeoutCommandEvent;
-	import asunit4.framework.ITestListener;
+	import asunit4.framework.IResult;
+	import asunit4.framework.IRunner;
 	import asunit4.framework.Method;
 	import asunit4.framework.TestFailure;
 	import asunit4.framework.TestIterator;
@@ -19,12 +20,12 @@ package asunit4.runners {
 	import flash.utils.getTimer;
 	import flash.utils.setTimeout;
 
-	public class TestRunner extends EventDispatcher {
+	public class TestRunner extends EventDispatcher implements IRunner {
 		internal var currentTest:Object; // partially exposed for unit testing
 		protected var currentMethod:Method;
 		protected var startTime:Number;
 		protected var timer:Timer;
-		protected var testListener:ITestListener;
+		protected var result:IResult;
 		protected var methodsToRun:TestIterator;
 		protected var methodTimeoutID:int = -1;
 		protected var methodPassed:Boolean = true;
@@ -35,20 +36,20 @@ package asunit4.runners {
 			timer.addEventListener(TimerEvent.TIMER, runNextMethod);
 		}
 		
-		public function run(test:Class, testListener:ITestListener):void {
-			runMethodByName(test, testListener, "");
+		public function run(test:Class, result:IResult):void {
+			runMethodByName(test, result, "");
 		}
 		
-		public function runMethodByName(test:Class, testListener:ITestListener, testMethodName:String):void {
+		public function runMethodByName(test:Class, result:IResult, testMethodName:String):void {
 			currentTest = new test();
-			this.testListener = testListener;
+			this.result = result;
 			currentMethod = null;
 						
 			Async.instance.addEventListener(TimeoutCommandEvent.CALLED,		onAsyncMethodCalled);
 			Async.instance.addEventListener(TimeoutCommandEvent.TIMED_OUT,	onAsyncMethodTimedOut);
 			
 			startTime = getTimer();
-			this.testListener.onTestStarted(currentTest);
+			this.result.onTestStarted(currentTest);
 			
 			methodsToRun = new TestIterator(currentTest, testMethodName);
 			runNextMethod();			
@@ -69,7 +70,7 @@ package asunit4.runners {
 			methodPassed = true; // innocent until proven guilty by recordFailure()
 			
 			if (currentMethod.ignore) {
-				testListener.onTestIgnored(currentMethod);
+				result.onTestIgnored(currentMethod);
 				onMethodCompleted();
 				return;
 			}
@@ -115,7 +116,7 @@ package asunit4.runners {
 			Async.instance.cancelPending();
 			
 			if (currentMethod.isTest && methodPassed && !currentMethod.ignore) {
-				testListener.onTestSuccess(new TestSuccess(currentTest, currentMethod.name));
+				result.onTestSuccess(new TestSuccess(currentTest, currentMethod.name));
 			}
 
 			// Calling synchronously is faster but keeps adding to the call stack.
@@ -145,7 +146,7 @@ package asunit4.runners {
 		
 		protected function recordFailure(error:Error):void {
 			methodPassed = false;
-			testListener.onTestFailure(new TestFailure(currentTest, currentMethod.name, error));
+			result.onTestFailure(new TestFailure(currentTest, currentMethod.name, error));
 		}
 		
 		protected function onAsyncMethodCompleted(event:Event = null):void {
@@ -159,10 +160,10 @@ package asunit4.runners {
 			Async.instance.removeEventListener(TimeoutCommandEvent.TIMED_OUT,	onAsyncMethodTimedOut);
 			Async.instance.cancelPending();
 			
-			this.testListener.onTestCompleted(currentTest);
+			result.onTestCompleted(currentTest);
 			
 			//TODO: move out because runTime is for whole run, not one test
-			//testListener.runTime = getTimer() - startTime;
+			//result.runTime = getTimer() - startTime;
 			
 			dispatchEvent(new Event(Event.COMPLETE));
 		}

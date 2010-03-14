@@ -1,5 +1,6 @@
 package asunit4.runners {
 	import asunit4.framework.IResult;
+	import asunit4.framework.IRunner;
 	import asunit4.framework.SuiteIterator;
 
 	import flash.events.Event;
@@ -7,7 +8,7 @@ package asunit4.runners {
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 
-	public class SuiteRunner extends EventDispatcher {
+	public class SuiteRunner extends EventDispatcher implements IRunner {
 		/** Can be changed at runtime. */
 		public static var DEFAULT_TEST_RUNNER:Class = TestRunner;
 		

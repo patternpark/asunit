@@ -13,9 +13,9 @@ package asunit4.runners
 	public class TestRunnerAsyncMethodTest extends TestCase {
 		private var runner:TestRunner;
 		private var runnerResult:Result;
-		private var successTest:AsyncMethodSuccessTest;
-		private var tooSlowTest:AsyncMethodTooSlowTest;
-		private var syncTest:AsyncDelegateCalledSynchronouslyTest;
+		private var successTest:Class;
+		private var tooSlowTest:Class;
+		private var syncTest:Class;
 
 		public function TestRunnerAsyncMethodTest(testMethod:String = null) {
 			super(testMethod);
@@ -24,9 +24,9 @@ package asunit4.runners
 		protected override function setUp():void {
 			runner = new TestRunner();
 			runnerResult = new Result();
-			successTest = new AsyncMethodSuccessTest();
-			syncTest = new AsyncDelegateCalledSynchronouslyTest();
-			tooSlowTest = new AsyncMethodTooSlowTest();
+			successTest = AsyncMethodSuccessTest;
+			syncTest = AsyncDelegateCalledSynchronouslyTest;
+			tooSlowTest = AsyncMethodTooSlowTest;
 		}
 
 		protected override function tearDown():void {

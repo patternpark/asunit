@@ -20,7 +20,7 @@ package asunit4.runners {
 	import flash.utils.setTimeout;
 
 	public class TestRunner extends EventDispatcher {
-		protected var currentTest:Object;
+		internal var currentTest:Object; // partially exposed for unit testing
 		protected var currentMethod:Method;
 		protected var startTime:Number;
 		protected var timer:Timer;
@@ -35,8 +35,8 @@ package asunit4.runners {
 			timer.addEventListener(TimerEvent.TIMER, runNextMethod);
 		}
 		
-		public function run(test:Object, testListener:ITestListener, testMethodName:String = ""):void {
-			currentTest = test;
+		public function run(test:Class, testListener:ITestListener, testMethodName:String = ""):void {
+			currentTest = new test();
 			this.testListener = testListener;
 			currentMethod = null;
 						
@@ -46,7 +46,7 @@ package asunit4.runners {
 			startTime = getTimer();
 			this.testListener.onTestStarted(currentTest);
 			
-			methodsToRun = new TestIterator(test, testMethodName);
+			methodsToRun = new TestIterator(currentTest, testMethodName);
 			runNextMethod();
 		}
 		

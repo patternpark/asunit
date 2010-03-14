@@ -38,7 +38,7 @@ package asunit4.runners {
 			}
 			
 			var testClass:Class = testClasses.next();
-			testRunner.run(new testClass(), result);
+			testRunner.run(testClass, result);
 		}
 		
 		protected function onTestCompleted(e:Event):void {

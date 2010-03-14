@@ -9,7 +9,6 @@ package asunit4.runners
 
 	public class TestRunnerIgnoredMethodTest extends TestCase {
 		private var runner:TestRunner;
-		private var ignoredTest:IgnoredMethodTest;
 		private var runnerResult:Result;
 		
 		public function TestRunnerIgnoredMethodTest(testMethod:String = null) {
@@ -18,20 +17,18 @@ package asunit4.runners
 
 		protected override function setUp():void {
 			runner = new TestRunner();
-			ignoredTest = new IgnoredMethodTest();
 			runnerResult = new Result();
 		}
 
 		protected override function tearDown():void {
 			runner = null;
-			ignoredTest = null;
 			runnerResult = null;
 		}
 
 		//////
 		public function test_run_with_ignored_method():void {
 			runner.addEventListener(Event.COMPLETE, addAsync(check_Result_has_one_ignored_method, 100));
-			runner.run(ignoredTest, runnerResult);
+			runner.run(IgnoredMethodTest, runnerResult);
 		}
 		
 		private function check_Result_has_one_ignored_method(e:Event):void {

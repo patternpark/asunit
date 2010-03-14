@@ -8,7 +8,6 @@ package asunit4.runners {
 
 	public class TestRunnerErrorMethodTest extends TestCase {
 		private var runner:TestRunner;
-		private var testWithError:ErrorInMethodTest;
 		private var runnerResult:Result;
 		
 		public function TestRunnerErrorMethodTest(testMethod:String = null) {
@@ -17,13 +16,11 @@ package asunit4.runners {
 
 		protected override function setUp():void {
 			runner = new TestRunner();
-			testWithError = new ErrorInMethodTest();
 			runnerResult = new Result();
 		}
 
 		protected override function tearDown():void {
 			runner = null;
-			testWithError = null;
 			runnerResult = null;
 		}
 
@@ -34,7 +31,7 @@ package asunit4.runners {
 		//////
 		public function test_run_with_errors():void {
 			runner.addEventListener(Event.COMPLETE, addAsync(check_Result_has_one_error, 100));
-			runner.run(testWithError, runnerResult);
+			runner.run(ErrorInMethodTest, runnerResult);
 		}
 		
 		private function check_Result_has_one_error(e:Event):void {
@@ -45,7 +42,7 @@ package asunit4.runners {
 			
 			var failure0:TestFailure = runnerResult.errors[0] as TestFailure;
 			assertTrue('thrownException is correct type', failure0.thrownException is ArgumentError);
-			assertSame('failedTest reference', testWithError, failure0.failedTest);
+			assertTrue('failedTest is an instance of the test class', failure0.failedTest is ErrorInMethodTest);
 			assertSame('failedMethod name', 'throw_ArgumentError', failure0.failedMethod);
 		}
 		

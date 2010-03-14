@@ -11,7 +11,7 @@ package asunit4.runners {
 	public class TestRunnerTest extends TestCase {
 		private var runner:TestRunner;
 		private var runnerResult:Result;
-		private var test:MultiMethodTest;
+		private var test:Class;
 
 		public function TestRunnerTest(testMethod:String = null) {
 			super(testMethod);
@@ -22,7 +22,7 @@ package asunit4.runners {
 			runnerResult = new Result();
 			// Yes, statics are ugly, but we're testing that static methods are called, e.g. [BeforeClass].
 			MultiMethodTest.methodsCalled = [];
-			test = new MultiMethodTest();
+			test = MultiMethodTest;
 		}
 
 		protected override function tearDown():void {
@@ -51,23 +51,23 @@ package asunit4.runners {
 			assertSame(MultiMethodTest.runBeforeClass1, 		MultiMethodTest.methodsCalled[i++]);
 			assertSame(MultiMethodTest.runBeforeClass2, 		MultiMethodTest.methodsCalled[i++]);
 			
-			assertSame(test.runBefore1, 						MultiMethodTest.methodsCalled[i++]);
-			assertSame(test.runBefore2, 						MultiMethodTest.methodsCalled[i++]);
-			assertSame(test.fail_assertEquals,					MultiMethodTest.methodsCalled[i++]);
-			assertSame(test.runAfter1, 							MultiMethodTest.methodsCalled[i++]);
-			assertSame(test.runAfter2, 							MultiMethodTest.methodsCalled[i++]);
+			assertSame(runner.currentTest.runBefore1, 						MultiMethodTest.methodsCalled[i++]);
+			assertSame(runner.currentTest.runBefore2, 						MultiMethodTest.methodsCalled[i++]);
+			assertSame(runner.currentTest.fail_assertEquals,				MultiMethodTest.methodsCalled[i++]);
+			assertSame(runner.currentTest.runAfter1, 						MultiMethodTest.methodsCalled[i++]);
+			assertSame(runner.currentTest.runAfter2, 						MultiMethodTest.methodsCalled[i++]);
 
-			assertSame(test.runBefore1, 						MultiMethodTest.methodsCalled[i++]);
-			assertSame(test.runBefore2, 						MultiMethodTest.methodsCalled[i++]);
-			assertSame(test.numChildren_is_0_by_default,		MultiMethodTest.methodsCalled[i++]);
-			assertSame(test.runAfter1, 							MultiMethodTest.methodsCalled[i++]);
-			assertSame(test.runAfter2, 							MultiMethodTest.methodsCalled[i++]);
+			assertSame(runner.currentTest.runBefore1, 						MultiMethodTest.methodsCalled[i++]);
+			assertSame(runner.currentTest.runBefore2, 						MultiMethodTest.methodsCalled[i++]);
+			assertSame(runner.currentTest.numChildren_is_0_by_default,		MultiMethodTest.methodsCalled[i++]);
+			assertSame(runner.currentTest.runAfter1, 						MultiMethodTest.methodsCalled[i++]);
+			assertSame(runner.currentTest.runAfter2, 						MultiMethodTest.methodsCalled[i++]);
 			
-			assertSame(test.runBefore1, 						MultiMethodTest.methodsCalled[i++]);
-			assertSame(test.runBefore2, 						MultiMethodTest.methodsCalled[i++]);
-			assertSame(test.stage_is_null_by_default, 			MultiMethodTest.methodsCalled[i++]);
-			assertSame(test.runAfter1, 							MultiMethodTest.methodsCalled[i++]);
-			assertSame(test.runAfter2, 							MultiMethodTest.methodsCalled[i++]);
+			assertSame(runner.currentTest.runBefore1, 						MultiMethodTest.methodsCalled[i++]);
+			assertSame(runner.currentTest.runBefore2, 						MultiMethodTest.methodsCalled[i++]);
+			assertSame(runner.currentTest.stage_is_null_by_default, 		MultiMethodTest.methodsCalled[i++]);
+			assertSame(runner.currentTest.runAfter1, 						MultiMethodTest.methodsCalled[i++]);
+			assertSame(runner.currentTest.runAfter2, 						MultiMethodTest.methodsCalled[i++]);
 			
 			assertSame(MultiMethodTest.runAfterClass1, 			MultiMethodTest.methodsCalled[i++]);
 			assertSame(MultiMethodTest.runAfterClass2, 			MultiMethodTest.methodsCalled[i++]);
@@ -88,11 +88,12 @@ package asunit4.runners {
 			assertEquals('one failure in testResult', 1, failures.length);
 			
 			var failure0:ITestFailure = failures[0] as TestFailure;
-			assertSame(test, failure0.failedTest);
+			assertTrue("failedTest is instance of test class", failure0.failedTest is test);
 		}
 
 		public function test_run_test_method_by_name_executes_proper_method_sequence():void {
-			runner.addEventListener(Event.COMPLETE, addAsync(check_methodsCalled_after_running_test_method_by_name, 500));
+			var delegate:Function = addAsync(check_methodsCalled_after_running_test_method_by_name, 500);
+			runner.addEventListener(Event.COMPLETE, delegate);
 			
 			var testMethodName:String = 'stage_is_null_by_default';
 			runner.run(test, runnerResult, testMethodName);
@@ -104,11 +105,11 @@ package asunit4.runners {
 			assertSame(MultiMethodTest.runBeforeClass1, 		MultiMethodTest.methodsCalled[i++]);
 			assertSame(MultiMethodTest.runBeforeClass2, 		MultiMethodTest.methodsCalled[i++]);
 			
-			assertSame(test.runBefore1, 						MultiMethodTest.methodsCalled[i++]);
-			assertSame(test.runBefore2, 						MultiMethodTest.methodsCalled[i++]);
-			assertSame(test.stage_is_null_by_default, 			MultiMethodTest.methodsCalled[i++]);
-			assertSame(test.runAfter1, 							MultiMethodTest.methodsCalled[i++]);
-			assertSame(test.runAfter2, 							MultiMethodTest.methodsCalled[i++]);
+			assertSame(runner.currentTest.runBefore1, 						MultiMethodTest.methodsCalled[i++]);
+			assertSame(runner.currentTest.runBefore2, 						MultiMethodTest.methodsCalled[i++]);
+			assertSame(runner.currentTest.stage_is_null_by_default, 		MultiMethodTest.methodsCalled[i++]);
+			assertSame(runner.currentTest.runAfter1, 						MultiMethodTest.methodsCalled[i++]);
+			assertSame(runner.currentTest.runAfter2, 						MultiMethodTest.methodsCalled[i++]);
 			
 			assertSame(MultiMethodTest.runAfterClass1, 			MultiMethodTest.methodsCalled[i++]);
 			assertSame(MultiMethodTest.runAfterClass2, 			MultiMethodTest.methodsCalled[i++]);

@@ -8,9 +8,9 @@ package asunit4.runners {
 
 	public class TestRunnerExpectsErrorTest extends TestCase {
 		private var runner:TestRunner;
-		private var successTest:TestExpectsArgumentErrorAndThrowsIt;
-		private var throwNothingTest:TestExpectsArgumentErrorButThrowsNothing;
-		private var throwWrongErrorTest:TestExpectsArgumentErrorButThrowsWrongError;
+		private var successTest:Class;
+		private var throwNothingTest:Class;
+		private var throwWrongErrorTest:Class;
 		private var runnerResult:Result;
 
 		public function TestRunnerExpectsErrorTest(testMethod:String = null) {
@@ -20,9 +20,9 @@ package asunit4.runners {
 		protected override function setUp():void {
 			runner = new TestRunner();
 			runnerResult = new Result();
-			successTest = new TestExpectsArgumentErrorAndThrowsIt();
-			throwNothingTest = new TestExpectsArgumentErrorButThrowsNothing();
-			throwWrongErrorTest = new TestExpectsArgumentErrorButThrowsWrongError();
+			successTest = TestExpectsArgumentErrorAndThrowsIt;
+			throwNothingTest = TestExpectsArgumentErrorButThrowsNothing;
+			throwWrongErrorTest = TestExpectsArgumentErrorButThrowsWrongError;
 		}
 
 		protected override function tearDown():void {
@@ -60,7 +60,7 @@ package asunit4.runners {
 			
 			var failure0:TestFailure = runnerResult.failures[0] as TestFailure;
 			assertTrue('thrownException is correct type', failure0.thrownException is AssertionFailedError);
-			assertSame('failedTest reference', throwNothingTest, failure0.failedTest);
+			assertTrue('failedTest is instance of the test class', failure0.failedTest is throwNothingTest);
 			assertSame('failedMethod name', 'fail_by_throwing_nothing', failure0.failedMethod);
 		}
 		

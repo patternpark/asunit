@@ -9,7 +9,6 @@ package asunit4.runners
 
 	public class SuiteRunnerTest extends TestCase {
 		private var suiteRunner:SuiteRunner;
-		private var suiteClass:Class;
 		private var runnerResult:Result;
 
 		public function SuiteRunnerTest(testMethod:String = null) {
@@ -18,13 +17,11 @@ package asunit4.runners
 
 		protected override function setUp():void {
 			suiteRunner = new SuiteRunner();
-			suiteClass = DoubleFailSuite;
 			runnerResult = new Result();
 		}
 
 		protected override function tearDown():void {
 			suiteRunner = null;
-			suiteClass = null;
 			runnerResult = null;
 		}
 		
@@ -32,7 +29,7 @@ package asunit4.runners
 		
 		public function test_run_triggers_COMPLETE_Event():void {
 			suiteRunner.addEventListener(Event.COMPLETE, addAsync(check_Result_wasSuccessful_false, 500));
-			suiteRunner.run(suiteClass, runnerResult);
+			suiteRunner.run(DoubleFailSuite, runnerResult);
 		}
 		
 		private function check_Result_wasSuccessful_false(e:Event):void {

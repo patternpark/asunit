@@ -15,7 +15,7 @@ package asunit.util {
             return list[index] != null;
         }
 
-        public function next():Object {
+        public function next():* {
             return list[index++];
         }
 

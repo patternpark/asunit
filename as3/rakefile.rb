@@ -13,18 +13,21 @@ ASUNIT_VERSION = '4.1'
 # of required gems, compilers and vms
 
 ##########################################
-# Define the known Meta Data tags for
-# Flex 3 SDK inclusion:
+# Define the known Meta Data tags:
 
-def as3_meta_data_args
-  ["-compiler.keep-as3-metadata += Test",
-  "-compiler.keep-as3-metadata += Suite",
-  "-compiler.keep-as3-metadata += Before",
-  "-compiler.keep-as3-metadata += After",
-  "-compiler.keep-as3-metadata += Ignore",
-  "-compiler.keep-as3-metadata += BeforeClass",
-  "-compiler.keep-as3-metadata += AfterClass",
-  "-compiler.keep-as3-metadata += RunWith"]
+def apply_as3_meta_data_args(t)
+  [
+    "After",
+    "AfterClass",
+    "Before",
+    "BeforeClass",
+    "Ignore",
+    "RunWith",
+    "Suite",
+    "Test"
+  ].each do |arg|
+    t.keep_as3_metadata << arg
+  end
 end
 
 ##########################################
@@ -34,10 +37,13 @@ desc "Compile the test harness"
 mxmlc 'bin/AsUnitRunner.swf' do |t|
   t.default_size = '1000 600'
   t.source_path << 'src'
+  t.source_path << 'lib/as3reflection'
   t.input = 'test/AsUnitRunner.as'
   t.debug = true
   t.gem_name = 'sprout-flex4sdk-tool'
-  t.prepended_args = as3_meta_data_args
+  t.static_link_runtime_shared_libraries = true
+
+  apply_as3_meta_data_args(t)
 end
 
 ##########################################
@@ -46,7 +52,8 @@ end
 compc 'bin/AsUnit4.swc' do |t|
   t.include_sources << 'src'
   t.source_path << 'src'
-  t.prepended_args = as3_meta_data_args
+  t.source_path << 'lib/as3reflection'
+  apply_as3_meta_data_args(t)
 end
 
 # TODO: The :swc task should also call
@@ -57,7 +64,6 @@ end
 # a bunch of AIR-only classes.
 compc 'bin/AsUnit4-AIR.swc' do |t|
   t.gem_name = 'sprout-flex4sdk-tool'
-  t.prepended_args = as3_meta_data_args
   t.include_sources << 'src'
   t.include_sources << 'air'
   t.source_path << 'src'
@@ -67,6 +73,10 @@ compc 'bin/AsUnit4-AIR.swc' do |t|
   # on AirRunner:
   t.include_libraries << 'lib/airglobal.swc'
   t.include_libraries << 'lib/airframework.swc'
+
+  t.static_link_runtime_shared_libraries = true
+
+  apply_as3_meta_data_args(t)
 end
 
 desc "Compile the AsUnit swc"
@@ -86,6 +96,9 @@ asdoc 'doc' do |t|
   # on AirRunner:
   t.library_path << 'lib/airglobal.swc'
   t.library_path << 'lib/airframework.swc'
+
+  # Not on asdoc?
+  #t.static_link_runtime_shared_libraries = true
 end
 
 ##########################################
@@ -129,7 +142,7 @@ task :zip => [:clean, 'dist', archive, :remove_dist]
 ##########################################
 # Set up task wrappers
 
-task :default => :run
+task :default => :test
 
 desc "Alias to the default task"
 task :test => :run

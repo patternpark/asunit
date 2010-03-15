@@ -1,11 +1,13 @@
-package asunit4.framework
-{
+package asunit4.framework {
+
 	import asunit.util.ArrayIterator;
 	import asunit.util.Iterator;
 
-	import flash.utils.describeType;
+    import p2.reflect.Reflection;
+    import p2.reflect.ReflectionMethod;
 
-	public class TestIterator {
+
+	public class TestIterator implements Iterator {
 		
 		protected var beforeClassMethods:Iterator;
 		protected var beforeMethods:Iterator;
@@ -82,28 +84,20 @@ package asunit4.framework
 			return getMethodsWithMetadata(test, "Ignore");
 		}
 		
-		protected static function getMethodsWithMetadata(object:Object, metadataName:String, useStatic:Boolean = false):Array {
-			//trace('========== ' + metadataName);
-			var typeInfo:XML = describeType(object);
-			if (!useStatic && typeInfo.@base == 'Class') typeInfo = typeInfo.factory[0];
-			//trace('typeInfo: ' + typeInfo);
-			
-			var methodNodes:XMLList = typeInfo.method.(hasOwnProperty("metadata")
-				&& metadata.(@name == metadataName).length() > 0);
-				
-			//trace('methodNodes: ' + methodNodes.toXMLString());
-			
-			var methods:Array = [];
-			for each (var methodNode:XML in methodNodes) {
-				var methodValue:Function = object[methodNode.@name];
-				methods[methods.length] = new Method(object, methodNode.@name, methodValue, methodNode.metadata);
-			}
-			// For now, enforce a consistent order to enable precise testing.
-			methods.sortOn('name');
-			methods.sortOn('order');
-			return methods;
-		}
-				
+		protected static function getMethodsWithMetadata(instance:Object, metaDataName:String, useStatic:Boolean = false):Array {
+            var reflection:Reflection = Reflection.create(instance);
+            var methodReflections:Array = reflection.getMembersByMetaData(metaDataName);
+
+            var methods:Array = [];
+            var methodReflection:ReflectionMethod;
+            for each(methodReflection in methodReflections) {
+                methods.push( new Method(instance, methodReflection) );
+            }
+            methods.sortOn('name');
+            methods.sortOn('order');
+            return methods;
+        }
+
 		/**
 		 *
 		 * @param	test	An instance of a class with methods that have [Before] metadata.
@@ -133,7 +127,7 @@ package asunit4.framework
  				|| afterClassMethods.hasNext();
        }
 
-        public function next():Method {
+        public function next():* {
 			if (!testMethods) return null;
 
 			if (beforeClassMethods.hasNext())

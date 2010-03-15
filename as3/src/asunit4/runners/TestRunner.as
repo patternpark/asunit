@@ -82,7 +82,15 @@ package asunit4.runners {
 			methodIsExecuting = true;
 			
 			if (currentMethod.expects) {
-				var errorClass:Class = getDefinitionByName(currentMethod.expects) as Class;
+                // TODO: [luke] Added try..catch here b/c I had a bad class name in my expects
+                // is the catch here written correctly?
+                try {
+                    var errorClass:Class = getDefinitionByName(currentMethod.expects) as Class;
+                }
+                catch(definitionError:ReferenceError) {
+                    recordFailure(new Error('Could not find Reference for: ' + currentMethod.expects));
+                    methodIsExecuting = false;
+                }
 				try {
 					Assert.assertThrows(errorClass, currentMethod.value);
 				}
@@ -147,7 +155,7 @@ package asunit4.runners {
 			methodPassed = false;
 			testListener.onTestFailure(new TestFailure(currentTest, currentMethod.name, error));
 		}
-		
+
 		protected function onAsyncMethodCompleted(event:Event = null):void {
 			if (!methodIsExecuting && !Async.instance.hasPending) {
 				onMethodCompleted();

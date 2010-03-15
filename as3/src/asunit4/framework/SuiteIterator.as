@@ -1,12 +1,16 @@
 package asunit4.framework 
 {
-	import flash.utils.describeType;
+    import asunit.util.Iterator;
+
 	import flash.utils.getDefinitionByName;
 
-	public class SuiteIterator {
+    import p2.reflect.Reflection;
+    import p2.reflect.ReflectionVariable;
+
+	public class SuiteIterator implements Iterator {
 		
         protected var list:Array;
-        protected var index:Number = 0;
+        protected var index:int;
 				
 		public function SuiteIterator(testSuite:Class) {
 			list = getTestClasses(testSuite);
@@ -15,44 +19,44 @@ package asunit4.framework
 		/**
 		 *
 		 * @param	testSuite	A Class or instance that declares tests as instance variables.
-		 * @return	An array of Class references.
+		 * @return	An array of Class references sorted on Name.
 		 */
-		public static function getTestClasses(testSuite:Class):Array {
-			if (!isSuite(testSuite) && TestIterator.isTest(testSuite))
-				return [testSuite];
-			
-			var typeInfo:XML = describeType(testSuite);
-			var testClasses:Array = [];
-			for each (var variableType:XML in typeInfo.factory[0].variable.@type) {
-				var testClass:Class = Class( getDefinitionByName(String(variableType)) );
-				// Recurse through nested suites.
-				if (isSuite(testClass)) {
-					testClasses = testClasses.concat( getTestClasses(testClass) );
-				}
-				else {
-					testClasses[testClasses.length] = testClass;
-				}
-			}
-			testClasses.sort();
-			return testClasses;
-		}
-		
-		public static function countTestClasses(testSuite:Class):uint {
-			return getTestClasses(testSuite).length;
-		}
-		
+        public function getTestClasses(suite:Class):Array {
+            if(!SuiteIterator.isSuite(suite) && TestIterator.isTest(suite)) {
+                return [suite];
+            }
+            var reflection:Reflection = Reflection.create(suite);
+            var variable:ReflectionVariable;
+            var TestConstructor:Class;
+            var result:Array = [];
+            for each(variable in reflection.variables) {
+                TestConstructor = Class(getDefinitionByName(variable.type));
+                if(SuiteIterator.isSuite(TestConstructor)) {
+                    result = result.concat( getTestClasses(TestConstructor) );
+                }
+                else {
+                    result.push(TestConstructor);
+                }
+            }
+            result.sort();
+            return result;
+        }
+
+        public function get length():uint {
+            return list.length;
+        }
+
 		public static function isSuite(possibleTestSuite:Class):Boolean {
-			var typeInfo:XML = describeType(possibleTestSuite);
-			var metadataMatchingSuite:XMLList = typeInfo.factory[0].metadata.(@name == 'Suite');
-			return metadataMatchingSuite.length() > 0;
+            return Reflection.create(possibleTestSuite).getMetaDataByName('Suite') != null;
 		}
 			
         public function hasNext():Boolean {
             return list[index] != null;
         }
 
-        public function next():Class {
-            return Class(list[index++]);
+        // Returns a Class reference:
+        public function next():* {
+            return list[index++];
         }
 
         public function reset():void {

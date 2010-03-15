@@ -82,18 +82,15 @@ package asunit4.runners {
 			methodIsExecuting = true;
 			
 			if (currentMethod.expects) {
-                // TODO: [luke] Added try..catch here b/c I had a bad class name in my expects
-                // is the catch here written correctly?
                 try {
                     var errorClass:Class = getDefinitionByName(currentMethod.expects) as Class;
-                }
-                catch(definitionError:ReferenceError) {
-                    recordFailure(new Error('Could not find Reference for: ' + currentMethod.expects));
-                    methodIsExecuting = false;
-                }
-				try {
 					Assert.assertThrows(errorClass, currentMethod.value);
 				}
+                catch(definitionError:ReferenceError) {
+                    // NOTE: [luke] Added ReferenceError catch here b/c I had a bad class name in my expects.
+                    // Does this look right?
+                    recordFailure(new Error('Could not find Reference for: ' + currentMethod.expects));
+                }
 				catch (error:Error) {
 					recordFailure(error);
 				}

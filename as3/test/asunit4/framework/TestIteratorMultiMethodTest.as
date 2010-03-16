@@ -1,8 +1,11 @@
 package asunit4.framework {
+
 	import asunit.framework.TestCase;
+
 	import asunit4.support.MultiMethodTest;
 
 	public class TestIteratorMultiMethodTest extends TestCase {
+
 		private var iterator:TestIterator;
 		private var multiTest:MultiMethodTest;
 

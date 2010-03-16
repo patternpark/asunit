@@ -1,10 +1,13 @@
 ﻿package asunit4.support {
-	import flash.display.Sprite;
+
 	import asunit.asserts.*;
+
+	import flash.display.Sprite;
 
 	public class MultiMethodTest {
 		
 		public static var methodsCalled:Array = [];
+
 		protected var sprite:Sprite;
 	
 		public function MultiMethodTest() {
@@ -69,8 +72,6 @@
 		public static function runAfterClass2():void {
 			methodsCalled.push(arguments.callee);
 		}
-		
-		
 	}
-
 }
+

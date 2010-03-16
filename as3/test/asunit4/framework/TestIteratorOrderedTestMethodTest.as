@@ -1,8 +1,11 @@
 package asunit4.framework {
+
 	import asunit.framework.TestCase;
+
 	import asunit4.support.OrderedTestMethodTest;
 
 	public class TestIteratorOrderedTestMethodTest extends TestCase {
+
 		private var iterator:TestIterator;
 		private var orderedTest:OrderedTestMethodTest;
 
@@ -54,3 +57,4 @@ package asunit4.framework {
 		}
 	}
 }
+

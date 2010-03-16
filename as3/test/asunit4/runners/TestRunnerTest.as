@@ -9,6 +9,7 @@ package asunit4.runners {
 	import flash.events.Event;
 
 	public class TestRunnerTest extends TestCase {
+
 		private var runner:TestRunner;
 		private var runnerResult:Result;
 		private var test:MultiMethodTest;
@@ -18,6 +19,7 @@ package asunit4.runners {
 		}
 
 		protected override function setUp():void {
+            super.setUp();
 			runner = new TestRunner();
 			runnerResult = new Result();
 			// Yes, statics are ugly, but we're testing that static methods are called, e.g. [BeforeClass].
@@ -26,6 +28,7 @@ package asunit4.runners {
 		}
 
 		protected override function tearDown():void {
+            super.tearDown();
 			runner = null;
 			MultiMethodTest.methodsCalled = null;
 		}
@@ -38,7 +41,6 @@ package asunit4.runners {
 			assertFalse(test is TestCase);
 		}
 
-		//////
 		// For now, the test methods are sorted alphabetically to enable precise testing.
 		public function test_run_test_instance_executes_proper_method_sequence():void {
 			runner.addEventListener(Event.COMPLETE, addAsync(check_methodsCalled_after_running_test_instance, 500));
@@ -117,3 +119,4 @@ package asunit4.runners {
 		}
 	}
 }
+

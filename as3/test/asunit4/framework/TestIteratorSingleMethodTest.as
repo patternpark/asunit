@@ -1,8 +1,11 @@
 package asunit4.framework {
+
 	import asunit.framework.TestCase;
+
 	import asunit4.support.FailAssertTrueTest;
 
 	public class TestIteratorSingleMethodTest extends TestCase {
+
 		private var iterator:TestIterator;
 		private var singleTest:FailAssertTrueTest;
 
@@ -44,3 +47,4 @@ package asunit4.framework {
 		}
 	}
 }
+

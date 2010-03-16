@@ -1,5 +1,7 @@
 package asunit4.framework {
+
 	import asunit.framework.TestCase;
+
 	import asunit4.support.IgnoredMethodTest;
 
 	public class TestIteratorIgnoredMethodTest extends TestCase {

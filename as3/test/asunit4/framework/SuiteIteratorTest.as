@@ -1,4 +1,5 @@
 package asunit4.framework {
+
 	import asunit.framework.TestCase;
 	import asunit4.support.DoubleFailSuite;
 	import asunit4.support.FailAssertEqualsTest;

@@ -1,6 +1,8 @@
 ﻿package asunit4.support {
-	import flash.display.Sprite;
+
 	import asunit.asserts.*;
+
+	import flash.display.Sprite;
 
 	public class OrderedTestMethodTest {
 		
@@ -30,7 +32,5 @@
 		public function negativeOrderIsAllowed():void {
 			methodsCalled.push(arguments.callee);
 		}
-		
-		
 	}
 }

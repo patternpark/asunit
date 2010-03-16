@@ -1,4 +1,5 @@
 ﻿package asunit4.support {
+
 	import asunit.asserts.*;
 
 	public class IgnoredMethodTest {

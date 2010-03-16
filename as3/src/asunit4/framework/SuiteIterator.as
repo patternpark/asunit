@@ -1,5 +1,5 @@
-package asunit4.framework 
-{
+package asunit4.framework {
+
     import asunit.util.Iterator;
 
 	import flash.utils.getDefinitionByName;

@@ -22,12 +22,12 @@ package asunit4.framework {
             
             var testMethodsArray:Array = getTestMethods(test);
             if (!testMethodsArray.length) {
-                testMethods = new ArrayIterator();
+                testMethods        = new ArrayIterator();
                 beforeClassMethods = new ArrayIterator();
-                beforeMethods = new ArrayIterator();
-                afterMethods = new ArrayIterator();
-                afterClassMethods = new ArrayIterator();
-                ignoredMethods = new ArrayIterator();
+                beforeMethods      = new ArrayIterator();
+                afterMethods       = new ArrayIterator();
+                afterClassMethods  = new ArrayIterator();
+                ignoredMethods     = new ArrayIterator();
                 return;
             }
             

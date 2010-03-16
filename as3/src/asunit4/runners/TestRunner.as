@@ -43,7 +43,7 @@ package asunit4.runners {
 			currentTest = test;
 			this.testListener = testListener;
 			currentMethod = null;
-						
+	        	
 			Async.instance.addEventListener(TimeoutCommandEvent.CALLED,		onAsyncMethodCalled);
 			Async.instance.addEventListener(TimeoutCommandEvent.TIMED_OUT,	onAsyncMethodTimedOut);
 			

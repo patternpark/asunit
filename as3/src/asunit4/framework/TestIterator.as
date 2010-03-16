@@ -6,7 +6,6 @@ package asunit4.framework {
     import p2.reflect.Reflection;
     import p2.reflect.ReflectionMethod;
 
-
     public class TestIterator implements Iterator {
         
         private var afterClassMethods:Iterator;
@@ -22,12 +21,7 @@ package asunit4.framework {
             
             var testMethodsArray:Array = getTestMethods(test);
             if (!testMethodsArray.length) {
-                testMethods        = new ArrayIterator();
-                beforeClassMethods = new ArrayIterator();
-                beforeMethods      = new ArrayIterator();
-                afterMethods       = new ArrayIterator();
-                afterClassMethods  = new ArrayIterator();
-                ignoredMethods     = new ArrayIterator();
+                setUpNullIterators();
                 return;
             }
             
@@ -39,11 +33,26 @@ package asunit4.framework {
                 );
             }
             
-            testMethods         = new ArrayIterator(testMethodsArray);
+            testMethods = new ArrayIterator(testMethodsArray);
+            setUpIterators(test);
+        }
+
+        private function setUpNullIterators():void {
+            // Set up null iterators for access to length
+            // and other properties...
+            testMethods        = new ArrayIterator();
+            beforeClassMethods = new ArrayIterator();
+            beforeMethods      = new ArrayIterator();
+            afterMethods       = new ArrayIterator();
+            afterClassMethods  = new ArrayIterator();
+            ignoredMethods     = new ArrayIterator();
+        }
+
+        private function setUpIterators(test:Object):void {
+            afterClassMethods   = new ArrayIterator(getAfterClassMethods(test));
+            afterMethods        = new ArrayIterator(getAfterMethods(test));
             beforeClassMethods  = new ArrayIterator(getBeforeClassMethods(test));
             beforeMethods       = new ArrayIterator(getBeforeMethods(test));
-            afterMethods        = new ArrayIterator(getAfterMethods(test));
-            afterClassMethods   = new ArrayIterator(getAfterClassMethods(test));
             ignoredMethods      = new ArrayIterator(getIgnoredMethods(test));
         }
 

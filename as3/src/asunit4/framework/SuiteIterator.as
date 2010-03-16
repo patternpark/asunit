@@ -16,12 +16,7 @@ package asunit4.framework
 			list = getTestClasses(testSuite);
 		}
 		
-		/**
-		 *
-		 * @param	testSuite	A Class or instance that declares tests as instance variables.
-		 * @return	An array of Class references sorted on Name.
-		 */
-        public function getTestClasses(suite:Class):Array {
+        private function getTestClasses(suite:Class):Array {
             if(!SuiteIterator.isSuite(suite) && TestIterator.isTest(suite)) {
                 return [suite];
             }

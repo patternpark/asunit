@@ -255,7 +255,7 @@ package asunit.textui {
 				count = Test(test).countTestCases();
 			}
 			else {
-				count = TestIterator.countTestMethods(test);
+				count = new TestIterator(test).length;
 			}
 			
             for(var i:uint; i < count; i++) {

@@ -1,12 +1,13 @@
 package asunit4.framework {
 
 	import asunit.framework.TestCase;
+    import asunit.util.Iterator;
 
 	import asunit4.support.FailAssertTrueTest;
 
 	public class TestIteratorSingleMethodTest extends TestCase {
 
-		private var iterator:TestIterator;
+		private var iterator:Iterator;
 		private var singleTest:FailAssertTrueTest;
 
 		public function TestIteratorSingleMethodTest(testMethod:String = null) {
@@ -14,11 +15,14 @@ package asunit4.framework {
 		}
 
 		protected override function setUp():void {
+            super.setUp();
 			singleTest = new FailAssertTrueTest();
 		}
 
 		protected override function tearDown():void {
-			iterator = null;
+            super.tearDown();
+			iterator   = null;
+            singleTest = null;
 		}
 
 		public function test_iterator_for_null_yields_hasNext_false():void {
@@ -39,9 +43,9 @@ package asunit4.framework {
 		public function test_iterator_next():void {
 			iterator = new TestIterator(singleTest);
 			
-			assertEquals('runBefore', 		String(iterator.next()));
-			assertEquals('fail_assertTrue',	String(iterator.next()));
-			assertEquals('runAfter',		String(iterator.next()));
+			assertEquals('runBefore', 		iterator.next().toString());
+			assertEquals('fail_assertTrue',	iterator.next().toString());
+			assertEquals('runAfter',		iterator.next().toString());
 			
 			assertFalse('no methods left in iterator', iterator.hasNext());
 		}

@@ -17,6 +17,10 @@
 		public function should_be_ignored():void {
 			fail('this test method should be ignored');
 		}
+
+		[Test]
+        public function should_not_be_ignored():void {
+        }
 		
 	}
 }

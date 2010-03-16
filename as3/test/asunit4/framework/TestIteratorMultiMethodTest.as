@@ -1,12 +1,13 @@
 package asunit4.framework {
 
 	import asunit.framework.TestCase;
+    import asunit.util.ArrayIterator;
+    import asunit.util.Iterator;
 
 	import asunit4.support.MultiMethodTest;
 
 	public class TestIteratorMultiMethodTest extends TestCase {
 
-		private var iterator:TestIterator;
 		private var multiTest:MultiMethodTest;
 
 		public function TestIteratorMultiMethodTest(testMethod:String = null) {
@@ -14,114 +15,83 @@ package asunit4.framework {
 		}
 
 		protected override function setUp():void {
+            super.setUp();
 			multiTest = new MultiMethodTest();
 		}
 
 		protected override function tearDown():void {
-			iterator = null;
+            super.setUp();
 			multiTest = null;
 		}
 
-		public function test_countTestMethods_of_test():void {
-			assertEquals(3, TestIterator.countTestMethods(multiTest));
-		}
+        private function verifyMethods(actual:Iterator, expectedItems:Array):void {
+            var expected:Iterator = new ArrayIterator(expectedItems);
+			assertEquals(expected.length, actual.length);
+            var actualMethod:Method;
+            var expectedMethod:Object;
+            for(var i:uint; i < expected.length; i++) {
+                actualMethod = actual.next();
+                expectedMethod = expected.next();
+                assertEquals(expectedMethod.name, actualMethod.name);
+                assertSame(expectedMethod.name + " with wrong value", expectedMethod.value, actualMethod.value);
+            }
+        }
 		
 		public function test_get_BeforeClass_methods_of_test_instance():void {
-			var beforeClassMethods:Array = TestIterator.getBeforeClassMethods(multiTest);
-			
-			assertEquals(2, beforeClassMethods.length);
-			assertEquals(beforeClassMethods[0].name, 'runBeforeClass1');
-			assertEquals(beforeClassMethods[1].name, 'runBeforeClass2');
-			
-			assertEquals(beforeClassMethods[0].value, MultiMethodTest.runBeforeClass1);
-			assertEquals(beforeClassMethods[1].value, MultiMethodTest.runBeforeClass2);
+            var iterator:Iterator = new TestIterator(multiTest).beforeClassIterator;
+            var methods:Array = [
+                { name: 'runBeforeClass1', value: MultiMethodTest.runBeforeClass1 },
+                { name: 'runBeforeClass2', value: MultiMethodTest.runBeforeClass2 }
+            ];
+
+            verifyMethods(iterator, methods);
 		}
 		
 		public function test_get_AfterClass_methods_of_test_instance():void {
-			var afterClassMethods:Array = TestIterator.getAfterClassMethods(multiTest);
-			
-			assertEquals(2, afterClassMethods.length);
-			assertEquals(afterClassMethods[0].name, 'runAfterClass1');
-			assertEquals(afterClassMethods[1].name, 'runAfterClass2');
-			
-			assertEquals(afterClassMethods[0].value, MultiMethodTest.runAfterClass1);
-			assertEquals(afterClassMethods[1].value, MultiMethodTest.runAfterClass2);
+			var iterator:Iterator = new TestIterator(multiTest).afterClassIterator;
+            var methods:Array = [
+                { name: 'runAfterClass1', value: MultiMethodTest.runAfterClass1 },
+                { name: 'runAfterClass2', value: MultiMethodTest.runAfterClass2 }
+            ];
+
+            verifyMethods(iterator, methods);
 		}
-		
+
 		public function test_get_before_methods_of_test_instance():void {
-			var beforeMethods:Array = TestIterator.getBeforeMethods(multiTest);
-			
-			assertEquals(2, beforeMethods.length);
-			assertEquals(beforeMethods[0].name, 'runBefore1');
-			assertEquals(beforeMethods[1].name, 'runBefore2');
-		}
-		
-		public function test_get_before_methods_of_test_class():void {
-			var beforeMethods:Array = TestIterator.getBeforeMethods(MultiMethodTest);
-			
-			assertEquals(2, beforeMethods.length);
-			assertEquals(beforeMethods[0].name, 'runBefore1');
-			assertEquals(beforeMethods[1].name, 'runBefore2');
+			var iterator:Iterator = new TestIterator(multiTest).beforeIterator;
+            var methods:Array = [
+                { name: 'runBefore1', value: multiTest.runBefore1 },
+                { name: 'runBefore2', value: multiTest.runBefore2 },
+            ];
+
+			verifyMethods(iterator, methods);
 		}
 		
 		public function test_get_test_methods_of_test_instance():void {
 			//NOTE: Avoid naming variables the same as testMethods property in asunit.framework.TestCase.
-			var theTestMethods:Array = TestIterator.getTestMethods(multiTest);
-			
-			assertEquals(3, theTestMethods.length);
-			assertEquals(theTestMethods[0].name, 'fail_assertEquals');
-			assertEquals(theTestMethods[1].name, 'numChildren_is_0_by_default');
-			assertEquals(theTestMethods[2].name, 'stage_is_null_by_default');
-			
-			assertEquals(multiTest.fail_assertEquals, 			theTestMethods[0].value);
-			assertEquals(multiTest.numChildren_is_0_by_default,	theTestMethods[1].value);
-			assertEquals(multiTest.stage_is_null_by_default, 	theTestMethods[2].value);
-		}
-		
-		public function test_get_test_methods_of_test_class():void {
-			var theTestMethods:Array = TestIterator.getTestMethods(MultiMethodTest);
-			
-			assertEquals(3, theTestMethods.length);
-			assertEquals(theTestMethods[0].name, 'fail_assertEquals');
-			assertEquals(theTestMethods[1].name, 'numChildren_is_0_by_default');
-			assertEquals(theTestMethods[2].name, 'stage_is_null_by_default');
-			
-			// method.value is null when the class is passed of an instance
-			//TODO: perhaps throw an Error instead to force not to pass a class
-			assertNull(theTestMethods[0].value);
-			assertNull(theTestMethods[1].value);
-			assertNull(theTestMethods[2].value);
+			var iterator:Iterator = new TestIterator(multiTest).testMethodsIterator;
+            var methods:Array = [
+                { name: 'fail_assertEquals', value: multiTest.fail_assertEquals },
+                { name: 'numChildren_is_0_by_default', value: multiTest.numChildren_is_0_by_default },
+                { name: 'stage_is_null_by_default', value: multiTest.stage_is_null_by_default }
+            ];
+
+            verifyMethods(iterator, methods);
 		}
 		
 		public function test_get_after_methods_of_test_instance():void {
-			var afterMethods:Array = TestIterator.getAfterMethods(multiTest);
-			
-			assertEquals(2, afterMethods.length);
-			assertEquals(afterMethods[0].name, 'runAfter1');
-			assertEquals(afterMethods[1].name, 'runAfter2');
-			
-			assertEquals(afterMethods[0].value, multiTest.runAfter1);
-			assertEquals(afterMethods[1].value, multiTest.runAfter2);
-		}
-		
-		public function test_get_after_methods_of_test_class():void {
-			var afterMethods:Array = TestIterator.getAfterMethods(MultiMethodTest);
-			
-			assertEquals(2, afterMethods.length);
-			assertEquals(afterMethods[0].name, 'runAfter1');
-			assertEquals(afterMethods[1].name, 'runAfter2');
-		}
+			var iterator:Iterator = new TestIterator(multiTest).afterIterator;
+            var methods:Array = [
+                { name: 'runAfter1', value: multiTest.runAfter1 },
+                { name: 'runAfter2', value: multiTest.runAfter2 }
+            ];
 
+            verifyMethods(iterator, methods);
+        }
+				
 		public function test_iterator_next_with_test_instance():void {
-			iterator = new TestIterator(multiTest);
-			checkAllNextCalls(iterator);
-		}
-		
-		public function test_creating_iterator_test_class_throws_Error():void {
-			assertThrows(ArgumentError, function():void { new TestIterator(MultiMethodTest); } );
-		}
-		
-		private function checkAllNextCalls(iterator:TestIterator):void {
+			var iterator:Iterator = new TestIterator(multiTest);
+
 			assertSame('runBeforeClass1', 				iterator.next().name);
 			assertSame('runBeforeClass2', 				iterator.next().name);
 			
@@ -150,12 +120,14 @@ package asunit4.framework {
 		}
 		
 		public function test_iterator_exhausted_with_while_loop_then_reset_should_hasNext():void {
-			iterator = new TestIterator(multiTest);
-			while (iterator.hasNext()) { iterator.next(); }
+			var iterator:Iterator = new TestIterator(multiTest);
+			while(iterator.hasNext()) {
+                iterator.next();
+            }
 			iterator.reset();
 			
 			assertTrue(iterator.hasNext());
 		}
-		
 	}
 }
+

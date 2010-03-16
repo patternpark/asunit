@@ -5,5 +5,6 @@ package asunit.util {
         function next():*;
         function hasNext():Boolean;
         function reset():void;
+        function get length():uint;
     }
 }

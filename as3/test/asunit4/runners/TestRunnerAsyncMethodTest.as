@@ -1,6 +1,7 @@
 package asunit4.runners {
 
     import asunit.framework.TestCase;
+    import asunit.util.Iterator;
 
     import asunit4.framework.Method;
     import asunit4.framework.Result;
@@ -22,6 +23,7 @@ package asunit4.runners {
         }
 
         protected override function setUp():void {
+            super.setUp();
             runner       = new TestRunner();
             runnerResult = new Result();
             successTest  = new AsyncMethodSuccessTest();
@@ -30,16 +32,20 @@ package asunit4.runners {
         }
 
         protected override function tearDown():void {
-            runner = null;
+            super.tearDown();
+            runner       = null;
             runnerResult = null;
+            successTest  = null;
+            syncTest     = null;
+            tooSlowTest  = null;
         }
         
         public function test_async_test_method_should_have_timeout_value():void {
-            var testMethods:Array = TestIterator.getTestMethods(successTest);
-            
-            assertEquals(1, testMethods.length);
-            var method0:Method = Method(testMethods[0]);
-            assertEquals('timeout value', 100, method0.timeout);
+            var iterator:Iterator = new TestIterator(successTest);
+
+            assertEquals(1, iterator.length);
+            var method:Method = Method(iterator.next());
+            assertEquals('timeout value', 100, method.timeout);
         }
 
         public function test_run_with_successful_async_operation():void {
@@ -88,7 +94,6 @@ class AsyncMethodSuccessTest {
     
     private function onComplete():void {
     }
-    
 }
 
 class AsyncMethodTooSlowTest {
@@ -101,7 +106,6 @@ class AsyncMethodTooSlowTest {
     
     private function onComplete():void {
     }
-    
 }
 
 class AsyncDelegateCalledSynchronouslyTest {
@@ -118,6 +122,5 @@ class AsyncDelegateCalledSynchronouslyTest {
     private function onComplete():void {
         handlerWasCalled = true;
     }
-    
 }
 

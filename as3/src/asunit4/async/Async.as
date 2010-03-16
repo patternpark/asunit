@@ -1,4 +1,5 @@
 package asunit4.async {
+
 	import asunit.framework.ErrorEvent;
 
 	import asunit4.events.TimeoutCommandEvent;
@@ -7,11 +8,9 @@ package asunit4.async {
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 
-	public class Async extends EventDispatcher {
+	public class Async extends EventDispatcher implements IAsync {
 		
 		public static var DEFAULT_TIMEOUT:uint = 50;
-		
-		private static var _instance:Async;
 		
 		protected var pending:Array;
 		
@@ -19,24 +18,20 @@ package asunit4.async {
 			pending = [];
 		}
 		
-		public static function get instance():Async {
-			return _instance || (_instance = new Async());
-		}
-		
 		public function get hasPending():Boolean {
 			return pending.length > 0;
 		}
 		
-		public function addAsync(handler:Function, duration:int = -1):Function {
+		public function add(handler:Function, duration:int = -1):Function {
 			if (duration == -1) duration = DEFAULT_TIMEOUT;
 			var command:TimeoutCommand = new TimeoutCommand(null, handler, duration);
 			addPending(command);
 			return command.getCallback();
 		}
 		
-		public static function proceedOnEvent(test:Object, target:IEventDispatcher, eventName:String, timeout:int = 500, timeoutHandler:Function = null):void {
-			
-			target.addEventListener(eventName, addAsync(null, timeout), false, 0, true);
+		public function proceedOnEvent(test:Object, target:IEventDispatcher, eventName:String, timeout:int = 500, timeoutHandler:Function = null):void {
+            var asyncHandler:Function = add(null, timeout);
+			target.addEventListener(eventName, asyncHandler, false, 0, true);
 		}
 		
 		public function cancelPending():void {
@@ -49,7 +44,7 @@ package asunit4.async {
 		}
 		
 		// Partially opened for testing purposes.
-		internal function getPending():Array {
+		public function getPending():Array {
 			// Clone to prevent changing by reference.
 			return pending.slice();
 		}
@@ -74,3 +69,4 @@ package asunit4.async {
 		}
 	}
 }
+

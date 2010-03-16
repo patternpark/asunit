@@ -59,7 +59,7 @@ package asunit4.runners {
         }
         
         public function test_run_synchronous_call_of_async_delegate():void {
-            runner.addEventListener(Event.COMPLETE, addAsync(check_runner_result_wasSuccessful2, 100));
+            runner.addEventListener(Event.COMPLETE, addAsync(check_runner_result_wasSuccessful2, 10));
             runner.run(syncTest, runnerResult);
         }
         
@@ -82,14 +82,17 @@ package asunit4.runners {
 }
 
 import asunit.asserts.*;
-import asunit4.async.addAsync;
+import asunit4.async.IAsync;
 import flash.utils.setTimeout;
 
 class AsyncMethodSuccessTest {
+
+    [Async]
+    public var async:IAsync;
     
     [Test(timeout="100")]
     public function operation_delayed_but_fast_enough_will_succeed():void {
-        var delegate:Function = asunit4.async.addAsync(onComplete);
+        var delegate:Function = async.add(onComplete);
         setTimeout(delegate, 0);
     }
     
@@ -99,9 +102,12 @@ class AsyncMethodSuccessTest {
 
 class AsyncMethodTooSlowTest {
     
+    [Async]
+    public var async:IAsync;
+
     [Test(timeout="0")]
     public function operation_too_slow_will_fail():void {
-        var delegate:Function = asunit4.async.addAsync(onComplete);
+        var delegate:Function = async.add(onComplete);
         setTimeout(delegate, 1);
     }
     
@@ -110,12 +116,15 @@ class AsyncMethodTooSlowTest {
 }
 
 class AsyncDelegateCalledSynchronouslyTest {
-    
+
+    [Async]
+    public var async:IAsync;
+
     private var handlerWasCalled:Boolean = false;
     
     [Test(timeout="10")]
     public function calling_delegate_synchronously_should_succeed():void {
-        var delegate:Function = asunit4.async.addAsync(onComplete);
+        var delegate:Function = async.add(onComplete);
         delegate();
         assertTrue(handlerWasCalled);
     }

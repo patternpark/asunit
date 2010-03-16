@@ -14,9 +14,9 @@ package asunit4.runners {
     public class TestRunnerAsyncMethodTest extends TestCase {
         private var runner:TestRunner;
         private var runnerResult:Result;
-        private var successTest:AsyncMethodSuccessTest;
-        private var syncTest:AsyncDelegateCalledSynchronouslyTest;
-        private var tooSlowTest:AsyncMethodTooSlowTest;
+        private var successTest:Class;
+        private var syncTest:Class;
+        private var tooSlowTest:Class;
 
         public function TestRunnerAsyncMethodTest(testMethod:String = null) {
             super(testMethod);
@@ -26,9 +26,9 @@ package asunit4.runners {
             super.setUp();
             runner       = new TestRunner();
             runnerResult = new Result();
-            successTest  = new AsyncMethodSuccessTest();
-            syncTest     = new AsyncDelegateCalledSynchronouslyTest();
-            tooSlowTest  = new AsyncMethodTooSlowTest();
+            successTest  = AsyncMethodSuccessTest
+            syncTest     = AsyncDelegateCalledSynchronouslyTest
+            tooSlowTest  = AsyncMethodTooSlowTest
         }
 
         protected override function tearDown():void {
@@ -41,10 +41,11 @@ package asunit4.runners {
         }
         
         public function test_async_test_method_should_have_timeout_value():void {
-            var iterator:Iterator = new TestIterator(successTest);
+            var instance:* = new successTest();
+            var iterator:Iterator = new TestIterator(instance);
 
             assertEquals(1, iterator.length);
-            var method:Method = Method(iterator.next());
+            var method:Method = iterator.next();
             assertEquals('timeout value', 100, method.timeout);
         }
 

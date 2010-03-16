@@ -1,13 +1,13 @@
-﻿package asunit4.ui {
+package asunit4.ui {
 	import asunit4.framework.IResult;
 	import asunit4.framework.Result;
-	import flash.display.MovieClip;
-	import asunit4.runners.BaseRunner;
 	import asunit4.printers.FlashBuilderPrinter;
+	import asunit4.runners.BaseRunner;
+
+	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.system.fscommand;
-	import flash.system.System;
-	
+
 	public class FlashBuilderRunnerUI extends MovieClip {
 		
 		protected var runner:BaseRunner;

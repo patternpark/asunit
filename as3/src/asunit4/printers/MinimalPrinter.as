@@ -1,5 +1,4 @@
-﻿package asunit4.printers 
-{
+package asunit4.printers {
 	import asunit.framework.ITestFailure;
 
 	import asunit4.framework.IResult;

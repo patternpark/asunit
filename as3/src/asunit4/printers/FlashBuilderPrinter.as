@@ -1,5 +1,4 @@
-﻿package asunit4.printers
-{
+package asunit4.printers {
 	import asunit.framework.ITestFailure;
 
 	import asunit4.framework.IResult;
@@ -13,8 +12,7 @@
 	import flash.net.XMLSocket;
 	import flash.utils.getQualifiedClassName;
 
-	public class FlashBuilderPrinter implements IRunListener
-	{
+	public class FlashBuilderPrinter implements IRunListener {
 		protected var projectName:String;
 		protected var contextName:String;
 		protected var messageQueue:Array;
@@ -42,24 +40,6 @@
 		
 		public function onTestCompleted(test:Object):void {
         }
-		
-		public function addResult(result:IResult):void {
-			var failure:ITestFailure;
-			
-			for each (failure in result.errors) {
-				sendMessage(getFailureMessage(failure));
-			}
-			
-			for each (failure in result.failures) {
-				sendMessage(getFailureMessage(failure));
-			}
-			
-			for each (var success:ITestSuccess in result.successes) {
-				var xmlMessageSuccess:String = "<testCase name='" + success.method
-					+ "' testSuite='" + getQualifiedClassName(success.test) + "' status='success'/>";
-				sendMessage(xmlMessageSuccess);
-			}
-		}
 		
 		// works for both errors and failures
 		public function onTestFailure(failure:ITestFailure):void {

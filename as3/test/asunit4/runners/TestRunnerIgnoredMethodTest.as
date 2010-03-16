@@ -9,7 +9,7 @@ package asunit4.runners {
 
     public class TestRunnerIgnoredMethodTest extends TestCase {
 
-        private var ignoredTest:IgnoredMethodTest;
+        private var ignoredTest:Class;
         private var runner:TestRunner;
         private var runnerResult:Result;
         
@@ -19,7 +19,7 @@ package asunit4.runners {
 
         protected override function setUp():void {
             super.setUp();
-            ignoredTest  = new IgnoredMethodTest();
+            ignoredTest  = IgnoredMethodTest;
             runner       = new TestRunner();
             runnerResult = new Result();
         }

@@ -1,10 +1,9 @@
-﻿package asunit4.events
-{
+package asunit4.events {
 	import asunit4.async.TimeoutCommand;
+
 	import flash.events.Event;
-	
-	public class TimeoutCommandEvent extends Event
-	{
+
+	public class TimeoutCommandEvent extends Event {
 		public static const CALLED:String = 'called';
 		public static const TIMED_OUT:String = 'timedOut';
 		

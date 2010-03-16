@@ -1,4 +1,4 @@
-﻿package asunit4.async {
+package asunit4.async {
 	
 	/**
 	 *

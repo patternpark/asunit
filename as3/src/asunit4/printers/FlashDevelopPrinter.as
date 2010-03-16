@@ -1,5 +1,4 @@
-﻿package asunit4.printers
-{
+package asunit4.printers {
 	import asunit.framework.ITestFailure;
 
 	import asunit4.framework.IResult;
@@ -7,8 +6,7 @@
 	import asunit4.framework.ITestSuccess;
 	import asunit4.framework.Method;
 
-	public class FlashDevelopPrinter implements IRunListener
-	{
+	public class FlashDevelopPrinter implements IRunListener {
 		protected static const localPathPattern:RegExp =
 			/([A-Z]:\\[^\/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^\/:\*\?<>\|]+\.\w{2,6})/g;
 		

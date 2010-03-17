@@ -2,6 +2,7 @@ as2/bin
 as25/bin
 as3/bin
 as3/bin-debug
+as3/obj
 html-template
 .DS_Store
 .actionScriptProperties

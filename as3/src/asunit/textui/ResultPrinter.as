@@ -1,12 +1,16 @@
 package asunit.textui {
     import asunit.errors.AssertionFailedError;
     import asunit.framework.Test;
+	import asunit.framework.TestCase;
     import asunit.framework.TestFailure;
+    import asunit.framework.ITestFailure;
     import asunit.framework.TestListener;
-    import asunit.framework.TestResult;
+    import asunit.framework.ITestResult;
     import asunit.runner.BaseTestRunner;
     import asunit.runner.Version;
-    
+	import asunit4.runners.TestRunner;
+	import asunit4.framework.TestIterator;
+
     import flash.display.Sprite;
     import flash.events.*;
     import flash.system.Capabilities;
@@ -19,12 +23,12 @@ package asunit.textui {
     /**
     *   This is the base class for collecting test output and formatting for different
     *   displays.
-    *   
+    *
     *   This class simply presents test results as if they were being shown on a terminal.
-    *   
-    *   The <code>XMLResultPrinter</code> provides a good example of how this class can 
+    *
+    *   The <code>XMLResultPrinter</code> provides a good example of how this class can
     *   be subclassed and used to emit different/additional output.
-    *   
+    *
     *   @see XMLResultPrinter
     **/
     public class ResultPrinter extends Sprite implements TestListener {
@@ -73,7 +77,7 @@ package asunit.textui {
         public function setShowTrace(showTrace:Boolean):void {
             this.showTrace = showTrace;
         }
-        
+
         public override function set width(w:Number):void {
             textArea.x = gutter;
             textArea.width = w - gutter*2;
@@ -95,21 +99,21 @@ package asunit.textui {
         public function print(...args:Array):void {
             textArea.appendText(args.toString());
         }
-        
+
         /**
          * API for use by textui.TestRunner
          */
-         
-        public function run(test:Test):void {
+
+        public function run(test:Object):void {
         }
-        
-        public function printResult(result:TestResult, runTime:Number):void {
+
+        public function printResult(result:ITestResult, runTime:Number):void {
             printHeader(runTime);
             printErrors(result);
             printFailures(result);
             printFooter(result);
 
-               bar.setSuccess(result.wasSuccessful());
+               bar.setSuccess(result.wasSuccessful);
                if(showTrace) {
                 trace(textArea.text.split("\r").join("\n"));
                }
@@ -123,12 +127,12 @@ package asunit.textui {
             println("Time: " + elapsedTimeAsString(runTime));
         }
 
-        protected function printErrors(result:TestResult):void {
-            printDefects(result.errors(), result.errorCount(), "error");
+        protected function printErrors(result:ITestResult):void {
+            printDefects(result.errors, result.errorCount, "error");
         }
 
-        protected function printFailures(result:TestResult):void {
-            printDefects(result.failures(), result.failureCount(), "failure");
+        protected function printFailures(result:ITestResult):void {
+            printDefects(result.failures, result.failureCount, "failure");
         }
 
         protected function printDefects(booBoos:Object, count:int, type:String):void {
@@ -142,22 +146,22 @@ package asunit.textui {
                 println("There were " + count + " " + type + "s:");
             }
             var i:uint;
-            for each (var item:TestFailure in booBoos) {
-                printDefect(TestFailure(item), i);
+            for each (var item:ITestFailure in booBoos) {
+                printDefect(item, i);
                 i++;
             }
         }
 
-        public function printDefect(booBoo:TestFailure, count:int ):void { // only public for testing purposes
+        public function printDefect(booBoo:ITestFailure, count:int ):void { // only public for testing purposes
             printDefectHeader(booBoo, count);
             printDefectTrace(booBoo);
         }
 
-        protected function printDefectHeader(booBoo:TestFailure, count:int):void {
+        protected function printDefectHeader(booBoo:ITestFailure, count:int):void {
             // I feel like making this a println, then adding a line giving the throwable a chance to print something
             // before we get to the stack trace.
             var startIndex:uint = textArea.text.length;
-            println(count + ") " + booBoo.failedFeature());
+            println(count + ") " + booBoo.failedFeature);
             var endIndex:uint = textArea.text.length;
 
             var format:TextFormat = textArea.getTextFormat();
@@ -171,26 +175,26 @@ package asunit.textui {
             textArea.setTextFormat(format, startIndex, endIndex);
         }
 
-        protected function printDefectTrace(booBoo:TestFailure):void {
-            println(BaseTestRunner.getFilteredTrace(booBoo.thrownException().getStackTrace()));
+        protected function printDefectTrace(booBoo:ITestFailure):void {
+            println(BaseTestRunner.getFilteredTrace(booBoo.thrownException.getStackTrace()));
         }
 
-        protected function printFooter(result:TestResult):void {
+        protected function printFooter(result:ITestResult):void {
             println();
-            if (result.wasSuccessful()) {
+            if (result.wasSuccessful) {
                 print("OK");
-                println (" (" + result.runCount() + " test" + (result.runCount() == 1 ? "": "s") + ")");
+                println (" (" + result.runCount + " test" + (result.runCount == 1 ? "": "s") + ")");
             } else {
                 println("FAILURES!!!");
-                println("Tests run: " + result.runCount()+
-                             ",  Failures: "+result.failureCount()+
-                             ",  Errors: "+result.errorCount());
+                println("Tests run: " + result.runCount+
+                             ",  Failures: "+result.failureCount+
+                             ",  Errors: "+result.errorCount);
             }
-            
+
             printTimeSummary();
             println();
         }
-        
+
         protected function printTimeSummary():void {
             testTimes.sortOn('duration', Array.NUMERIC | Array.DESCENDING);
             println();
@@ -214,35 +218,46 @@ package asunit.textui {
         /**
          * @see asunit.framework.TestListener#addError(Test, Throwable)
          */
-        public function addError(test:Test, t:Error):void {
+        public function addError(failure:ITestFailure):void {
+			if (failure.thrownException is AssertionFailedError) {
+				addFailure(failure);
+				return;
+			}
             print("E");
         }
 
         /**
          * @see asunit.framework.TestListener#addFailure(Test, AssertionFailedError)
          */
-        public function addFailure(test:Test, t:AssertionFailedError):void {
+        public function addFailure(failure:ITestFailure):void {
             print("F");
         }
 
         /**
          * @see asunit.framework.TestListener#endTestMethod(test, testMethod);
          */
-        public function startTestMethod(test:Test, methodName:String):void {
+        public function startTestMethod(test:Object, methodName:String):void {
         }
 
         /**
          * @see asunit.framework.TestListener#endTestMethod(test, testMethod);
          */
-        public function endTestMethod(test:Test, methodName:String):void {
+        public function endTestMethod(test:Object, methodName:String):void {
         }
 
         /**
          * @see asunit.framework.TestListener#startTest(Test)
          */
-        public function startTest(test:Test):void {
+        public function startTest(test:Object):void {
             startTime = getTimer();
-            var count:uint = test.countTestCases();
+			var count:uint;
+			if (test is Test) {
+				count = Test(test).countTestCases();
+			}
+			else {
+				count = new TestIterator(test).length;
+			}
+			
             for(var i:uint; i < count; i++) {
                 print(".");
                 if (fColumn++ >= 80) {
@@ -255,7 +270,7 @@ package asunit.textui {
         /**
          * @see asunit.framework.TestListener#endTest(Test)
          */
-        public function endTest(test:Test):void {
+        public function endTest(test:Object):void {
             var duration:Number = getTimer() - startTime;
             testTimes.push(TestTime.create(test, duration));
         }

@@ -1,0 +1,56 @@
+﻿=================
+  AsUnit 4 TODO
+=================
+
+*******************************
+I'd like to move away from using this text file and instead use PivotalTracker
+
+I've created a project here:
+http://www.pivotaltracker.com/projects/65416
+
+Please let me know what you think.
+
+*******************************
+
+High Priority
+-------------
+- Restore headers/footers and green/red bar to MinimalPrinter.
+- Mirror FlexUnit's Async methods handleEvent(), etc.
+
+
+Medium Priority
+---------------
+- [RunWith] support.
+- Test async Before/After/BeforeClass/AfterClass methods.
+- Increase test coverage.
+- Probably move from MinimalComps back to textfields for MinimalPrinter.
+- Make interfaces for TestRunner, etc. and type to them instead of implementations.
+
+
+Low Priority
+------------
+- User-defined metadata, e.g. [Test(description="Watch out for this one",issueID="12345")]
+- Theories
+- Hook into FlexUnit continuous integration.
+
+
+=================
+  Tooling TODO
+=================
+
+- Project Sprouts integration (for someone else to do).
+- AIR app to generate class/test stubs.
+- Mechanism for running all tests in a folder without manually creating a suite.
+- AIR runner with more features like running only failed tests.
+- Monkey-patching to trick Flash Builder UI into using AsUnit.
+
+
+=================
+  AsUnit 3 TODO
+=================
+
+Refactor AsUnit 3 using AsUnit 4 code.
+- Move iteration and running logic out of TestCase as much as possible.
+- Get rid of flakiness in async test results (wrong method names, etc.).
+- Unify interfaces.
+- Unify printers.

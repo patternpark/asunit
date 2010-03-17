@@ -10,9 +10,9 @@ package asunit.textui {
     public class FlexTestRunner extends TestRunner {
 
         public function FlexTestRunner() {
-            setPrinter(new ResultPrinter());
+            printer = new ResultPrinter();
         }
-    
+
         protected override function addedHandler(event:Event):void {
             if(event.target === this) {
                 parent.addEventListener(Event.RESIZE, resizeHandler);
@@ -22,20 +22,20 @@ package asunit.textui {
                 event.stopPropagation();
             }
         }
-    
+
         public override function set width(w:Number):void {
-            fPrinter.width = w;
+            _printer.width = w;
         }
-    
+
         public override function set height(h:Number):void {
-            fPrinter.height = h;
+            _printer.height = h;
         }
-    
+
         public function resizeHandler(event:Event):void {
             width = parent.width;
             height = parent.height;
         }
-    
+
         public override function addChild(child:DisplayObject):DisplayObject {
             if(parent && child is IUIComponent) {
                 // AND check for 'is' UIUComponent...
@@ -45,7 +45,7 @@ package asunit.textui {
                 return super.addChild(child);
             }
         }
-    
+
         public override function removeChild(child:DisplayObject):DisplayObject {
             if(child is IUIComponent) {
                 return parent.removeChild(child);

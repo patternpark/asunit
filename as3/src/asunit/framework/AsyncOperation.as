@@ -29,14 +29,8 @@ package asunit.framework {
 				try {
 					handler.apply(testCase, arguments);
 				}
-				catch(e:AssertionFailedError) {
-					testCase.getResult().addFailure(testCase, e);
-				}
-				catch(ioe:IllegalOperationError) {
-					testCase.getResult().addError(testCase, ioe);
-				}
-				catch(unknownError:Error) {
-					testCase.getResult().addError(testCase, unknownError);
+				catch(error:Error) {
+					testCase.getResult().addFailure(new TestFailure(testCase, error));
 				}
 				finally {
 					testCase.asyncOperationComplete(context);

@@ -14,24 +14,22 @@ package asunit4.framework {
 		}
 
 		public function test_countTestClasses_of_suite_class():void {
-            var iterator:SuiteIterator = new SuiteIterator(DoubleFailSuite);
+            var iterator:Iterator = new SuiteIterator(DoubleFailSuite);
 			assertEquals(2, iterator.length);
 		}
 		
-		public function test_isSuite_with_suite_class():void {
-			assertTrue(SuiteIterator.isSuite(DoubleFailSuite));
+		public function test_accepts_non_suite_class():void {
+            var iterator:Iterator = new SuiteIterator(Date);
+			assertEquals(0, iterator.length);
 		}
 		
-		public function test_isSuite_false_with_non_suite_class():void {
-			assertFalse(SuiteIterator.isSuite(Date));
-		}
-		
-		public function test_isSuite_false_with_test_class():void {
-			assertFalse(SuiteIterator.isSuite(FailAssertEqualsTest));
+		public function test_accepts_test_class():void {
+            var iterator:Iterator = new SuiteIterator(FailAssertEqualsTest);
+			assertEquals(1, iterator.length);
 		}
 		
 		public function test_getTestClasses_of_suite_class():void {
-            var iterator:SuiteIterator = new SuiteIterator(DoubleFailSuite);
+            var iterator:Iterator = new SuiteIterator(DoubleFailSuite);
 			
 			assertEquals(2, iterator.length);
 			// In case the ordering is random, check that the array contains the class somewhere.
@@ -40,7 +38,7 @@ package asunit4.framework {
 		}
 		
 		public function test_getTestClasses_on_test_class_should_return_array_with_test():void {
-            var iterator:SuiteIterator = new SuiteIterator(FailAssertTrueTest);
+            var iterator:Iterator = new SuiteIterator(FailAssertTrueTest);
 			
 			assertEquals(1, iterator.length);
 			assertSame(FailAssertTrueTest, iterator.next());

@@ -16,17 +16,18 @@ package asunit4.framework {
 			list = getTestClasses(testSuite);
 		}
 		
-        private function getTestClasses(suite:Class):Array {
-            if(!SuiteIterator.isSuite(suite) && TestIterator.isTest(suite)) {
-                return [suite];
+        private function getTestClasses(Suite:Class):Array {
+            if(!isSuite(Suite) && TestIterator.isTest(Suite)) {
+                return [Suite];
             }
-            var reflection:Reflection = Reflection.create(suite);
+
+            var reflection:Reflection = Reflection.create(Suite);
             var variable:ReflectionVariable;
             var TestConstructor:Class;
             var result:Array = [];
             for each(variable in reflection.variables) {
                 TestConstructor = Class(getDefinitionByName(variable.type));
-                if(SuiteIterator.isSuite(TestConstructor)) {
+                if(isSuite(TestConstructor)) {
                     result = result.concat( getTestClasses(TestConstructor) );
                 }
                 else {
@@ -41,8 +42,8 @@ package asunit4.framework {
             return list.length;
         }
 
-		public static function isSuite(possibleTestSuite:Class):Boolean {
-            return Reflection.create(possibleTestSuite).getMetaDataByName('Suite') != null;
+		private function isSuite(clazz:Class):Boolean {
+            return (Reflection.create(clazz).getMetaDataByName('Suite') != null);
 		}
 			
         public function hasNext():Boolean {

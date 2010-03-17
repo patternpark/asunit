@@ -27,13 +27,10 @@ package asunit4.framework {
             var iterator:SuiteIterator = new SuiteIterator(suiteClass);
 			assertEquals(3, iterator.length);
 		}
-		
-		public function test_isSuite_with_suite_class():void {
-			assertTrue(SuiteIterator.isSuite(suiteClass));
-		}
-		
+
 		public function test_isSuite_false_with_test_class():void {
-			assertFalse(SuiteIterator.isSuite(SucceedAssertTrueTest));
+            var iterator:SuiteIterator = new SuiteIterator(SucceedAssertTrueTest);
+			assertEquals(1, iterator.length);
 		}
 		
 		public function test_getTestClasses_of_suite_class():void {

@@ -38,6 +38,10 @@ package asunit4.async {
          * 
          * In the previous example, test execution will be halted until the
          * +handler+ method is called.
+         *
+         * It's worth noting that AsUnit does not store any state related
+         * to the playback of your test harness in global variables.
+         *
          */
 		public function Async() {
 			pending = [];

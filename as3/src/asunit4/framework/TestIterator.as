@@ -152,15 +152,6 @@ package asunit4.framework {
             return getTestMethods(test).length;
         }
         
-        // Let's move this out of static - it's only used by SuiteIterator...
-        // maybe we can defer the check until after we already create
-        // a test iterator.
-        public static function isTest(TestClass:Class):Boolean {
-            var instance:* = new TestClass();
-            var iterator:Iterator = new TestIterator(instance);
-            return (iterator.length > 0);
-        }
-        
         public function hasNext():Boolean {
             if (!testMethods) return false;
             

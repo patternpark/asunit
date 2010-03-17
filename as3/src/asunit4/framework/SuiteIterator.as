@@ -42,10 +42,14 @@ package asunit4.framework {
             return list.length;
         }
 
-		private function isSuite(clazz:Class):Boolean {
-            return (Reflection.create(clazz).getMetaDataByName('Suite') != null);
+		private function isSuite(Suite:Class):Boolean {
+            return (Reflection.create(Suite).getMetaDataByName('Suite') != null);
 		}
-			
+
+        private function isTest(Test:Class):Boolean {
+            return (Reflection.create(Test).getMetaDataByName('Test') != null);
+        }
+        
         public function hasNext():Boolean {
             return list[index] != null;
         }

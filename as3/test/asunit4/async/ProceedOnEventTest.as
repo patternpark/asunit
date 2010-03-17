@@ -57,7 +57,7 @@
 			var commands:Array = async.getPending();
 			var command:TimeoutCommand = commands[0];
 			//command.addEventListener(ErrorEvent.ERROR, async.add(onAsyncMethodFailed));
-			command.addEventListener(TimeoutCommandEvent.TIMED_OUT, async.add(onAsyncMethodFailed));
+			command.addEventListener(TimeoutCommandEvent.TIMED_OUT, addAsync(onAsyncMethodFailed));
 			
 			// send the correct event too slowly
 			timeoutID = setTimeout(dispatchCompleteEvent, 10);
@@ -74,7 +74,7 @@
 			command = async.getPending()[0];
 			
 			// Use AsUnit 3's async.add() to verify onAsyncMethodCalled is called.
-			command.addEventListener(TimeoutCommandEvent.CALLED, async.add(onAsyncMethodCalled));
+			command.addEventListener(TimeoutCommandEvent.CALLED, addAsync(onAsyncMethodCalled));
 			
 			// If all goes well, the ErrorEvent won't be dispatched.
 			command.addEventListener(ErrorEvent.ERROR, failIfCalled);

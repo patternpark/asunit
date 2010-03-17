@@ -111,7 +111,7 @@ flashplayer :run => 'bin/AsUnitRunner.swf'
 ##########################################
 # Package framework ZIPs
 
-archive = "bin/asunit3.#{ASUNIT_VERSION}.zip"
+archive = "bin/AsUnit#{ASUNIT_VERSION}.zip"
 
 # Create the dist package so that we can 
 # distribute src and examples packages.
@@ -121,6 +121,7 @@ file 'dist' => :swc do
   
   FileUtils.cp_r 'bin/AsUnit4.swc', 'dist/libs/'
   FileUtils.cp_r 'src', 'dist/src'
+  FileUtils.cp_r 'lib/as3reflection/p2', 'dist/src'
   FileUtils.cp_r 'examples', 'dist/examples'
   FileUtils.cp_r 'air/asunit/textui/AirRunner.as', 'dist/src/asunit/textui/AirRunner.as'
 end

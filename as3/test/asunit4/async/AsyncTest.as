@@ -43,8 +43,7 @@
 			
 			cancelTimeout();
 			
-			assertEquals("no commands for test after handler called",
-				0, async.getPending().length);
+			assertEquals("no commands for test after handler called", 0, async.getPending().length);
 		}
 		
 		protected function foo():void { }

@@ -14,6 +14,31 @@ package asunit4.async {
 		
 		protected var pending:Array;
 		
+        /**
+         * Asynchronous handler class.
+         *
+         * This class give you the ability to create Asynchronous event handlers
+         * and pause test execution until those handlers are triggered.
+         *
+         * To take advantage of Asynchronous features, add a member variable
+         * to your test like:
+         * 
+         *  [Async]
+         *  public var async:IAsync;
+         *
+         * This public property will be injected with an IAsync instance 
+         * before each test method. 
+         * 
+         * Within your test methods, you can add Async callbacks with:
+         *
+         *  [Test]
+         *  public function verifySomething():void {
+         *      async.add(handler);
+         *  }
+         * 
+         * In the previous example, test execution will be halted until the
+         * +handler+ method is called.
+         */
 		public function Async() {
 			pending = [];
 		}

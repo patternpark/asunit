@@ -4,7 +4,7 @@ package {
     public class AsUnitRunner extends TestRunner {
 
         public function AsUnitRunner() {
-            start(AllTests,null,TestRunner.SHOW_TRACE);
+            start(AllTests, null, TestRunner.SHOW_TRACE);
         }
     }
 }

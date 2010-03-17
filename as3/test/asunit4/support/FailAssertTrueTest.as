@@ -6,12 +6,9 @@
 		
 		public var methodsCalled:Array;
 		
-		public function FailAssertTrueTest() {
-			methodsCalled = [];
-		}
-		
 		[Before]
 		public function runBefore():void {
+			methodsCalled = [];
 			methodsCalled.push(arguments.callee);
 		}
 		

@@ -17,7 +17,7 @@ package asunit4.framework {
 		}
 		
         private function getTestClasses(Suite:Class):Array {
-            if(!isSuite(Suite) && TestIterator.isTest(Suite)) {
+            if(!isSuite(Suite) && isTest(Suite)) {
                 return [Suite];
             }
 
@@ -47,7 +47,10 @@ package asunit4.framework {
 		}
 
         private function isTest(Test:Class):Boolean {
-            return (Reflection.create(Test).getMetaDataByName('Test') != null);
+            // NOTE: A test is more than just:
+            // return (Reflection.create(Test).getMetaDataByName('Test') != null);
+            var iterator:Iterator = new TestIterator(new Test());
+            return (iterator.length > 0);
         }
         
         public function hasNext():Boolean {
@@ -64,3 +67,4 @@ package asunit4.framework {
         }
 	}
 }
+

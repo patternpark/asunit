@@ -1,7 +1,8 @@
 package asunit4.framework {
 
-    import flash.display.MovieClip
     import asunit4.async.IAsync;
+    import flash.display.DisplayObjectContainer;
+    import flash.display.MovieClip
         
     class TestCase {
 
@@ -16,6 +17,11 @@ package asunit4.framework {
         public function callSetUp():void {
             setUp();
         }
+
+        [Context]
+        // TODO: The Runner should inject a unique
+        // and appropriate context for the requested DataType
+        public var context:DisplayObjectContainer;
 
         protected function setUp():void {
         }
@@ -34,7 +40,7 @@ package asunit4.framework {
         }
 
         protected function getContext():MovieClip {
-            return null;
+            return context;
         }
     }
 }

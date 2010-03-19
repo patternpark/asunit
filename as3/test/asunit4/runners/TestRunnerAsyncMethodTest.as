@@ -117,7 +117,9 @@ class AsyncMethodTooSlowTest {
 
 class AsyncDelegateCalledSynchronouslyTest {
 
-    [Async]
+    import asunit.asserts.*;
+
+    [Inject]
     public var async:IAsync;
 
     private var handlerWasCalled:Boolean = false;

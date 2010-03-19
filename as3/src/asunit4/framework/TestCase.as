@@ -6,7 +6,7 @@ package asunit4.framework {
         
     class TestCase {
 
-        [Async]
+        [Inject]
         public var async:IAsync;
 
         [Before]
@@ -18,7 +18,7 @@ package asunit4.framework {
             setUp();
         }
 
-        [Context]
+        [Inject]
         // TODO: The Runner should inject a unique
         // and appropriate context for the requested DataType
         public var context:DisplayObjectContainer;
@@ -36,7 +36,7 @@ package asunit4.framework {
 
         // TODO: Implement addAsync correctly:
         protected function addAsync(...):Function {
-            return null;
+            return async.add(...);
         }
 
         protected function getContext():MovieClip {

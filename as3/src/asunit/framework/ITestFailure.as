@@ -9,7 +9,6 @@
 		function get failedFeature():String;
 
 		function get failedMethod():String;
-		//function set failedMethod (value:String) : void;
 
 		/**
 		 * Gets the failed test case.

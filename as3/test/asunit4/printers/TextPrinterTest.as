@@ -66,9 +66,6 @@ package asunit4.printers {
             executeAFailingTest();
             var expected:String = "testSomethingThatFails : Error: Fake Failure";
             assertTrue("Printer should fail", printer.toString().indexOf(expected) > -1);
-            trace("-----------------------");
-            trace(">> PRINTER: " + printer);
-            trace("-----------------------");
         }
 
         public function testPrinterDisplayed():void {

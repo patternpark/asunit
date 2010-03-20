@@ -43,10 +43,12 @@ package asunit4.framework {
 		public function test_iterator_next():void {
 			iterator = new TestIterator(singleTest);
 			
+            assertTrue('a', iterator.hasNext());
 			assertEquals('runBefore', 		iterator.next().toString());
+            assertTrue('b', iterator.hasNext());
 			assertEquals('fail_assertTrue',	iterator.next().toString());
+            assertTrue('c', iterator.hasNext());
 			assertEquals('runAfter',		iterator.next().toString());
-			
 			assertFalse('no methods left in iterator', iterator.hasNext());
 		}
 	}

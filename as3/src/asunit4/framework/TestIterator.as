@@ -173,11 +173,13 @@ package asunit4.framework {
         public function next():* {
             if (!testMethods) return null;
 
-            if (beforeClassMethods.hasNext())
+            if (beforeClassMethods.hasNext()) {
                 return beforeClassMethods.next();
+            }
                 
-            if (beforeMethods.hasNext())
+            if (beforeMethods.hasNext()) {
                 return beforeMethods.next();
+            }
             
             if (!testMethodHasRunThisCycle && testMethods.hasNext()) {
                 testMethodHasRunThisCycle = true;

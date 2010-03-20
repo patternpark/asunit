@@ -29,9 +29,9 @@ package asunit4.runners {
     import p2.reflect.ReflectionMember;
     import p2.reflect.ReflectionVariable;
 
-    public class TestRunner extends EventDispatcher implements IRunner, IAsync {
-
-        public static var ASYNC_INTERFACE:String = 'asunit4.async::IAsync';
+    public class TestRunner extends EventDispatcher implements IRunner {
+        public static var ASYNC_NAME:String = 'asunit4.async::Async';
+        public static var IASYNC_NAME:String = 'asunit4.async::IAsync';
         public static var DISPLAY_OBJECT_CONTAINER:String = 'flash.display::DisplayObjectContainer';
 
         // partially exposed for unit testing
@@ -50,11 +50,13 @@ package asunit4.runners {
         protected var startTime:Number;
         protected var timer:Timer;
         protected var visualContext:DisplayObjectContainer;
+        protected var visualInstances:Array;
 
         public function TestRunner() {
             async = new Async();
             timer = new Timer(0, 1);
             timer.addEventListener(TimerEvent.TIMER, runNextMethod);
+            visualInstances = [];
         }
 
         public function run(test:Class, result:IResult, visualContext:DisplayObjectContainer=null):void {
@@ -219,7 +221,7 @@ package asunit4.runners {
         protected function injectMember(member:ReflectionVariable):void {
             var reflection:Reflection = Reflection.create(getDefinitionByName(member.type));
             try {
-            var instance:* = createInstanceFromReflection(reflection);
+                var instance:* = createInstanceFromReflection(reflection);
             }
             catch(e:VerifyError) {
                 throw new VerifyError("Failed to instantiate " + member.type + " in order to inject public var " + member.name);
@@ -228,18 +230,36 @@ package asunit4.runners {
         }
 
         protected function createInstanceFromReflection(reflection:Reflection):* {
-            var clazz:Class = getClassReferenceFromReflection(reflection);
-            var constructorReflection:Reflection = Reflection.create(clazz);
-            // Return the shared async instance if they're expecting any 
-            // data type that isA IAsync...
-            if(constructorReflection.isA(ASYNC_INTERFACE)) {
+            // Return the shared async instance if they're expecting the interface
+            // or concrete instance, but NOT if their Inject is merely a subclass...
+            if(reflection.name == ASYNC_NAME || reflection.name == IASYNC_NAME) {
                 return async;
             }
-            else if(constructorReflection.isA(DISPLAY_OBJECT_CONTAINER)) {
-                trace(">> FOUND A DISPLAY OBJECT!!!");
+
+            var clazz:Class = getClassReferenceFromReflection(reflection);
+            var constructorReflection:Reflection = Reflection.create(clazz);
+            var instance:* = new constructorReflection.classReference();
+
+            if(constructorReflection.isA(DISPLAY_OBJECT_CONTAINER)) {
+                // Add injected DisplayObjectContainers to a collection
+                // for removal, and add them to the visualContext if
+                // one was provided to the run() method.
+                if(visualContext) {
+                    visualInstances.push(instance);
+                    visualContext.addChild(instance);
+                } 
+                else {
+                    warn("TestRunner is injecting a DisplayObjectContainer on your Test but wasn't given a visualContext when run was called. This means your visual entity will not be attached to the Display List.");
+                }
             }
 
-            return new constructorReflection.classReference();
+            return instance;
+        }
+
+        // TODO: Implement some notification scheme that allows 
+        // users to turn off noisy messages...
+        protected function warn(message:String):void {
+            //trace("[WARNING] " + message);
         }
 
         protected function getClassReferenceFromReflection(reflection:Reflection):Class {
@@ -267,45 +287,6 @@ package asunit4.runners {
         // TODO: Implement this method:
         protected function argumentFreeConstructor(reflection:Reflection):Boolean {
             return true;
-        }
-
-        protected function updateAsyncMembers():void {
-            asyncMembers.reset();
-
-            var member:ReflectionVariable;
-            while(asyncMembers.hasNext()) {
-                member = asyncMembers.next();
-                try {
-                    currentTest[member.name] = async;
-                }
-                catch(e:Error) {
-                    trace("[ERROR] TestRunner attempted to write an IAsync instance, but was denied for some reason: " + e);
-                }
-            }
-        }
-
-        /**
-         * Implementing the asunit4.async.IAsync interface to delegate
-         **/
-
-		public function add(handler:Function, duration:int = -1):Function {
-            return async.add(handler, duration);
-        }
-
-		public function cancelPending():void {
-            async.cancelPending();
-        }
-
-		public function proceedOnEvent(test:Object, target:IEventDispatcher, eventName:String, timeout:int = 500, timeoutHandler:Function = null):void {
-            async.proceedOnEvent(test, target, eventName, timeout, timeoutHandler);
-        }
-
-		public function getPending():Array {
-            return async.getPending();
-        }
-
-		public function get hasPending():Boolean {
-            return async.hasPending;
         }
     }
 }

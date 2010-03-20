@@ -32,6 +32,8 @@ package asunit4.printers {
         private var testTimes:Array;
 		private var startTime:Number;
 
+        private var runCompleted:Boolean;
+
 		public function TextPrinter() {
             initialize();
         }
@@ -58,23 +60,22 @@ package asunit4.printers {
 		
 		public function onTestFailure(failure:ITestFailure):void {
             var s:String = '';
-			var stack:String = '';
-
 			s += getQualifiedClassName(failure.failedTest);
 			s += '.' + failure.failedMethod + ' : ';
-			
-			stack = failure.thrownException.getStackTrace();
-			
-			stack = stack.replace(localPathPattern, '');
-			stack = stack.replace(/AssertionFailedError: /, '');
+            s += getFailureStackTrace(failure);
 
-			s += stack + '\n\n';
-			
             failures.push(s);
             dots.push(failure.isFailure ? 'F' : 'E');
-			//failuresField.text += s;
-			//dots.text += failure.isFailure ? 'F' : 'E';
 		}
+
+        private function getFailureStackTrace(failure:ITestFailure):String {
+            var stack:String = "";
+			stack = failure.thrownException.getStackTrace();
+			stack = stack.replace(localPathPattern, '');
+			stack = stack.replace(/AssertionFailedError: /, '');
+            stack += "\n\n";
+            return stack;
+        }
 		
 		public function onTestSuccess(success:ITestSuccess):void {
 			dots.push('.');
@@ -94,7 +95,8 @@ package asunit4.printers {
         }
 		
 		public function onRunCompleted(result:IResult):void {
-			//trace('???? result.wasSuccessful: ' + result.wasSuccessful);
+            runCompleted = true;
+
             if (result.wasSuccessful) {
                 print("OK");
                 println (" (" + result.runCount + " test" + (result.runCount == 1 ? "": "s") + ")");
@@ -140,7 +142,13 @@ package asunit4.printers {
                 str += dots[i];
             }
             parts.push(str);
-            parts.push(footer);
+
+            if(runCompleted) {
+                if(failures.length > 0) {
+                    parts = parts.concat(failures);
+                }
+                parts.push(footer);
+            }
             return parts.join("\n\n");
         }
 		

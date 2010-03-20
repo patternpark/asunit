@@ -3,12 +3,12 @@ package asunit4.framework {
 	import asunit.framework.TestCase;
     import asunit.util.Iterator;
 
-	import asunit4.support.FailAssertTrueTest;
+	import asunit4.support.FailAssertTrue;
 
 	public class TestIteratorSingleMethodTest extends TestCase {
 
 		private var iterator:Iterator;
-		private var singleTest:FailAssertTrueTest;
+		private var singleTest:FailAssertTrue;
 
 		public function TestIteratorSingleMethodTest(testMethod:String = null) {
 			super(testMethod);
@@ -16,7 +16,7 @@ package asunit4.framework {
 
 		protected override function setUp():void {
             super.setUp();
-			singleTest = new FailAssertTrueTest();
+			singleTest = new FailAssertTrue();
 		}
 
 		protected override function tearDown():void {

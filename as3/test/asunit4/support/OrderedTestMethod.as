@@ -4,11 +4,11 @@
 
 	import flash.display.Sprite;
 
-	public class OrderedTestMethodTest {
+	public class OrderedTestMethod {
 		
 		public var methodsCalled:Array = [];
 	
-		public function OrderedTestMethodTest() {
+		public function OrderedTestMethod() {
 		}
 		
 		// Method names are chosen to avoid coinciding with alphabetical order.

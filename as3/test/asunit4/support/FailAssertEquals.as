@@ -1,12 +1,12 @@
 ﻿package asunit4.support {
 
 	import asunit.asserts.*;
+	
+	public class FailAssertEquals {
 
-	public class SucceedAssertTrueTest {
-		
 		public var methodsCalled:Array;
 		
-		public function SucceedAssertTrueTest() {
+		public function FailAssertEquals() {
 			methodsCalled = [];
 		}
 		
@@ -21,11 +21,9 @@
 		}
 		
 		[Test]
-		public function succeed_assertTrue():void {
+		public function fail_assertEquals():void {
 			methodsCalled.push(arguments.callee);
-			assertTrue(true);
+			assertEquals('Words should be equal', 'right', 'wrong');
 		}
-		
 	}
-
 }

@@ -2,7 +2,7 @@
 
 	import asunit.asserts.*;
 
-	public class IgnoredMethodTest {
+	public class IgnoredMethod {
 		
 		[Before]
 		public function runBefore():void {

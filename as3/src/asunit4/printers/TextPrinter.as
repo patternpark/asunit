@@ -35,7 +35,8 @@ package asunit4.printers {
         private var resultBarHeight:uint = 3;
         private var successes:Array;
         private var testTimes:Array;
-        private var textDisplay:TextField;
+
+        protected var textDisplay:TextField;
 
         private var runCompleted:Boolean;
 

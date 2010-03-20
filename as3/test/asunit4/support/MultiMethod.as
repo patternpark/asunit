@@ -4,13 +4,13 @@
 
 	import flash.display.Sprite;
 
-	public class MultiMethodTest {
+	public class MultiMethod {
 		
 		public static var methodsCalled:Array = [];
 
 		protected var sprite:Sprite;
 	
-		public function MultiMethodTest() {
+		public function MultiMethod() {
 		}
 		
 		[BeforeClass]

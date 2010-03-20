@@ -2,13 +2,16 @@
 
 	import asunit.asserts.*;
 
-	public class FailAssertTrueTest {
+	public class SucceedAssertTrue{
 		
 		public var methodsCalled:Array;
 		
+		public function SucceedAssertTrue() {
+			methodsCalled = [];
+		}
+		
 		[Before]
 		public function runBefore():void {
-			methodsCalled = [];
 			methodsCalled.push(arguments.callee);
 		}
 		
@@ -18,9 +21,9 @@
 		}
 		
 		[Test]
-		public function fail_assertTrue():void {
+		public function succeed_assertTrue():void {
 			methodsCalled.push(arguments.callee);
-			assertTrue('Law of non-contradiction', false);
+			assertTrue(true);
 		}
 		
 	}

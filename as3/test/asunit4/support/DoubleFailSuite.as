@@ -2,7 +2,7 @@
 		
 	[Suite]
 	public class DoubleFailSuite {
-		public var failAssertTrueTest:FailAssertTrueTest;
-		public var failAssertEqualsTest:FailAssertEqualsTest;
+		public var failAssertTrueTest:FailAssertTrue;
+		public var failAssertEqualsTest:FailAssertEquals;
 	}
 }

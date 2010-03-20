@@ -1,17 +1,14 @@
 ﻿package asunit4.support {
 
 	import asunit.asserts.*;
-	
-	public class FailAssertEqualsTest {
 
-		public var methodsCalled:Array;
+	public class FailAssertTrue {
 		
-		public function FailAssertEqualsTest() {
-			methodsCalled = [];
-		}
+		public var methodsCalled:Array;
 		
 		[Before]
 		public function runBefore():void {
+			methodsCalled = [];
 			methodsCalled.push(arguments.callee);
 		}
 		
@@ -21,9 +18,11 @@
 		}
 		
 		[Test]
-		public function fail_assertEquals():void {
+		public function fail_assertTrue():void {
 			methodsCalled.push(arguments.callee);
-			assertEquals('Words should be equal', 'right', 'wrong');
+			assertTrue('Law of non-contradiction', false);
 		}
+		
 	}
+
 }

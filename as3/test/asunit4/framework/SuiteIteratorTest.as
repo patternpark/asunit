@@ -4,8 +4,8 @@ package asunit4.framework {
     import asunit.util.Iterator;
 
 	import asunit4.support.DoubleFailSuite;
-	import asunit4.support.FailAssertEqualsTest;
-	import asunit4.support.FailAssertTrueTest;
+	import asunit4.support.FailAssertEquals;
+	import asunit4.support.FailAssertTrue;
 
 	public class SuiteIteratorTest extends TestCase {
 
@@ -24,7 +24,7 @@ package asunit4.framework {
 		}
 		
 		public function test_accepts_test_class():void {
-            var iterator:Iterator = new SuiteIterator(FailAssertEqualsTest);
+            var iterator:Iterator = new SuiteIterator(FailAssertEquals);
 			assertEquals(1, iterator.length);
 		}
 		
@@ -33,15 +33,15 @@ package asunit4.framework {
 			
 			assertEquals(2, iterator.length);
 			// In case the ordering is random, check that the array contains the class somewhere.
-            assertSame(FailAssertEqualsTest, iterator.next());
-            assertSame(FailAssertTrueTest, iterator.next());
+            assertSame(FailAssertEquals, iterator.next());
+            assertSame(FailAssertTrue, iterator.next());
 		}
 		
 		public function test_getTestClasses_on_test_class_should_return_array_with_test():void {
-            var iterator:Iterator = new SuiteIterator(FailAssertTrueTest);
+            var iterator:Iterator = new SuiteIterator(FailAssertTrue);
 			
 			assertEquals(1, iterator.length);
-			assertSame(FailAssertTrueTest, iterator.next());
+			assertSame(FailAssertTrue, iterator.next());
 		}
 		
 		public function test_iterator_for_non_suite_class_yields_hasNext_false():void {
@@ -57,8 +57,8 @@ package asunit4.framework {
 		public function test_iterator_next():void {
 			var iterator:Iterator = new SuiteIterator(DoubleFailSuite);
 			
-			assertSame(FailAssertEqualsTest,	iterator.next());
-			assertSame(FailAssertTrueTest, 		iterator.next());
+			assertSame(FailAssertEquals,	iterator.next());
+			assertSame(FailAssertTrue, 		iterator.next());
 			
 			assertFalse('no methods left in iterator', iterator.hasNext());
 		}

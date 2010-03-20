@@ -3,12 +3,12 @@ package asunit4.framework {
 	import asunit.framework.TestCase;
     import asunit.util.Iterator;
 
-	import asunit4.support.OrderedTestMethodTest;
+	import asunit4.support.OrderedTestMethod;
 
 	public class TestIteratorOrderedTestMethodTest extends TestCase {
 
 		private var iterator:Iterator;
-		private var orderedTest:OrderedTestMethodTest;
+		private var orderedTest:OrderedTestMethod;
 
 		public function TestIteratorOrderedTestMethodTest(testMethod:String = null) {
 			super(testMethod);
@@ -16,7 +16,7 @@ package asunit4.framework {
 
 		protected override function setUp():void {
             super.setUp();
-			orderedTest = new OrderedTestMethodTest();
+			orderedTest = new OrderedTestMethod();
 		}
 
 		protected override function tearDown():void {

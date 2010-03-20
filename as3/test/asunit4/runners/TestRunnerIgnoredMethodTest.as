@@ -3,7 +3,7 @@ package asunit4.runners {
     import asunit.framework.TestCase;
 
     import asunit4.framework.Result;
-    import asunit4.support.IgnoredMethodTest;
+    import asunit4.support.IgnoredMethod;
 
     import flash.events.Event;
 
@@ -19,7 +19,7 @@ package asunit4.runners {
 
         protected override function setUp():void {
             super.setUp();
-            ignoredTest  = IgnoredMethodTest;
+            ignoredTest  = IgnoredMethod;
             runner       = new TestRunner();
             runnerResult = new Result();
         }

@@ -2,6 +2,6 @@
 		
 	[Suite]
 	public class SingleSuccessSuite {
-		public var succeedAssertTrueTest:SucceedAssertTrueTest;
+		public var succeedAssertTrue:SucceedAssertTrue;
 	}
 }

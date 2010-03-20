@@ -2,19 +2,19 @@ package asunit4.framework {
 
 	import asunit.framework.TestCase;
 
-	import asunit4.support.MultiMethodTest;
+	import asunit4.support.MultiMethod;
 
 	public class TestIteratorMethodByNameTest extends TestCase {
 
 		private var iterator:TestIterator;
-		private var multiTest:MultiMethodTest;
+		private var multiTest:MultiMethod;
 
 		public function TestIteratorMethodByNameTest(testMethod:String = null) {
 			super(testMethod);
 		}
 
 		protected override function setUp():void {
-			multiTest = new MultiMethodTest();
+			multiTest = new MultiMethod();
 		}
 
 		protected override function tearDown():void {

@@ -3,11 +3,11 @@ package asunit4.framework {
 	import asunit.framework.TestCase;
     import asunit.util.Iterator;
 
-	import asunit4.support.IgnoredMethodTest;
+	import asunit4.support.IgnoredMethod;
 
 	public class TestIteratorIgnoredMethodTest extends TestCase {
 
-		private var ignoredTest:IgnoredMethodTest;
+		private var ignoredTest:IgnoredMethod;
 		private var iterator:Iterator;
 
 		public function TestIteratorIgnoredMethodTest(testMethod:String = null) {
@@ -16,7 +16,7 @@ package asunit4.framework {
 
 		protected override function setUp():void {
             super.setUp();
-			ignoredTest = new IgnoredMethodTest();
+			ignoredTest = new IgnoredMethod();
 		}
 
 		protected override function tearDown():void {
@@ -46,16 +46,16 @@ package asunit4.framework {
 }
 
 /*
-<factory type="asunit4.support::IgnoredMethodTest">
+<factory type="asunit4.support::IgnoredMethod">
   <extendsClass type="Object"/>
-  <method name="runAfter" declaredBy="asunit4.support::IgnoredMethodTest" returnType="void">
+  <method name="runAfter" declaredBy="asunit4.support::IgnoredMethod" returnType="void">
     <metadata name="After"/>
   </method>
-  <method name="should_be_ignored" declaredBy="asunit4.support::IgnoredMethodTest" returnType="void">
+  <method name="should_be_ignored" declaredBy="asunit4.support::IgnoredMethod" returnType="void">
     <metadata name="Test"/>
     <metadata name="Ignore"/>
   </method>
-  <method name="runBefore" declaredBy="asunit4.support::IgnoredMethodTest" returnType="void">
+  <method name="runBefore" declaredBy="asunit4.support::IgnoredMethod" returnType="void">
     <metadata name="Before"/>
   </method>
 </factory>

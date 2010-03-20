@@ -4,11 +4,11 @@ package asunit4.framework {
     import asunit.util.ArrayIterator;
     import asunit.util.Iterator;
 
-	import asunit4.support.MultiMethodTest;
+	import asunit4.support.MultiMethod;
 
 	public class TestIteratorMultiMethodTest extends TestCase {
 
-		private var multiTest:MultiMethodTest;
+		private var multiTest:MultiMethod;
 
 		public function TestIteratorMultiMethodTest(testMethod:String = null) {
 			super(testMethod);
@@ -16,7 +16,7 @@ package asunit4.framework {
 
 		protected override function setUp():void {
             super.setUp();
-			multiTest = new MultiMethodTest();
+			multiTest = new MultiMethod();
 		}
 
 		protected override function tearDown():void {
@@ -40,8 +40,8 @@ package asunit4.framework {
 		public function test_get_BeforeClass_methods_of_test_instance():void {
             var iterator:Iterator = new TestIterator(multiTest).beforeClassIterator;
             var methods:Array = [
-                { name: 'runBeforeClass1', value: MultiMethodTest.runBeforeClass1 },
-                { name: 'runBeforeClass2', value: MultiMethodTest.runBeforeClass2 }
+                { name: 'runBeforeClass1', value: MultiMethod.runBeforeClass1 },
+                { name: 'runBeforeClass2', value: MultiMethod.runBeforeClass2 }
             ];
 
             verifyMethods(iterator, methods);
@@ -50,8 +50,8 @@ package asunit4.framework {
 		public function test_get_AfterClass_methods_of_test_instance():void {
 			var iterator:Iterator = new TestIterator(multiTest).afterClassIterator;
             var methods:Array = [
-                { name: 'runAfterClass1', value: MultiMethodTest.runAfterClass1 },
-                { name: 'runAfterClass2', value: MultiMethodTest.runAfterClass2 }
+                { name: 'runAfterClass1', value: MultiMethod.runAfterClass1 },
+                { name: 'runAfterClass2', value: MultiMethod.runAfterClass2 }
             ];
 
             verifyMethods(iterator, methods);

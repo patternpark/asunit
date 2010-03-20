@@ -1,4 +1,5 @@
 package asunit.framework {
+
     import asunit.errors.AssertionFailedError;
     import asunit.errors.InstanceNotFoundError;
 

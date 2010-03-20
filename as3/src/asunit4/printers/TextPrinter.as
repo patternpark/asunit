@@ -192,17 +192,22 @@ package asunit4.printers {
             }
         }
 		
-		private function onAddedToStage(e:Event):void {
+		private function onAddedToStage(event:Event):void {
 			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+            addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
 			initializeDisplay();
             updateTextDisplay();
 		}
+
+        private function onRemovedFromStage(event:Event):void {
+            stage.removeEventListener(Event.RESIZE, onStageResize);
+        }
 		
-		private function onStageResize(e:Event):void {
-			backgroundFill.width = stage.stageWidth;
-			backgroundFill.height = stage.stageHeight;
-            textDisplay.width = stage.stageWidth;
-            textDisplay.height = stage.stageHeight;
+		private function onStageResize(event:Event):void {
+            backgroundFill.width  = stage.stageWidth;
+            backgroundFill.height = stage.stageHeight;
+            textDisplay.width     = stage.stageWidth;
+            textDisplay.height    = stage.stageHeight;
 		}
 		
 		private function initializeDisplay():void {

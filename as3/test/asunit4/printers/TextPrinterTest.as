@@ -33,12 +33,12 @@ package asunit4.printers {
 
         override protected function tearDown():void {
             super.tearDown();
+            removeChild(printer);
             failure    = null;
             printer    = null;
             testResult = null;
             success    = null;
             test       = null;
-            removeChild(printer);
         }
 
         private function executeASucceedingTest():void {
@@ -57,7 +57,6 @@ package asunit4.printers {
             testResult.onRunCompleted(null);
         }
 
-        /*
         public function testPrinterOnTestSuccess():void {
             executeASucceedingTest();
             assertTrue("Printer should print OK", printer.toString().indexOf('OK') > -1);
@@ -73,11 +72,10 @@ package asunit4.printers {
         }
 
         public function testPrinterDisplayed():void {
-            //executeASucceedingTest();
-            //addChild(printer);
-            //assertTrue("The output was displayed.", printer.getTextDisplay().text.indexOf('Time Summary:') > -1);
+            addChild(printer);
+            executeASucceedingTest();
+            assertTrue("The output was displayed.", printer.getTextDisplay().text.indexOf('Time Summary:') > -1);
         }
-        */
     }
 }
 
@@ -94,3 +92,4 @@ class FakeTextPrinter extends TextPrinter {
         return textDisplay;
     }
 }
+

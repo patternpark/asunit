@@ -49,22 +49,18 @@ package asunit4.runners {
             assertEquals('timeout value', 100, method.timeout);
         }
 
-        public function test_run_with_successful_async_operation():void {
-            runner.addEventListener(Event.COMPLETE, addAsync(check_runner_result_wasSuccessful, 100));
+        public function testRunAsyncWithoutFailing():void {
+            runner.addEventListener(Event.COMPLETE, addAsync(ensureRunnerHasNotYetFailed, 100));
             runner.run(successTest, runnerResult);
         }
                 
-        private function check_runner_result_wasSuccessful(e:Event):void {
-            assertTrue('runner result was successful', runnerResult.wasSuccessful);
-        }
-        
-        public function test_run_synchronous_call_of_async_delegate():void {
-            runner.addEventListener(Event.COMPLETE, addAsync(check_runner_result_wasSuccessful2, 10));
+        public function testRunAsyncCallsAsyncDelegate():void {
+            runner.addEventListener(Event.COMPLETE, addAsync(ensureRunnerHasNotYetFailed, 10));
             runner.run(syncTest, runnerResult);
         }
         
-        private function check_runner_result_wasSuccessful2(e:Event):void {
-            assertTrue('runner result was successful 2', runnerResult.wasSuccessful);
+        private function ensureRunnerHasNotYetFailed(e:Event):void {
+            assertFalse('runner result has not failed', runnerResult.failureEncountered);
         }
         
         public function test_run_with_too_slow_async_operation_triggers_result_with_IllegalOperationError():void {

@@ -31,6 +31,7 @@ package asunit4.runners {
     public class TestRunner extends EventDispatcher implements IRunner, IAsync {
 
         public static var ASYNC_INTERFACE:String = 'asunit4.async::IAsync';
+        public static var DISPLAY_OBJECT_CONTAINER:String = 'flash.display::DisplayObjectContainer';
         // partially exposed for unit testing
         internal var currentTest:Object;
 
@@ -40,6 +41,7 @@ package asunit4.runners {
         protected var asyncMembers:Iterator;
         protected var currentMethod:Method;
         protected var currentTestReflection:Reflection;
+        protected var displayObjectMembers:Iterator;
         protected var injectableMembers:Iterator;
         protected var methodIsExecuting:Boolean = false;
         protected var methodPassed:Boolean = true;
@@ -80,6 +82,11 @@ package asunit4.runners {
 
         protected function initializeInjectableMembers():void {
             injectableMembers = new ArrayIterator(currentTestReflection.getMembersByMetaData('Inject'));
+        }
+
+        protected function intializeDisplayObjectMembers():void {
+            var members:Array = new Array();
+            displayObjectMembers = new ArrayIterator(members);
         }
 
         protected function initializeAsyncMembers():void {

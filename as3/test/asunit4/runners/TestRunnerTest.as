@@ -118,6 +118,36 @@ package asunit4.runners {
 			
 			assertEquals('checked all methodsCalled', MultiMethod.methodsCalled.length, i);
 		}
+
+        private function testInjectDisplayObjectContainer():void {
+            runner.run(SomeTest, runnerResult);
+            assertTrue(runnerResult.wasSuccessful);
+            assertTrue(false);
+        }
 	}
+}
+
+import asunit.asserts.*;
+import asunit4.async.IAsync;
+
+import flash.display.DisplayObjectContainer;
+
+class SomeTest {
+
+    [Inject]
+    public var async:IAsync;
+
+    [Inject]
+    public var context:DisplayObjectContainer;
+
+    [Test]
+    public function verifyInjection():void {
+        assertNotNull(context);
+    }
+
+    [Test]
+    public function verifyAsyncInjection():void {
+        assertNotNull(async);
+    }
 }
 

@@ -36,35 +36,58 @@ package asunit4.framework {
             testResult = null;
 		}
 
-		public function testInstantiated():void {
-			assertTrue("result is Result", testResult is Result);
-		}
-
-		public function testRunCountWithSingleSuccess():void {
+        private function runSingleSuccess():void {
             testResult.onRunStarted();
             testResult.onTestStarted(test);
             testResult.onTestSuccess(success);
             testResult.onTestCompleted(test);
-            testResult.onRunCompleted(testResult);
-			assertEquals(1, testResult.runCount);
-		}
+            testResult.onRunCompleted(null);
+        }
 
-        public function testRunCountWithSingleError():void {
+        private function runSingleFailure():void {
             testResult.onRunStarted();
             testResult.onTestStarted(test);
             testResult.onTestFailure(failure);
             testResult.onTestCompleted(test);
             testResult.onRunCompleted(testResult);
-			assertEquals(1, testResult.runCount);
         }
 
-        public function testRunCountWithSingleIgnore():void {
+        private function runSingleIgnore():void {
             testResult.onRunStarted();
             testResult.onTestStarted(test);
             testResult.onTestIgnored(null);
             testResult.onTestCompleted(test);
             testResult.onRunCompleted(testResult);
+        }
+
+		public function testRunWithSingleSuccess():void {
+            assertFalse("before test run", testResult.wasSuccessful);
+            runSingleSuccess();
+            assertFalse("failure encountered", testResult.failureEncountered);
+            assertTrue("after test complete", testResult.wasSuccessful);
+			assertEquals(1, testResult.runCount);
+		}
+
+        public function testRunWithSingleFailure():void {
+            runSingleFailure();
+            assertTrue("failure encountered", testResult.failureEncountered);
+            assertFalse("after test complete", testResult.wasSuccessful);
+			assertEquals(1, testResult.runCount);
+        }
+
+        public function testRunWithSingleError():void {
+            runSingleFailure();
+            assertTrue("failure encountered", testResult.failureEncountered);
+            assertFalse("after test complete", testResult.wasSuccessful);
+			assertEquals(1, testResult.runCount);
+        }
+
+        public function testRunCountWithSingleIgnore():void {
+            runSingleIgnore();
+            assertFalse("failure encountered", testResult.failureEncountered);
+            assertTrue("after test complete", testResult.wasSuccessful);
 			assertEquals(0, testResult.runCount);
         }
 	}
 }
+

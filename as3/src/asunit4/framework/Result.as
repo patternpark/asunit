@@ -1,5 +1,5 @@
-package asunit4.framework
-{
+package asunit4.framework {
+
 	import asunit.framework.ITestFailure;
 
 	import flash.events.EventDispatcher;
@@ -22,6 +22,7 @@ package asunit4.framework
         protected var _ignoredTests:Array;
 		protected var _runCount:uint = 0;
 		protected var listeners:Array;
+        protected var runComplete:Boolean;
 
         public function Result() {
 			_failures		= [];
@@ -84,6 +85,7 @@ package asunit4.framework
 		}
 		
 		public function onRunCompleted(result:IResult):void {
+            runComplete = true;
 			for each (var listener:IRunListener in listeners) {
 				listener.onRunCompleted(this);
 			}
@@ -132,13 +134,18 @@ package asunit4.framework
 			}
 		}
 		
-		
-		
         /**
-         * Returns whether the entire test was successful or not.
+         * Returns whether or not we have yet encountered a failure or error.
+         */
+        public function get failureEncountered():Boolean {
+            return (failureCount > 0 || errorCount > 0);
+        }
+
+        /**
+         * Returns whether or not the entire test was successful.
          */
         public function get wasSuccessful():Boolean {
-            return (failureCount == 0 && errorCount == 0);
+            return (runComplete && !failureEncountered);
         }
 		
     }

@@ -24,6 +24,7 @@
 		
 		function get runCount():uint;
 		
+        function get failureEncountered():Boolean;
 		function get wasSuccessful():Boolean;
 		
 		function get runTime():Number;

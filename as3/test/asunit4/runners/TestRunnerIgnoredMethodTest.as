@@ -31,13 +31,13 @@ package asunit4.runners {
             runnerResult = null;
         }
 
-        public function test_run_with_ignored_method():void {
-            runner.addEventListener(Event.COMPLETE, addAsync(check_Result_has_one_ignored_method, 100));
+        public function testRunWithIgnoredMethod():void {
+            runner.addEventListener(Event.COMPLETE, addAsync(checkResultHasOneIgnoredMethod, 100));
             runner.run(ignoredTest, runnerResult);
         }
         
-        private function check_Result_has_one_ignored_method(e:Event):void {
-            assertTrue('runnerResult.wasSuccessful', runnerResult.wasSuccessful);
+        private function checkResultHasOneIgnoredMethod(e:Event):void {
+            assertFalse('runnerResult.failureEncountered', runnerResult.failureEncountered);
             assertEquals('one ignored test in result', 1, runnerResult.ignoredTests.length);
         }
     }

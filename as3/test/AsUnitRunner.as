@@ -1,6 +1,5 @@
 package {
     import asunit.textui.TestRunner;
-    import asunit4.printers.TextPrinterTest;
     
     public class AsUnitRunner extends TestRunner {
 

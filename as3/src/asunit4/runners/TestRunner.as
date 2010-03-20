@@ -79,7 +79,7 @@ package asunit4.runners {
             result.onTestStarted(currentTest);
             
             methodsToRun = new TestIterator(currentTest, testMethodName);
-            runNextMethod();            
+            runNextMethod();
         }
 
         protected function initializeInjectableMembers():void {

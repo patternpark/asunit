@@ -163,11 +163,16 @@ package asunit4.framework {
        }
 
         public function get length():uint {
-            return (beforeClassMethods.length + 
-                    beforeMethods.length + 
-                    testMethods.length + 
-                    afterMethods.length +
-                    afterClassMethods.length);
+            var testMethodCount:int = testMethods.length - ignoredMethods.length;
+            var classHelperCount:int = beforeClassMethods.length + afterClassMethods.length;
+            var methodHelperCount:int = beforeMethods.length + afterMethods.length;
+                                       
+            if(methodHelperCount > 0) {
+                return (testMethodCount * methodHelperCount) + testMethodCount + classHelperCount;
+            }
+            else {
+                return testMethodCount + classHelperCount;
+            }
         }
 
         public function next():* {

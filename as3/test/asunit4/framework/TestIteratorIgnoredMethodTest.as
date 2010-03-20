@@ -31,7 +31,7 @@ package asunit4.framework {
 
         public function test_getTestMethods_should_not_include_ignored_test():void {
             var iterator:Iterator = new TestIterator(ignoredTest);
-            assertEquals(4, iterator.length);
+            assertEquals(3, iterator.length);
         }
 		
 		public function test_getTestMethods_should_return_ignored_test():void {

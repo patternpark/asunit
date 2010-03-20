@@ -36,7 +36,7 @@ package asunit4.framework {
                 assertSame(expectedMethod.name + " with wrong value", expectedMethod.value, actualMethod.value);
             }
         }
-		
+
 		public function test_get_BeforeClass_methods_of_test_instance():void {
             var iterator:Iterator = new TestIterator(multiTest).beforeClassIterator;
             var methods:Array = [
@@ -128,6 +128,13 @@ package asunit4.framework {
 			
 			assertTrue(iterator.hasNext());
 		}
+
+        public function testIteratorLength():void {
+            // TestIterator.length reflects all methods that will be called...
+            // not just test methods and not all non-test methods * test methods.
+            var iterator:TestIterator = new TestIterator(multiTest);
+            assertEquals(19, iterator.length);
+        }
 	}
 }
 

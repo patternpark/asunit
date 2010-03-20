@@ -23,7 +23,7 @@ package asunit4.async {
          * To take advantage of Asynchronous features, add a member variable
          * to your test like:
          * 
-         *  [Async]
+         *  [Inject]
          *  public var async:IAsync;
          *
          * This public property will be injected with an IAsync instance 

@@ -29,15 +29,18 @@ package asunit4.runners {
     import p2.reflect.ReflectionVariable;
 
     public class TestRunner extends EventDispatcher implements IRunner, IAsync {
+
+        public static var ASYNC_INTERFACE:String = 'asunit4.async::IAsync';
         // partially exposed for unit testing
         internal var currentTest:Object;
 
         private var async:IAsync;
 
         // Question: [from luke] Should these be private?
+        protected var asyncMembers:Iterator;
         protected var currentMethod:Method;
         protected var currentTestReflection:Reflection;
-        protected var asyncMembers:Iterator;
+        protected var injectableMembers:Iterator;
         protected var methodIsExecuting:Boolean = false;
         protected var methodPassed:Boolean = true;
         protected var methodTimeoutID:int = -1;
@@ -62,6 +65,7 @@ package asunit4.runners {
             this.result           = result;
             currentMethod         = null;
 
+            initializeInjectableMembers();
             initializeAsyncMembers();
             
             async.addEventListener(TimeoutCommandEvent.CALLED,     onAsyncMethodCalled);
@@ -74,8 +78,29 @@ package asunit4.runners {
             runNextMethod();            
         }
 
+        protected function initializeInjectableMembers():void {
+            injectableMembers = new ArrayIterator(currentTestReflection.getMembersByMetaData('Inject'));
+        }
+
         protected function initializeAsyncMembers():void {
-            asyncMembers = new ArrayIterator(currentTestReflection.getMembersByMetaData('Async'));
+            var members:Array = new Array();
+            var member:ReflectionVariable;
+            while(injectableMembers.hasNext()) {
+                // By expecting a ReflectionVariable,
+                // and null-checking in the verification,
+                // we will only receive Accessors and Variables.
+                member = injectableMembers.next();
+                if(memberIsAsync(member)) {
+                    members.push(member);
+                }
+            }
+            injectableMembers.reset();
+
+            asyncMembers = new ArrayIterator(members);
+        }
+
+        private function memberIsAsync(member:ReflectionVariable):Boolean {
+            return (member && member.type == ASYNC_INTERFACE);
         }
         
         protected function runNextMethod(e:TimerEvent = null):void {

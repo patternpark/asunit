@@ -87,7 +87,7 @@ import flash.utils.setTimeout;
 
 class AsyncMethodSuccessTest {
 
-    [Async]
+    [Inject]
     public var async:IAsync;
     
     [Test(timeout="100")]
@@ -102,7 +102,7 @@ class AsyncMethodSuccessTest {
 
 class AsyncMethodTooSlowTest {
     
-    [Async]
+    [Inject]
     public var async:IAsync;
 
     [Test(timeout="0")]
@@ -119,7 +119,7 @@ class AsyncDelegateCalledSynchronouslyTest {
 
     import asunit.asserts.*;
 
-    [Async]
+    [Inject]
     public var async:IAsync;
 
     private var handlerWasCalled:Boolean = false;

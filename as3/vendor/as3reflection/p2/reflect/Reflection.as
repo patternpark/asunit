@@ -20,6 +20,7 @@ package p2.reflect {
         private var _isClass:Boolean;
         private var _isDynamic:Boolean;
         private var _isFinal:Boolean;
+        private var _isInterface:Boolean;
         private var _isStatic:Boolean;
         private var _methodNames:Array;
         private var _methods:Array;
@@ -279,6 +280,14 @@ package p2.reflect {
         
         public function get base():String {
             return _base ||= description.@base;
+        }
+
+        public function get isInterface():Boolean {
+            return _isInterface ||= inferIsInterface();
+        }
+
+        private function inferIsInterface():Boolean {
+            return (base == "Class" && (description..factory..extendsClass.length() == 0));
         }
         
         public function get isClass():Boolean {

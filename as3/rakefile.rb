@@ -38,7 +38,7 @@ desc "Compile the test harness"
 mxmlc 'bin/AsUnitRunner.swf' do |t|
   t.default_size = '1000 600'
   t.source_path << 'src'
-  t.source_path << 'lib/as3reflection'
+  t.library_path << 'lib/Reflection.swc'
   t.input = 'test/AsUnitRunner.as'
   t.debug = true
   t.gem_name = 'sprout-flex4sdk-tool'
@@ -53,7 +53,7 @@ end
 compc 'bin/AsUnit4.swc' do |t|
   t.include_sources << 'src'
   t.source_path << 'src'
-  t.source_path << 'lib/as3reflection'
+  t.library_path << 'lib/Reflection.swc'
   apply_as3_meta_data_args(t)
 end
 
@@ -92,6 +92,7 @@ asdoc 'doc' do |t|
   t.appended_args = '-examples-path=examples'
   t.source_path << 'src'
   t.doc_classes << 'AsUnit'
+  t.library_path << 'lib/Reflection.swc'
 
   # Include air swcs to avoid failures
   # on AirRunner:

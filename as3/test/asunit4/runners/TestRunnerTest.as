@@ -37,17 +37,16 @@ package asunit4.runners {
 			assertTrue("TestRunner instantiated", runner is TestRunner);
 		}
 		
-		public function test_free_test_does_not_extend_TestCase():void {
+		public function testTestDoesNotExtendTestCase():void {
 			assertFalse(test is TestCase);
 		}
 
-		// For now, the test methods are sorted alphabetically to enable precise testing.
-		public function test_run_test_instance_executes_proper_method_sequence():void {
-			runner.addEventListener(Event.COMPLETE, addAsync(check_methodsCalled_after_running_test_instance, 500));
+		public function testRunMethodsAlphabetically():void {
+			runner.addEventListener(Event.COMPLETE, addAsync(checkMethodsCalledAfterRunningTestInstance, 500));
 			runner.run(test, runnerResult);
 		}
 		
-		private function check_methodsCalled_after_running_test_instance(e:Event):void {
+		private function checkMethodsCalledAfterRunningTestInstance(e:Event):void {
 			var i:uint = 0;
 			
 			assertSame(MultiMethod.runBeforeClass1, 		MultiMethod.methodsCalled[i++]);
@@ -77,13 +76,13 @@ package asunit4.runners {
 			assertEquals('checked all methodsCalled', MultiMethod.methodsCalled.length, i);
 		}
 
-		public function test_run_triggers_ResultEvent_with_wasSuccessful_false_and_failures():void {
-			runner.addEventListener(Event.COMPLETE, addAsync(check_Result_wasSuccessful_false, 500));
-			
+		public function testRunTriggersResultEvent():void {
+			runner.addEventListener(Event.COMPLETE, addAsync(checkResultWasNotSuccessful, 500));
 			runner.run(test, runnerResult);
 		}
 		
-		private function check_Result_wasSuccessful_false(e:Event):void {
+		private function checkResultWasNotSuccessful(e:Event):void {
+            assertTrue(runnerResult.failureEncountered);
 			assertFalse(runnerResult.wasSuccessful);
 			
 			var failures:Array = runnerResult.failures;
@@ -93,15 +92,15 @@ package asunit4.runners {
 			assertTrue("failedTest is instance of test class", failure0.failedTest is test);
 		}
 
-		public function test_run_test_method_by_name_executes_proper_method_sequence():void {
-			var delegate:Function = addAsync(check_methodsCalled_after_running_test_method_by_name, 500);
+		public function testRunMethodByNameExecutesExpectedSequence():void {
+			var delegate:Function = addAsync(checkMethodsCalledAfterRunningTestMethodByName, 500);
 			runner.addEventListener(Event.COMPLETE, delegate);
 			
 			var testMethodName:String = 'stage_is_null_by_default';
 			runner.runMethodByName(test, runnerResult, testMethodName);
 		}
 		
-		private function check_methodsCalled_after_running_test_method_by_name(e:Event):void {
+		private function checkMethodsCalledAfterRunningTestMethodByName(e:Event):void {
 			var i:uint = 0;
 			
 			assertSame(MultiMethod.runBeforeClass1, 		MultiMethod.methodsCalled[i++]);
@@ -119,35 +118,49 @@ package asunit4.runners {
 			assertEquals('checked all methodsCalled', MultiMethod.methodsCalled.length, i);
 		}
 
-        private function testInjectDisplayObjectContainer():void {
-            runner.run(SomeTest, runnerResult);
-            assertTrue(runnerResult.wasSuccessful);
-            assertTrue(false);
+        public function testInjectTypes():void {
+            runner.run(InjectionVerification, runnerResult);
+            assertFalse("Should not have encountered failures: " + runnerResult.failures.join("\n\n"), runnerResult.failureEncountered);
         }
 	}
 }
 
 import asunit.asserts.*;
+import asunit4.async.Async;
 import asunit4.async.IAsync;
 
-import flash.display.DisplayObjectContainer;
+import flash.display.Sprite;
 
-class SomeTest {
-
-    [Inject]
-    public var async:IAsync;
+class InjectionVerification {
 
     [Inject]
-    public var context:DisplayObjectContainer;
+    public var iAsync:IAsync;
+
+    [Inject]
+    public var async:Async;
+
+    [Inject]
+    public var context:Sprite;
 
     [Test]
-    public function verifyInjection():void {
-        assertNotNull(context);
+    public function verifyDisplayObjectInjection():void {
+        assertNotNull("DisplayObject should exiset", context);
+    }
+
+    [Ignore]
+    [Test]
+    public function verifyDisplayObjectAttachedToStage():void {
+        assertNotNull("DisplayObjects hould be attached", context.stage);
     }
 
     [Test]
     public function verifyAsyncInjection():void {
         assertNotNull(async);
+    }
+
+    [Test]
+    public function verifyIAsyncInjection():void {
+        assertNotNull(iAsync);
     }
 }
 

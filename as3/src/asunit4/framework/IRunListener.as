@@ -1,4 +1,5 @@
 ﻿package asunit4.framework {
+
 	import asunit.framework.ITestFailure;
 	import asunit4.framework.IResult;
 	
@@ -7,3 +8,4 @@
 		function onRunCompleted(result:IResult):void;
 	}
 }
+

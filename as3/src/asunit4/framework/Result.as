@@ -136,6 +136,7 @@ package asunit4.framework {
 		
         /**
          * Returns whether or not we have yet encountered a failure or error.
+         * Will be accurate when checked at any time during test run.
          */
         public function get failureEncountered():Boolean {
             return (failureCount > 0 || errorCount > 0);
@@ -143,6 +144,7 @@ package asunit4.framework {
 
         /**
          * Returns whether or not the entire test was successful.
+         * Will only return true after +onRunCompleted+ called.
          */
         public function get wasSuccessful():Boolean {
             return (runComplete && !failureEncountered);

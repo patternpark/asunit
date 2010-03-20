@@ -1,4 +1,5 @@
 ﻿package asunit4.framework {
+
 	import asunit.framework.ITestFailure;
 	
 	public interface ITestListener {
@@ -9,3 +10,4 @@
 		function onTestIgnored(method:Method):void;
 	}
 }
+

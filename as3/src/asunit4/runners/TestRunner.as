@@ -32,16 +32,14 @@ package asunit4.runners {
 
         public static var ASYNC_INTERFACE:String = 'asunit4.async::IAsync';
         public static var DISPLAY_OBJECT_CONTAINER:String = 'flash.display::DisplayObjectContainer';
+
         // partially exposed for unit testing
         internal var currentTest:Object;
 
-        private var async:IAsync;
-
-        // Question: [from luke] Should these be private?
+        protected var async:IAsync;
         protected var asyncMembers:Iterator;
         protected var currentMethod:Method;
         protected var currentTestReflection:Reflection;
-        protected var displayObjectMembers:Iterator;
         protected var injectableMembers:Iterator;
         protected var methodIsExecuting:Boolean = false;
         protected var methodPassed:Boolean = true;
@@ -68,7 +66,6 @@ package asunit4.runners {
             currentMethod         = null;
 
             initializeInjectableMembers();
-            initializeAsyncMembers();
             
             async.addEventListener(TimeoutCommandEvent.CALLED,     onAsyncMethodCalled);
             async.addEventListener(TimeoutCommandEvent.TIMED_OUT,  onAsyncMethodTimedOut);
@@ -84,32 +81,6 @@ package asunit4.runners {
             injectableMembers = new ArrayIterator(currentTestReflection.getMembersByMetaData('Inject'));
         }
 
-        protected function intializeDisplayObjectMembers():void {
-            var members:Array = new Array();
-            displayObjectMembers = new ArrayIterator(members);
-        }
-
-        protected function initializeAsyncMembers():void {
-            var members:Array = new Array();
-            var member:ReflectionVariable;
-            while(injectableMembers.hasNext()) {
-                // By expecting a ReflectionVariable,
-                // and null-checking in the verification,
-                // we will only receive Accessors and Variables.
-                member = injectableMembers.next();
-                if(memberIsAsync(member)) {
-                    members.push(member);
-                }
-            }
-            injectableMembers.reset();
-
-            asyncMembers = new ArrayIterator(members);
-        }
-
-        private function memberIsAsync(member:ReflectionVariable):Boolean {
-            return (member && member.type == ASYNC_INTERFACE);
-        }
-        
         protected function runNextMethod(e:TimerEvent = null):void {
             if (testCompleted) {
                 onTestCompleted();
@@ -130,7 +101,7 @@ package asunit4.runners {
                 return;
             }
 
-            updateAsyncMembers();
+            injectMembers();
             
             if (currentMethod.timeout >= 0) {
                 methodTimeoutID = setTimeout(onMethodTimeout, currentMethod.timeout);
@@ -232,6 +203,67 @@ package asunit4.runners {
         
         protected function get testCompleted():Boolean {
             return (!methodsToRun.hasNext() && !async.hasPending);
+        }
+
+        protected function injectMembers():void {
+            var member:ReflectionVariable;
+            while(injectableMembers.hasNext()) {
+                injectMember(injectableMembers.next());
+            }
+            injectableMembers.reset();
+        }
+
+        protected function injectMember(member:ReflectionVariable):void {
+            var reflection:Reflection = Reflection.create(getDefinitionByName(member.type));
+            try {
+            var instance:* = createInstanceFromReflection(reflection);
+            }
+            catch(e:VerifyError) {
+                throw new VerifyError("Failed to instantiate " + member.type + " in order to inject public var " + member.name);
+            }
+            currentTest[member.name] = instance;
+        }
+
+        protected function createInstanceFromReflection(reflection:Reflection):* {
+            var clazz:Class = getClassReferenceFromReflection(reflection);
+            var constructorReflection:Reflection = Reflection.create(clazz);
+            // Return the shared async instance if they're expecting any 
+            // data type that isA IAsync...
+            if(constructorReflection.isA(ASYNC_INTERFACE)) {
+                return async;
+            }
+            else if(constructorReflection.isA(DISPLAY_OBJECT_CONTAINER)) {
+                trace(">> FOUND A DISPLAY OBJECT!!!");
+            }
+
+            return new constructorReflection.classReference();
+        }
+
+        protected function getClassReferenceFromReflection(reflection:Reflection):Class {
+            // This will attempt to deal with I-prefixed interfaces - like IAsync.
+            if(reflection.isInterface) {
+                return attemptToGetClassReferenceFromReflection(reflection);
+            }
+            return reflection.classReference;
+        }
+
+        protected function attemptToGetClassReferenceFromReflection(reflection:Reflection):Class {
+            var fullName:String = reflection.name;
+            var parts:Array = fullName.split("::");
+            var interfaceName:String = parts.pop();
+            var expr:RegExp = /I([AZ].+)/;
+            var match:Object = expr.exec(interfaceName);
+            if(match) {
+                parts.push(match[1]);
+                var implementationName:String = parts.join("::");
+                return Class(getDefinitionByName(implementationName));
+            }
+            throw new VerifyError("Unable to find class instance for interface " + fullName);
+        }
+
+        // TODO: Implement this method:
+        protected function argumentFreeConstructor(reflection:Reflection):Boolean {
+            return true;
         }
 
         protected function updateAsyncMembers():void {

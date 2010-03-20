@@ -46,10 +46,11 @@ package asunit4.framework {
             return (Reflection.create(Suite).getMetaDataByName('Suite') != null);
 		}
 
-        private function isTest(Test:Class):Boolean {
+        private function isTest(ProvidedTest:Class):Boolean {
             // NOTE: A test is more than just:
-            // return (Reflection.create(Test).getMetaDataByName('Test') != null);
-            var iterator:Iterator = new TestIterator(new Test());
+            // return (Reflection.create(ProvidedTest).getMetaDataByName('Test') != null);
+            // but this seems like more work than we should be doing here...
+            var iterator:Iterator = new TestIterator(new ProvidedTest());
             return (iterator.length > 0);
         }
         

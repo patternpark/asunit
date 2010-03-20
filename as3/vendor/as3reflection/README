@@ -1,0 +1,7 @@
+These source files should be merged with the src path in the source 
+distribution of AsUnit, but when compiling, developing and testing
+AsUnit, we should always build against the lib/Reflection.swc
+
+These files are being included simply to avoid making users add
+another SWC to their library-path.
+

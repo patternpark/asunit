@@ -4,3 +4,4 @@ package asunit4.framework {
 		function run(item:Class, result:IResult):void;
 	}
 }
+

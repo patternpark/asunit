@@ -23,7 +23,7 @@ package asunit4.ui {
 		}
 		
 		public function run(suite:Class):void {
-			printer = new TextPrintur();
+			printer = new TextPrinter();
 			addChild(printer);
 			
 			result = new Result();

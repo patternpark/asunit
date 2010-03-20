@@ -24,6 +24,9 @@ package asunit4.printers {
         override protected function setUp():void {
             super.setUp();
             printer    = new FakeTextPrinter();
+            printer.backgroundColor = 0xffcc00;
+            printer.textColor = 0x000000;
+
             testResult = new Result();
             test       = new TestCase();
             failure    = new TestFailure(test, 'testSomethingThatFails', new Error('Fake Failure'));
@@ -59,7 +62,9 @@ package asunit4.printers {
 
         public function testPrinterOnTestSuccess():void {
             executeASucceedingTest();
-            assertTrue("Printer should print OK", printer.toString().indexOf('OK') > -1);
+            var actual:String = printer.toString();
+            assertTrue("Printer should print OK", actual.indexOf('OK') > -1);
+            assertTrue("Printer should include Test count: ", actual.match(/\nOK \(1 test\)/));
         }
 
         public function testPrinterFailure():void {
@@ -67,7 +72,13 @@ package asunit4.printers {
             var expected:String = "testSomethingThatFails : Error: Fake Failure";
             var actual:String = printer.toString();
             assertTrue("Printer should fail", actual.indexOf(expected) > -1);
-            assertTrue("Printer should include Test Duration: " + printer, actual.match(/\nTotal Time: \d/));
+            assertTrue("Printer should include Test Duration: ", actual.match(/\nTotal Time: \d/));
+        }
+
+        public function testPrinterWithNoTests():void {
+            testResult.onRunStarted();
+            testResult.onRunCompleted(null);
+            assertTrue("Printer should include Warning for no tests", printer.toString().indexOf("[WARNING]") > -1);
         }
 
         public function testPrinterDisplayed():void {

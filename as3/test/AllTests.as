@@ -21,6 +21,7 @@ package {
 	import asunit4.async.AsyncTest;
 	import asunit4.async.ProceedOnEventTest;
 	import asunit4.framework.NestedSuiteIteratorTest;
+	import asunit4.framework.ResultTest;
 	import asunit4.framework.SuiteIteratorTest;
 	import asunit4.framework.TestIteratorIgnoredMethodTest;
 	import asunit4.framework.TestIteratorMethodByNameTest;
@@ -52,6 +53,7 @@ package {
 			addTest(new asunit4.async.AsyncTest());
 			addTest(new asunit4.async.ProceedOnEventTest());
 			addTest(new asunit4.framework.NestedSuiteIteratorTest());
+			addTest(new asunit4.framework.ResultTest());
 			addTest(new asunit4.framework.SuiteIteratorTest());
 			addTest(new asunit4.framework.TestIteratorIgnoredMethodTest());
 			addTest(new asunit4.framework.TestIteratorMethodByNameTest());

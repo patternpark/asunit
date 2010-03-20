@@ -18,11 +18,13 @@ package asunit4.printers {
 
 	public class TextPrinter extends Sprite implements IRunListener {
 
-        public static var DEFAULT_HEADER:String = "AsUnit 3.0 by people just like you.\n\nFlash Player version: " + Capabilities.version
+        public static var DEFAULT_HEADER:String = "AsUnit 4.0\n\nFlash Player version: " + Capabilities.version
 		public static var LOCAL_PATH_PATTERN:RegExp = /([A-Z]:\\[^\/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^\/:\*\?<>\|]+\.\w{2,6})/g;
 
-        public var columnCount:int = 80;
+        public var backgroundColor:uint = 0x333333;
         public var localPathPattern:RegExp;
+        public var columnCount:int      = 80;
+        public var textColor:uint       = 0xffffff;
 
         private var backgroundFill:Shape;
 		private var dots:Array;
@@ -108,8 +110,15 @@ package asunit4.printers {
 		
 		public function onRunCompleted(result:IResult):void {
             runCompleted = true;
+            if(result.runCount == 0) {
+                println("[WARNING] No tests were found or executed.");   
+                println();
+                return;
+            }
 
-            if (result.wasSuccessful) {
+           printTimeSummary();
+
+            if(result.wasSuccessful) {
                 print("OK");
                 println (" (" + result.runCount + " test" + (result.runCount == 1 ? "": "s") + ")");
             }
@@ -121,7 +130,7 @@ package asunit4.printers {
 					+ ",  Ignored: " + result.ignoredTestCount
 					);
             }
-			printTimeSummary();
+			printTimeDetails();
             updateTextDisplay();
             logResult();
 		}
@@ -137,8 +146,20 @@ package asunit4.printers {
 		private function println(str:String = ""):void {
 			print(str + "\n");
 		}
-		
+
         private function printTimeSummary():void {
+            testTimes.sortOn('duration', Array.NUMERIC | Array.DESCENDING);
+            println();
+            var totalTime:Number = 0;
+            var len:Number = testTimes.length;
+            for(var i:uint; i < len; i++) {
+                totalTime += testTimes[i].duration;
+            }
+            println("Total Time: " + totalTime + ' ms');
+            println();
+        }
+
+        private function printTimeDetails():void {
             testTimes.sortOn('duration', Array.NUMERIC | Array.DESCENDING);
             println();
             println();
@@ -146,14 +167,11 @@ package asunit4.printers {
             println();
             var len:Number = testTimes.length;
             var total:Number = 0;
+            var testTime:Object;
             for (var i:Number = 0; i < len; i++) {
-				var testTime:Object = testTimes[i];
-                total += testTime.duration;
+				testTime = testTimes[i];
                 println(testTime.duration + ' ms : ' + getQualifiedClassName(testTime.test));
             }
-            println();
-            println('Total Time: ' + total);
-            println();
         }
 
         override public function toString():String {
@@ -214,14 +232,14 @@ package asunit4.printers {
 			stage.addEventListener(Event.RESIZE, onStageResize);
 
 			backgroundFill = new Shape();
-			backgroundFill.graphics.beginFill(0x333333);
+			backgroundFill.graphics.beginFill(backgroundColor);
 			backgroundFill.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
 			addChild(backgroundFill);
 
             textDisplay = new TextField();
             textDisplay.multiline = true;
             textDisplay.wordWrap = true;
-            textDisplay.textColor = 0xFFFFFF;
+            textDisplay.textColor = textColor;
             textDisplay.x = 0;
             textDisplay.y = 0;
             textDisplay.width     = stage.stageWidth;

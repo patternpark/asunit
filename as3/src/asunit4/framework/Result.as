@@ -61,7 +61,6 @@ package asunit4.framework
         public function get ignoredTestCount():uint { return _ignoredTests.length; }
 		
 		public function get runCount():uint {
-			//TODO: write test for this
 			return errorCount + failureCount + successCount;
 		}
 		

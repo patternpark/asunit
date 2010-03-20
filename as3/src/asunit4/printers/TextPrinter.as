@@ -145,10 +145,15 @@ package asunit4.printers {
             println('Time Summary:');
             println();
             var len:Number = testTimes.length;
+            var total:Number = 0;
             for (var i:Number = 0; i < len; i++) {
 				var testTime:Object = testTimes[i];
+                total += testTime.duration;
                 println(testTime.duration + ' ms : ' + getQualifiedClassName(testTime.test));
             }
+            println();
+            println('Total Time: ' + total);
+            println();
         }
 
         override public function toString():String {

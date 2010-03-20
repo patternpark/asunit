@@ -65,7 +65,9 @@ package asunit4.printers {
         public function testPrinterFailure():void {
             executeAFailingTest();
             var expected:String = "testSomethingThatFails : Error: Fake Failure";
-            assertTrue("Printer should fail", printer.toString().indexOf(expected) > -1);
+            var actual:String = printer.toString();
+            assertTrue("Printer should fail", actual.indexOf(expected) > -1);
+            assertTrue("Printer should include Test Duration: " + printer, actual.match(/\nTotal Time: \d/));
         }
 
         public function testPrinterDisplayed():void {

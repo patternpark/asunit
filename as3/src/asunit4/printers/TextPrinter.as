@@ -13,24 +13,29 @@ package asunit4.printers {
 	import flash.system.Capabilities;
 	import flash.utils.getQualifiedClassName;
 	import flash.utils.getTimer;
+    import flash.text.TextField;
+    import flash.text.TextFormat;
 
 	public class TextPrinter extends Sprite implements IRunListener {
 
-        public static var DEFAULT_HEADER:String = "AsUnit 3.0 by Luke Bayes and Ali Mills\n\nFlash Player version: " + Capabilities.version
+        public static var DEFAULT_HEADER:String = "AsUnit 3.0 by people just like you.\n\nFlash Player version: " + Capabilities.version
 		public static var LOCAL_PATH_PATTERN:RegExp = /([A-Z]:\\[^\/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^\/:\*\?<>\|]+\.\w{2,6})/g;
 
         public var columnCount:int = 80;
         public var localPathPattern:RegExp;
 
-        private var failures:Array;
-        private var successes:Array;
-        private var ignores:Array;
+        private var backgroundFill:Shape;
 		private var dots:Array;
 		private var footer:String;
 		private var header:String;
-
-        private var testTimes:Array;
 		private var startTime:Number;
+        private var failures:Array;
+        private var ignores:Array;
+        private var resultBar:Shape;
+        private var resultBarHeight:uint = 3;
+        private var successes:Array;
+        private var testTimes:Array;
+        private var textDisplay:TextField;
 
         private var runCompleted:Boolean;
 
@@ -48,14 +53,15 @@ package asunit4.printers {
             footer           = '';
             header           = DEFAULT_HEADER;
             localPathPattern = LOCAL_PATH_PATTERN;
-			//if(stage) {
-				//initUI();
-            //} else {
-				//addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-            //}
+			if(stage) {
+				initializeDisplay();
+            } else {
+				addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+            }
 		}
 		
 		public function onRunStarted():void {
+            updateTextDisplay();
 		}
 		
 		public function onTestFailure(failure:ITestFailure):void {
@@ -66,6 +72,7 @@ package asunit4.printers {
 
             failures.push(s);
             dots.push(failure.isFailure ? 'F' : 'E');
+            updateTextDisplay();
 		}
 
         private function getFailureStackTrace(failure:ITestFailure):String {
@@ -79,19 +86,23 @@ package asunit4.printers {
 		
 		public function onTestSuccess(success:ITestSuccess):void {
 			dots.push('.');
+            updateTextDisplay();
 		}
 		
 		public function onTestIgnored(method:Method):void {
 			dots.push('I');
+            updateTextDisplay();
 		}
 		
 		public function onTestStarted(test:Object):void {
 			startTime = getTimer();
+            updateTextDisplay();
 		}
 		
 		public function onTestCompleted(test:Object):void {
             var duration:Number = getTimer() - startTime;
             testTimes.push({test:test, duration:duration});
+            updateTextDisplay();
         }
 		
 		public function onRunCompleted(result:IResult):void {
@@ -110,17 +121,23 @@ package asunit4.printers {
 					);
             }
 			printTimeSummary();
+            updateTextDisplay();
+            logResult();
 		}
+
+        protected function logResult():void {
+            trace(toString());
+        }
 		
-		protected function print(str:String):void {
+		private function print(str:String):void {
 			footer += str;
 		}
 		
-		protected function println(str:String = ""):void {
+		private function println(str:String = ""):void {
 			print(str + "\n");
 		}
 		
-        protected function printTimeSummary():void {
+        private function printTimeSummary():void {
             testTimes.sortOn('duration', Array.NUMERIC | Array.DESCENDING);
             println();
             println();
@@ -151,48 +168,66 @@ package asunit4.printers {
             }
             return parts.join("\n\n");
         }
+
+        private function updateTextDisplay():void {
+            if(textDisplay) {
+                textDisplay.text = toString();
+                updateResultBar();
+            }
+        }
+
+        private function updateResultBar():void {
+            if(stage) {
+                var color:uint = (failures.length > 0) ? 0xFF0000 : 0x00FF00;
+                resultBar.graphics.clear();
+                resultBar.graphics.beginFill(color);
+                resultBar.graphics.drawRect(0, 0, stage.stageWidth, resultBarHeight);
+                resultBar.y = stage.stageHeight - resultBarHeight;
+            }
+        }
 		
-		//protected function onAddedToStage(e:Event):void {
-			//removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-			//stage.addEventListener(Event.RESIZE, onStageResize);
-			//initUI();
-		//}
+		private function onAddedToStage(e:Event):void {
+			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			initializeDisplay();
+            updateTextDisplay();
+		}
 		
-		//protected function onStageResize(e:Event):void {
-			//failuresField.width = stage.stageWidth;
-			//backgroundFill.width = stage.stageWidth;
-			//backgroundFill.height = stage.stageHeight;
-		//}
+		private function onStageResize(e:Event):void {
+			backgroundFill.width = stage.stageWidth;
+			backgroundFill.height = stage.stageHeight;
+            textDisplay.width = stage.stageWidth;
+            textDisplay.height = stage.stageHeight;
+		}
 		
-        /**
-		protected function initUI():void {
+		private function initializeDisplay():void {
+			stage.addEventListener(Event.RESIZE, onStageResize);
+
 			backgroundFill = new Shape();
 			backgroundFill.graphics.beginFill(0x333333);
 			backgroundFill.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
 			addChild(backgroundFill);
-			
-			Style.LABEL_TEXT = 0xFFFFFF;
-			
-			var vbox:VBox = new VBox(this);
-			vbox.spacing = 0;
-			
-			header = new Text(vbox);
-			header.width = 400;
-			header.height = 50;
-			header.editable = false;
-			header.text = "AsUnit 3.0 by Luke Bayes and Ali Mills"
-				+ "\n\n" + "Flash Player version: " + Capabilities.version
 
-			//dots = new Text(vbox);
-			//dots.width = 800;
-			//dots.height = 20;
+            textDisplay = new TextField();
+            textDisplay.multiline = true;
+            textDisplay.wordWrap = true;
+            textDisplay.textColor = 0xFFFFFF;
+            textDisplay.x = 0;
+            textDisplay.y = 0;
+            textDisplay.width     = stage.stageWidth;
+            textDisplay.height    = stage.stageHeight;
 
-			failuresField = new Text(vbox);
-			failuresField.width = stage.stageWidth;
-			failuresField.height = 300;
-			failuresField.editable = false;
+            var format:TextFormat = textDisplay.getTextFormat();
+            format.font           = '_sans';
+            format.size           = 12;
+            format.leftMargin     = 5;
+            format.rightMargin    = 5;
+            textDisplay.defaultTextFormat = format;
+
+            addChild(textDisplay);
+			
+            resultBar = new Shape();
+            addChild(resultBar);
 		}
-        */
 	}
 }
 

@@ -23,7 +23,7 @@ package asunit4.printers {
 
         override protected function setUp():void {
             super.setUp();
-            printer    = new TextPrinter();
+            printer    = new FakeTextPrinter();
             testResult = new Result();
             test       = new TestCase();
             failure    = new TestFailure(test, 'testSomethingThatFails', new Error('Fake Failure'));
@@ -67,6 +67,19 @@ package asunit4.printers {
             var expected:String = "testSomethingThatFails : Error: Fake Failure";
             assertTrue("Printer should fail", printer.toString().indexOf(expected) > -1);
         }
+
+        public function testPrinterDisplayed():void {
+            executeASucceedingTest();
+            addChild(printer);
+        }
     }
 }
 
+import asunit4.printers.TextPrinter;
+
+class FakeTextPrinter extends TextPrinter {
+
+    // Prevent the printer from tracing results:
+    override protected function logResult():void {
+    }
+}

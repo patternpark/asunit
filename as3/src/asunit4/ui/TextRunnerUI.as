@@ -31,7 +31,7 @@ package asunit4.ui {
 			result.addListener(new FlashDevelopPrinter());
 			
 			runner = new BaseRunner();
-			runner.run(suite, result);
+			runner.run(suite, result, this);
 		}
 	}
 }

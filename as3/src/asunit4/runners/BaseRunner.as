@@ -2,6 +2,7 @@ package asunit4.runners {
 	import asunit4.framework.IResult;
 	import asunit4.framework.IRunner;
 
+    import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 
@@ -13,11 +14,11 @@ package asunit4.runners {
 			suiteRunner = new SuiteRunner();
 		}
 		
-		public function run(suite:Class, result:IResult):void {
+		public function run(suite:Class, result:IResult, visualContext:DisplayObjectContainer):void {
 			this.result = result;
 			suiteRunner.addEventListener(Event.COMPLETE, onSuiteCompleted);
 			result.onRunStarted();
-			suiteRunner.run(suite, result);
+			suiteRunner.run(suite, result, visualContext);
 		}
 		
 		protected function onSuiteCompleted(e:Event):void {

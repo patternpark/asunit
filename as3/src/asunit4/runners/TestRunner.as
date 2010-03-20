@@ -13,6 +13,7 @@ package asunit4.runners {
     import asunit4.framework.TestIterator;
     import asunit4.framework.TestSuccess;
 
+    import flash.display.DisplayObjectContainer;
     import flash.errors.IllegalOperationError;
     import flash.events.Event;
     import flash.events.EventDispatcher;
@@ -48,6 +49,7 @@ package asunit4.runners {
         protected var result:IResult;
         protected var startTime:Number;
         protected var timer:Timer;
+        protected var visualContext:DisplayObjectContainer;
 
         public function TestRunner() {
             async = new Async();
@@ -55,15 +57,16 @@ package asunit4.runners {
             timer.addEventListener(TimerEvent.TIMER, runNextMethod);
         }
 
-        public function run(test:Class, result:IResult):void {
-            runMethodByName(test, result, "");
+        public function run(test:Class, result:IResult, visualContext:DisplayObjectContainer=null):void {
+            runMethodByName(test, result, visualContext);
         }
         
-        public function runMethodByName(test:Class, result:IResult, testMethodName:String):void {
+        public function runMethodByName(test:Class, result:IResult, visualContext:DisplayObjectContainer=null, testMethodName:String=null):void {
             currentTest           = new test();
             currentTestReflection = Reflection.create(test);
-            this.result           = result;
             currentMethod         = null;
+            this.result           = result;
+            this.visualContext    = visualContext;
 
             initializeInjectableMembers();
             

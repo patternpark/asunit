@@ -20,7 +20,7 @@ package asunit4.ui {
 		public function run(suite:Class, projectName:String = ""):void {
 			var result:IResult = new Result();
 			result.addListener(new FlashBuilderPrinter(projectName));
-			runner.run(suite, result);
+			runner.run(suite, result, this);
 		}
 		
 		protected function onRunnerComplete(e:Event):void {

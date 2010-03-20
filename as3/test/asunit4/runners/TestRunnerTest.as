@@ -5,6 +5,7 @@ package asunit4.runners {
 	import asunit4.framework.Result;
 	import asunit4.framework.TestFailure;
 	import asunit4.support.MultiMethod;
+    import asunit4.support.InjectionVerification;
     
 	import flash.events.Event;
 
@@ -97,7 +98,7 @@ package asunit4.runners {
 			runner.addEventListener(Event.COMPLETE, delegate);
 			
 			var testMethodName:String = 'stage_is_null_by_default';
-			runner.runMethodByName(test, runnerResult, testMethodName);
+			runner.runMethodByName(test, runnerResult, null, testMethodName);
 		}
 		
 		private function checkMethodsCalledAfterRunningTestMethodByName(e:Event):void {
@@ -119,48 +120,9 @@ package asunit4.runners {
 		}
 
         public function testInjectTypes():void {
-            runner.run(InjectionVerification, runnerResult);
+            runner.run(InjectionVerification, runnerResult, getContext());
             assertFalse("Should not have encountered failures: " + runnerResult.failures.join("\n\n"), runnerResult.failureEncountered);
         }
 	}
-}
-
-import asunit.asserts.*;
-import asunit4.async.Async;
-import asunit4.async.IAsync;
-
-import flash.display.Sprite;
-
-class InjectionVerification {
-
-    [Inject]
-    public var iAsync:IAsync;
-
-    [Inject]
-    public var async:Async;
-
-    [Inject]
-    public var context:Sprite;
-
-    [Test]
-    public function verifyDisplayObjectInjection():void {
-        assertNotNull("DisplayObject should exiset", context);
-    }
-
-    [Ignore]
-    [Test]
-    public function verifyDisplayObjectAttachedToStage():void {
-        assertNotNull("DisplayObjects hould be attached", context.stage);
-    }
-
-    [Test]
-    public function verifyAsyncInjection():void {
-        assertNotNull(async);
-    }
-
-    [Test]
-    public function verifyIAsyncInjection():void {
-        assertNotNull(iAsync);
-    }
 }
 

@@ -4,6 +4,7 @@ package asunit4.runners {
 
 	import asunit4.framework.Result;
 	import asunit4.support.DoubleFailSuite;
+    import asunit4.support.InjectionVerification;
 
 	import flash.events.Event;
 
@@ -28,14 +29,19 @@ package asunit4.runners {
 			runnerResult = null;
 		}
 		
-		public function test_run_triggers_COMPLETE_Event():void {
-			suiteRunner.addEventListener(Event.COMPLETE, addAsync(check_Result_wasSuccessful_false, 500));
+		public function testRunTriggersCompleteEvent():void {
+			suiteRunner.addEventListener(Event.COMPLETE, addAsync(checkResultWasNotSuccessful, 500));
 			suiteRunner.run(DoubleFailSuite, runnerResult);
 		}
-		
-		private function check_Result_wasSuccessful_false(e:Event):void {
+        
+		private function checkResultWasNotSuccessful(event:Event):void {
 			assertFalse(runnerResult.wasSuccessful);
 		}
+
+        public function testCanHandATestToSuiteRunner():void {
+            suiteRunner.run(InjectionVerification, runnerResult);
+            assertFalse(runnerResult.wasSuccessful);
+        }
 	}
 }
 

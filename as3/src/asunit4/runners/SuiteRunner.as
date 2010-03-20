@@ -3,6 +3,7 @@ package asunit4.runners {
 	import asunit4.framework.IRunner;
 	import asunit4.framework.SuiteIterator;
 
+    import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
@@ -17,17 +18,19 @@ package asunit4.runners {
 		protected var testClasses:SuiteIterator;
 		protected var timer:Timer;
 		protected var result:IResult;
+        protected var visualContext:DisplayObjectContainer;
 		
 		public function SuiteRunner() {
 			timer = new Timer(0, 1);
 		}
 		
-		public function run(suite:Class, result:IResult):void {
+		public function run(suite:Class, result:IResult, visualContext:DisplayObjectContainer=null):void {
 			this.result = result;
 			testRunner = new DEFAULT_TEST_RUNNER();
 			testRunner.addEventListener(Event.COMPLETE, onTestCompleted);
 			testClasses = new SuiteIterator(suite);
 			timer.addEventListener(TimerEvent.TIMER, runNextTest);
+            this.visualContext = visualContext;
 			
 			runNextTest();
 		}
@@ -39,7 +42,7 @@ package asunit4.runners {
 			}
 			
 			var testClass:Class = testClasses.next();
-			testRunner.run(testClass, result);
+			testRunner.run(testClass, result, visualContext);
 		}
 		
 		protected function onTestCompleted(e:Event):void {

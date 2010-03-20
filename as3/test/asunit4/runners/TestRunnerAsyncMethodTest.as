@@ -64,7 +64,7 @@ package asunit4.runners {
         }
         
         private function check_runner_result_wasSuccessful2(e:Event):void {
-            assertTrue('runner result was successful222', runnerResult.wasSuccessful);
+            assertTrue('runner result was successful 2', runnerResult.wasSuccessful);
         }
         
         public function test_run_with_too_slow_async_operation_triggers_result_with_IllegalOperationError():void {
@@ -119,7 +119,7 @@ class AsyncDelegateCalledSynchronouslyTest {
 
     import asunit.asserts.*;
 
-    [Inject]
+    [Async]
     public var async:IAsync;
 
     private var handlerWasCalled:Boolean = false;

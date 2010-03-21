@@ -1,10 +1,10 @@
 package asunit4.framework {
 
     import asunit4.async.IAsync;
-    import flash.display.DisplayObjectContainer;
+    import flash.display.Sprite;
     import flash.display.MovieClip
         
-    class TestCase {
+    public class TestCase {
 
         [Inject]
         public var async:IAsync;
@@ -19,9 +19,7 @@ package asunit4.framework {
         }
 
         [Inject]
-        // TODO: The Runner should inject a unique
-        // and appropriate context for the requested DataType
-        public var context:DisplayObjectContainer;
+        public var context:Sprite;
 
         protected function setUp():void {
         }
@@ -35,11 +33,11 @@ package asunit4.framework {
         }
 
         // TODO: Implement addAsync correctly:
-        protected function addAsync(...):Function {
-            return async.add(...);
+        protected function addAsync(handler:Function, timeout:int=-1):Function {
+            return async.add(handler, timeout);
         }
 
-        protected function getContext():MovieClip {
+        protected function getContext():Sprite {
             return context;
         }
     }

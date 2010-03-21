@@ -14,7 +14,7 @@ package asunit4.runners {
 			suiteRunner = new SuiteRunner();
 		}
 		
-		public function run(suite:Class, result:IResult, visualContext:DisplayObjectContainer):void {
+		public function run(suite:Class, result:IResult, visualContext:DisplayObjectContainer=null):void {
 			this.result = result;
 			suiteRunner.addEventListener(Event.COMPLETE, onSuiteCompleted);
 			result.onRunStarted();

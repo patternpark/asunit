@@ -19,10 +19,10 @@ def apply_as3_meta_data_args(t)
   [
     "After",
     "AfterClass",
-    "Async",
     "Before",
     "BeforeClass",
     "Ignore",
+    "Inject",
     "RunWith",
     "Suite",
     "Test"

@@ -1,8 +1,8 @@
 ﻿package asunit4.ui {
-	import asunit4.ui.MinimalRunnerUI;
+	import asunit4.ui.TextRunnerUI;
 	import asunit4.support.DoubleNestedSuite;
 	
-	public class MinimalExample extends MinimalRunnerUI {
+	public class MinimalExample extends TextRunnerUI {
 		
 		public function MinimalExample() {
 			run(DoubleNestedSuite);

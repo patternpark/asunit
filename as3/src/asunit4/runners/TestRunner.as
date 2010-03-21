@@ -89,6 +89,7 @@ package asunit4.runners {
         protected function runNextMethod(e:TimerEvent = null):void {
             if(methodsToRun.readyToTearDown) {
                 removeInjectedMembers();
+                removeInjectedVisualInstances();
             }
             
             if (testCompleted) {
@@ -222,6 +223,14 @@ package asunit4.runners {
                 removeInjectedMember(injectableMembers.next());
             }
             injectableMembers.reset();
+        }
+
+        protected function removeInjectedVisualInstances():void {
+            var visuals:Iterator = new ArrayIterator(visualInstances);
+            while(visuals.hasNext()) {
+                visualContext.removeChild(visuals.next());
+            }
+            visualInstances = [];
         }
 
         protected function removeInjectedMember(member:ReflectionVariable):void {

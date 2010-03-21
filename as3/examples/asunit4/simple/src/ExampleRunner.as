@@ -1,7 +1,7 @@
 package {
-    import asunit4.ui.MinimalRunnerUI;
+    import asunit4.ui.TextRunnerUI;
 	
-	public class ExampleRunner extends MinimalRunnerUI {
+	public class ExampleRunner extends TextRunnerUI {
 
 		public function ExampleRunner() {
 			run(AllTests);

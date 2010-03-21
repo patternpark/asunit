@@ -87,11 +87,19 @@ package asunit4.runners {
         }
 
         protected function runNextMethod(e:TimerEvent = null):void {
+            if(methodsToRun.readyToTearDown) {
+                removeInjectedMembers();
+            }
+            
             if (testCompleted) {
                 onTestCompleted();
                 return;
             }
-            
+
+            if(methodsToRun.readyToSetUp) {
+                injectMembers();
+            }
+
             runMethod(methodsToRun.next());
         }
         
@@ -105,8 +113,6 @@ package asunit4.runners {
                 onMethodCompleted();
                 return;
             }
-
-            injectMembers();
             
             if (currentMethod.timeout >= 0) {
                 methodTimeoutID = setTimeout(onMethodTimeout, currentMethod.timeout);
@@ -210,6 +216,19 @@ package asunit4.runners {
             return (!methodsToRun.hasNext() && !async.hasPending);
         }
 
+        protected function removeInjectedMembers():void {
+            var member:ReflectionVariable;
+            while(injectableMembers.hasNext()) {
+                removeInjectedMember(injectableMembers.next());
+            }
+            injectableMembers.reset();
+        }
+
+        protected function removeInjectedMember(member:ReflectionVariable):void {
+            if(!member) return;
+            currentTest[member.name] = null;
+        }
+
         protected function injectMembers():void {
             var member:ReflectionVariable;
             while(injectableMembers.hasNext()) {
@@ -219,6 +238,7 @@ package asunit4.runners {
         }
 
         protected function injectMember(member:ReflectionVariable):void {
+            if(!member) return;
             var reflection:Reflection = Reflection.create(getDefinitionByName(member.type));
             try {
                 var instance:* = createInstanceFromReflection(reflection);

@@ -8,24 +8,28 @@ package asunit4.framework {
 
     public class TestIterator implements Iterator {
         
+        private var _readyToTearDown:Boolean;
+
         private var afterClassMethods:Iterator;
         private var afterMethods:Iterator;
         private var beforeClassMethods:Iterator;
         private var beforeMethods:Iterator;
+        private var beforeMethodRanLastCycle:Boolean;
         private var ignoredMethods:Iterator;
+        private var setUpHasRunThisCycle:Boolean;
         private var testMethodHasRunThisCycle:Boolean;
         private var testMethods:Iterator;
         
         public function TestIterator(test:Object, testMethodName:String = "") {
-            if (test is Class) throw new ArgumentError("test argument cannot be a Class");
+            if(test is Class) throw new ArgumentError("test argument cannot be a Class");
             
             var testMethodsArray:Array = getTestMethods(test);
-            if (!testMethodsArray.length) {
+            if(!testMethodsArray.length) {
                 setUpNullIterators();
                 return;
             }
             
-            if (testMethodName) {
+            if(testMethodName) {
                 testMethodsArray = testMethodsArray.filter(
                     function(item:Object, index:int, array:Array):Boolean {
                         return (item.name == testMethodName);
@@ -35,6 +39,14 @@ package asunit4.framework {
             
             testMethods = new ArrayIterator(testMethodsArray);
             setUpIterators(test);
+        }
+
+        public function get readyToSetUp():Boolean {
+            return !setUpHasRunThisCycle || (!afterMethods.hasNext() && testMethodHasRunThisCycle && testMethods.hasNext());
+        }
+
+        public function get readyToTearDown():Boolean {
+            return _readyToTearDown;
         }
 
         private function setUpNullIterators():void {
@@ -153,7 +165,7 @@ package asunit4.framework {
         }
         
         public function hasNext():Boolean {
-            if (!testMethods) return false;
+            if(!testMethods) return false;
             
             return testMethods.hasNext()
                 || beforeMethods.hasNext()
@@ -176,27 +188,46 @@ package asunit4.framework {
         }
 
         public function next():* {
-            if (!testMethods) return null;
+            if(!testMethods) return null;
 
-            if (beforeClassMethods.hasNext()) {
-                return beforeClassMethods.next();
+            var value:*;
+
+            _readyToTearDown         = false;
+            beforeMethodRanLastCycle = false;
+            setUpHasRunThisCycle     = true;
+
+            if(beforeClassMethods.hasNext()) {
+                value = beforeClassMethods.next();
+                //updateReadyToSetUp();
+                return value;
             }
-                
-            if (beforeMethods.hasNext()) {
-                return beforeMethods.next();
+
+
+            if(beforeMethods.hasNext()) {
+                value = beforeMethods.next();
+                beforeMethodRanLastCycle = true;
+                //updateReadyToSetUp();
+                return value;
             }
             
-            if (!testMethodHasRunThisCycle && testMethods.hasNext()) {
+            //updateReadyToSetUp();
+
+            if(!testMethodHasRunThisCycle && testMethods.hasNext()) {
                 testMethodHasRunThisCycle = true;
-                return testMethods.next();
+                value = testMethods.next();
+                updateReadyToTearDown();
+                return value;
             }
             
-            if (afterMethods.hasNext()) {
-                return afterMethods.next();
+            if(afterMethods.hasNext()) {
+                value = afterMethods.next();
+                //updateReadyToSetUp();
+                updateReadyToTearDown();
+                return value;
             }
-            
-            if (!testMethods.hasNext()) {
-                if (afterClassMethods.hasNext()) {
+
+            if(!testMethods.hasNext()) {
+                if(afterClassMethods.hasNext()) {
                     return afterClassMethods.next();
                 }
                 return null;
@@ -205,17 +236,32 @@ package asunit4.framework {
             beforeMethods.reset();
             afterMethods.reset();
             testMethodHasRunThisCycle = false;
+            setUpHasRunThisCycle = false;
             return next();
         }
 
+        private function updateReadyToTearDown():void {
+            // Used by TestRunner to remove visual
+            // entities:
+            if(!beforeClassMethods.hasNext() &&
+               !beforeMethods.hasNext() &&
+               testMethodHasRunThisCycle &&
+               !afterMethods.hasNext()) {
+                _readyToTearDown = true;
+            }
+        }
+
         public function reset():void {
-            if (!testMethods) return;
+            if(!testMethods) return;
             
             beforeClassMethods.reset();
             beforeMethods.reset();
             testMethods.reset();
             afterMethods.reset();
             afterClassMethods.reset();
+
+            _readyToTearDown          = false;
+            setUpHasRunThisCycle      = false;
             testMethodHasRunThisCycle = false;
         }
     }

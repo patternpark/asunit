@@ -89,37 +89,83 @@ package asunit4.framework {
             verifyMethods(iterator, methods);
         }
 				
-		public function test_iterator_next_with_test_instance():void {
-			var iterator:Iterator = new TestIterator(multiTest);
+		public function testIteratorNext():void {
+			var iterator:Iterator = new TestIterator(multiTest); // Use this to ensure we use the Iterator interface
+            var testIterator:TestIterator = iterator as TestIterator; // Use this to check TestIterator interface
 
-			assertSame('runBeforeClass1', 				iterator.next().name);
-			assertSame('runBeforeClass2', 				iterator.next().name);
-			
-			assertSame('runBefore1', 					iterator.next().name);
-			assertSame('runBefore2', 					iterator.next().name);
-			assertSame('fail_assertEquals',				iterator.next().name);
-			assertSame('runAfter1', 					iterator.next().name);
-			assertSame('runAfter2', 					iterator.next().name);
+            assertTrue('setup a',                       testIterator.readyToSetUp);
+            assertFalse('teardown a',                   testIterator.readyToTearDown);
+            assertEquals('runBeforeClass1', 			iterator.next().name);
+            assertFalse('setup b',                      testIterator.readyToSetUp);
+            assertFalse('teardown b',                   testIterator.readyToTearDown);
+			assertEquals('runBeforeClass2', 		    iterator.next().name);
 
-			assertSame('runBefore1', 					iterator.next().name);
-			assertSame('runBefore2', 					iterator.next().name);
-			assertSame('numChildren_is_0_by_default',	iterator.next().name);
-			assertSame('runAfter1', 					iterator.next().name);
-			assertSame('runAfter2', 					iterator.next().name);
+            assertFalse('setup c',                      testIterator.readyToSetUp);
+            assertFalse('teardown c',                   testIterator.readyToTearDown);
 			
-			assertSame('runBefore1', 					iterator.next().name);
-			assertSame('runBefore2', 					iterator.next().name);
-			assertSame('stage_is_null_by_default', 		iterator.next().name);
-			assertSame('runAfter1', 					iterator.next().name);
-			assertSame('runAfter2', 					iterator.next().name);
+			assertEquals('runBefore1', 					iterator.next().name);
+            assertFalse('setup d',                      testIterator.readyToSetUp);
+            assertFalse('teardown d',                   testIterator.readyToTearDown);
+            assertFalse('setup e',                      testIterator.readyToSetUp);
+			assertEquals('runBefore2', 					iterator.next().name);
+            assertFalse('setup e',                      testIterator.readyToSetUp);
+            assertFalse('teardown e',                   testIterator.readyToTearDown);
+			assertEquals('fail_assertEquals',			iterator.next().name);
+            assertFalse('setup f',                      testIterator.readyToSetUp);
+            assertFalse('teardown f',                   testIterator.readyToTearDown);
+			assertEquals('runAfter1', 					iterator.next().name);
+            assertFalse('setup g',                      testIterator.readyToSetUp);
+            assertFalse('teardown g',                   testIterator.readyToTearDown);
+			assertEquals('runAfter2', 					iterator.next().name);
+
+            assertTrue('setup h',                       testIterator.readyToSetUp);
+            assertTrue('teardown h',                    testIterator.readyToTearDown);
+
+			assertEquals('runBefore1', 					iterator.next().name);
+            assertFalse('setup i',                      testIterator.readyToSetUp);
+            assertFalse('teardown i',                   testIterator.readyToTearDown);
+			assertEquals('runBefore2', 					iterator.next().name);
+            assertFalse('setup j',                      testIterator.readyToSetUp);
+            assertFalse('teardown j',                   testIterator.readyToTearDown);
+			assertEquals('numChildren_is_0_by_default',	iterator.next().name);
+            assertFalse('setup k',                      testIterator.readyToSetUp);
+            assertFalse('teardown k',                   testIterator.readyToTearDown);
+			assertEquals('runAfter1', 					iterator.next().name);
+            assertFalse('setup l',                      testIterator.readyToSetUp);
+            assertFalse('teardown l',                   testIterator.readyToTearDown);
+			assertEquals('runAfter2', 					iterator.next().name);
+
+            assertTrue('setup m',                       testIterator.readyToSetUp);
+            assertTrue('teardown m',                    testIterator.readyToTearDown);
 			
-			assertSame('runAfterClass1', 				iterator.next().name);
-			assertSame('runAfterClass2', 				iterator.next().name);
+			assertEquals('runBefore1', 					iterator.next().name);
+            assertFalse('setup n',                      testIterator.readyToSetUp);
+            assertFalse('teardown n',                   testIterator.readyToTearDown);
+			assertEquals('runBefore2', 					iterator.next().name);
+            assertFalse('setup o',                      testIterator.readyToSetUp);
+            assertFalse('teardown o',                   testIterator.readyToTearDown);
+			assertEquals('stage_is_null_by_default', 	iterator.next().name);
+            assertFalse('setup p',                      testIterator.readyToSetUp);
+            assertFalse('teardown p',                   testIterator.readyToTearDown);
+			assertEquals('runAfter1', 					iterator.next().name);
+            assertFalse('setup q',                      testIterator.readyToSetUp);
+            assertFalse('teardown q',                   testIterator.readyToTearDown);
+			assertEquals('runAfter2', 					iterator.next().name);
+
+            assertFalse('setup r',                      testIterator.readyToSetUp); // No more setUps remaining!
+            assertTrue('teardown r',                    testIterator.readyToTearDown);
+			
+			assertEquals('runAfterClass1', 				iterator.next().name);
+            assertFalse('setup s',                      testIterator.readyToSetUp);
+            assertFalse('teardown s',                   testIterator.readyToTearDown);
+			assertEquals('runAfterClass2', 				iterator.next().name);
+            assertFalse('setup t',                      testIterator.readyToSetUp);
+            assertFalse('teardown t',                   testIterator.readyToTearDown);
 			
 			assertFalse('no methods left in iterator',	iterator.hasNext());
 		}
 		
-		public function test_iterator_exhausted_with_while_loop_then_reset_should_hasNext():void {
+		public function testIteratorExhaustedWithWhileLoopThenResetShouldHasNext():void {
 			var iterator:Iterator = new TestIterator(multiTest);
 			while(iterator.hasNext()) {
                 iterator.next();

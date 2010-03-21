@@ -19,21 +19,25 @@ package asunit4.support {
 
         [Test]
         public function verifyDisplayObjectInjection():void {
+            trace(">> verifyDisplayObjectInjection");
             assertNotNull("DisplayObject should exiset", context);
         }
 
         [Test]
         public function verifyDisplayObjectAttachedToStage():void {
+            trace(">> verifyDisplayObjectAttachedToStage");
             assertNotNull("DisplayObjects hould be attached", context.stage);
         }
 
         [Test]
         public function verifyAsyncInjection():void {
+            trace(">> verifyAsyncInjection");
             assertNotNull(async);
         }
 
         [Test]
         public function verifyIAsyncInjection():void {
+            trace(">> verifyIAsyncInjection");
             assertNotNull(iAsync);
         }
     }

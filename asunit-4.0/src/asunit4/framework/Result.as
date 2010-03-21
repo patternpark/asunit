@@ -14,28 +14,27 @@ package asunit4.framework {
      * @see Test
      */
     public class Result extends EventDispatcher implements IResult {
-		protected var _runTime:Number;
-		
-        protected var _failures:Array;
-        protected var _errors:Array;
-        protected var _successes:Array;
-        protected var _ignoredTests:Array;
+
 		protected var _runCount:uint = 0;
+		protected var _runTime:Number;
+        protected var _errors:Array;
+        protected var _failures:Array;
+        protected var _ignoredTests:Array;
+        protected var _successes:Array;
+        protected var _warnings:Array;
+
 		protected var listeners:Array;
         protected var runComplete:Boolean;
 
         public function Result() {
-			_failures		= [];
-			_errors			= [];
-			_successes		= [];
-			_ignoredTests	= [];
-			listeners		= [];
+			_errors       = [];
+			_failures     = [];
+			_ignoredTests = [];
+			_successes    = [];
+            _warnings     = [];
+			listeners     = [];
         }
 		
-		
-        /**
-         *
-         */
         public function get errors():Array { return _errors; }
 		
         /**
@@ -56,7 +55,9 @@ package asunit4.framework {
         public function get successes():Array { return _successes; }
 		
         public function get successCount():uint { return _successes.length; }
-		
+
+        public function get warnings():Array { return _warnings; }
+
         public function get ignoredTests():Array { return _ignoredTests; }
 		
         public function get ignoredTestCount():uint { return _ignoredTests.length; }
@@ -133,7 +134,15 @@ package asunit4.framework {
 				listener.onTestIgnored(method);
 			}
 		}
-		
+
+        public function onWarning(warning:ITestWarning):void {
+            _warnings.push(warning);
+
+            for each (var listener:IRunListener in listeners) {
+                listener.onWarning(warning);
+            }
+        }
+
         /**
          * Returns whether or not we have yet encountered a failure or error.
          * Will be accurate when checked at any time during test run.

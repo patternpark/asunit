@@ -1,10 +1,7 @@
-﻿package asunit4.framework
-{
+﻿package asunit4.framework {
+
 	import asunit.framework.ITestFailure;
 
-	/**
-	 *
-	 */
 	public interface IResult extends IRunListener, ITestListener {
 		
 		function addListener(listener:IRunListener):void;
@@ -18,6 +15,8 @@
 		
 		function get successes():Array;
 		function get successCount():uint;
+
+        function get warnings():Array;
 		
 		function get ignoredTests():Array;
 		function get ignoredTestCount():uint;
@@ -31,3 +30,4 @@
 		function set runTime(value:Number):void;
 	}
 }
+

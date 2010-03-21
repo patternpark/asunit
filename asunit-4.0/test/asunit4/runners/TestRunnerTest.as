@@ -6,6 +6,7 @@ package asunit4.runners {
 	import asunit4.framework.TestFailure;
 	import asunit4.support.MultiMethod;
     import asunit4.support.InjectionVerification;
+    import asunit4.support.InjectionFailure;
     
 	import flash.events.Event;
 
@@ -125,6 +126,12 @@ package asunit4.runners {
         public function testInjectTypes():void {
             runner.run(InjectionVerification, runnerResult, getContext());
             assertFalse("Should not have encountered failures: " + runnerResult.failures.join("\n\n"), runnerResult.failureEncountered);
+        }
+
+        public function testInjectWithUnknownAttribute():void {
+            runner.run(InjectionFailure, runnerResult);
+            var warnings:Array = runnerResult.warnings;
+            assertEquals(1, warnings.length);
         }
 	}
 }

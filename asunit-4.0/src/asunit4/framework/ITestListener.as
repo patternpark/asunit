@@ -8,6 +8,7 @@
 		function onTestFailure(failure:ITestFailure):void;
 		function onTestSuccess(success:ITestSuccess):void;
 		function onTestIgnored(method:Method):void;
+        function onWarning(warning:ITestWarning):void;
 	}
 }
 

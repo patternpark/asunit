@@ -1,4 +1,5 @@
 package asunit4.runners {
+
     import asunit.framework.Assert;
     import asunit.util.ArrayIterator;
     import asunit.util.Iterator;
@@ -12,6 +13,7 @@ package asunit4.runners {
     import asunit4.framework.TestFailure;
     import asunit4.framework.TestIterator;
     import asunit4.framework.TestSuccess;
+    import asunit4.framework.TestWarning;
 
     import flash.display.DisplayObjectContainer;
     import flash.errors.IllegalOperationError;
@@ -277,7 +279,13 @@ package asunit4.runners {
             var len:int = args.length;
             for(var i:int; i < len; i++) {
                 arg = args[i];
-                instance[arg.key] = coerceArgumentType(member, arg.value);
+                try {
+                    instance[arg.key] = coerceArgumentType(member, arg.value);
+                }
+                catch(e:ReferenceError) {
+                    var reflect:Reflection = Reflection.create(instance);
+                    warn("Unable to inject attribute " + arg.key + " on " + reflect.name);
+                }
             }
         }
 
@@ -321,8 +329,9 @@ package asunit4.runners {
 
         // TODO: Implement some notification scheme that allows 
         // users to turn off noisy messages...
-        protected function warn(message:String):void {
-            trace("[WARNING] " + message);
+        protected function warn(message:String, method:Method=null):void {
+            result.onWarning(new TestWarning(message, method));
+            //trace("[WARNING] " + message);
         }
 
         protected function getClassReferenceFromReflection(reflection:Reflection):Class {

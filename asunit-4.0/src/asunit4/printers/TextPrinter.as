@@ -5,6 +5,7 @@ package asunit4.printers {
 	import asunit4.framework.IResult;
 	import asunit4.framework.IRunListener;
 	import asunit4.framework.ITestSuccess;
+    import asunit4.framework.ITestWarning;
 	import asunit4.framework.Method;
 
 	import flash.display.Shape;
@@ -26,17 +27,18 @@ package asunit4.printers {
         public var columnCount:int      = 80;
         public var textColor:uint       = 0xffffff;
 
-        private var backgroundFill:Shape;
 		private var dots:Array;
 		private var footer:String;
 		private var header:String;
 		private var startTime:Number;
+        private var backgroundFill:Shape;
         private var failures:Array;
         private var ignores:Array;
         private var resultBar:Shape;
         private var resultBarHeight:uint = 3;
         private var successes:Array;
         private var testTimes:Array;
+        private var warnings:Array;
 
         protected var textDisplay:TextField;
 
@@ -52,6 +54,7 @@ package asunit4.printers {
             ignores   = [];
             successes = [];
 			testTimes = [];
+            warnings  = [];
 			
             footer           = '';
             header           = DEFAULT_HEADER;
@@ -96,6 +99,10 @@ package asunit4.printers {
 			dots.push('I');
             updateTextDisplay();
 		}
+
+        public function onWarning(warning:ITestWarning):void {
+            warnings.push(warning.toString());
+        }
 		
 		public function onTestStarted(test:Object):void {
 			startTime = getTimer();
@@ -187,6 +194,9 @@ package asunit4.printers {
             if(runCompleted) {
                 if(failures.length > 0) {
                     parts = parts.concat(failures);
+                }
+                if(warnings.length > 0) {
+                    parts = parts.concat(warnings);
                 }
                 parts.push(footer);
             }

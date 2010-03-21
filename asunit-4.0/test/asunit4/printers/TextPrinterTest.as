@@ -1,13 +1,16 @@
 package asunit4.printers {
     
+    import asunit.framework.ITestFailure;
     import asunit.framework.Test;
     import asunit.framework.TestCase;
-    import asunit4.framework.ITestSuccess;
-    import asunit4.framework.TestSuccess;
-    import asunit.framework.ITestFailure;
-    import asunit4.framework.TestFailure;
+
     import asunit4.framework.IResult;
+    import asunit4.framework.ITestSuccess;
+    import asunit4.framework.ITestWarning;
     import asunit4.framework.Result;
+    import asunit4.framework.TestFailure;
+    import asunit4.framework.TestSuccess;
+    import asunit4.framework.TestWarning;
 
     public class TextPrinterTest extends TestCase {
 
@@ -52,6 +55,15 @@ package asunit4.printers {
             testResult.onRunCompleted(null);
         }
 
+        private function executeASucceedingTestWithWarning(warning:ITestWarning):void {
+            testResult.onRunStarted();
+            testResult.onTestStarted(test);
+            testResult.onWarning(warning);
+            testResult.onTestSuccess(success);
+            testResult.onTestCompleted(test);
+            testResult.onRunCompleted(null);
+        }
+
         private function executeAFailingTest():void {
             testResult.onRunStarted();
             testResult.onTestStarted(test);
@@ -85,6 +97,12 @@ package asunit4.printers {
             addChild(printer);
             executeASucceedingTest();
             assertTrue("The output was displayed.", printer.getTextDisplay().text.indexOf('Time Summary:') > -1);
+        }
+
+        public function testDisplaysWarnings():void {
+            var message:String = "problem"
+            executeASucceedingTestWithWarning(new TestWarning(message));
+            assertTrue("Printer displays warnings", printer.toString().indexOf(message) > -1);
         }
     }
 }

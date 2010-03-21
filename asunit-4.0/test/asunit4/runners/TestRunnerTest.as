@@ -8,6 +8,7 @@ package asunit4.runners {
 	import asunit4.support.MultiMethod;
     import asunit4.async.IAsync;
     import asunit4.async.Async;
+    import asunit4.support.AnnotatedSubClass;
     import asunit4.support.InjectionFailure;
     import asunit4.support.InjectionVerification;
     import asunit4.support.InjectTimeoutOnAsync;
@@ -143,6 +144,11 @@ package asunit4.runners {
             assertEquals(Async.DEFAULT_TIMEOUT, async.timeout);
             runner.run(InjectTimeoutOnAsync, runnerResult);
             assertEquals(5, async.timeout);
+        }
+
+        public function testAnnotationsOnSuperClass():void {
+            runner.run(AnnotatedSubClass, runnerResult);
+            assertFalse("Should not have failures: " + runnerResult.failures.join("\n\n"), runnerResult.failureEncountered);
         }
 	}
 }

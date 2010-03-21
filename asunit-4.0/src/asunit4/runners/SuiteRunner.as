@@ -8,8 +8,10 @@ package asunit4.runners {
 	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
+    import flash.utils.getDefinitionByName;
 
     import p2.reflect.Reflection;
+    import p2.reflect.ReflectionMetaData;
 
 	public class SuiteRunner extends EventDispatcher implements IRunner {
 		/** Can be changed at runtime. */
@@ -54,7 +56,22 @@ package asunit4.runners {
 
         protected function getRunnerForTest(testClass:Class):IRunner {
             var reflection:Reflection = Reflection.create(testClass);
-            trace(">> reflect: " + reflection.getMetaDataByName('RunWith'));
+            var runWith:ReflectionMetaData = reflection.getMetaDataByName('RunWith');
+            if(runWith) {
+                if(runWith.args.length == 0) {
+                    throw new VerifyError("Encountered [RunWith] declaration that's missing the class argument. Try [RunWith(my.class.Name)] instead.");
+                }
+                var className:String = runWith.args[0];
+                try {
+                    var customRunner:Class = getDefinitionByName(className) as Class;
+                    return new customRunner() as IRunner;
+                }
+                catch(e:ReferenceError) {
+                    var message:String = "Encountered [RunWith] declaration but cannot instantiate the provided runner. " + className + ". ";
+                    message += "Is there an actual reference to this class somewhere in your project?";
+                    throw new ReferenceError(message);
+                }
+            }
             return defaultRunner;
         }
 		

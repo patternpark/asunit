@@ -11,7 +11,6 @@ package asunit4.support {
 
 		public function run(item:Class, result:IResult, visualContext:DisplayObjectContainer=null):void {
             var currentTest:TestForFakeRunner = new item() as TestForFakeRunner;
-            var value:int = currentTest.customTestMethod();
 
             result.onTestStarted(currentTest);
             result.onTestSuccess(new TestSuccess(currentTest, 'customTestMethod'));

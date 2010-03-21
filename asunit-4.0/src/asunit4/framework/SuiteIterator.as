@@ -6,6 +6,7 @@ package asunit4.framework {
 
     import p2.reflect.Reflection;
     import p2.reflect.ReflectionVariable;
+    import p2.reflect.ReflectionMetaData;
 
 	public class SuiteIterator implements Iterator {
 		
@@ -47,11 +48,10 @@ package asunit4.framework {
 		}
 
         private function isTest(ProvidedTest:Class):Boolean {
-            // NOTE: A test is more than just:
-            // return (Reflection.create(ProvidedTest).getMetaDataByName('Test') != null);
-            // but this seems like more work than we should be doing here...
-            var iterator:Iterator = new TestIterator(new ProvidedTest());
-            return (iterator.length > 0);
+            var reflection:Reflection = Reflection.create(ProvidedTest);
+            var testMethods:Array = reflection.getMethodsByMetaData('Test');
+            var runWith:ReflectionMetaData = reflection.getMetaDataByName('RunWith');
+            return (runWith != null || testMethods.length > 0);
         }
         
         public function hasNext():Boolean {

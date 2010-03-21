@@ -19,13 +19,13 @@ package asunit4.runners {
 
 		protected override function setUp():void {
             super.setUp();
-			suiteRunner = new SuiteRunner();
+			suiteRunner  = new SuiteRunner();
 			runnerResult = new Result();
 		}
 
 		protected override function tearDown():void {
             super.tearDown();
-			suiteRunner = null;
+			suiteRunner  = null;
 			runnerResult = null;
 		}
 		
@@ -42,6 +42,7 @@ package asunit4.runners {
             suiteRunner.run(InjectionVerification, runnerResult);
             assertFalse(runnerResult.wasSuccessful);
         }
+
 	}
 }
 

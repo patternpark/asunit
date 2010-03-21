@@ -2,11 +2,15 @@ package asunit4.runners {
 
 	import asunit.framework.ITestFailure;
 	import asunit.framework.TestCase;
+
 	import asunit4.framework.Result;
 	import asunit4.framework.TestFailure;
 	import asunit4.support.MultiMethod;
-    import asunit4.support.InjectionVerification;
+    import asunit4.async.IAsync;
+    import asunit4.async.Async;
     import asunit4.support.InjectionFailure;
+    import asunit4.support.InjectionVerification;
+    import asunit4.support.InjectTimeoutOnAsync;
     
 	import flash.events.Event;
 
@@ -132,6 +136,13 @@ package asunit4.runners {
             runner.run(InjectionFailure, runnerResult);
             var warnings:Array = runnerResult.warnings;
             assertEquals(1, warnings.length);
+        }
+
+        public function testInjectAsyncTimeoutFromMetaData():void {
+            var async:IAsync = runner.async;
+            assertEquals(Async.DEFAULT_TIMEOUT, async.timeout);
+            runner.run(InjectTimeoutOnAsync, runnerResult);
+            assertEquals(5, async.timeout);
         }
 	}
 }

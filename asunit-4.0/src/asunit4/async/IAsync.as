@@ -4,6 +4,9 @@ package asunit4.async {
 
     public interface IAsync extends IEventDispatcher {
 
+        function set timeout(timeout:int):void;
+        function get timeout():int;
+
 		function add(handler:Function, duration:int = -1):Function;
 
 		function cancelPending():void;

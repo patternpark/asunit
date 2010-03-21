@@ -12,6 +12,7 @@ package asunit4.async {
 		
 		public static var DEFAULT_TIMEOUT:uint = 50;
 		
+        private var _timeout:int = DEFAULT_TIMEOUT;
 		protected var pending:Array;
 		
         /**
@@ -50,15 +51,23 @@ package asunit4.async {
 		public function get hasPending():Boolean {
 			return pending.length > 0;
 		}
+
+        public function set timeout(timeout:int):void {
+            _timeout = timeout;
+        }
+
+        public function get timeout():int {
+            return _timeout;
+        }
 		
 		public function add(handler:Function, duration:int = -1):Function {
-			if (duration == -1) duration = DEFAULT_TIMEOUT;
+			if (duration == -1) duration = timeout;
 			var command:TimeoutCommand = new TimeoutCommand(null, handler, duration);
 			addPending(command);
 			return command.getCallback();
 		}
 		
-		public function proceedOnEvent(test:Object, target:IEventDispatcher, eventName:String, timeout:int = 500, timeoutHandler:Function = null):void {
+		public function proceedOnEvent(test:Object, target:IEventDispatcher, eventName:String, timeout:int=500, timeoutHandler:Function=null):void {
             var asyncHandler:Function = add(null, timeout);
 			target.addEventListener(eventName, asyncHandler, false, 0, true);
 		}

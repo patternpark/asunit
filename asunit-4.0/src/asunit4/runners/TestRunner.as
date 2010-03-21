@@ -39,8 +39,8 @@ package asunit4.runners {
 
         // partially exposed for unit testing
         internal var currentTest:Object;
+        internal var async:IAsync;
 
-        protected var async:IAsync;
         protected var asyncMembers:Iterator;
         protected var currentMethod:Method;
         protected var currentTestReflection:Reflection;

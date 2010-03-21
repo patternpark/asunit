@@ -19,15 +19,15 @@
             this.name = reflection.name;
             this.value = scope[reflection.name];
 
-            var testReflection:ReflectionMetaData = reflection.getMetaDataByName('Test');
+            var metadata:ReflectionMetaData = reflection.getMetaDataByName('Test');
 
-            if(testReflection != null) {
+            if(metadata != null) {
                 isTest  = true;
                 ignore  = (reflection.getMetaDataByName('Ignore') != null);
 
-                timeout = testReflection.getValueFor('timeout');
-                expects = testReflection.getValueFor('expects');
-                order   = testReflection.getValueFor('order');
+                timeout = metadata.getValueFor('timeout');
+                expects = metadata.getValueFor('expects');
+                order   = metadata.getValueFor('order');
             }
         }
 
@@ -36,3 +36,4 @@
 		}
 	}
 }
+

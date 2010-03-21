@@ -29,6 +29,7 @@ package {
 	import asunit4.framework.TestIteratorOrderedTestMethodTest;
 	import asunit4.framework.TestIteratorSingleMethodTest;
 	import asunit4.printers.TextPrinterTest;
+	import asunit4.runners.BaseRunnerTest;
 	import asunit4.runners.SuiteRunnerTest;
 	import asunit4.runners.TestRunnerAsyncMethodTest;
 	import asunit4.runners.TestRunnerErrorMethodTest;
@@ -61,6 +62,7 @@ package {
 			addTest(new asunit4.framework.TestIteratorOrderedTestMethodTest());
 			addTest(new asunit4.framework.TestIteratorSingleMethodTest());
 			addTest(new asunit4.printers.TextPrinterTest());
+			addTest(new asunit4.runners.BaseRunnerTest());
 			addTest(new asunit4.runners.SuiteRunnerTest());
 			addTest(new asunit4.runners.TestRunnerAsyncMethodTest());
 			addTest(new asunit4.runners.TestRunnerErrorMethodTest());

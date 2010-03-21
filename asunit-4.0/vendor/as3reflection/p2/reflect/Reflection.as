@@ -6,6 +6,8 @@ package p2.reflect {
     import flash.utils.getQualifiedClassName;
     
     public class Reflection extends ReflectionBase {
+        public static var WARN:Boolean = true;
+
         private static var READ_WRITE:String = "readwrite";
         private static var READ_ONLY:String = "readonly";
         private static var WRITE_ONLY:String = "writeonly";
@@ -348,9 +350,17 @@ package p2.reflect {
          * methods that are annotated with the provided +metaDataName+.
          **/
         public function getMembersByMetaData(metaDataName:String):Array {
-            return allMembers.filter(function(item:ReflectionMember, index:int, items:Array):Boolean {
+            var result:Array = allMembers.filter(function(item:ReflectionMember, index:int, items:Array):Boolean {
                 return (item.getMetaDataByName(metaDataName) != null);
             });
+            if(Reflection.WARN && result.length == 0) {
+                var warning:String = "[WARNING] p2.reflect.Reflection.getMembersByMetaData was unable to find any members with meta data: " + metaDataName + "\n";
+                warning += "Did you forget to add --keep-as3-metadata=" + metaDataName + " to your compiler options?\n";
+                warning += "(set p2.reflect.Reflection.WARN = false to hide this message in the future)";
+                trace(warning);
+            }
+
+            return result;
         }
 
         /**

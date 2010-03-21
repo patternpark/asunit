@@ -55,7 +55,12 @@ package p2.reflect {
             for each(item in list) {
                 key = item.@key;
                 value = item.@value;
-                items.push({ key: key, value: value });
+                if(key == "") {
+                    items.push(value);
+                }
+                else {
+                    items.push({ key: key, value: value });
+                }
                 this[key] = value;
             }
             return items;

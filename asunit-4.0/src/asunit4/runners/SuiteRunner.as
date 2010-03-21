@@ -9,11 +9,13 @@ package asunit4.runners {
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 
+    import p2.reflect.Reflection;
+
 	public class SuiteRunner extends EventDispatcher implements IRunner {
 		/** Can be changed at runtime. */
 		public static var DEFAULT_TEST_RUNNER:Class = TestRunner;
 		
-		protected var testRunner:TestRunner;
+		protected var defaultRunner:IRunner;
 		protected var suiteRunner:SuiteRunner;
 		protected var testClasses:SuiteIterator;
 		protected var timer:Timer;
@@ -26,11 +28,15 @@ package asunit4.runners {
 		
 		public function run(suite:Class, result:IResult, visualContext:DisplayObjectContainer=null):void {
 			this.result = result;
-			testRunner = new DEFAULT_TEST_RUNNER();
-			testRunner.addEventListener(Event.COMPLETE, onTestCompleted);
-			testClasses = new SuiteIterator(suite);
-			timer.addEventListener(TimerEvent.TIMER, runNextTest);
             this.visualContext = visualContext;
+            runSuite(suite, result);
+        }
+
+        protected function runSuite(suite:*, result:IResult):void {
+			testClasses = new SuiteIterator(suite);
+			defaultRunner = new DEFAULT_TEST_RUNNER();
+			defaultRunner.addEventListener(Event.COMPLETE, onTestCompleted);
+			timer.addEventListener(TimerEvent.TIMER, runNextTest);
 			
 			runNextTest();
 		}
@@ -42,8 +48,15 @@ package asunit4.runners {
 			}
 			
 			var testClass:Class = testClasses.next();
-			testRunner.run(testClass, result, visualContext);
+            var runner:IRunner = getRunnerForTest(testClass);
+			runner.run(testClass, result, visualContext);
 		}
+
+        protected function getRunnerForTest(testClass:Class):IRunner {
+            var reflection:Reflection = Reflection.create(testClass);
+            trace(">> reflect: " + reflection.getMetaDataByName('RunWith'));
+            return defaultRunner;
+        }
 		
 		protected function onTestCompleted(e:Event):void {
 			// Start a new green thread.

@@ -64,12 +64,10 @@ package asunit4.printers {
 		}
 		
 		public function onRunStarted():void {
-            trace(">> onRunStarted");
             updateTextDisplay();
 		}
 		
 		public function onTestFailure(failure:ITestFailure):void {
-            trace(">> onTestFailure with: " + failure);
             var s:String = '';
 			s += getQualifiedClassName(failure.failedTest);
 			s += '.' + failure.failedMethod + ' : ';
@@ -90,7 +88,6 @@ package asunit4.printers {
         }
 		
 		public function onTestSuccess(success:ITestSuccess):void {
-            trace(">> onTestSuccess with: " + success);
 			dots.push('.');
             updateTextDisplay();
 		}
@@ -182,7 +179,6 @@ package asunit4.printers {
             parts.push(header);
             var len:int = dots.length;
             var str:String = '';
-            trace(">> toString with: " + dots.length);
             for(var i:int; i < len; i++) {
                 str += dots[i];
             }

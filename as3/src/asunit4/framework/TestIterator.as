@@ -166,7 +166,6 @@ package asunit4.framework {
         
         public function hasNext():Boolean {
             if(!testMethods) return false;
-            
             return testMethods.hasNext()
                 || beforeMethods.hasNext()
                 || afterMethods.hasNext()

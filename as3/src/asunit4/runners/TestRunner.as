@@ -64,7 +64,6 @@ package asunit4.runners {
         }
         
         public function runMethodByName(test:Class, result:IResult, visualContext:DisplayObjectContainer=null, testMethodName:String=null):void {
-            trace(">> runMethodByName: " + test);
             currentTest           = new test();
             currentTestReflection = Reflection.create(test);
             currentMethod         = null;
@@ -80,6 +79,9 @@ package asunit4.runners {
             result.onTestStarted(currentTest);
             
             methodsToRun = new TestIterator(currentTest, testMethodName);
+            if(methodsToRun.length == 0) {
+                warn(">> We were unable to find any test methods in " + currentTestReflection.name + ". Did you set the --keep-as3-metadata flag?");
+            }
             runNextMethod();
         }
 
@@ -88,7 +90,6 @@ package asunit4.runners {
         }
 
         protected function runNextMethod(e:TimerEvent = null):void {
-            trace(">> runNextMethod");
             if(methodsToRun.readyToTearDown) {
                 removeInjectedMembers();
                 removeInjectedVisualInstances();
@@ -203,8 +204,6 @@ package asunit4.runners {
         }
         
         protected function onTestCompleted():void {
-            trace("----------------");
-            trace(">> onTestCompleted");
             async.removeEventListener(TimeoutCommandEvent.CALLED,      onAsyncMethodCalled);
             async.removeEventListener(TimeoutCommandEvent.TIMED_OUT,   onAsyncMethodTimedOut);
             async.cancelPending();
@@ -254,11 +253,11 @@ package asunit4.runners {
             var reflection:Reflection = Reflection.create(getDefinitionByName(member.type));
             try {
                 var instance:* = createInstanceFromReflection(reflection);
+                currentTest[member.name] = instance;
             }
             catch(e:VerifyError) {
                 throw new VerifyError("Failed to instantiate " + member.type + " in order to inject public var " + member.name);
             }
-            currentTest[member.name] = instance;
         }
 
         protected function createInstanceFromReflection(reflection:Reflection):* {
@@ -291,7 +290,7 @@ package asunit4.runners {
         // TODO: Implement some notification scheme that allows 
         // users to turn off noisy messages...
         protected function warn(message:String):void {
-            //trace("[WARNING] " + message);
+            trace("[WARNING] " + message);
         }
 
         protected function getClassReferenceFromReflection(reflection:Reflection):Class {

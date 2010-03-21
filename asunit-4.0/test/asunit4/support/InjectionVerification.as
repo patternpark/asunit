@@ -17,6 +17,34 @@ package asunit4.support {
         [Inject]
         public var context:Sprite;
 
+        [Inject(someString="stringValue", someBoolean=false, someNumber=23.4, someInt=-23, someUInt=25)]
+        public var custom:CustomParameters;
+
+        [Test]
+        public function injectedShouldReceiveUIntValue():void {
+            assertSame(25, custom.someUInt);
+        }
+
+        [Test]
+        public function injectedShouldReceiveIntegerValue():void {
+            assertSame(-23, custom.someInt);
+        }
+
+        [Test]
+        public function injectedShouldReceiveNumberValue():void {
+            assertSame(23.4, custom.someNumber);
+        }
+
+        [Test]
+        public function injectedShouldReceiveBooleanValue():void {
+            assertSame(false, custom.someBoolean);
+        }
+
+        [Test]
+        public function injectedShouldReceiveStringValue():void {
+            assertEquals("stringValue", custom.someString);
+        }
+
         [Test]
         public function verifyDisplayObjectInjection():void {
             assertNotNull("DisplayObject should exiset", context);

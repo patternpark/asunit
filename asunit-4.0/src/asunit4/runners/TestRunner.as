@@ -27,6 +27,7 @@ package asunit4.runners {
 
     import p2.reflect.Reflection;
     import p2.reflect.ReflectionMember;
+    import p2.reflect.ReflectionMetaData;
     import p2.reflect.ReflectionVariable;
 
     public class TestRunner extends EventDispatcher implements IRunner {
@@ -250,14 +251,45 @@ package asunit4.runners {
 
         protected function injectMember(member:ReflectionVariable):void {
             if(!member) return;
-            var reflection:Reflection = Reflection.create(getDefinitionByName(member.type));
+            var definition:Class;
+            try {
+                definition = getDefinitionByName(member.type) as Class;
+            }
+            catch(referenceError:ReferenceError) {
+                warn("Unable to [Inject] with " + member.type + ". Maybe this was an inner class? That makes it unavailable to external code, try putting it in it's own file.");
+                return;
+            }
+            var reflection:Reflection = Reflection.create(definition);
             try {
                 var instance:* = createInstanceFromReflection(reflection);
+                configureInjectedInstance(member, instance);
                 currentTest[member.name] = instance;
             }
             catch(e:VerifyError) {
                 throw new VerifyError("Failed to instantiate " + member.type + " in order to inject public var " + member.name);
             }
+        }
+
+        protected function configureInjectedInstance(member:ReflectionVariable, instance:*):void {
+            var injectTag:ReflectionMetaData = member.getMetaDataByName('Inject');
+            var args:Array = injectTag.args;
+            var arg:Object;
+            var len:int = args.length;
+            for(var i:int; i < len; i++) {
+                arg = args[i];
+                instance[arg.key] = coerceArgumentType(member, arg.value);
+            }
+        }
+
+        protected function coerceArgumentType(member:ReflectionVariable, value:String):* {
+            switch(value) {
+                case "false" :
+                    return false;
+                case "true" :
+                    return true;
+            }
+
+            return value;
         }
 
         protected function createInstanceFromReflection(reflection:Reflection):* {

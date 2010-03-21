@@ -104,21 +104,24 @@ package asunit4.runners {
 		private function checkMethodsCalledAfterRunningTestMethodByName(e:Event):void {
 			var i:uint = 0;
 			
-			assertSame(MultiMethod.runBeforeClass1, 		MultiMethod.methodsCalled[i++]);
-			assertSame(MultiMethod.runBeforeClass2, 		MultiMethod.methodsCalled[i++]);
+			assertSame(MultiMethod.runBeforeClass1, 		        MultiMethod.methodsCalled[i++]);
+			assertSame(MultiMethod.runBeforeClass2, 		        MultiMethod.methodsCalled[i++]);
 			
-			assertSame(runner.currentTest.runBefore1, 						MultiMethod.methodsCalled[i++]);
-			assertSame(runner.currentTest.runBefore2, 						MultiMethod.methodsCalled[i++]);
-			assertSame(runner.currentTest.stage_is_null_by_default, 		MultiMethod.methodsCalled[i++]);
-			assertSame(runner.currentTest.runAfter1, 						MultiMethod.methodsCalled[i++]);
-			assertSame(runner.currentTest.runAfter2, 						MultiMethod.methodsCalled[i++]);
+			assertSame(runner.currentTest.runBefore1, 				MultiMethod.methodsCalled[i++]);
+			assertSame(runner.currentTest.runBefore2, 				MultiMethod.methodsCalled[i++]);
+			assertSame(runner.currentTest.stage_is_null_by_default,	MultiMethod.methodsCalled[i++]);
+			assertSame(runner.currentTest.runAfter1, 				MultiMethod.methodsCalled[i++]);
+			assertSame(runner.currentTest.runAfter2, 				MultiMethod.methodsCalled[i++]);
 			
-			assertSame(MultiMethod.runAfterClass1, 			MultiMethod.methodsCalled[i++]);
-			assertSame(MultiMethod.runAfterClass2, 			MultiMethod.methodsCalled[i++]);
+			assertSame(MultiMethod.runAfterClass1, 			        MultiMethod.methodsCalled[i++]);
+			assertSame(MultiMethod.runAfterClass2, 			        MultiMethod.methodsCalled[i++]);
 			
-			assertEquals('checked all methodsCalled', MultiMethod.methodsCalled.length, i);
+			assertEquals('checked all methodsCalled',               MultiMethod.methodsCalled.length, i);
 		}
 
+        // This an interesting hack in that an AsUnit 4 Test Case is being instantiated
+        // and executed, but in this environment, we're simply checking to see if it passed,
+        // and outputing any failures to the message...
         public function testInjectTypes():void {
             runner.run(InjectionVerification, runnerResult, getContext());
             assertFalse("Should not have encountered failures: " + runnerResult.failures.join("\n\n"), runnerResult.failureEncountered);

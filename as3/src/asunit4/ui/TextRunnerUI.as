@@ -17,7 +17,7 @@ package asunit4.ui {
 		
 		public function TextRunnerUI() {
 			if (stage) {
-				stage.align = StageAlign.TOP_LEFT;
+				stage.align     = StageAlign.TOP_LEFT;
 				stage.scaleMode = StageScaleMode.NO_SCALE;
 			}
 		}
@@ -28,7 +28,7 @@ package asunit4.ui {
 			
 			result = new Result();
 			result.addListener(printer);
-			result.addListener(new FlashDevelopPrinter());
+			//result.addListener(new FlashDevelopPrinter());
 			
 			runner = new BaseRunner();
 			runner.run(suite, result, this);

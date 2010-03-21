@@ -64,6 +64,7 @@ package asunit4.runners {
         }
         
         public function runMethodByName(test:Class, result:IResult, visualContext:DisplayObjectContainer=null, testMethodName:String=null):void {
+            trace(">> runMethodByName: " + test);
             currentTest           = new test();
             currentTestReflection = Reflection.create(test);
             currentMethod         = null;
@@ -87,6 +88,7 @@ package asunit4.runners {
         }
 
         protected function runNextMethod(e:TimerEvent = null):void {
+            trace(">> runNextMethod");
             if(methodsToRun.readyToTearDown) {
                 removeInjectedMembers();
                 removeInjectedVisualInstances();
@@ -201,6 +203,8 @@ package asunit4.runners {
         }
         
         protected function onTestCompleted():void {
+            trace("----------------");
+            trace(">> onTestCompleted");
             async.removeEventListener(TimeoutCommandEvent.CALLED,      onAsyncMethodCalled);
             async.removeEventListener(TimeoutCommandEvent.TIMED_OUT,   onAsyncMethodTimedOut);
             async.cancelPending();
@@ -209,7 +213,6 @@ package asunit4.runners {
             
             //TODO: move out because runTime is for whole run, not one test
             //result.runTime = getTimer() - startTime;
-            
             dispatchEvent(new Event(Event.COMPLETE));
         }
         

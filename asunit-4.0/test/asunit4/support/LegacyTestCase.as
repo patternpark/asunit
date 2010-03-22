@@ -23,6 +23,10 @@ package asunit4.support {
             assertEquals("foo", instance.name);
         }
 
+        public function someNonTestMethod():void {
+            throw new Error("This should not be called");
+        }
+
         [Test]
         // Ensure this method only gets called once
         // in a given test run...

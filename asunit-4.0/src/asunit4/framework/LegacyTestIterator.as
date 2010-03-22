@@ -19,12 +19,20 @@ package asunit4.framework {
             var methods:Array = [];
             var reflection:Reflection = Reflection.create(instance);
             reflection.methods.forEach(function(methodReflection:ReflectionMethod, index:int, list:Array):void {
-                if(methodReflection.getMetaDataByName('Test') == null) {
+                if(methodNameBeginsWithTest(methodReflection) && methodDoesNotHaveTestAnnotation(methodReflection)) {
                     methods.push( new Method(instance, methodReflection) );
                 }
             });
 
             return methods;
+        }
+
+        protected function methodNameBeginsWithTest(method:ReflectionMethod):Boolean {
+            return (method.name.match(/^test/) != null);
+        }
+
+        protected function methodDoesNotHaveTestAnnotation(method:ReflectionMethod):Boolean {
+            return (method.getMetaDataByName('Test') == null);
         }
 	}
 }

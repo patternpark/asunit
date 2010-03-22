@@ -49,7 +49,7 @@ package asunit4.framework {
             return _readyToTearDown;
         }
 
-        private function setUpNullIterators():void {
+        protected function setUpNullIterators():void {
             // Set up null iterators for access to length
             // and other properties...
             testMethods        = new ArrayIterator();
@@ -60,7 +60,7 @@ package asunit4.framework {
             ignoredMethods     = new ArrayIterator();
         }
 
-        private function setUpIterators(test:Object):void {
+        protected function setUpIterators(test:Object):void {
             afterClassMethods   = new ArrayIterator(getAfterClassMethods(test));
             afterMethods        = new ArrayIterator(getAfterMethods(test));
             beforeClassMethods  = new ArrayIterator(getBeforeClassMethods(test));
@@ -97,7 +97,7 @@ package asunit4.framework {
          * @param   test    An instance of a class with methods that have [Before] metadata.
          * @return  An array of Method instances.
          */
-        private function getBeforeClassMethods(test:Object):Array {
+        protected function getBeforeClassMethods(test:Object):Array {
             return getMethodsWithMetadata(test["constructor"], "BeforeClass", true);
         }
         
@@ -106,16 +106,17 @@ package asunit4.framework {
          * @param   test    An instance of a class with methods that have [Before] metadata.
          * @return  An array of Method instances.
          */
-        private function getBeforeMethods(test:Object):Array {
+        protected function getBeforeMethods(test:Object):Array {
             return getMethodsWithMetadata(test, "Before");
         }
         
         /**
          *
-         * @param   test    An instance of a class with methods that have [Test] metadata.
+         * @param   test    An instance of a class with methods that have [Test] metadata,
+         *                  or have a methods that begin with 'test'.
          * @return  An array of Method instances.
          */
-        private function getTestMethods(test:Object):Array {
+        protected function getTestMethods(test:Object):Array {
             return getMethodsWithMetadata(test, "Test");
         }
         
@@ -124,7 +125,7 @@ package asunit4.framework {
          * @param   test    An instance of a class with methods that have [After] metadata.
          * @return  An array of Method instances.
          */
-        private function getAfterMethods(test:Object):Array {
+        protected function getAfterMethods(test:Object):Array {
             return getMethodsWithMetadata(test, "After");
         }
         
@@ -133,7 +134,7 @@ package asunit4.framework {
          * @param   test    An instance of a class with methods that have [After] metadata.
          * @return  An array of Method instances.
          */
-        private function getIgnoredMethods(test:Object):Array {
+        protected function getIgnoredMethods(test:Object):Array {
             return getMethodsWithMetadata(test, "Ignore");
         }
         
@@ -156,11 +157,11 @@ package asunit4.framework {
          * @param   test    An instance of a class with methods that have [Before] metadata.
          * @return  An array of Method instances.
          */
-        private function getAfterClassMethods(test:Object):Array {
+        protected function getAfterClassMethods(test:Object):Array {
             return getMethodsWithMetadata(test["constructor"], "AfterClass", true);
         }
         
-        private function countTestMethods(test:Object):uint {
+        protected function countTestMethods(test:Object):uint {
             return getTestMethods(test).length;
         }
         
@@ -239,7 +240,7 @@ package asunit4.framework {
             return next();
         }
 
-        private function updateReadyToTearDown():void {
+        protected function updateReadyToTearDown():void {
             // Used by TestRunner to remove visual
             // entities:
             if(!beforeClassMethods.hasNext() &&

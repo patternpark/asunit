@@ -4,6 +4,8 @@ package asunit4.support {
 
     public class LegacyTestCase extends TestCase {
 
+        public static var callCount:int;
+
         private var instance:*;
 
         override protected function setUp():void {
@@ -19,6 +21,13 @@ package asunit4.support {
 
         public function testSomething():void {
             assertEquals("foo", instance.name);
+        }
+
+        [Test]
+        // Ensure this method only gets called once
+        // in a given test run...
+        public function testSomethingElse():void {
+            callCount++;
         }
     }
 }

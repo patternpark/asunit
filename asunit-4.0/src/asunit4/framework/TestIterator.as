@@ -138,6 +138,15 @@ package asunit4.framework {
             return getMethodsWithMetadata(test, "Ignore");
         }
         
+        /**
+         *
+         * @param   test    An instance of a class with methods that have [Before] metadata.
+         * @return  An array of Method instances.
+         */
+        protected function getAfterClassMethods(test:Object):Array {
+            return getMethodsWithMetadata(test["constructor"], "AfterClass", true);
+        }
+
         protected function getMethodsWithMetadata(instance:Object, metaDataName:String, useStatic:Boolean = false):Array {
             var reflection:Reflection = Reflection.create(instance);
             var methodReflections:Array = reflection.getMembersByMetaData(metaDataName);
@@ -150,15 +159,6 @@ package asunit4.framework {
             methods.sortOn('name');
             methods.sortOn('order');
             return methods;
-        }
-
-        /**
-         *
-         * @param   test    An instance of a class with methods that have [Before] metadata.
-         * @return  An array of Method instances.
-         */
-        protected function getAfterClassMethods(test:Object):Array {
-            return getMethodsWithMetadata(test["constructor"], "AfterClass", true);
         }
         
         protected function countTestMethods(test:Object):uint {

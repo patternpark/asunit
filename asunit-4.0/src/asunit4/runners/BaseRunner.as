@@ -1,10 +1,11 @@
 package asunit4.runners {
+
 	import asunit4.framework.IResult;
 	import asunit4.framework.IRunner;
 
-    import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+    import flash.display.DisplayObjectContainer;
 
 	public class BaseRunner extends EventDispatcher implements IRunner {
 		protected var suiteRunner:SuiteRunner;
@@ -28,3 +29,4 @@ package asunit4.runners {
 		}
 	}
 }
+

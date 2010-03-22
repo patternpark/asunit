@@ -4,6 +4,7 @@ package asunit4.runners {
 
     import asunit4.framework.IResult;
     import asunit4.framework.Result;
+    import asunit4.framework.LegacyTestIterator;
     import asunit4.support.LegacyTestCase;
 
     public class LegacyRunnerTest extends TestCase {
@@ -17,20 +18,22 @@ package asunit4.runners {
 
         override protected function setUp():void {
             super.setUp();
-            testResult     = new Result();
+            LegacyTestCase.callCount = 0;
+            testResult = new Result();
             testRunner = new LegacyRunner();
         }
 
         override protected function tearDown():void {
             super.tearDown();
-            testResult     = null;
+            testResult = null;
             testRunner = null;
         }
 
         public function testSimpleSubclass():void {
             testRunner.run(LegacyTestCase, testResult);
             assertEquals(0, testResult.failureCount);
-            assertEquals(1, testResult.runCount);
+            assertEquals(2, testResult.runCount);
         }
     }
 }
+

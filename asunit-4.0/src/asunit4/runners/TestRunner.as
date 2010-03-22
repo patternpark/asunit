@@ -81,11 +81,16 @@ package asunit4.runners {
             startTime = getTimer();
             result.onTestStarted(currentTest);
             
-            methodsToRun = new TestIterator(currentTest, testMethodName);
+            methodsToRun = createTestIterator(currentTest, testMethodName);
+
             if(methodsToRun.length == 0) {
                 warn(">> We were unable to find any test methods in " + currentTestReflection.name + ". Did you set the --keep-as3-metadata flag?");
             }
             runNextMethod();
+        }
+
+        protected function createTestIterator(test:*, testMethodName:String):TestIterator {
+            return new TestIterator(test, testMethodName);
         }
 
         protected function initializeInjectableMembers():void {

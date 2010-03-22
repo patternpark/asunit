@@ -1,5 +1,6 @@
 package asunit4.printers {
 	import asunit.framework.ITestFailure;
+	import asunit4.framework.ITestWarning;
 
 	import asunit4.framework.IResult;
 	import asunit4.framework.IRunListener;
@@ -56,6 +57,10 @@ package asunit4.printers {
 			var xmlMessageIgnore:String = "<testCase name='" + method.name
 				+ "' testSuite='" + getQualifiedClassName(method.scope) + "' status='ignore'/>";
 			sendMessage(xmlMessageIgnore);
+		}
+		
+		public function onWarning(warning:ITestWarning):void {
+			//TODO: is there any way to send a warning to Flash Builder?
 		}
 		
 		public function onRunCompleted(result:IResult):void {

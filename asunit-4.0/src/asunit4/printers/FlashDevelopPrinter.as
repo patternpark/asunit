@@ -1,5 +1,6 @@
 package asunit4.printers {
 	import asunit.framework.ITestFailure;
+	import asunit4.framework.ITestWarning;
 
 	import asunit4.framework.IResult;
 	import asunit4.framework.IRunListener;
@@ -35,6 +36,10 @@ package asunit4.printers {
 		
 		public function onTestIgnored(method:Method):void {
 			// don't send ignored test to FlashDevelop Panel
+		}
+
+		public function onWarning(warning:ITestWarning):void {
+			//TODO: send warning to FlashDevelop Panel?
 		}
 		
 		public function onRunCompleted(result:IResult):void {

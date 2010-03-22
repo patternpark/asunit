@@ -9,6 +9,7 @@
 	<!-- project paths -->
 	<property name="root.dir" location="."/>
 	<property name="src.dir" location="${root.dir}/src"/>
+	<property name="vendor.dir" location="${root.dir}/vendor"/>
 	<property name="test.dir" location="${root.dir}/test"/>
 	<property name="libs.dir" location="${root.dir}/lib"/>
 	<property name="output.dir" location="${root.dir}/bin"/>
@@ -22,6 +23,7 @@
 			<arg value="-incremental=true" />
 				
 			<arg value="-source-path+=${src.dir}" />
+			<arg value="-source-path+=${vendor.dir}/as3reflection" />
 			
 			<!-- Include all classes in this path. -->
 			<arg value="-include-sources=${src.dir}" />
@@ -31,8 +33,10 @@
 			
 			<!-- Exclude Flex and AIR framework classes from swc. -->
 			<arg value="-external-library-path+=${FLEX_HOME}/frameworks/libs" />
+			<!--
 			<arg value="-external-library-path+=${libs.dir}/airframework.swc" />
 			<arg value="-external-library-path+=${libs.dir}/airglobal.swc" />
+			-->
 			
 			<arg value="-output=${output.swc}" />
 		</java>

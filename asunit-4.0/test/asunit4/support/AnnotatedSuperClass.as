@@ -13,4 +13,3 @@ package asunit4.support {
         public var dictionary:Dictionary;
     }
 }
-

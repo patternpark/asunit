@@ -1,4 +1,4 @@
-﻿package asunit4.async {
+package asunit4.async {
 
 	import asunit.framework.ErrorEvent;
 	import asunit.framework.TestCase;
@@ -90,6 +90,5 @@
 		protected function failIfCalled(e:Event = null):void {
 			fail("This function should not have been called");
 		}
-		
 	}
 }

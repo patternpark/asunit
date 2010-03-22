@@ -32,7 +32,6 @@ package asunit4.framework {
         protected function tearDown():void {
         }
 
-        // TODO: Implement addAsync correctly:
         protected function addAsync(handler:Function, timeout:int=-1):Function {
             return async.add(handler, timeout);
         }
@@ -102,4 +101,3 @@ package asunit4.framework {
         }
     }
 }
-

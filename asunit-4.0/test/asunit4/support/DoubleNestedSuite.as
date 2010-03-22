@@ -9,6 +9,6 @@
 		public var singleErrorSuite:SingleErrorSuite;
 		
 		// a single test not in a suite
-		public var ignoredMethodTest:IgnoredMethodTest;
+		public var ignoredMethodTest:IgnoredMethod;
 	}
 }

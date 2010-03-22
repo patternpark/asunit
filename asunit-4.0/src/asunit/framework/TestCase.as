@@ -64,7 +64,7 @@ package asunit.framework {
 	 *  @includeExample ComponentTestExample.as
 	 *  @includeExample AsynchronousTestMethodExample.as
 	 */
-	public class TestCase extends Assert implements Test {
+public class TestCase extends Assert implements Test {
 		protected static const PRE_SET_UP:int        = 0;
 		protected static const SET_UP:int             = 1;
 		protected static const RUN_METHOD:int         = 2;
@@ -96,7 +96,10 @@ package asunit.framework {
 		public function TestCase(testMethod:String = null) {
 			var description:XML = describeType(this);
 			var className:Object = description.@name;
-			var methods:XMLList = description..method.(@name.match("^test"));
+			
+			// FDT says it "Could not resolve function 'match'" at this line:
+			//var methods:XMLList = description..method.(@name.match("^test"));
+			var methods:XMLList = description..method;
 			if(testMethod != null) {
 				testMethods = testMethod.split(", ").join(",").split(",");
 				if(testMethods.length == 1) {
@@ -150,7 +153,9 @@ package asunit.framework {
 			var name:String;
 			for each(var item:Object in methodNames) {
 				name = item.toString();
-				testMethods.push(name);
+				if(name.match('^test')) {
+					testMethods.push(name);
+				}
 			}
 		}
 

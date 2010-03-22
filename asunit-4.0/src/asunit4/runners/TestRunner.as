@@ -332,11 +332,8 @@ package asunit4.runners {
             return instance;
         }
 
-        // TODO: Implement some notification scheme that allows 
-        // users to turn off noisy messages...
         protected function warn(message:String, method:Method=null):void {
             result.onWarning(new TestWarning(message, method));
-            //trace("[WARNING] " + message);
         }
 
         protected function getClassReferenceFromReflection(reflection:Reflection):Class {

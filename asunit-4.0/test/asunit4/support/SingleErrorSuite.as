@@ -2,6 +2,6 @@
 		
 	[Suite]
 	public class SingleErrorSuite {
-		public var errorInMethodTest:ErrorInMethodTest;
+		public var errorInMethodTest:ErrorInMethod;
 	}
 }

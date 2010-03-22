@@ -9,7 +9,6 @@ package {
     public class AsUnitRunner extends TestRunner {
 
         public function AsUnitRunner() {
-            Reflection.WARN = false;
             start(AllTests, null, TestRunner.SHOW_TRACE);
         }
     }

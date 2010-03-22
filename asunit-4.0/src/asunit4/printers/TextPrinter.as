@@ -200,7 +200,7 @@ package asunit4.printers {
                 }
                 parts.push(footer);
             }
-            return parts.join("\n\n");
+            return parts.join("\n\n") + "\n\n";
         }
 
         private function updateTextDisplay():void {

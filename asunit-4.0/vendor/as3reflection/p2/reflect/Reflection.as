@@ -6,7 +6,6 @@ package p2.reflect {
     import flash.utils.getQualifiedClassName;
     
     public class Reflection extends ReflectionBase {
-        public static var WARN:Boolean = true;
 
         private static var READ_WRITE:String = "readwrite";
         private static var READ_ONLY:String = "readonly";
@@ -353,12 +352,15 @@ package p2.reflect {
             var result:Array = allMembers.filter(function(item:ReflectionMember, index:int, items:Array):Boolean {
                 return (item.getMetaDataByName(metaDataName) != null);
             });
-            if(Reflection.WARN && result.length == 0) {
-                var warning:String = "[WARNING] p2.reflect.Reflection.getMembersByMetaData was unable to find any members with meta data: " + metaDataName + "\n";
-                warning += "Did you forget to add --keep-as3-metadata=" + metaDataName + " to your compiler options?\n";
-                warning += "(set p2.reflect.Reflection.WARN = false to hide this message in the future)";
-                trace(warning);
-            }
+            // We should have some way to remind folks to add a new metadata tag to
+            // their compiler options, shouldn't we? 
+            // it's just that the following is really annoying...
+            //if(Reflection.WARN && result.length == 0) {
+                //var warning:String = "[WARNING] p2.reflect.Reflection.getMembersByMetaData was unable to find any members with meta data: " + metaDataName + "\n";
+                //warning += "Did you forget to add --keep-as3-metadata=" + metaDataName + " to your compiler options?\n";
+                //warning += "(set p2.reflect.Reflection.WARN = false to hide this message in the future)";
+                //trace(warning);
+            //}
 
             return result;
         }

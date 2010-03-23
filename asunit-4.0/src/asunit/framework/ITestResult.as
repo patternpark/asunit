@@ -1,8 +1,5 @@
 ﻿package asunit.framework {
-	
-	/**
-	 *
-	 */
+
 	public interface ITestResult {
 		
 		function addFailure(failure:ITestFailure):void;
@@ -18,8 +15,7 @@
 		
 		function get wasSuccessful():Boolean;
 		
-		function addListener(listener:TestListener):void;
-		function removeListener(listener:TestListener):void;
+		function addListener(listener:ITestListener):void;
+		function removeListener(listener:ITestListener):void;
 	}
-	
 }

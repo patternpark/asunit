@@ -324,7 +324,12 @@ package asunit.runners {
 
             var clazz:Class = getClassReferenceFromReflection(reflection);
             var constructorReflection:Reflection = Reflection.create(clazz);
-            var instance:* = new constructorReflection.classReference();
+            try {
+                var instance:* = new constructorReflection.classReference();
+            }
+            catch(e:VerifyError) {
+                warn("Unable to instantiate: " + reflection.name + " for injection");
+            }
 
             if(constructorReflection.isA(DISPLAY_OBJECT_CONTAINER)) {
                 // Add injected DisplayObjectContainers to a collection

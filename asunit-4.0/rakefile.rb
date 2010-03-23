@@ -38,14 +38,13 @@ end
 
 desc "Compile the test harness"
 mxmlc "bin/#{test_input}.swf" do |t|
+  t.gem_name = 'sprout-flex4sdk-tool'
   t.default_size = '1000 600'
   t.source_path << 'src'
   t.library_path << 'lib/Reflection.swc'
   t.input = "test/#{test_input}.as"
   t.debug = true
-  t.gem_name = 'sprout-flex4sdk-tool'
   t.static_link_runtime_shared_libraries = true
-
   apply_as3_meta_data_args(t)
 end
 
@@ -53,6 +52,7 @@ end
 # Compile the SWC
 
 compc 'bin/AsUnit4.swc' do |t|
+  t.gem_name = 'sprout-flex4sdk-tool'
   t.include_sources << 'src'
   t.source_path << 'src'
   t.library_path << 'lib/Reflection.swc'

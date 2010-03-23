@@ -21,6 +21,7 @@ package asunit.framework {
 
 		override protected function setUp():void {
 			super.setUp();
+			trace(">> setUp");
             failure    = new TestFailure(test, 'testSomethingThatFails', new Error('Fake Failure'));
             success    = new TestSuccess(test, 'testSomethingThatSucceeds');
             test       = new TestCase();
@@ -29,6 +30,7 @@ package asunit.framework {
 
 		override protected function tearDown():void {
 			super.tearDown();
+			trace(">> tearDown");
             failure    = null;
             success    = null;
             test       = null;
@@ -60,11 +62,13 @@ package asunit.framework {
         }
 
 		public function testRunWithSingleSuccess():void {
+            trace("---------------");
+            trace(">> testRunWithSingleSuccess called!");
             assertFalse("before test run", testResult.wasSuccessful);
-            runSingleSuccess();
-            assertFalse("failure encountered", testResult.failureEncountered);
-            assertTrue("after test complete", testResult.wasSuccessful);
-			assertEquals(1, testResult.runCount);
+            //runSingleSuccess();
+            //assertFalse("failure encountered", testResult.failureEncountered);
+            //assertTrue("after test complete", testResult.wasSuccessful);
+			//assertEquals(1, testResult.runCount);
 		}
 
         public function testRunWithSingleFailure():void {

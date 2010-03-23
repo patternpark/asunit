@@ -6,7 +6,7 @@ package asunit.framework {
     import flash.display.DisplayObject;
     import flash.display.DisplayObjectContainer;
     import flash.display.Sprite;
-        
+    
     [RunWith("asunit.runners.LegacyRunner")]
     public class TestCase {
         
@@ -59,7 +59,7 @@ package asunit.framework {
             Assert.assertTrue.apply(args);
         }
 
-        protected function assertFalse(...args:Array):void {
+        protected function assertFalse(...args):void {
             Assert.assertFalse.apply(args);
         }
 

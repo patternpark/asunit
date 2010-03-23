@@ -25,6 +25,7 @@ package asunit.framework {
             if(test is Class) throw new ArgumentError("test argument cannot be a Class");
             
             var testMethodsArray:Array = getTestMethods(test);
+            trace(">> TestIterator with: " + testMethodsArray.length);
             if(!testMethodsArray.length) {
                 setUpNullIterators();
                 return;

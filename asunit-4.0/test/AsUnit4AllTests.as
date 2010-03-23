@@ -31,10 +31,12 @@ package {
     [Suite]
 	public class AsUnit4AllTests {
 
-        public var asunit4_async_AsyncTest:asunit.framework.AsyncTest;
+        public var asunit4_framework_ResultTest:asunit.framework.ResultTest;
+
+        /*
+        public var _Asunit4AsyncAsyncTest:asunit.framework.AsyncTest;
         public var asunit4_async_ProceedOnEventTest:asunit.framework.ProceedOnEventTest;
         public var asunit4_framework_NestedSuiteIteratorTest:asunit.framework.NestedSuiteIteratorTest;
-        public var asunit4_framework_ResultTest:asunit.framework.ResultTest;
         public var asunit4_framework_SuiteIteratorTest:asunit.framework.SuiteIteratorTest;
         public var asunit4_framework_TestIteratorIgnoredMethodTest:asunit.framework.TestIteratorIgnoredMethodTest;
         public var asunit4_framework_TestIteratorMethodByNameTest:asunit.framework.TestIteratorMethodByNameTest;
@@ -58,5 +60,6 @@ package {
         public var asunit_framework_AsyncMethodTest:asunit.framework.AsyncMethodTest;
         public var asunit_framework_VisualTestCaseTest:asunit.framework.VisualTestCaseTest;
         public var asunit_util_ArrayIteratorTest:asunit.util.ArrayIteratorTest;
+        */
 	}
 }

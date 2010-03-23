@@ -1,4 +1,5 @@
 package asunit.runners {
+    
 	import asunit.framework.IResult;
 	import asunit.framework.IRunner;
 	import asunit.framework.SuiteIterator;
@@ -58,10 +59,30 @@ package asunit.runners {
             // but not found...
 			runner.run(testClass, result, testMethod, visualContext);
 		}
+		
+		protected function getRunWithDeclaration(reflection:Reflection):ReflectionMetaData {
+		    var result:ReflectionMetaData = reflection.getMetaDataByName('RunWith');
+		    if(result) {
+		        return result;
+	        }
+		    
+		    var baseClass:*;
+		    var baseClassReflection:Reflection;
+		    var len:int = reflection.extendedClasses.length;
+		    for(var i:int; i < len; i++) {
+		        baseClass = getDefinitionByName(reflection.extendedClasses[i]);
+		        baseClassReflection = Reflection.create(baseClass);
+		        result = baseClassReflection.getMetaDataByName('RunWith');
+		        if(result) {
+		            return result;
+	            }
+	        }
+	        return null;
+	    }
 
         protected function getRunnerForTest(testClass:Class):IRunner {
             var reflection:Reflection = Reflection.create(testClass);
-            var runWith:ReflectionMetaData = reflection.getMetaDataByName('RunWith');
+            var runWith:ReflectionMetaData = getRunWithDeclaration(reflection);
             if(runWith) {
                 if(runWith.args.length == 0) {
                     throw new VerifyError("Encountered [RunWith] declaration that's missing the class argument. Try [RunWith(my.class.Name)] instead.");
@@ -90,6 +111,5 @@ package asunit.runners {
 			timer.removeEventListener(TimerEvent.TIMER, runNextTest);
 			dispatchEvent(new Event(Event.COMPLETE));
 		}
-				
 	}
 }

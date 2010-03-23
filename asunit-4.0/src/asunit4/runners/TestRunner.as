@@ -51,6 +51,7 @@ package asunit4.runners {
         protected var methodsToRun:TestIterator;
         protected var result:IResult;
         protected var startTime:Number;
+        protected var testMethodNameReceived:Boolean;
         protected var timer:Timer;
         protected var visualContext:DisplayObjectContainer;
         protected var visualInstances:Array;
@@ -67,11 +68,12 @@ package asunit4.runners {
         }
         
         public function runMethodByName(test:Class, result:IResult, methodName:String=null, visualContext:DisplayObjectContainer=null):void {
-            currentTest           = new test();
-            currentTestReflection = Reflection.create(test);
-            currentMethod         = null;
-            this.result           = result;
-            this.visualContext    = visualContext;
+            currentTest            = new test();
+            currentTestReflection  = Reflection.create(test);
+            currentMethod          = null;
+            testMethodNameReceived = (methodName != null);
+            this.result            = result;
+            this.visualContext     = visualContext;
 
             initializeInjectableMembers();
             
@@ -98,7 +100,7 @@ package asunit4.runners {
         }
 
         protected function runNextMethod(e:TimerEvent = null):void {
-            if(methodsToRun.readyToTearDown) {
+            if(!testMethodNameReceived && methodsToRun.readyToTearDown) {
                 removeInjectedMembers();
                 removeInjectedVisualInstances();
             }

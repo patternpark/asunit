@@ -104,7 +104,7 @@ package asunit4.runners {
 			runner.addEventListener(Event.COMPLETE, delegate);
 			
 			var testMethodName:String = 'stage_is_null_by_default';
-			runner.runMethodByName(test, runnerResult, null, testMethodName);
+			runner.runMethodByName(test, runnerResult, testMethodName);
 		}
 		
 		private function checkMethodsCalledAfterRunningTestMethodByName(e:Event):void {
@@ -116,11 +116,14 @@ package asunit4.runners {
 			assertSame(runner.currentTest.runBefore1, 				MultiMethod.methodsCalled[i++]);
 			assertSame(runner.currentTest.runBefore2, 				MultiMethod.methodsCalled[i++]);
 			assertSame(runner.currentTest.stage_is_null_by_default,	MultiMethod.methodsCalled[i++]);
-			assertSame(runner.currentTest.runAfter1, 				MultiMethod.methodsCalled[i++]);
-			assertSame(runner.currentTest.runAfter2, 				MultiMethod.methodsCalled[i++]);
+
+            // NOTE: The following assertions are no longer applicable.
+            // if the testMethod is provided, tearDown does not occur...
+			//assertSame(runner.currentTest.runAfter1, 				MultiMethod.methodsCalled[i++]);
+			//assertSame(runner.currentTest.runAfter2, 				MultiMethod.methodsCalled[i++]);
 			
-			assertSame(MultiMethod.runAfterClass1, 			        MultiMethod.methodsCalled[i++]);
-			assertSame(MultiMethod.runAfterClass2, 			        MultiMethod.methodsCalled[i++]);
+			//assertSame(MultiMethod.runAfterClass1, 			        MultiMethod.methodsCalled[i++]);
+			//assertSame(MultiMethod.runAfterClass2, 			        MultiMethod.methodsCalled[i++]);
 			
 			assertEquals('checked all methodsCalled',               MultiMethod.methodsCalled.length, i);
 		}
@@ -129,7 +132,7 @@ package asunit4.runners {
         // and executed, but in this environment, we're simply checking to see if it passed,
         // and outputing any failures to the message...
         public function testInjectTypes():void {
-            runner.run(InjectionVerification, runnerResult, getContext());
+            runner.run(InjectionVerification, runnerResult, null, getContext());
             assertFalse("Should not have encountered failures: " + runnerResult.failures.join("\n\n"), runnerResult.failureEncountered);
         }
 

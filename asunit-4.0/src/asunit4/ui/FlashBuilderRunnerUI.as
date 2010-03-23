@@ -17,10 +17,10 @@ package asunit4.ui {
 			runner.addEventListener(Event.COMPLETE, onRunnerComplete);
 		}
 		
-		public function run(suite:Class, projectName:String = ""):void {
+		public function run(suite:Class, projectName:String = "", methodName:String=null):void {
 			var result:IResult = new Result();
 			result.addListener(new FlashBuilderPrinter(projectName));
-			runner.run(suite, result, this);
+			runner.run(suite, result, methodName, this);
 		}
 		
 		protected function onRunnerComplete(e:Event):void {

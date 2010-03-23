@@ -15,11 +15,11 @@ package asunit4.runners {
 			suiteRunner = new SuiteRunner();
 		}
 		
-		public function run(suite:Class, result:IResult, visualContext:DisplayObjectContainer=null):void {
+		public function run(suite:Class, result:IResult, testMethod:String=null, visualContext:DisplayObjectContainer=null):void {
 			this.result = result;
 			suiteRunner.addEventListener(Event.COMPLETE, onSuiteCompleted);
 			result.onRunStarted();
-			suiteRunner.run(suite, result, visualContext);
+			suiteRunner.run(suite, result, testMethod, visualContext);
 		}
 		
 		protected function onSuiteCompleted(e:Event):void {

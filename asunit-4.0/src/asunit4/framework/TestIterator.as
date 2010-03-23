@@ -16,6 +16,7 @@ package asunit4.framework {
         private var beforeMethods:Iterator;
         private var beforeMethodRanLastCycle:Boolean;
         private var ignoredMethods:Iterator;
+        private var testMethodNameReceived:Boolean;
         private var setUpHasRunThisCycle:Boolean;
         private var testMethodHasRunThisCycle:Boolean;
         private var testMethods:Iterator;
@@ -30,6 +31,7 @@ package asunit4.framework {
             }
             
             if(testMethodName) {
+                testMethodNameReceived = true;
                 testMethodsArray = testMethodsArray.filter(
                     function(item:Object, index:int, array:Array):Boolean {
                         return (item.name == testMethodName);
@@ -61,8 +63,14 @@ package asunit4.framework {
         }
 
         protected function setUpIterators(test:Object):void {
-            afterClassMethods   = new ArrayIterator(getAfterClassMethods(test));
-            afterMethods        = new ArrayIterator(getAfterMethods(test));
+            if(!testMethodNameReceived) {
+                afterClassMethods   = new ArrayIterator(getAfterClassMethods(test));
+                afterMethods        = new ArrayIterator(getAfterMethods(test));
+            }
+            else {
+                afterClassMethods = new ArrayIterator([]);
+                afterMethods      = new ArrayIterator([]);
+            }
             beforeClassMethods  = new ArrayIterator(getBeforeClassMethods(test));
             beforeMethods       = new ArrayIterator(getBeforeMethods(test));
             ignoredMethods      = new ArrayIterator(getIgnoredMethods(test));

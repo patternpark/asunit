@@ -62,11 +62,11 @@ package asunit4.runners {
             visualInstances = [];
         }
 
-        public function run(test:Class, result:IResult, visualContext:DisplayObjectContainer=null):void {
-            runMethodByName(test, result, visualContext);
+        public function run(test:Class, result:IResult, methodName:String=null, visualContext:DisplayObjectContainer=null):void {
+            runMethodByName(test, result, methodName, visualContext);
         }
         
-        public function runMethodByName(test:Class, result:IResult, visualContext:DisplayObjectContainer=null, testMethodName:String=null):void {
+        public function runMethodByName(test:Class, result:IResult, methodName:String=null, visualContext:DisplayObjectContainer=null):void {
             currentTest           = new test();
             currentTestReflection = Reflection.create(test);
             currentMethod         = null;
@@ -81,7 +81,7 @@ package asunit4.runners {
             startTime = getTimer();
             result.onTestStarted(currentTest);
             
-            methodsToRun = createTestIterator(currentTest, testMethodName);
+            methodsToRun = createTestIterator(currentTest, methodName);
 
             if(methodsToRun.length == 0) {
                 warn(">> We were unable to find any test methods in " + currentTestReflection.name + ". Did you set the --keep-as3-metadata flag?");

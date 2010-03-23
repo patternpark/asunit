@@ -317,6 +317,7 @@ package asunit.runners {
         protected function createInstanceFromReflection(reflection:Reflection):* {
             // Return the shared async instance if they're expecting the interface
             // or concrete instance, but NOT if their Inject is merely a subclass...
+            trace(">> reflection.name: " + reflection.name);
             if(reflection.name == ASYNC_NAME || reflection.name == IASYNC_NAME) {
                 return async;
             }

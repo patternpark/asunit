@@ -66,14 +66,21 @@ package asunit4.runners {
         public function run(test:Class, result:IResult, methodName:String=null, visualContext:DisplayObjectContainer=null):void {
             runMethodByName(test, result, methodName, visualContext);
         }
-        
+
         public function runMethodByName(test:Class, result:IResult, methodName:String=null, visualContext:DisplayObjectContainer=null):void {
-            currentTest            = new test();
             currentTestReflection  = Reflection.create(test);
-            currentMethod          = null;
-            testMethodNameReceived = (methodName != null);
             this.result            = result;
             this.visualContext     = visualContext;
+            currentMethod          = null;
+            testMethodNameReceived = (methodName != null);
+
+            try {
+                currentTest            = new test();
+            }
+            catch(e:VerifyError) {
+                warn("Unable to instantiate provided test case with: " + currentTestReflection.name);
+                return;
+            }
 
             initializeInjectableMembers();
             

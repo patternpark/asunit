@@ -56,11 +56,11 @@ package asunit.framework {
         } 
 
         protected function assertTrue(...args:Array):void {
-            Assert.assertTrue.apply(args);
+            Assert.assertTrue.apply(null, args);
         }
 
-        protected function assertFalse(...args):void {
-            Assert.assertFalse.apply(args);
+        public function assertFalse(...args:Array):void {
+            Assert.assertFalse.apply(null, args);
         }
 
         protected function fail(message:String):void {
@@ -72,35 +72,35 @@ package asunit.framework {
         }
 
         protected function assertEquals(...args:Array):void {
-            Assert.assertEquals.apply(args);
+            Assert.assertEquals.apply(null, args);
         }
 
         protected function assertNotNull(...args:Array):void {
-            Assert.assertNotNull.apply(args);
+            Assert.assertNotNull.apply(null, args);
         }
 
         protected function assertNull(...args:Array):void {
-            Assert.assertNull.apply(args);
+            Assert.assertNull.apply(null, args);
         }
 
         protected function assertSame(...args:Array):void {
-            Assert.assertSame.apply(args);
+            Assert.assertSame.apply(null, args);
         }
 
         protected function assertNotSame(...args:Array):void {
-            Assert.assertNotSame.apply(args);
+            Assert.assertNotSame.apply(null, args);
         }
 
         protected function assertEqualsFloat(...args:Array):void {
-            Assert.assertEquals.apply(args);
+            Assert.assertEquals.apply(null, args);
         }
 
         protected function assertEqualsArrays(...args:Array):void {
-            Assert.assertEqualsArrays.apply(args);
+            Assert.assertEqualsArrays.apply(null, args);
         }
         
         protected function assertEqualsArraysIgnoringOrder(...args:Array):void {
-            Assert.assertEqualsArraysIgnoringOrder.apply(args);
+            Assert.assertEqualsArraysIgnoringOrder.apply(null, args);
         }
     }
 }

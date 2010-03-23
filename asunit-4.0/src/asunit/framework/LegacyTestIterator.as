@@ -24,6 +24,7 @@ package asunit.framework {
                 }
             });
 
+            methods.sortOn('name');
             return methods;
         }
 

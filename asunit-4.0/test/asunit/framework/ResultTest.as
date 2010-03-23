@@ -65,10 +65,11 @@ package asunit.framework {
             trace("---------------");
             trace(">> testRunWithSingleSuccess called!");
             assertFalse("before test run", testResult.wasSuccessful);
-            //runSingleSuccess();
-            //assertFalse("failure encountered", testResult.failureEncountered);
-            //assertTrue("after test complete", testResult.wasSuccessful);
-			//assertEquals(1, testResult.runCount);
+            runSingleSuccess();
+            assertFalse("failure encountered", testResult.failureEncountered);
+            assertTrue("after test complete", testResult.wasSuccessful);
+			assertEquals(1, testResult.runCount);
+            trace("------------------");
 		}
 
         public function testRunWithSingleFailure():void {

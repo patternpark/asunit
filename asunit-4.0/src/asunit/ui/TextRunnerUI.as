@@ -24,6 +24,7 @@ package asunit.ui {
 		
 		public function run(suite:Class, testMethod:String=null):void {
 		    trace(">> running with: " + suite);
+            trace("===================");
 			printer = new TextPrinter();
 			addChild(printer);
 			

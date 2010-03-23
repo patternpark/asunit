@@ -3,6 +3,8 @@ sprout 'as3'
 
 ASUNIT_VERSION = '4.1'
 
+test_input = "AsUnit4Runner"
+
 ##########################################
 # To build from this file, install Ruby (http://ruby-lang.org)
 # and RubyGems (http://rubygems.org/), then run:
@@ -35,11 +37,11 @@ end
 # Compile the Test Harness
 
 desc "Compile the test harness"
-mxmlc 'bin/AsUnitRunner.swf' do |t|
+mxmlc "bin/#{test_input}.swf" do |t|
   t.default_size = '1000 600'
   t.source_path << 'src'
   t.library_path << 'lib/Reflection.swc'
-  t.input = 'test/AsUnitRunner.as'
+  t.input = "test/#{test_input}.as"
   t.debug = true
   t.gem_name = 'sprout-flex4sdk-tool'
   t.static_link_runtime_shared_libraries = true
@@ -107,7 +109,7 @@ end
 # Launch the Test Harness
 
 desc "Compile and run the test harness"
-flashplayer :run => 'bin/AsUnitRunner.swf'
+flashplayer :run => "bin/#{test_input}.swf"
 
 ##########################################
 # Package framework ZIPs

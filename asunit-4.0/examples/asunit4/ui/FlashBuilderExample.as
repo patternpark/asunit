@@ -1,6 +1,6 @@
-﻿package asunit4.ui {
-	import asunit4.ui.FlashBuilderRunnerUI;
-	import asunit4.support.DoubleNestedSuite;
+﻿package asunit.ui {
+	import asunit.ui.FlashBuilderRunnerUI;
+	import asunit.support.DoubleNestedSuite;
 	
 	public class FlashBuilderExample extends FlashBuilderRunnerUI {
 		

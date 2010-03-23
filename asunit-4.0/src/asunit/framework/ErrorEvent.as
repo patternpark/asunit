@@ -1,9 +1,7 @@
 ﻿package asunit.framework {
+
 	import flash.events.Event;
-	
-	/**
-	 *
-	 */
+
 	public class ErrorEvent extends Event {
 		public static const ERROR:String = 'error';
 		protected var _error:Error;

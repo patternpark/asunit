@@ -18,25 +18,25 @@ package {
 	import asunit.framework.VisualTestCaseTest;
 	import asunit.textui.TestRunnerTest;
 	import asunit.util.ArrayIteratorTest;
-	import asunit4.async.AsyncTest;
-	import asunit4.async.ProceedOnEventTest;
-	import asunit4.framework.NestedSuiteIteratorTest;
-	import asunit4.framework.ResultTest;
-	import asunit4.framework.SuiteIteratorTest;
-	import asunit4.framework.TestIteratorIgnoredMethodTest;
-	import asunit4.framework.TestIteratorMethodByNameTest;
-	import asunit4.framework.TestIteratorMultiMethodTest;
-	import asunit4.framework.TestIteratorOrderedTestMethodTest;
-	import asunit4.framework.TestIteratorSingleMethodTest;
-	import asunit4.printers.TextPrinterTest;
-	import asunit4.runners.BaseRunnerTest;
-	import asunit4.runners.LegacyRunnerTest;
-	import asunit4.runners.SuiteRunnerTest;
-	import asunit4.runners.TestRunnerAsyncMethodTest;
-	import asunit4.runners.TestRunnerErrorMethodTest;
-	import asunit4.runners.TestRunnerExpectsErrorTest;
-	import asunit4.runners.TestRunnerIgnoredMethodTest;
-	import asunit4.runners.TestRunnerTest;
+	import asunit.framework.AsyncTest;
+	import asunit.framework.ProceedOnEventTest;
+	import asunit.framework.NestedSuiteIteratorTest;
+	import asunit.framework.ResultTest;
+	import asunit.framework.SuiteIteratorTest;
+	import asunit.framework.TestIteratorIgnoredMethodTest;
+	import asunit.framework.TestIteratorMethodByNameTest;
+	import asunit.framework.TestIteratorMultiMethodTest;
+	import asunit.framework.TestIteratorOrderedTestMethodTest;
+	import asunit.framework.TestIteratorSingleMethodTest;
+	import asunit.printers.TextPrinterTest;
+	import asunit.runners.BaseRunnerTest;
+	import asunit.runners.LegacyRunnerTest;
+	import asunit.runners.SuiteRunnerTest;
+	import asunit.runners.TestRunnerAsyncMethodTest;
+	import asunit.runners.TestRunnerErrorMethodTest;
+	import asunit.runners.TestRunnerExpectsErrorTest;
+	import asunit.runners.TestRunnerIgnoredMethodTest;
+	import asunit.runners.TestRunnerTest;
 
 	public class AllTests extends TestSuite {
 
@@ -52,8 +52,8 @@ package {
 			addTest(new asunit.framework.VisualTestCaseTest());
 			addTest(new asunit.textui.TestRunnerTest());
 			addTest(new asunit.util.ArrayIteratorTest());
-			addTest(new asunit4.async.AsyncTest());
-			addTest(new asunit4.async.ProceedOnEventTest());
+			addTest(new asunit4.framework.AsyncTest());
+			addTest(new asunit4.framework.ProceedOnEventTest());
 			addTest(new asunit4.framework.NestedSuiteIteratorTest());
 			addTest(new asunit4.framework.ResultTest());
 			addTest(new asunit4.framework.SuiteIteratorTest());

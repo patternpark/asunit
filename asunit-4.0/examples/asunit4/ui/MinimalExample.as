@@ -1,6 +1,6 @@
-﻿package asunit4.ui {
-	import asunit4.ui.TextRunnerUI;
-	import asunit4.support.DoubleNestedSuite;
+﻿package asunit.ui {
+	import asunit.ui.TextRunnerUI;
+	import asunit.support.DoubleNestedSuite;
 	
 	public class MinimalExample extends TextRunnerUI {
 		

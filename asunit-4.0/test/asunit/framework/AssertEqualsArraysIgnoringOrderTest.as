@@ -71,10 +71,6 @@
             assertEqualsArraysIgnoringOrder(["abc", "def", "ghi"], ["def", "abc", "ghi"]);
         }
 
-        public function testArrayEqualsDifferentOrder2():void {
-            assertEqualsArraysIgnoringOrder([setUp, tearDown, cleanUp], [cleanUp, tearDown, setUp]);
-        }
-
         public function testArrayEqualsDifferentTypes():void {
             assertAssertionFailed(Assert.assertEqualsArraysIgnoringOrder,
                 ["abc", "def", "ghi"], 

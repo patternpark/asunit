@@ -30,26 +30,5 @@ package asunit.framework {
             timer.start();
             handler();
         }
-
-        public function testAsyncFailed():void{
-            var wasCalled:Boolean;
-            var failed:Boolean;
-            function onAsync():void {
-                wasCalled = true;
-                fail("Shouldn't have been called");
-            }
-            function onDone(event:TimerEvent):void {
-                assertFalse(wasCalled);
-                assertTrue(failed);
-            }
-            function onFailure():void {
-                failed = true;
-            }
-
-            var handler:Function = addAsync(onAsync, 0, onFailure);
-            var timer:Timer = new Timer(50, 1);
-            timer.addEventListener(TimerEvent.TIMER, onDone);
-            timer.start();
-        }
     }
 }

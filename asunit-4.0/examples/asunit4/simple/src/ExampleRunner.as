@@ -1,5 +1,5 @@
 package {
-    import asunit4.ui.TextRunnerUI;
+    import asunit.ui.TextRunnerUI;
 	
 	public class ExampleRunner extends TextRunnerUI {
 

@@ -51,6 +51,7 @@ package asunit4.runners {
         protected var methodsToRun:TestIterator;
         protected var result:IResult;
         protected var startTime:Number;
+        protected var testMethodNameReceived:Boolean;
         protected var timer:Timer;
         protected var visualContext:DisplayObjectContainer;
         protected var visualInstances:Array;
@@ -62,16 +63,17 @@ package asunit4.runners {
             visualInstances = [];
         }
 
-        public function run(test:Class, result:IResult, visualContext:DisplayObjectContainer=null):void {
-            runMethodByName(test, result, visualContext);
+        public function run(test:Class, result:IResult, methodName:String=null, visualContext:DisplayObjectContainer=null):void {
+            runMethodByName(test, result, methodName, visualContext);
         }
         
-        public function runMethodByName(test:Class, result:IResult, visualContext:DisplayObjectContainer=null, testMethodName:String=null):void {
-            currentTest           = new test();
-            currentTestReflection = Reflection.create(test);
-            currentMethod         = null;
-            this.result           = result;
-            this.visualContext    = visualContext;
+        public function runMethodByName(test:Class, result:IResult, methodName:String=null, visualContext:DisplayObjectContainer=null):void {
+            currentTest            = new test();
+            currentTestReflection  = Reflection.create(test);
+            currentMethod          = null;
+            testMethodNameReceived = (methodName != null);
+            this.result            = result;
+            this.visualContext     = visualContext;
 
             initializeInjectableMembers();
             
@@ -81,7 +83,7 @@ package asunit4.runners {
             startTime = getTimer();
             result.onTestStarted(currentTest);
             
-            methodsToRun = createTestIterator(currentTest, testMethodName);
+            methodsToRun = createTestIterator(currentTest, methodName);
 
             if(methodsToRun.length == 0) {
                 warn(">> We were unable to find any test methods in " + currentTestReflection.name + ". Did you set the --keep-as3-metadata flag?");
@@ -98,7 +100,7 @@ package asunit4.runners {
         }
 
         protected function runNextMethod(e:TimerEvent = null):void {
-            if(methodsToRun.readyToTearDown) {
+            if(!testMethodNameReceived && methodsToRun.readyToTearDown) {
                 removeInjectedMembers();
                 removeInjectedVisualInstances();
             }

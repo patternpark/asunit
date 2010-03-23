@@ -23,14 +23,16 @@ package asunit4.runners {
 		protected var timer:Timer;
 		protected var result:IResult;
         protected var visualContext:DisplayObjectContainer;
+        protected var testMethod:String;
 		
 		public function SuiteRunner() {
 			timer = new Timer(0, 1);
 		}
 		
-		public function run(suite:Class, result:IResult, visualContext:DisplayObjectContainer=null):void {
+		public function run(suite:Class, result:IResult, testMethod:String=null, visualContext:DisplayObjectContainer=null):void {
 			this.result = result;
             this.visualContext = visualContext;
+            this.testMethod = testMethod;
             runSuite(suite, result);
         }
 
@@ -51,7 +53,10 @@ package asunit4.runners {
 			
 			var testClass:Class = testClasses.next();
             var runner:IRunner = getRunnerForTest(testClass);
-			runner.run(testClass, result, visualContext);
+            // [luke] TODO: There should be a clear search,
+            // and clear failure when testMethod is provided,
+            // but not found...
+			runner.run(testClass, result, testMethod, visualContext);
 		}
 
         protected function getRunnerForTest(testClass:Class):IRunner {

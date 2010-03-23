@@ -22,7 +22,7 @@ package asunit4.ui {
 			}
 		}
 		
-		public function run(suite:Class):void {
+		public function run(suite:Class, testMethod:String=null):void {
 			printer = new TextPrinter();
 			addChild(printer);
 			
@@ -31,7 +31,7 @@ package asunit4.ui {
 			result.addListener(new FlashDevelopPrinter());
 			
 			runner = new BaseRunner();
-			runner.run(suite, result, this);
+			runner.run(suite, result, testMethod, this);
 		}
 	}
 }

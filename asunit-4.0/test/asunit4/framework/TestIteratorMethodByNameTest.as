@@ -34,11 +34,14 @@ package asunit4.framework {
 			assertSame('runBefore1', 					iterator.next().name);
 			assertSame('runBefore2', 					iterator.next().name);
 			assertSame('stage_is_null_by_default', 		iterator.next().name);
-			assertSame('runAfter1', 					iterator.next().name);
-			assertSame('runAfter2', 					iterator.next().name);
+
+            // NOTE: When a method name is provided, the teardown should
+            // not occur.
+			//assertSame('runAfter1', 					iterator.next().name);
+			//assertSame('runAfter2', 					iterator.next().name);
 			
-			assertSame('runAfterClass1', 				iterator.next().name);
-			assertSame('runAfterClass2', 				iterator.next().name);
+			//assertSame('runAfterClass1', 				iterator.next().name);
+			//assertSame('runAfterClass2', 				iterator.next().name);
 			
 			assertFalse('no methods left in iterator',	iterator.hasNext());
 		}

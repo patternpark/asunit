@@ -19,7 +19,7 @@ package asunit.printers {
 
 	public class TextPrinter extends Sprite implements IRunListener {
 
-        public static var DEFAULT_HEADER:String = "AsUnit 4.0 by Luke Bayes and Ali Mills\n\nFlash Player version: " + Capabilities.version
+        public static var DEFAULT_HEADER:String = "AsUnit 4.0 by Luke Bayes, Ali Mills and Robert Penner\n\nFlash Player version: " + Capabilities.version
 		public static var LOCAL_PATH_PATTERN:RegExp = /([A-Z]:\\[^\/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^\/:\*\?<>\|]+\.\w{2,6})/g;
 
         public var backgroundColor:uint = 0x333333;

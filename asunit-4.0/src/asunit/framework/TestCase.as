@@ -49,7 +49,7 @@ package asunit.framework {
         }
 
         protected function removeChild(child:DisplayObject):DisplayObject {
-            if(child && context.getChildIndex(child) > -1) {
+            if(child && child.parent === context) {
                 context.removeChild(child);
             }
             return child;

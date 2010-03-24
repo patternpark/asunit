@@ -6,8 +6,7 @@
 	public class Method {
 		public var expects:String;
 		public var ignore:Boolean;
-		public var isTest:Boolean;
-		public var metadata:XMLList;
+		public var metadata:ReflectionMetaData;
 		public var name:String;
 		public var order:int      = 0;
 		public var scope:Object;
@@ -19,16 +18,23 @@
             this.name = reflection.name;
             this.value = scope[reflection.name];
 
-            var metadata:ReflectionMetaData = reflection.getMetaDataByName('Test');
+            metadata = reflection.getMetaDataByName('Test');
 
             if(metadata != null) {
-                isTest  = true;
                 ignore  = (reflection.getMetaDataByName('Ignore') != null);
 
                 timeout = metadata.getValueFor('timeout');
                 expects = metadata.getValueFor('expects');
                 order   = metadata.getValueFor('order');
             }
+        }
+
+        public function get isTest():Boolean {
+            return (metadata != null || isLegacyTest);
+        }
+
+        public function get isLegacyTest():Boolean {
+            return (metadata == null && name.match(/^test/));
         }
 
 		public function toString():String {

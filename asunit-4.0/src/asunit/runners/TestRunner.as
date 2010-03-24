@@ -227,8 +227,6 @@ package asunit.runners {
             
             result.onTestCompleted(currentTest);
             
-            //TODO: move out because runTime is for whole run, not one test
-            //result.runTime = getTimer() - startTime;
             dispatchEvent(new Event(Event.COMPLETE));
         }
         
@@ -317,9 +315,7 @@ package asunit.runners {
         protected function createInstanceFromReflection(reflection:Reflection):* {
             // Return the shared async instance if they're expecting the interface
             // or concrete instance, but NOT if their Inject is merely a subclass...
-            trace(">> reflection.name: " + reflection.name);
             if(reflection.name == ASYNC_NAME || reflection.name == IASYNC_NAME) {
-                trace(">> returning existing Async instance!");
                 return async;
             }
 

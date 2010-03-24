@@ -40,7 +40,6 @@ package asunit.runners {
         protected function runSuite(suite:*, result:IResult):void {
 			testClasses = new SuiteIterator(suite);
 			defaultRunner = new DEFAULT_TEST_RUNNER();
-			defaultRunner.addEventListener(Event.COMPLETE, onTestCompleted);
 			timer.addEventListener(TimerEvent.TIMER, runNextTest);
 			
 			runNextTest();
@@ -54,6 +53,7 @@ package asunit.runners {
 			
 			var testClass:Class = testClasses.next();
             var runner:IRunner = getRunnerForTest(testClass);
+			runner.addEventListener(Event.COMPLETE, onTestCompleted);
             // [luke] TODO: There should be a clear search,
             // and clear failure when testMethod is provided,
             // but not found...
@@ -102,6 +102,7 @@ package asunit.runners {
         }
 		
 		protected function onTestCompleted(e:Event):void {
+            e.target.removeEventListener(Event.COMPLETE, onTestCompleted);
 			// Start a new green thread.
 			timer.reset();
 			timer.start();

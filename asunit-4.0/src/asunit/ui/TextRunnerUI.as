@@ -20,19 +20,32 @@ package asunit.ui {
 				stage.align     = StageAlign.TOP_LEFT;
 				stage.scaleMode = StageScaleMode.NO_SCALE;
 			}
+            initialize();
 		}
-		
-		public function run(suite:Class, testMethod:String=null):void {
-		    trace(">> running with: " + suite);
-            trace("===================");
+
+        protected function initialize():void {
+            initializeResult();
+            initializePrinters();
+            initializeRunner();
+        }
+
+        protected function initializeResult():void {
+            result = new Result();
+        }
+
+        protected function initializePrinters():void {
 			printer = new TextPrinter();
 			addChild(printer);
-			
-			result = new Result();
 			result.addListener(printer);
+
 			result.addListener(new FlashDevelopPrinter());
-			
+        }
+
+        protected function initializeRunner():void {
 			runner = new BaseRunner();
+        }
+		
+		public function run(suite:Class, testMethod:String=null):void {
 			runner.run(suite, result, testMethod, this);
 		}
 	}

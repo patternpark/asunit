@@ -1,10 +1,13 @@
 package {
-	import asunit.textui.TestRunner;
+	import asunit.ui.TextRunnerUI;
+	import asunit.runners.LegacyRunner;
 
-	public class AsUnitRunner extends TestRunner {
+	public class AsUnitRunner extends TextRunnerUI {
+	    
+	    private var legacyRunner:LegacyRunner;
 
         public function AsUnitRunner() {
-            start(AllTests, null, TestRunner.SHOW_TRACE);
+            run(AllTests);
         }
     }
 }

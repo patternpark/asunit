@@ -3,7 +3,7 @@ sprout 'as3'
 
 ASUNIT_VERSION = '4.1'
 
-test_input = "AsUnit4Runner"
+test_input = "AsUnitRunner"
 
 ##########################################
 # To build from this file, install Ruby (http://ruby-lang.org)

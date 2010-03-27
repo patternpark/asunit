@@ -1,8 +1,10 @@
 package asunit.runners {
 
+    import asunit.asserts.*;
     import asunit.framework.TestCase;
     import asunit.util.Iterator;
 
+    import asunit.framework.IAsync;
     import asunit.framework.Method;
     import asunit.framework.Result;
     import asunit.framework.TestFailure;
@@ -11,19 +13,19 @@ package asunit.runners {
     import flash.events.Event;
     import flash.utils.getQualifiedClassName;
 
-    public class TestRunnerAsyncMethodTest extends TestCase {
+    public class TestRunnerAsyncMethodTest {
+
+        [Inject]
+        public var async:IAsync;
+
         private var runner:TestRunner;
         private var runnerResult:Result;
         private var successTest:Class;
         private var syncTest:Class;
         private var tooSlowTest:Class;
 
-        public function TestRunnerAsyncMethodTest(testMethod:String = null) {
-            super(testMethod);
-        }
-
-        protected override function setUp():void {
-            super.setUp();
+        [Before]
+        public function setUp():void {
             runner       = new TestRunner();
             runnerResult = new Result();
             successTest  = AsyncMethodSuccessTest
@@ -31,8 +33,8 @@ package asunit.runners {
             tooSlowTest  = AsyncMethodTooSlowTest
         }
 
-        protected override function tearDown():void {
-            super.tearDown();
+        [After]
+        public function tearDown():void {
             runner       = null;
             runnerResult = null;
             successTest  = null;
@@ -40,7 +42,8 @@ package asunit.runners {
             tooSlowTest  = null;
         }
         
-        public function test_async_test_method_should_have_timeout_value():void {
+        [Test]
+        public function asyncMethodShouldHaveTimeout():void {
             var instance:* = new successTest();
             var iterator:Iterator = new TestIterator(instance);
 
@@ -49,13 +52,15 @@ package asunit.runners {
             assertEquals('timeout value', 100, method.timeout);
         }
 
-        public function testRunAsyncWithoutFailing():void {
-            runner.addEventListener(Event.COMPLETE, addAsync(ensureRunnerHasNotYetFailed, 100));
+        [Test]
+        public function asyncShouldWork():void {
+            runner.addEventListener(Event.COMPLETE, async.add(ensureRunnerHasNotYetFailed, 100));
             runner.run(successTest, runnerResult);
         }
-                
-        public function testRunAsyncCallsAsyncDelegate():void {
-            runner.addEventListener(Event.COMPLETE, addAsync(ensureRunnerHasNotYetFailed, 10));
+
+        [Test]
+        public function runAsyncCallsAsyncDelegate():void {
+            runner.addEventListener(Event.COMPLETE, async.add(ensureRunnerHasNotYetFailed, 10));
             runner.run(syncTest, runnerResult);
         }
         
@@ -63,12 +68,13 @@ package asunit.runners {
             assertFalse('runner result has not failed', runnerResult.failureEncountered);
         }
         
-        public function test_run_with_too_slow_async_operation_triggers_result_with_IllegalOperationError():void {
-            runner.addEventListener(Event.COMPLETE, addAsync(check_Result_has_IllegalOperationError, 100));
+        [Test]
+        public function shouldSeeErrorWhenAsyncFailure():void {
+            runner.addEventListener(Event.COMPLETE, async.add(checkResultForIllegalOperationError, 100));
             runner.run(tooSlowTest, runnerResult);
         }
         
-        private function check_Result_has_IllegalOperationError(e:Event):void {
+        private function checkResultForIllegalOperationError(e:Event):void {
             assertEquals('number of errors', 1, runnerResult.errors.length);
             var failure0:TestFailure = runnerResult.errors[0] as TestFailure;
             assertEquals('exception type', 'flash.errors::IllegalOperationError', getQualifiedClassName(failure0.thrownException));

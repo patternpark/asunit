@@ -1,4 +1,5 @@
 package {
+
 	import asunit.ui.TextRunnerUI;
 	import asunit.runners.LegacyRunner;
 

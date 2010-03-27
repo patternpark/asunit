@@ -136,7 +136,7 @@ package asunit.runners {
             }
             
             if (currentMethod.timeout >= 0) {
-                methodTimeoutID = setTimeout(onMethodTimeout, currentMethod.timeout);
+                methodTimeoutID = setTimeout(onMethodTimeout, async.timeout);
             }
             
             // This is used to prevent async callbacks from triggering onMethodCompleted too early.
@@ -168,6 +168,7 @@ package asunit.runners {
             methodIsExecuting = false;
             
             if (async.hasPending) return;
+
             onMethodCompleted();
         }
 

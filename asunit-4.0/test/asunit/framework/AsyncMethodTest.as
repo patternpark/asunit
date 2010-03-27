@@ -1,71 +1,69 @@
 package asunit.framework {
+    
+    import asunit.asserts.*;
+    
     import flash.display.Sprite;
     import flash.utils.setTimeout;
 
-    public class AsyncMethodTest extends TestCase {
+    public class AsyncMethodTest {
 
-        private var instance:Sprite;
-        private var asyncInstance:Sprite;
+        [Inject]
+        public var async:IAsync;
 
-        public function AsyncMethodTest(testMethod:String = null) {
-            super(testMethod);
-        }
+        [Inject]
+        public var sprite:Sprite;
 
-        protected override function setUp():void {
-            instance = new Sprite();
-            addChild(instance);
-            var handler:Function = addAsync(asyncSetupHandler);
+        [Before]
+        protected function setUp():void {
+            var handler:Function = async.add(asyncSetupHandler);
             setTimeout(handler, 0);
         }
 
-        protected override function tearDown():void {
-            removeChild(instance);
-            removeChild(asyncInstance);
-            instance = null;
-            asyncInstance = null;
-        }
-
         public function asyncSetupHandler():void{
-            asyncInstance = new Sprite();
-            addChild(asyncInstance);
         }
 
+        [Test]
         public function testInstantiated():void {
-            assertTrue("Sprite instantiated", instance is Sprite);
+            assertTrue("Sprite instantiated", sprite is Sprite);
         }
 
+        [Test]
         public function testAsyncMethod():void {
-            var handler:Function = addAsync(asyncHandler);
+            var handler:Function = async.add(asyncHandler);
             setTimeout(handler, 0);
         }
         
         private function asyncHandler():void {
-            assertTrue(instance is Sprite);
+            assertTrue(sprite is Sprite);
         }
         
+        [Test]
         public function testAsyncVisualEntity():void {
-            var handler:Function = addAsync(spriteHandler);
+            var handler:Function = async.add(spriteHandler);
             setTimeout(handler, 0);
         }
         
         private function spriteHandler():void {
-            assertTrue(instance is Sprite);
+            assertTrue(sprite is Sprite);
         }
         
+        [Test]
         public function testAsyncVisualEntity2():void {
-            var handler:Function = addAsync(spriteHandler);
+            var handler:Function = async.add(spriteHandler);
             setTimeout(handler, 0);
         }
         
+        [Test]
         public function testMultipleAsyncMethod():void {
-            var handler1:Function = addAsync(spriteHandler);
-            var handler2:Function = addAsync(spriteHandler);
+            var handler1:Function = async.add(spriteHandler);
+            var handler2:Function = async.add(spriteHandler);
             setTimeout(handler1, 0);
             setTimeout(handler2, 0);
         }
         
+        [Test]
         public function testAsyncSetup():void{
-            assertTrue(asyncInstance is Sprite);
+            assertTrue(sprite is Sprite);
         }
     }
 }

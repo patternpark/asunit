@@ -10,7 +10,7 @@
 		public var name:String;
 		public var order:int      = 0;
 		public var scope:Object;
-		public var timeout:Number = -1;
+		public var timeout:int = -1;
 		public var value:Function;
 		
 		public function Method(scope:Object, reflection:ReflectionMethod) {
@@ -23,9 +23,18 @@
             if(metadata != null) {
                 ignore  = (reflection.getMetaDataByName('Ignore') != null);
 
-                timeout = metadata.getValueFor('timeout');
-                expects = metadata.getValueFor('expects');
-                order   = metadata.getValueFor('order');
+                applyMetaData('timeout');
+                applyMetaData('expects');
+                applyMetaData('order');
+            }
+        }
+
+        // The null response for timeout was updating the
+        // int field to zero when it needs to be -1...
+        private function applyMetaData(name:String):void {
+            var value:* = metadata.getValueFor(name);
+            if(value != null) {
+                this[name] = value;
             }
         }
 

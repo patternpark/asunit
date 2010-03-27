@@ -18,14 +18,15 @@ package asunit.printers {
     import flash.text.TextFormat;
 
 	public class TextPrinter extends Sprite implements IRunListener {
-
-        public static var DEFAULT_HEADER:String = "AsUnit 4.0 by Luke Bayes, Ali Mills and Robert Penner\n\nFlash Player version: " + Capabilities.version
 		public static var LOCAL_PATH_PATTERN:RegExp = /([A-Z]:\\[^\/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^\/:\*\?<>\|]+\.\w{2,6})/g;
+        public static var BACKGROUND_COLOR:uint = 0x333333;
+        public static var DEFAULT_HEADER:String = "AsUnit 4.0 by Luke Bayes, Ali Mills and Robert Penner\n\nFlash Player version: " + Capabilities.version
+        public static var FONT_SIZE:int = 12;
+        public static var TEXT_COLOR:uint = 0xffffff;
 
-        public var backgroundColor:uint = 0x333333;
+        public var backgroundColor:uint = BACKGROUND_COLOR;
         public var localPathPattern:RegExp;
-        public var columnCount:int      = 80;
-        public var textColor:uint       = 0xffffff;
+        public var textColor:uint       = TEXT_COLOR;
 
 		private var dots:Array;
 		private var footer:String;
@@ -36,13 +37,13 @@ package asunit.printers {
         private var ignores:Array;
         private var resultBar:Shape;
         private var resultBarHeight:uint = 3;
+        private var runCompleted:Boolean;
         private var successes:Array;
         private var testTimes:Array;
         private var warnings:Array;
 
         protected var textDisplay:TextField;
 
-        private var runCompleted:Boolean;
 
 		public function TextPrinter() {
             initialize();
@@ -257,7 +258,7 @@ package asunit.printers {
 
             var format:TextFormat = textDisplay.getTextFormat();
             format.font           = '_sans';
-            format.size           = 12;
+            format.size           = FONT_SIZE;
             format.leftMargin     = 5;
             format.rightMargin    = 5;
             textDisplay.defaultTextFormat = format;

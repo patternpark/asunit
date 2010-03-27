@@ -46,6 +46,15 @@ package asunit.framework {
         private function spriteHandler():void {
             assertTrue(sprite is Sprite);
         }
+
+        public function testAsyncFailure():void {
+            var handler:Function = async.add(asyncFailure, 2);
+            setTimeout(handler, 10);
+        } 
+
+        private function asyncFailure():void {
+            assertTrue(true);
+        }
         
         [Test]
         public function testAsyncVisualEntity2():void {

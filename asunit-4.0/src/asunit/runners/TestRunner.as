@@ -134,9 +134,13 @@ package asunit.runners {
                 onMethodCompleted();
                 return;
             }
-            
-            if (currentMethod.timeout >= 0) {
-                methodTimeoutID = setTimeout(onMethodTimeout, async.timeout);
+
+            var timeout:int = (currentMethod.timeout > -1) ? currentMethod.timeout : async.timeout;
+
+            if (timeout >= 0) {
+                methodTimeoutID = setTimeout(function():void {
+                    onMethodTimeout(timeout);
+                }, timeout);
             }
             
             // This is used to prevent async callbacks from triggering onMethodCompleted too early.
@@ -172,8 +176,8 @@ package asunit.runners {
             onMethodCompleted();
         }
 
-        protected function onMethodTimeout():void {
-            recordFailure(new IllegalOperationError('Timeout (' + currentMethod.timeout + 'ms) exceeded during method ' + currentMethod.name));
+        protected function onMethodTimeout(timeout:int):void {
+            recordFailure(new IllegalOperationError('Timeout (' + timeout + 'ms) exceeded during method ' + currentMethod.name));
             onMethodCompleted();
         }
         

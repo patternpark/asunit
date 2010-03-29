@@ -38,6 +38,10 @@
             }
         }
 
+        public function execute():void {
+            value.call(scope);
+        }
+
         public function get isTest():Boolean {
             return (metadata != null || isLegacyTest);
         }

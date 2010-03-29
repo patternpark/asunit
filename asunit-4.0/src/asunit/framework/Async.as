@@ -92,6 +92,7 @@ package asunit.framework {
 			command.addEventListener(TimeoutCommandEvent.CALLED,	onTestResult);
 			command.addEventListener(TimeoutCommandEvent.TIMED_OUT,	onTestResult);
 			command.addEventListener(ErrorEvent.ERROR, 				onTestResult);
+            dispatchEvent(new TimeoutCommandEvent(TimeoutCommandEvent.ADDED, command));
 		}
 		
 		protected function onTestResult(e:Event):void {

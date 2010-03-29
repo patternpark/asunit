@@ -70,7 +70,7 @@ package asunit.runners {
         
         [Test]
         public function shouldSeeErrorWhenAsyncFailure():void {
-            runner.addEventListener(Event.COMPLETE, async.add(checkResultForIllegalOperationError, 100));
+            runner.addEventListener(Event.COMPLETE, async.add(checkResultForIllegalOperationError, 200));
             runner.run(tooSlowTest, runnerResult);
         }
         

@@ -85,7 +85,7 @@ package asunit.printers {
         private function getFailureStackTrace(failure:ITestFailure):String {
             var stack:String = "";
 			stack = failure.thrownException.getStackTrace();
-			stack = stack.replace(localPathPattern, '');
+			//stack = stack.replace(localPathPattern, '');
 			stack = stack.replace(/AssertionFailedError: /, '');
             stack += "\n\n";
             return stack;

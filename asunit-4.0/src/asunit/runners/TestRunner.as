@@ -119,7 +119,7 @@ package asunit.runners {
             }
 
             if(methodsToRun.readyToSetUp) {
-                injectMembers();
+                prepareForSetUp();
             }
 
             runMethod(methodsToRun.next());
@@ -278,6 +278,10 @@ package asunit.runners {
         protected function removeInjectedMember(member:ReflectionVariable):void {
             if(!member) return;
             currentTest[member.name] = null;
+        }
+
+        protected function prepareForSetUp():void {
+            injectMembers();
         }
 
         protected function injectMembers():void {

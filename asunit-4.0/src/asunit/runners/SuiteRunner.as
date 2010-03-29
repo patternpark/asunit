@@ -2,7 +2,7 @@ package asunit.runners {
     
 	import asunit.framework.IResult;
 	import asunit.framework.IRunner;
-    import asunit.utils.Iterator;
+    import asunit.util.Iterator;
 	import asunit.framework.SuiteIterator;
 
     import flash.display.DisplayObjectContainer;

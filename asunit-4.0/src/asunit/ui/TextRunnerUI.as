@@ -45,8 +45,8 @@ package asunit.ui {
 			runner = new BaseRunner();
         }
 		
-		public function run(suite:Class, testMethod:String=null):void {
-			runner.run(suite, result, testMethod, this);
+		public function run(testOrSuite:Class, testMethod:String=null):void {
+			runner.run(testOrSuite, result, testMethod, this);
 		}
 	}
 }

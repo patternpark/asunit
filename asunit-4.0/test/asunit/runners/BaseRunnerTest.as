@@ -1,38 +1,56 @@
 package asunit.runners {
 
-    import asunit.framework.TestCase;
-
-    import asunit.framework.IRunner;
+    import asunit.asserts.*;
     import asunit.framework.IResult;
+    import asunit.framework.IRunner;
     import asunit.framework.Result;
     import asunit.runners.BaseRunner;
-    import asunit.support.TestForFakeRunner;
     import asunit.support.MultiMethod;
+    import asunit.support.SucceedAssertTrue;
+    import asunit.support.TestForFakeRunner;
 
-    public class BaseRunnerTest extends TestCase {
+    public class BaseRunnerTest {
 
-        public function BaseRunnerTest(method:String=null) {
-            super(method);
+        private var runner:IRunner;
+        private var result:IResult;
+
+        [Before]
+        public function createRunnerAndResult():void {
+            runner = new BaseRunner();
+            result = new Result();
         }
 
-        override protected function setUp():void {
-            super.setUp();
+        [After]
+        public function cleanUpMultiMethod():void {
             MultiMethod.methodsCalled = [];
         }
 
-        public function testRunWith():void {
-            var runner:IRunner = new BaseRunner();
-            var result:IResult = new Result();
-            runner.run(TestForFakeRunner, result);
+        [After]
+        public function cleanUpRunnerAndResult():void {
+            runner = null;
+            result = null;
+        }
+
+        private function run(test:Class, methodName:String=null):void {
+            runner.run(test, result, methodName);
+        }
+
+        [Test]
+        public function respectRunWith():void {
+            run(TestForFakeRunner);
             assertEquals(1, result.successCount);
         }
 
-        public function testCustomMethod():void {
-            var runner:IRunner = new BaseRunner();
-            var result:IResult = new Result();
-            runner.run(MultiMethod, result, "stage_is_null_by_default");
+        [Test]
+        public function provideCustomMethod():void {
+            run(MultiMethod, "stage_is_null_by_default");
             assertEquals(1, result.successCount);
             assertEquals(5, MultiMethod.methodsCalled.length);
+        }
+
+        [Test(expects="asunit.errors.UsageError")]
+        public function providedCustomMethodNotFound():void {
+            run(SucceedAssertTrue, "unknownMethod");
         }
     }
 }

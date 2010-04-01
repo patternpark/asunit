@@ -2,6 +2,7 @@ package asunit.runners {
     
 	import asunit.framework.IResult;
 	import asunit.framework.IRunner;
+    import asunit.util.Iterator;
 	import asunit.framework.SuiteIterator;
 
     import flash.display.DisplayObjectContainer;
@@ -19,8 +20,7 @@ package asunit.runners {
 		public static var DEFAULT_TEST_RUNNER:Class = TestRunner;
 		
 		protected var defaultRunner:IRunner;
-		protected var suiteRunner:SuiteRunner;
-		protected var testClasses:SuiteIterator;
+		protected var testClasses:Iterator;
 		protected var timer:Timer;
 		protected var result:IResult;
         protected var visualContext:DisplayObjectContainer;

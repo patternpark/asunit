@@ -1,5 +1,6 @@
 package asunit.framework {
 
+    import asunit.errors.UsageError;
     import asunit.util.ArrayIterator;
     import asunit.util.Iterator;
 
@@ -37,6 +38,10 @@ package asunit.framework {
                         return (item.name == testMethodName);
                     }
                 );
+                if(testMethodsArray.length == 0) {
+                    var message:String = "Provided test method name (" + testMethodName + ") not found on provided class (" + Reflection.create(test).name + ")";
+                    throw new UsageError(message);
+                }
             }
             
             testMethods = new ArrayIterator(testMethodsArray);

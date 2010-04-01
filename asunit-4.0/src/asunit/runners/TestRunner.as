@@ -47,7 +47,7 @@ package asunit.runners {
         protected var injectableMembers:Iterator;
         protected var methodIsExecuting:Boolean = false;
         protected var methodPassed:Boolean = true;
-        protected var methodTimeoutID:int = -1;
+        protected var methodTimeoutID:Number;
         protected var methodsToRun:TestIterator;
         protected var result:IResult;
         protected var startTime:Number;
@@ -118,7 +118,7 @@ package asunit.runners {
             }
 
             if(methodsToRun.readyToSetUp) {
-                injectMembers();
+                prepareForSetUp();
             }
 
             runMethod(methodsToRun.next());
@@ -134,11 +134,7 @@ package asunit.runners {
                 onMethodCompleted();
                 return;
             }
-            
-            if (currentMethod.timeout >= 0) {
-                methodTimeoutID = setTimeout(onMethodTimeout, currentMethod.timeout);
-            }
-            
+
             // This is used to prevent async callbacks from triggering onMethodCompleted too early.
             methodIsExecuting = true;
             
@@ -158,7 +154,7 @@ package asunit.runners {
             }
             else {
                 try {
-                    currentMethod.value();
+                    currentMethod.execute();
                 }
                 catch (error:Error) {
                     recordFailure(error);
@@ -168,16 +164,11 @@ package asunit.runners {
             methodIsExecuting = false;
             
             if (async.hasPending) return;
+
             onMethodCompleted();
         }
 
-        protected function onMethodTimeout():void {
-            recordFailure(new IllegalOperationError('Timeout (' + currentMethod.timeout + 'ms) exceeded during method ' + currentMethod.name));
-            onMethodCompleted();
-        }
-        
         protected function onMethodCompleted():void {
-            clearTimeout(methodTimeoutID);
             async.cancelPending();
             
             if (currentMethod.isTest && methodPassed && !currentMethod.ignore) {
@@ -253,6 +244,10 @@ package asunit.runners {
         protected function removeInjectedMember(member:ReflectionVariable):void {
             if(!member) return;
             currentTest[member.name] = null;
+        }
+
+        protected function prepareForSetUp():void {
+            injectMembers();
         }
 
         protected function injectMembers():void {

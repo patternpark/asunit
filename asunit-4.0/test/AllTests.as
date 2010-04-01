@@ -5,72 +5,65 @@ package {
 	 * If you modify it and run this script, your
 	 * modifications will be lost!
 	 */
+    
+    import asunit.framework.AssertEqualsArraysIgnoringOrderTest;
+    import asunit.framework.AssertEqualsArraysTest;
+    import asunit.framework.AssertTest;
+    import asunit.framework.AssertThrowsTest;
+    import asunit.framework.AsyncFailureTest;
+    import asunit.framework.AsyncMethodTest;
+    import asunit.framework.AsyncTest;
+    import asunit.framework.NestedSuiteIteratorTest;
+    import asunit.framework.ProceedOnEventTest;
+    import asunit.framework.ResultTest;
+    import asunit.framework.SuiteIteratorTest;
+    import asunit.framework.TestIteratorIgnoredMethodTest;
+    import asunit.framework.TestIteratorMethodByNameTest;
+    import asunit.framework.TestIteratorMultiMethodTest;
+    import asunit.framework.TestIteratorOrderedTestMethodTest;
+    import asunit.framework.TestIteratorSingleMethodTest;
+    import asunit.framework.VisualTestCaseTest;
+    import asunit.printers.TextPrinterTest;
+    import asunit.runners.BaseRunnerTest;
+    import asunit.runners.LegacyRunnerTest;
+    import asunit.runners.SuiteRunnerTest;
+    import asunit.runners.TestRunnerAsyncMethodTest;
+    import asunit.runners.TestRunnerErrorMethodTest;
+    import asunit.runners.TestRunnerExpectsErrorTest;
+    import asunit.runners.TestRunnerIgnoredMethodTest;
+    import asunit.runners.TestRunnerTest;
+    import asunit.util.ArrayIteratorTest;
 
-	import asunit.framework.TestSuite;
-	import asunit.framework.AssertEqualsArraysIgnoringOrderTest;
-	import asunit.framework.AssertEqualsArraysTest;
-	import asunit.framework.AssertTest;
-	import asunit.framework.AssertThrowsTest;
-	import asunit.framework.AsyncFailureTest;
-	import asunit.framework.AsyncMethodTest;
-	import asunit.framework.TestCaseTest;
-	import asunit.framework.TestFailureTest;
-	import asunit.framework.VisualTestCaseTest;
-	import asunit.textui.TestRunnerTest;
-	import asunit.util.ArrayIteratorTest;
-	import asunit.framework.AsyncTest;
-	import asunit.framework.ProceedOnEventTest;
-	import asunit.framework.NestedSuiteIteratorTest;
-	import asunit.framework.ResultTest;
-	import asunit.framework.SuiteIteratorTest;
-	import asunit.framework.TestIteratorIgnoredMethodTest;
-	import asunit.framework.TestIteratorMethodByNameTest;
-	import asunit.framework.TestIteratorMultiMethodTest;
-	import asunit.framework.TestIteratorOrderedTestMethodTest;
-	import asunit.framework.TestIteratorSingleMethodTest;
-	import asunit.printers.TextPrinterTest;
-	import asunit.runners.BaseRunnerTest;
-	import asunit.runners.LegacyRunnerTest;
-	import asunit.runners.SuiteRunnerTest;
-	import asunit.runners.TestRunnerAsyncMethodTest;
-	import asunit.runners.TestRunnerErrorMethodTest;
-	import asunit.runners.TestRunnerExpectsErrorTest;
-	import asunit.runners.TestRunnerIgnoredMethodTest;
-	import asunit.runners.TestRunnerTest;
-
-	public class AllTests extends TestSuite {
-
-		public function AllTests() {
-			addTest(new asunit.framework.AssertEqualsArraysIgnoringOrderTest());
-			addTest(new asunit.framework.AssertEqualsArraysTest());
-			addTest(new asunit.framework.AssertTest());
-			addTest(new asunit.framework.AssertThrowsTest());
-			addTest(new asunit.framework.AsyncFailureTest());
-			addTest(new asunit.framework.AsyncMethodTest());
-			addTest(new asunit.framework.TestCaseTest());
-			addTest(new asunit.framework.TestFailureTest());
-			addTest(new asunit.framework.VisualTestCaseTest());
-			addTest(new asunit.textui.TestRunnerTest());
-			addTest(new asunit.util.ArrayIteratorTest());
-			addTest(new asunit4.framework.AsyncTest());
-			addTest(new asunit4.framework.ProceedOnEventTest());
-			addTest(new asunit4.framework.NestedSuiteIteratorTest());
-			addTest(new asunit4.framework.ResultTest());
-			addTest(new asunit4.framework.SuiteIteratorTest());
-			addTest(new asunit4.framework.TestIteratorIgnoredMethodTest());
-			addTest(new asunit4.framework.TestIteratorMethodByNameTest());
-			addTest(new asunit4.framework.TestIteratorMultiMethodTest());
-			addTest(new asunit4.framework.TestIteratorOrderedTestMethodTest());
-			addTest(new asunit4.framework.TestIteratorSingleMethodTest());
-			addTest(new asunit4.printers.TextPrinterTest());
-			addTest(new asunit4.runners.BaseRunnerTest());
-			addTest(new asunit4.runners.LegacyRunnerTest());
-			addTest(new asunit4.runners.SuiteRunnerTest());
-			addTest(new asunit4.runners.TestRunnerAsyncMethodTest());
-			addTest(new asunit4.runners.TestRunnerErrorMethodTest());
-			addTest(new asunit4.runners.TestRunnerExpectsErrorTest());
-			addTest(new asunit4.runners.TestRunnerIgnoredMethodTest());
-			addTest(new asunit4.runners.TestRunnerTest());
-		}
+    [Suite]
+	public class AllTests {
+        
+        public var asunit_framework_AssertEqualsArraysIgnoringOrderTest:asunit.framework.AssertEqualsArraysIgnoringOrderTest;
+        public var asunit_framework_AssertEqualsArraysTest:asunit.framework.AssertEqualsArraysTest;
+        public var asunit_framework_AssertTest:asunit.framework.AssertTest;
+        public var asunit_framework_AssertThrowsTest:asunit.framework.AssertThrowsTest;
+        public var asunit_framework_AsyncFailureTest:asunit.framework.AsyncFailureTest;
+        public var asunit_framework_AsyncMethodTest:asunit.framework.AsyncMethodTest;
+        public var asunit_framework_AsyncTest:asunit.framework.AsyncTest;
+        public var asunit_framework_NestedSuiteIteratorTest:asunit.framework.NestedSuiteIteratorTest;
+        public var asunit_framework_ProceedOnEventTest:asunit.framework.ProceedOnEventTest;
+        public var asunit_framework_ResultTest:asunit.framework.ResultTest;
+        public var asunit_framework_SuiteIteratorTest:asunit.framework.SuiteIteratorTest;
+        public var asunit_framework_TestIteratorIgnoredMethodTest:asunit.framework.TestIteratorIgnoredMethodTest;
+        public var asunit_framework_TestIteratorMethodByNameTest:asunit.framework.TestIteratorMethodByNameTest;
+        public var asunit_framework_TestIteratorMultiMethodTest:asunit.framework.TestIteratorMultiMethodTest;
+        public var asunit_framework_TestIteratorOrderedTestMethodTest:asunit.framework.TestIteratorOrderedTestMethodTest;
+        public var asunit_framework_TestIteratorSingleMethodTest:asunit.framework.TestIteratorSingleMethodTest;
+        public var asunit_framework_VisualTestCaseTest:asunit.framework.VisualTestCaseTest;
+        public var asunit_printers_TextPrinterTest:asunit.printers.TextPrinterTest;
+        public var asunit_runners_BaseRunnerTest:asunit.runners.BaseRunnerTest;
+        public var asunit_runners_LegacyRunnerTest:asunit.runners.LegacyRunnerTest;
+        public var asunit_runners_SuiteRunnerTest:asunit.runners.SuiteRunnerTest;
+        public var asunit_runners_TestRunnerAsyncMethodTest:asunit.runners.TestRunnerAsyncMethodTest;
+        public var asunit_runners_TestRunnerErrorMethodTest:asunit.runners.TestRunnerErrorMethodTest;
+        public var asunit_runners_TestRunnerExpectsErrorTest:asunit.runners.TestRunnerExpectsErrorTest;
+        public var asunit_runners_TestRunnerIgnoredMethodTest:asunit.runners.TestRunnerIgnoredMethodTest;
+        public var asunit_runners_TestRunnerTest:asunit.runners.TestRunnerTest;
+        public var asunit_util_ArrayIteratorTest:asunit.util.ArrayIteratorTest;
 	}
 }
+

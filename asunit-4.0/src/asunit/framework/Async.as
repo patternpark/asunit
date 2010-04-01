@@ -60,8 +60,35 @@ package asunit.framework {
             return _timeout;
         }
 		
-		public function add(handler:Function, duration:int = -1):Function {
+        /**
+         * Returns a new async handler that should be used as the observer of some
+         * presumably asynchronous event.
+         *
+         * You can optionally pass a function closure that you would like to have
+         * executed when the provided handler is called. If this closure includes
+         * assertions, they will display in the test result.
+         *
+         * You can also override the default timeout (50ms) with a new value for
+         * this particular handler.
+         *
+         * This method may be called any number of times in a given [Test], [BeforeClass],
+         * or [Before] method.
+         *
+         * Test execution will be paused until all async handlers have returned
+         * or timed out.
+         *
+         * One way to use this method, is to simply send it to an event that you
+         * expect to have dispatched within a given time.
+         * 
+         *     instance.addEventListener(Event.COMPLETE, addAsync());
+         *
+         * In this example, you will receive a timeout error if the COMPLETE
+         * event is not dispatched within 50ms.
+         *
+         */
+		public function add(handler:Function=null, duration:int=-1):Function {
 			if (duration == -1) duration = timeout;
+            handler ||= function(...args):* {};
 			var command:TimeoutCommand = new TimeoutCommand(null, handler, duration);
 			addPending(command);
 			return command.getCallback();
@@ -92,6 +119,7 @@ package asunit.framework {
 			command.addEventListener(TimeoutCommandEvent.CALLED,	onTestResult);
 			command.addEventListener(TimeoutCommandEvent.TIMED_OUT,	onTestResult);
 			command.addEventListener(ErrorEvent.ERROR, 				onTestResult);
+            dispatchEvent(new TimeoutCommandEvent(TimeoutCommandEvent.ADDED, command));
 		}
 		
 		protected function onTestResult(e:Event):void {

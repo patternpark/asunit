@@ -5,6 +5,7 @@ package asunit.events {
 	import flash.events.Event;
 
 	public class TimeoutCommandEvent extends Event {
+        public static const ADDED:String     = 'added';
 		public static const CALLED:String    = 'called';
 		public static const TIMED_OUT:String = 'timedOut';
 		

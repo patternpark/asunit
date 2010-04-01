@@ -3,7 +3,7 @@ sprout 'as3'
 
 ASUNIT_VERSION = '4.1'
 
-test_input = "AsUnit4Runner"
+test_input = "AsUnitRunner"
 
 ##########################################
 # To build from this file, install Ruby (http://ruby-lang.org)
@@ -51,7 +51,7 @@ end
 ##########################################
 # Compile the SWC
 
-compc 'bin/AsUnit4.swc' do |t|
+compc 'bin/asunit4-alpha.swc' do |t|
   t.gem_name = 'sprout-flex4sdk-tool'
   t.include_sources << 'src'
   t.source_path << 'src'
@@ -65,7 +65,7 @@ end
 # Had trouble creating a SWC with 
 # AIR dependencies without including
 # a bunch of AIR-only classes.
-compc 'bin/AsUnit4-AIR.swc' do |t|
+compc 'bin/asunit4-AIR-alpha.swc' do |t|
   t.gem_name = 'sprout-flex4sdk-tool'
   t.include_sources << 'src'
   t.include_sources << 'air'
@@ -83,8 +83,8 @@ compc 'bin/AsUnit4-AIR.swc' do |t|
 end
 
 desc "Compile the AsUnit swc"
-#task :swc => ['bin/AsUnit4.swc', 'bin/AsUnit4-AIR.swc']
-task :swc => 'bin/AsUnit4.swc'
+#task :swc => ['bin/asunit4-alpha.swc', 'bin/asunit4-AIR-alpha.swc']
+task :swc => 'bin/asunit4-alpha.swc'
 
 ##########################################
 # Generate documentation
@@ -122,7 +122,7 @@ file 'dist' => :swc do
   FileUtils.mkdir_p 'dist'
   FileUtils.mkdir_p 'dist/libs'
   
-  FileUtils.cp_r 'bin/AsUnit4.swc', 'dist/libs/'
+  FileUtils.cp_r 'bin/asunit4-alpha.swc', 'dist/libs/'
   FileUtils.cp_r 'src', 'dist/src'
   FileUtils.cp_r 'lib/as3reflection/p2', 'dist/src'
   FileUtils.cp_r 'examples', 'dist/examples'

@@ -58,7 +58,6 @@ package asunit.runners {
 
         public function TestRunner() {
             async = new Async();
-            async.addEventListener(TimeoutCommandEvent.ADDED, pendingAsyncAddedHandler);
             timer = new Timer(0, 1);
             timer.addEventListener(TimerEvent.TIMER, runNextMethod);
             visualInstances = [];
@@ -136,19 +135,6 @@ package asunit.runners {
                 return;
             }
 
-            /*
-           // TODO: Send the method.timeout declaration to the async.timeout?
-
-            var timeout:int = (currentMethod.timeout > -1) ? currentMethod.timeout : async.timeout;
-
-            if (timeout >= 0) {
-                clearMethodTimeout();
-                methodTimeoutID = setTimeout(function():void {
-                    onMethodTimeout(timeout);
-                }, timeout);
-            }
-            */
-            
             // This is used to prevent async callbacks from triggering onMethodCompleted too early.
             methodIsExecuting = true;
             
@@ -182,27 +168,7 @@ package asunit.runners {
             onMethodCompleted();
         }
 
-        // TODO: Update the pending timeout so that the overall timeout duration
-        // reflects the collection of pending async calls...
-        protected function pendingAsyncAddedHandler(event:TimeoutCommandEvent):void {
-            //trace(">> pending Async added handler with timeout: " + event.target.timeout);
-        }
-
-        protected function onMethodTimeout(timeout:int):void {
-            recordFailure(new IllegalOperationError('Timeout (' + timeout + 'ms) exceeded during method ' + currentMethod.name));
-            onMethodCompleted();
-        }
-
-        /*
-        protected function clearMethodTimeout():void {
-            if(!isNaN(methodTimeoutID)) {
-                clearTimeout(methodTimeoutID);
-            }
-        }
-        */
-        
         protected function onMethodCompleted():void {
-            //clearMethodTimeout();
             async.cancelPending();
             
             if (currentMethod.isTest && methodPassed && !currentMethod.ignore) {

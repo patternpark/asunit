@@ -43,16 +43,6 @@ package asunit.runners {
         }
         
         [Test]
-        public function asyncMethodShouldHaveTimeout():void {
-            var instance:* = new successTest();
-            var iterator:Iterator = new TestIterator(instance);
-
-            assertEquals(1, iterator.length);
-            var method:Method = iterator.next();
-            assertEquals('timeout value', 100, method.timeout);
-        }
-
-        [Test]
         public function asyncShouldWork():void {
             runner.addEventListener(Event.COMPLETE, async.add(ensureRunnerHasNotYetFailed, 100));
             runner.run(successTest, runnerResult);
@@ -92,7 +82,7 @@ class AsyncMethodSuccessTest {
     [Inject]
     public var async:IAsync;
     
-    [Test(timeout="100")]
+    [Test]
     public function operation_delayed_but_fast_enough_will_succeed():void {
         var delegate:Function = async.add(onComplete);
         setTimeout(delegate, 0);
@@ -103,14 +93,14 @@ class AsyncMethodSuccessTest {
 }
 
 class AsyncMethodTooSlowTest {
-    
+
     [Inject]
     public var async:IAsync;
 
-    [Test(timeout="0")]
+    [Test]
     public function operation_too_slow_will_fail():void {
-        var delegate:Function = async.add(onComplete);
-        setTimeout(delegate, 1);
+        var delegate:Function = async.add(onComplete, 1);
+        setTimeout(delegate, 100);
     }
     
     private function onComplete():void {
@@ -126,7 +116,7 @@ class AsyncDelegateCalledSynchronouslyTest {
 
     private var handlerWasCalled:Boolean = false;
     
-    [Test(timeout="10")]
+    [Test]
     public function calling_delegate_synchronously_should_succeed():void {
         var delegate:Function = async.add(onComplete);
         delegate();

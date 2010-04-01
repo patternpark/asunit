@@ -23,9 +23,18 @@
             if(metadata != null) {
                 ignore  = (reflection.getMetaDataByName('Ignore') != null);
 
-                applyMetaData('timeout');
+                handleTimeoutMetaData();
                 applyMetaData('expects');
                 applyMetaData('order');
+            }
+        }
+
+        private function handleTimeoutMetaData():void {
+            var value:* = metadata.getValueFor('timeout');
+            if(value != null) {
+                var message:String = "It seems you're using [Test(timeout=n)] for " + name + ", but this has been deprecated.\n";
+                message += "If you'd like to set a different timeout value, please send it to your Async instance methods like: async.add(null, timeoutInMilliseconds)";
+                trace("[DEPRECATION WARNING] " + message);
             }
         }
 

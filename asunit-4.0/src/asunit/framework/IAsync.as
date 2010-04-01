@@ -7,7 +7,7 @@ package asunit.framework {
         function set timeout(timeout:int):void;
         function get timeout():int;
 
-		function add(handler:Function, duration:int = -1):Function;
+		function add(handler:Function=null, duration:int=-1):Function;
 
 		function cancelPending():void;
         

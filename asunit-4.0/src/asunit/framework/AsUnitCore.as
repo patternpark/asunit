@@ -11,14 +11,31 @@ package asunit.framework {
 
         public function AsUnitCore() {
             super();
+            initializeObservers();
+            initialize();
+        }
+
+        protected function initializeObservers():void {
             observers = [];
+        }
+
+        /**
+         * A template method that concrete sub classes
+         * can override to auto-configure their own
+         * observers or other settings before start
+         * is called.
+         */
+        protected function initialize():void {
         }
 
         /**
          * Add a new Observer instance to this test run. 
          *
-         * There isn't a particular type for an observer because 
-         * concrete observers are coupled to concrete runners
+         * The TestObserver interface is simply a marker interface
+         * that indicates your observer has at least one [Inject]
+         * variable where a bridge will be injected.
+         *
+         * Concrete observers are coupled to concrete runners
          * by using metadata and Bridges for message passing.
          *
          * The primary TestRunner, CoreCallbackBridge and TextPrinter
@@ -32,7 +49,7 @@ package asunit.framework {
          * default TestRunner for all subsequent tests.
          *
          */
-        public function addObserver(observer:*):void {
+        public function addObserver(observer:TestObserver):void {
             observers.push(observer);
         }
 

@@ -11,7 +11,7 @@ package asunit.framework {
 		public var core:AsUnitCore;
 
         [Inject]
-        public var sprite:Sprite;
+        public var context:Sprite;
 
         [Test]
 		public function shouldBeInstantiated():void {
@@ -26,6 +26,11 @@ package asunit.framework {
         [Test]
         public function addObserverWithUnknownObjectShouldNotThrow():void {
             core.addObserver({});
+        }
+
+        [Test]
+        public function setVisualContextShouldWork():void {
+            core.setVisualContext(context);
         }
 	}
 }

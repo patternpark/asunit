@@ -1,43 +1,39 @@
 package asunit.framework {
+
+    import asunit.asserts.*;
+
     import flash.display.Sprite;
     
-    public class VisualTestCaseTest extends TestCase {
-        private var instance:Sprite;
+    public class VisualTestCaseTest {
 
-        public function VisualTestCaseTest(testMethod:String = null) {
-            super(testMethod);
-        }
+        [Inject]
+        public var sprite:Sprite;
 
-        protected override function setUp():void {
-            instance = new Sprite();
-            addChild(instance);
-        }
-
-        protected override function tearDown():void {
-            removeChild(instance);
+        [Test]
+        public function instantiated():void {
+            assertTrue(sprite is Sprite);
         }
         
-        public function testInstance():void {
-            assertTrue(instance is Sprite);
-        }
-        
+        [Test]
         public function testSize():void {
-            assertTrue(instance.width == 0);
-            assertTrue(instance.height == 0);
+            assertTrue(sprite.width == 0);
+            assertTrue(sprite.height == 0);
         }
 
+        [Test]
         public function testDrawnSize():void {
-            instance.graphics.beginFill(0xFF0000);
-            instance.graphics.drawRect(0, 0, 10, 20);
+            sprite.graphics.beginFill(0xFF0000);
+            sprite.graphics.drawRect(0, 0, 100, 200);
             
-            assertTrue(instance.width == 10);
-            assertTrue(instance.height == 20);
+            assertEquals(100, sprite.width);
+            assertEquals(200, sprite.height);
         }
 
+        [Test]
         public function testSecondSize():void {
-            assertTrue(instance.width == 0);
-            assertTrue(instance.height == 0);
+            assertTrue(sprite.width == 0);
+            assertTrue(sprite.height == 0);
         }
-
     }
 }
+

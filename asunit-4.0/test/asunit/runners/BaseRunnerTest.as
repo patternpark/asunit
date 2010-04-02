@@ -31,8 +31,8 @@ package asunit.runners {
             result = null;
         }
 
-        private function run(test:Class, methodName:String=null):void {
-            runner.run(test, result, methodName);
+        private function run(testOrSuite:Class, methodName:String=null):void {
+            runner.run(testOrSuite, result, methodName);
         }
 
         [Test]

@@ -4,7 +4,7 @@ package asunit.framework {
     import flash.display.DisplayObjectContainer;
 
 	public interface IRunner extends IEventDispatcher {
-		function run(item:Class, result:IResult, testMethod:String=null, visualContext:DisplayObjectContainer=null):void;
+		function run(testOrSuite:Class, result:IResult, testMethod:String=null, visualContext:DisplayObjectContainer=null):void;
 	}
 }
 

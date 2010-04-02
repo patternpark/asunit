@@ -63,8 +63,8 @@ package asunit.runners {
             visualInstances = [];
         }
 
-        public function run(test:Class, result:IResult, methodName:String=null, visualContext:DisplayObjectContainer=null):void {
-            runMethodByName(test, result, methodName, visualContext);
+        public function run(testOrSuite:Class, result:IResult, methodName:String=null, visualContext:DisplayObjectContainer=null):void {
+            runMethodByName(testOrSuite, result, methodName, visualContext);
         }
 
         public function runMethodByName(test:Class, result:IResult, methodName:String=null, visualContext:DisplayObjectContainer=null):void {

@@ -9,8 +9,8 @@ package asunit.support {
 
     public class FakeRunner extends EventDispatcher implements IRunner {
 
-		public function run(item:Class, result:IResult, testMethod:String=null, visualContext:DisplayObjectContainer=null):void {
-            var currentTest:TestForFakeRunner = new item() as TestForFakeRunner;
+		public function run(testOrSuite:Class, result:IResult, testMethod:String=null, visualContext:DisplayObjectContainer=null):void {
+            var currentTest:TestForFakeRunner = new testOrSuite() as TestForFakeRunner;
 
             result.onTestStarted(currentTest);
             result.onTestSuccess(new TestSuccess(currentTest, 'customTestMethod'));

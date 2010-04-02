@@ -1,25 +1,24 @@
 package asunit.printers {
 
-	import asunit.framework.ITestFailure;
-
-	import asunit.framework.IResult;
-	import asunit.framework.IRunListener;
-	import asunit.framework.ITestSuccess;
+    import asunit.framework.IResult;
+    import asunit.framework.IRunListener;
+    import asunit.framework.ITestFailure;
+    import asunit.framework.ITestSuccess;
     import asunit.framework.ITestWarning;
-	import asunit.framework.Method;
+    import asunit.framework.Method;
     import asunit.framework.TestObserver;
 
-	import flash.display.Shape;
-	import flash.display.Sprite;
-	import flash.events.Event;
-	import flash.system.Capabilities;
-	import flash.utils.getQualifiedClassName;
-	import flash.utils.getTimer;
+    import flash.display.Shape;
+    import flash.display.Sprite;
+    import flash.events.Event;
+    import flash.system.Capabilities;
     import flash.text.TextField;
     import flash.text.TextFormat;
+    import flash.utils.getQualifiedClassName;
+    import flash.utils.getTimer;
 
-	public class TextPrinter extends Sprite implements IRunListener, TestObserver {
-		public static var LOCAL_PATH_PATTERN:RegExp = /([A-Z]:\\[^\/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^\/:\*\?<>\|]+\.\w{2,6})/g;
+    public class TextPrinter extends Sprite implements IRunListener, TestObserver {
+        public static var LOCAL_PATH_PATTERN:RegExp = /([A-Z]:\\[^\/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^\/:\*\?<>\|]+\.\w{2,6})/g;
         public static var BACKGROUND_COLOR:uint = 0x333333;
         public static var DEFAULT_HEADER:String = "AsUnit 4.0 by Luke Bayes, Ali Mills and Robert Penner\n\nFlash Player version: " + Capabilities.version
         public static var FONT_SIZE:int = 12;
@@ -29,10 +28,10 @@ package asunit.printers {
         public var localPathPattern:RegExp;
         public var textColor:uint       = TEXT_COLOR;
 
-		private var dots:Array;
-		private var footer:String;
-		private var header:String;
-		private var startTime:Number;
+        private var dots:Array;
+        private var footer:String;
+        private var header:String;
+        private var startTime:Number;
         private var backgroundFill:Shape;
         private var failures:Array;
         private var ignores:Array;
@@ -46,7 +45,7 @@ package asunit.printers {
         protected var textDisplay:TextField;
 
 
-		public function TextPrinter() {
+        public function TextPrinter() {
             initialize();
         }
 
@@ -55,53 +54,53 @@ package asunit.printers {
             failures  = [];
             ignores   = [];
             successes = [];
-			testTimes = [];
+            testTimes = [];
             warnings  = [];
-			
+            
             footer           = '';
             header           = DEFAULT_HEADER;
             localPathPattern = LOCAL_PATH_PATTERN;
-			if(stage) {
-				initializeDisplay();
+            if(stage) {
+                initializeDisplay();
             } else {
-				addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+                addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
             }
-		}
-		
-		public function onRunStarted():void {
+        }
+        
+        public function onRunStarted():void {
             updateTextDisplay();
-		}
-		
-		public function onTestFailure(failure:ITestFailure):void {
+        }
+        
+        public function onTestFailure(failure:ITestFailure):void {
             var s:String = '';
-			s += getQualifiedClassName(failure.failedTest);
-			s += '.' + failure.failedMethod + ' : ';
+            s += getQualifiedClassName(failure.failedTest);
+            s += '.' + failure.failedMethod + ' : ';
             s += getFailureStackTrace(failure);
 
             failures.push(s);
             dots.push(failure.isFailure ? 'F' : 'E');
             updateTextDisplay();
-		}
+        }
 
         private function getFailureStackTrace(failure:ITestFailure):String {
             var stack:String = "";
-			stack = failure.thrownException.getStackTrace();
-			//stack = stack.replace(localPathPattern, '');
-			stack = stack.replace(/AssertionFailedError: /, '');
+            stack = failure.thrownException.getStackTrace();
+            //stack = stack.replace(localPathPattern, '');
+            stack = stack.replace(/AssertionFailedError: /, '');
             stack += "\n\n";
             return stack;
         }
-		
-		public function onTestSuccess(success:ITestSuccess):void {
-			dots.push('.');
+        
+        public function onTestSuccess(success:ITestSuccess):void {
+            dots.push('.');
             updateTextDisplay();
-		}
-		
-		public function onTestIgnored(method:Method):void {
-			dots.push('I');
+        }
+        
+        public function onTestIgnored(method:Method):void {
+            dots.push('I');
             ignores.push(getIgnoreFromMethod(method));
             updateTextDisplay();
-		}
+        }
 
         private function getIgnoreFromMethod(method:Method):String {
             return "[Ignore] found at: " + method.scopeName + "." + method.toString();
@@ -110,19 +109,19 @@ package asunit.printers {
         public function onWarning(warning:ITestWarning):void {
             warnings.push(warning.toString());
         }
-		
-		public function onTestStarted(test:Object):void {
-			startTime = getTimer();
+        
+        public function onTestStarted(test:Object):void {
+            startTime = getTimer();
             updateTextDisplay();
-		}
-		
-		public function onTestCompleted(test:Object):void {
+        }
+        
+        public function onTestCompleted(test:Object):void {
             var duration:Number = getTimer() - startTime;
             testTimes.push({test:test, duration:duration});
             updateTextDisplay();
         }
-		
-		public function onRunCompleted(result:IResult):void {
+        
+        public function onRunCompleted(result:IResult):void {
             runCompleted = true;
             if(result.runCount == 0) {
                 println("[WARNING] No tests were found or executed.");   
@@ -136,30 +135,30 @@ package asunit.printers {
                 print("OK");
                 println (" (" + result.runCount + " test" + (result.runCount == 1 ? "": "s") + ")");
             }
-			else {
+            else {
                 println("FAILURES!!!");
                 println("Tests run: " + result.runCount
-					+ ",  Failures: " + result.failureCount
-					+ ",  Errors: " + result.errorCount
-					+ ",  Ignored: " + result.ignoredTestCount
-					);
+                    + ",  Failures: " + result.failureCount
+                    + ",  Errors: " + result.errorCount
+                    + ",  Ignored: " + result.ignoredTestCount
+                    );
             }
-			printTimeDetails();
+            printTimeDetails();
             updateTextDisplay();
             logResult();
-		}
+        }
 
         protected function logResult():void {
             trace(toString());
         }
-		
-		private function print(str:String):void {
-			footer += str;
-		}
-		
-		private function println(str:String = ""):void {
-			print(str + "\n");
-		}
+        
+        private function print(str:String):void {
+            footer += str;
+        }
+        
+        private function println(str:String = ""):void {
+            print(str + "\n");
+        }
 
         private function printTimeSummary():void {
             testTimes.sortOn('duration', Array.NUMERIC | Array.DESCENDING);
@@ -183,7 +182,7 @@ package asunit.printers {
             var total:Number = 0;
             var testTime:Object;
             for (var i:Number = 0; i < len; i++) {
-				testTime = testTimes[i];
+                testTime = testTimes[i];
                 println(testTime.duration + ' ms : ' + getQualifiedClassName(testTime.test));
             }
         }
@@ -229,32 +228,32 @@ package asunit.printers {
                 resultBar.y = stage.stageHeight - resultBarHeight;
             }
         }
-		
-		private function onAddedToStage(event:Event):void {
-			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+        
+        private function onAddedToStage(event:Event):void {
+            removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
             addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
-			initializeDisplay();
+            initializeDisplay();
             updateTextDisplay();
-		}
+        }
 
         private function onRemovedFromStage(event:Event):void {
             stage.removeEventListener(Event.RESIZE, onStageResize);
         }
-		
-		private function onStageResize(event:Event):void {
+        
+        private function onStageResize(event:Event):void {
             backgroundFill.width  = stage.stageWidth;
             backgroundFill.height = stage.stageHeight;
             textDisplay.width     = stage.stageWidth;
             textDisplay.height    = stage.stageHeight;
-		}
-		
-		private function initializeDisplay():void {
-			stage.addEventListener(Event.RESIZE, onStageResize);
+        }
+        
+        private function initializeDisplay():void {
+            stage.addEventListener(Event.RESIZE, onStageResize);
 
-			backgroundFill = new Shape();
-			backgroundFill.graphics.beginFill(backgroundColor);
-			backgroundFill.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
-			addChild(backgroundFill);
+            backgroundFill = new Shape();
+            backgroundFill.graphics.beginFill(backgroundColor);
+            backgroundFill.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+            addChild(backgroundFill);
 
             textDisplay = new TextField();
             textDisplay.multiline = true;
@@ -273,10 +272,10 @@ package asunit.printers {
             textDisplay.defaultTextFormat = format;
 
             addChild(textDisplay);
-			
+            
             resultBar = new Shape();
             addChild(resultBar);
-		}
-	}
+        }
+    }
 }
 

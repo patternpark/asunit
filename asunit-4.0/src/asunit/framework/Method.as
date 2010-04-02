@@ -1,9 +1,13 @@
 ﻿package asunit.framework {
 
+    import p2.reflect.Reflection;
     import p2.reflect.ReflectionMethod;
     import p2.reflect.ReflectionMetaData;
 	
 	public class Method {
+
+        private var _scopeName:String;
+
 		public var expects:String;
 		public var ignore:Boolean;
 		public var metadata:ReflectionMetaData;
@@ -27,6 +31,10 @@
                 applyMetaData('expects');
                 applyMetaData('order');
             }
+        }
+
+        public function get scopeName():String {
+            return _scopeName ||= Reflection.create(scope).name
         }
 
         private function handleTimeoutMetaData():void {

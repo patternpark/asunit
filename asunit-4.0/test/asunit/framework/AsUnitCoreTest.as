@@ -1,7 +1,9 @@
 package asunit.framework {
     
     import asunit.asserts.*;
+
     import asunit.support.SucceedAssertTrue;
+    import asunit.printers.TextPrinter;
 
     import flash.display.Sprite;
 
@@ -24,13 +26,18 @@ package asunit.framework {
         }
 
         [Test]
-        public function addObserverWithUnknownObjectShouldNotThrow():void {
-            core.addObserver({});
-        }
-
-        [Test]
         public function setVisualContextShouldWork():void {
             core.setVisualContext(context);
+        }
+
+        [Ignore]
+        [Test]
+        public function textPrinterShouldWork():void {
+            var printer:TextPrinter = new TextPrinter();
+            context.addChild(printer);
+            core.addObserver(printer);
+
+            core.start(SucceedAssertTrue);
         }
 	}
 }

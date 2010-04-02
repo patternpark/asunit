@@ -7,6 +7,7 @@ package asunit.printers {
 	import asunit.framework.ITestSuccess;
     import asunit.framework.ITestWarning;
 	import asunit.framework.Method;
+    import asunit.framework.TestObserver;
 
 	import flash.display.Shape;
 	import flash.display.Sprite;
@@ -17,7 +18,7 @@ package asunit.printers {
     import flash.text.TextField;
     import flash.text.TextFormat;
 
-	public class TextPrinter extends Sprite implements IRunListener {
+	public class TextPrinter extends Sprite implements IRunListener, TestObserver {
 		public static var LOCAL_PATH_PATTERN:RegExp = /([A-Z]:\\[^\/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^\/:\*\?<>\|]+\.\w{2,6})/g;
         public static var BACKGROUND_COLOR:uint = 0x333333;
         public static var DEFAULT_HEADER:String = "AsUnit 4.0 by Luke Bayes, Ali Mills and Robert Penner\n\nFlash Player version: " + Capabilities.version
@@ -98,8 +99,13 @@ package asunit.printers {
 		
 		public function onTestIgnored(method:Method):void {
 			dots.push('I');
+            ignores.push(getIgnoreFromMethod(method));
             updateTextDisplay();
 		}
+
+        private function getIgnoreFromMethod(method:Method):String {
+            return "[Ignore] found at: " + method.scopeName + "." + method.toString();
+        }
 
         public function onWarning(warning:ITestWarning):void {
             warnings.push(warning.toString());
@@ -198,6 +204,9 @@ package asunit.printers {
                 }
                 if(warnings.length > 0) {
                     parts = parts.concat(warnings);
+                }
+                if(ignores.length > 0) {
+                    parts = parts.concat(ignores);
                 }
                 parts.push(footer);
             }

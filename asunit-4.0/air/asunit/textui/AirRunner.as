@@ -1,5 +1,7 @@
 package asunit.textui {
     import asunit.framework.ITestResult;
+    import asunit.framework.TestRunner;
+    import asunit.framework.FlexTestRunner;
 
     import mx.core.WindowedApplication;
 

@@ -51,12 +51,17 @@ end
 ##########################################
 # Compile the SWC
 
-compc 'bin/asunit4-alpha.swc' do |t|
+def configure_swc_task(t)
   t.gem_name = 'sprout-flex4sdk-tool'
   t.include_sources << 'src'
   t.source_path << 'src'
   t.library_path << 'lib/Reflection.swc'
+  t.static_link_runtime_shared_libraries = true
   apply_as3_meta_data_args(t)
+end
+
+compc "bin/asunit#{ASUNIT_VERSION}-alpha.swc" do |t|
+  configure_swc_task t
 end
 
 # TODO: The :swc task should also call
@@ -65,11 +70,10 @@ end
 # Had trouble creating a SWC with 
 # AIR dependencies without including
 # a bunch of AIR-only classes.
-compc 'bin/asunit4-AIR-alpha.swc' do |t|
-  t.gem_name = 'sprout-flex4sdk-tool'
-  t.include_sources << 'src'
+compc "bin/asunit#{ASUNIT_VERSION}-AIR-alpha.swc" do |t|
+  configure_swc_task t
+
   t.include_sources << 'air'
-  t.source_path << 'src'
   t.source_path << 'air'
   
   # Include air swcs to avoid failures
@@ -77,14 +81,12 @@ compc 'bin/asunit4-AIR-alpha.swc' do |t|
   t.include_libraries << 'lib/airglobal.swc'
   t.include_libraries << 'lib/airframework.swc'
 
-  t.static_link_runtime_shared_libraries = true
-
   apply_as3_meta_data_args(t)
 end
 
 desc "Compile the AsUnit swc"
-#task :swc => ['bin/asunit4-alpha.swc', 'bin/asunit4-AIR-alpha.swc']
-task :swc => 'bin/asunit4-alpha.swc'
+#task :swc => ["bin/asunit#{ASUNIT_VERSION}-alpha.swc", "bin/asunit#{ASUNIT_VERSION}-AIR-alpha.swc"]
+task :swc => "bin/asunit#{ASUNIT_VERSION}-alpha.swc"
 
 ##########################################
 # Generate documentation

@@ -1,12 +1,10 @@
 package asunit.runners {
 
-    import asunit.framework.Assert;
-    import asunit.util.ArrayIterator;
-    import asunit.util.Iterator;
-
     import asunit.events.TimeoutCommandEvent;
-    import asunit.framework.IAsync;
+    import asunit.framework.Assert;
     import asunit.framework.Async;
+    import asunit.framework.CallbackBridge;
+    import asunit.framework.IAsync;
     import asunit.framework.IResult;
     import asunit.framework.IRunner;
     import asunit.framework.Method;
@@ -14,6 +12,8 @@ package asunit.runners {
     import asunit.framework.TestIterator;
     import asunit.framework.TestSuccess;
     import asunit.framework.TestWarning;
+    import asunit.util.ArrayIterator;
+    import asunit.util.Iterator;
 
     import flash.display.DisplayObjectContainer;
     import flash.errors.IllegalOperationError;
@@ -36,6 +36,9 @@ package asunit.runners {
         public static var ASYNC_NAME:String = 'asunit.framework::Async';
         public static var IASYNC_NAME:String = 'asunit.framework::IAsync';
         public static var DISPLAY_OBJECT_CONTAINER:String = 'flash.display::DisplayObjectContainer';
+
+        [Inject]
+        public var bridge:CallbackBridge;
 
         // partially exposed for unit testing
         internal var currentTest:Object;

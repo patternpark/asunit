@@ -18,6 +18,7 @@ package {
     import asunit.framework.NestedSuiteIteratorTest;
     import asunit.framework.ProceedOnEventTest;
     import asunit.framework.ResultTest;
+    import asunit.framework.RunnerFactoryTest;
     import asunit.framework.SuiteIteratorTest;
     import asunit.framework.TestIteratorIgnoredMethodTest;
     import asunit.framework.TestIteratorMethodByNameTest;
@@ -51,6 +52,7 @@ package {
         public var asunit_framework_NestedSuiteIteratorTest:asunit.framework.NestedSuiteIteratorTest;
         public var asunit_framework_ProceedOnEventTest:asunit.framework.ProceedOnEventTest;
         public var asunit_framework_ResultTest:asunit.framework.ResultTest;
+        public var asunit_framework_RunnerFactoryTest:asunit.framework.RunnerFactoryTest;
         public var asunit_framework_SuiteIteratorTest:asunit.framework.SuiteIteratorTest;
         public var asunit_framework_TestIteratorIgnoredMethodTest:asunit.framework.TestIteratorIgnoredMethodTest;
         public var asunit_framework_TestIteratorMethodByNameTest:asunit.framework.TestIteratorMethodByNameTest;

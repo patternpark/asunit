@@ -18,17 +18,18 @@ package asunit.framework {
 		}
 		
         private function getTestClasses(Suite:Class):Array {
-            if(!isSuite(Suite) && isTest(Suite)) {
+            var reflection:Reflection = Reflection.create(Suite);
+
+            if(!isSuite(reflection) && isTest(reflection)) {
                 return [Suite];
             }
 
-            var reflection:Reflection = Reflection.create(Suite);
             var variable:ReflectionVariable;
             var TestConstructor:Class;
             var result:Array = [];
             for each(variable in reflection.variables) {
                 TestConstructor = Class(getDefinitionByName(variable.type));
-                if(isSuite(TestConstructor)) {
+                if(isSuite(Reflection.create(TestConstructor))) {
                     result = result.concat( getTestClasses(TestConstructor) );
                 }
                 else {
@@ -43,15 +44,12 @@ package asunit.framework {
             return list.length;
         }
 
-		private function isSuite(Suite:Class):Boolean {
-            return (Reflection.create(Suite).getMetaDataByName('Suite') != null);
+		private function isSuite(reflection:Reflection):Boolean {
+            return RunnerFactory.isSuite(reflection);
 		}
 
-        private function isTest(ProvidedTest:Class):Boolean {
-            var reflection:Reflection = Reflection.create(ProvidedTest);
-            var testMethods:Array = reflection.getMethodsByMetaData('Test');
-            var runWith:ReflectionMetaData = reflection.getMetaDataByName('RunWith');
-            return (runWith != null || testMethods.length > 0);
+        private function isTest(reflection:Reflection):Boolean {
+            return RunnerFactory.isTest(reflection);
         }
         
         public function hasNext():Boolean {

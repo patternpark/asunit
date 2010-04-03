@@ -51,9 +51,9 @@ package asunit.runners {
 			}
 			
 			var testClass:Class = testClasses.next();
-            // [luke] TODO: This create call can throw exceptions,
+            // [luke] TODO: This runnerFor call can throw exceptions,
             // we need to handle them in some way.
-            var runner:IRunner = factory.create(testClass);
+            var runner:IRunner = factory.runnerFor(testClass);
 			runner.addEventListener(Event.COMPLETE, onTestCompleted);
             // [luke] TODO: There should be a clear search,
             // and clear failure when testMethod is provided,

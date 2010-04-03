@@ -12,10 +12,7 @@ package asunit.framework {
 
 	public class RunnerFactory {
 
-		/** Can be changed at runtime. */
         public static var DEFAULT_SUITE_RUNNER:Class = SuiteRunner;
-
-		/** Can be changed at runtime. */
 		public static var DEFAULT_TEST_RUNNER:Class = TestRunner;
 
         /**
@@ -29,6 +26,11 @@ package asunit.framework {
          *
          */
         public var DefaultTestRunner:Class;
+
+        /**
+         * The DefaultSuiteRunner is what
+         * we use for all TestSuites
+         */
         public var DefaultSuiteRunner:Class;
 
         public function RunnerFactory() {
@@ -37,16 +39,16 @@ package asunit.framework {
         }
 
         /**
-         * create is the primary inerface to the RunnerFactory
+         * runnerFor is the primary inerface to the RunnerFactory
          */
-        public function create(fromTestOrSuite:Class):IRunner {
-            validate(fromTestOrSuite);
-            return getRunnerForTestOrSuite(fromTestOrSuite);
+        public function runnerFor(testOrSuite:Class):IRunner {
+            validate(testOrSuite);
+            return getRunnerForTestOrSuite(testOrSuite);
         }
 
         protected function validate(testOrSuite:Class):void {
             if(testOrSuite == null) {
-                throw new UsageError("RunnerFactory.create must be provided with a known test or suite class");
+                throw new UsageError("RunnerFactory.runnerFor must be provided with a known test or suite class");
             }
         }
 
@@ -55,14 +57,14 @@ package asunit.framework {
             if(RunnerFactory.isSuite(reflection)) {
                 return getRunnerForSuite(reflection);
             }
-            else if(RunnerFactory.isTest(reflection)) {
-                return getRunnerForTest(reflection);
-            }
             else if(RunnerFactory.isLegacyTest(reflection)) {
                 return getLegacyRunnerForTest(reflection);
             }
+            else if(RunnerFactory.isTest(reflection)) {
+                return getRunnerForTest(reflection);
+            }
 
-            throw new UsageError("RunnerFactory was asked for a Runner, but was not given a Test or Suite to work with: " + reflection.name);
+            throw new UsageError("RunnerFactory was asked for a Runner, but was not able to identify: " + reflection.name + " as a LegacyTest, Test or Suite.");
             return null;
         }
 
@@ -138,7 +140,6 @@ package asunit.framework {
         }
 
         public static function isTest(reflection:Reflection):Boolean {
-            trace(">> isTest with: " + reflection.name);
             var testMethods:Array = reflection.getMethodsByMetaData('Test');
             var runWith:ReflectionMetaData = reflection.getMetaDataByName('RunWith');
             return (runWith != null || testMethods.length > 0);

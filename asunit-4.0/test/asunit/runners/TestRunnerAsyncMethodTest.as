@@ -18,40 +18,22 @@ package asunit.runners {
         [Inject]
         public var async:IAsync;
 
-        private var runner:TestRunner;
-        private var runnerResult:Result;
-        private var successTest:Class;
-        private var syncTest:Class;
-        private var tooSlowTest:Class;
+        [Inject]
+        public var runner:TestRunner;
 
-        [Before]
-        public function setUp():void {
-            runner       = new TestRunner();
-            runnerResult = new Result();
-            successTest  = AsyncMethodSuccessTest
-            syncTest     = AsyncDelegateCalledSynchronouslyTest
-            tooSlowTest  = AsyncMethodTooSlowTest
-        }
-
-        [After]
-        public function tearDown():void {
-            runner       = null;
-            runnerResult = null;
-            successTest  = null;
-            syncTest     = null;
-            tooSlowTest  = null;
-        }
+        [Inject]
+        public var runnerResult:Result;
         
         [Test]
         public function asyncShouldWork():void {
             runner.addEventListener(Event.COMPLETE, async.add(ensureRunnerHasNotYetFailed, 100));
-            runner.run(successTest, runnerResult);
+            runner.run(AsyncMethodSuccessTest, runnerResult);
         }
 
         [Test]
         public function runAsyncCallsAsyncDelegate():void {
             runner.addEventListener(Event.COMPLETE, async.add(ensureRunnerHasNotYetFailed, 10));
-            runner.run(syncTest, runnerResult);
+            runner.run(AsyncDelegateCalledSynchronouslyTest, runnerResult);
         }
         
         private function ensureRunnerHasNotYetFailed(e:Event):void {
@@ -61,14 +43,14 @@ package asunit.runners {
         [Test]
         public function shouldSeeErrorWhenAsyncFailure():void {
             runner.addEventListener(Event.COMPLETE, async.add(checkResultForIllegalOperationError, 200));
-            runner.run(tooSlowTest, runnerResult);
+            runner.run(AsyncMethodTooSlowTest, runnerResult);
         }
         
         private function checkResultForIllegalOperationError(e:Event):void {
             assertEquals('number of errors', 1, runnerResult.errors.length);
             var failure0:TestFailure = runnerResult.errors[0] as TestFailure;
             assertEquals('exception type', 'flash.errors::IllegalOperationError', getQualifiedClassName(failure0.thrownException));
-            assertEquals('failed method name', 'operation_too_slow_will_fail', failure0.failedMethod);
+            assertEquals('failed method name', 'shouldFailForBeingTooSlow', failure0.failedMethod);
         }
     }
 }
@@ -83,12 +65,9 @@ class AsyncMethodSuccessTest {
     public var async:IAsync;
     
     [Test]
-    public function operation_delayed_but_fast_enough_will_succeed():void {
-        var delegate:Function = async.add(onComplete);
+    public function operationDelayedButFastEnoughToSucceed():void {
+        var delegate:Function = async.add();
         setTimeout(delegate, 0);
-    }
-    
-    private function onComplete():void {
     }
 }
 
@@ -98,12 +77,9 @@ class AsyncMethodTooSlowTest {
     public var async:IAsync;
 
     [Test]
-    public function operation_too_slow_will_fail():void {
-        var delegate:Function = async.add(onComplete, 1);
+    public function shouldFailForBeingTooSlow():void {
+        var delegate:Function = async.add(null, 1);
         setTimeout(delegate, 100);
-    }
-    
-    private function onComplete():void {
     }
 }
 
@@ -117,7 +93,7 @@ class AsyncDelegateCalledSynchronouslyTest {
     private var handlerWasCalled:Boolean = false;
     
     [Test]
-    public function calling_delegate_synchronously_should_succeed():void {
+    public function callingDelegateSynchronouslyShouldStillSucceed():void {
         var delegate:Function = async.add(onComplete);
         delegate();
         assertTrue(handlerWasCalled);

@@ -77,7 +77,7 @@ package asunit.framework {
          * This gives you the ability to see visual entities in isolation
          * while test-driving their development.
          */
-		public function start(testOrSuite:Class, testMethodName:String=null):void {
+		public function start(testOrSuite:Class, testMethodName:String=null, showPerformanceSummary:Boolean=true):void {
         }
 	}
 }

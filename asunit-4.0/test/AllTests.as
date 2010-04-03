@@ -10,7 +10,6 @@ package {
     import asunit.framework.AssertEqualsArraysTest;
     import asunit.framework.AssertTest;
     import asunit.framework.AssertThrowsTest;
-    import asunit.framework.AsUnitCoreTest;
     import asunit.framework.AsyncFailureTest;
     import asunit.framework.AsyncMethodTest;
     import asunit.framework.AsyncTest;
@@ -27,6 +26,7 @@ package {
     import asunit.framework.TestIteratorSingleMethodTest;
     import asunit.framework.VisualTestCaseTest;
     import asunit.printers.TextPrinterTest;
+    import asunit.runners.AsUnitCoreTest;
     import asunit.runners.BaseRunnerTest;
     import asunit.runners.LegacyRunnerTest;
     import asunit.runners.SuiteRunnerTest;
@@ -44,7 +44,6 @@ package {
         public var asunit_framework_AssertEqualsArraysTest:asunit.framework.AssertEqualsArraysTest;
         public var asunit_framework_AssertTest:asunit.framework.AssertTest;
         public var asunit_framework_AssertThrowsTest:asunit.framework.AssertThrowsTest;
-        public var asunit_framework_AsUnitCoreTest:asunit.framework.AsUnitCoreTest;
         public var asunit_framework_AsyncFailureTest:asunit.framework.AsyncFailureTest;
         public var asunit_framework_AsyncMethodTest:asunit.framework.AsyncMethodTest;
         public var asunit_framework_AsyncTest:asunit.framework.AsyncTest;
@@ -61,6 +60,7 @@ package {
         public var asunit_framework_TestIteratorSingleMethodTest:asunit.framework.TestIteratorSingleMethodTest;
         public var asunit_framework_VisualTestCaseTest:asunit.framework.VisualTestCaseTest;
         public var asunit_printers_TextPrinterTest:asunit.printers.TextPrinterTest;
+        public var asunit_runners_AsUnitCoreTest:asunit.runners.AsUnitCoreTest;
         public var asunit_runners_BaseRunnerTest:asunit.runners.BaseRunnerTest;
         public var asunit_runners_LegacyRunnerTest:asunit.runners.LegacyRunnerTest;
         public var asunit_runners_SuiteRunnerTest:asunit.runners.SuiteRunnerTest;

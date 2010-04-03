@@ -1,4 +1,4 @@
-package asunit.framework {
+package asunit.runners {
     
     import asunit.asserts.*;
 
@@ -27,7 +27,8 @@ package asunit.framework {
 
         [Test]
         public function setVisualContextShouldWork():void {
-            core.setVisualContext(context);
+            core.visualContext = context;
+            assertEquals(context, core.visualContext);
         }
 
         [Ignore]

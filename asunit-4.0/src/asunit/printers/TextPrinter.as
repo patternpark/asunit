@@ -24,25 +24,25 @@ package asunit.printers {
         public static var TEXT_COLOR:uint = 0xffffff;
 
         public var backgroundColor:uint = BACKGROUND_COLOR;
+        public var displayPerformanceDetails:Boolean = true;
         public var localPathPattern:RegExp;
         public var textColor:uint       = TEXT_COLOR;
 
+        protected var textDisplay:TextField;
+
+        private var backgroundFill:Shape;
         private var dots:Array;
+        private var failures:Array;
         private var footer:String;
         private var header:String;
-        private var startTime:Number;
-        private var backgroundFill:Shape;
-        private var failures:Array;
         private var ignores:Array;
         private var resultBar:Shape;
         private var resultBarHeight:uint = 3;
         private var runCompleted:Boolean;
+        private var startTime:Number;
         private var successes:Array;
         private var testTimes:Array;
         private var warnings:Array;
-
-        protected var textDisplay:TextField;
-
 
         public function TextPrinter() {
             initialize();
@@ -128,7 +128,7 @@ package asunit.printers {
                 return;
             }
 
-           printTimeSummary();
+            printTimeSummary();
 
             if(result.wasSuccessful) {
                 print("OK");
@@ -142,7 +142,9 @@ package asunit.printers {
                     + ",  Ignored: " + result.ignoredTestCount
                     );
             }
-            printTimeDetails();
+            if(displayPerformanceDetails) {
+                printPerformanceDetails();
+            }
             updateTextDisplay();
             logResult();
         }
@@ -171,7 +173,7 @@ package asunit.printers {
             println();
         }
 
-        private function printTimeDetails():void {
+        private function printPerformanceDetails():void {
             testTimes.sortOn('duration', Array.NUMERIC | Array.DESCENDING);
             println();
             println();

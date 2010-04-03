@@ -1,14 +1,21 @@
 package {
 
-	import asunit.ui.TextRunnerUI;
-	import asunit.runners.LegacyRunner;
+    import asunit.runners.AsUnitTextCore;
 
-	public class AsUnitRunner extends TextRunnerUI {
+    import flash.display.Sprite;
+
+	public class AsUnitRunner extends Sprite {
 	    
-	    private var legacyRunner:LegacyRunner;
+        private var core:AsUnitTextCore;
 
         public function AsUnitRunner() {
-            run(AllTests);
+            core = new AsUnitTextCore();
+
+            // Uncomment to turn off the perf report:
+            //core.displayPerformanceDetails = false;
+
+            core.start(AllTests, null, this);
         }
     }
 }
+

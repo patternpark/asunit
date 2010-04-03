@@ -1,5 +1,6 @@
 package asunit.framework {
 
+    import asunit.errors.UsageError;
 	import asunit.framework.ITestFailure;
 
 	import flash.events.EventDispatcher;
@@ -69,6 +70,12 @@ package asunit.framework {
 		public function get runTime():Number { return _runTime; }
 		public function set runTime(value:Number):void { _runTime = value; }
 		
+        public function addObserver(observer:TestObserver):void {
+            if(!(observer is IRunListener)) {
+                throw new UsageError("Result.addObserver called with an instance that wasn't an IRunListener. This should work soon, but doesn't yet...");
+            }
+            addListener(IRunListener(observer));
+        }
 		
 		public function addListener(listener:IRunListener):void {
 			if (listeners.indexOf(listener) >= 0) return;

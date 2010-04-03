@@ -1,73 +1,44 @@
-package asunit.framework {
+package asunit.runners {
 
+    import asunit.framework.IResult;
     import asunit.framework.IRunListener;
+    import asunit.framework.IRunner;
+    import asunit.framework.Result;
+    import asunit.framework.RunnerFactory;
+    import asunit.framework.TestObserver;
+    import asunit.runners.LegacyRunner;
 
     import flash.display.DisplayObjectContainer;
+    import flash.events.Event;
 	
-    /**
-     * This is the centralized entry point to an AsUnit test run.
-     * 
-     * This class does not extend a visual entity in order to make
-     * it dead-simple to integrate AsUnit with any programming, or
-     * development environment.
-     *
-     * This includes environments such as:
-     *
-     * ActionScript 3, Flash Authoring, Flex Builder
-     * Flex SDK, Flash Builder, FDT, Flash Develop, etc.
-     *
-     * The only requirement that AsUnit 4.0 has, is that you must be 
-     * able to compile ActionScript 3.0 and retain metadata declarations.
-     *
-     * @example The following code shows how an Document Class would
-     * instantiate and use the AsUnitCore class:
-     *
-     * <listing version="3.0">
-     *   package {
-     *
-     *      import asunit.framework.AsUnitCore;
-     *      import asunit.printers.TextPrinter;
-     *
-     *      import flash.display.MovieClip;
-     *
-     *      public class SomeProjectRunner extends MovieClip {
-     *
-     *          // Be sure to hold onto the reference so that 
-     *          // it doesn't get garbage collected while
-     *          // waiting for async test runs:
-     *          private var core:AsUnitCore;
-     *           
-     *          public function SomeProjectRunner() {
-     *              // Instantiate the Core class:
-     *              core = new AsUnitCore();
-     *              // Give it a DisplayObjectContainer to use
-     *              // for Visual tests:
-     *              // (Only necessary if you have visual tests)
-     *              core.setVisualContext(this);
-     *              // Add any number of TestObservers:
-     *              core.addObserver(new TextPrinter());
-     *
-     *              // Start the test run with a Suite or Test 
-     *              // class reference:
-     *              start(AllTests);
-     *          }
-     *      }
-     *  }
-     * </listing>
-     */
 	public class AsUnitCore {
 
-        protected var visualContext:DisplayObjectContainer;
         protected var observers:Array;
+        protected var legacyRunnerReference:LegacyRunner;
+        protected var result:IResult;
+        protected var runner:IRunner;
+        protected var _visualContext:DisplayObjectContainer;
 
         public function AsUnitCore() {
             super();
+            initializeResult();
             initializeObservers();
             initialize();
         }
 
+        /**
+         * Template method for subclasses to override
+         * and change the Result instance.
+         */
+        protected function initializeResult():void {
+            result = new Result();
+        }
+
+        /**
+         * Template method for subclasses to override,
+         * and use to create default observers.
+         */
         protected function initializeObservers():void {
-            observers = [];
         }
 
         /**
@@ -101,7 +72,7 @@ package asunit.framework {
          *
          */
         public function addObserver(observer:TestObserver):void {
-            observers.push(observer);
+            result.addObserver(observer);
         }
 
         /**
@@ -113,8 +84,12 @@ package asunit.framework {
          * you have any tests that [Inject] DisplayObject instances.
          * 
          */
-        public function setVisualContext(context:DisplayObjectContainer):void {
-            visualContext = context;
+        public function set visualContext(context:DisplayObjectContainer):void {
+            _visualContext = context;
+        }
+
+        public function get visualContext():DisplayObjectContainer {
+            return _visualContext;
         }
 
         /**
@@ -128,8 +103,22 @@ package asunit.framework {
          * This gives you the ability to see visual entities in isolation
          * while test-driving their development.
          */
-		public function start(testOrSuite:Class, testMethodName:String=null, showPerformanceSummary:Boolean=true):void {
+		public function start(testOrSuite:Class, testMethodName:String=null, visualContext:DisplayObjectContainer=null):void {
+            // Must use the accessor, not the _ value:
+            if(visualContext) this.visualContext = visualContext;
+
+            var factory:RunnerFactory = new RunnerFactory();
+            runner = factory.runnerFor(testOrSuite);
+            
+			runner.addEventListener(Event.COMPLETE, onRunCompleted);
+			result.onRunStarted();
+		    runner.run(testOrSuite, result, testMethodName, this.visualContext);
         }
+
+		protected function onRunCompleted(e:Event):void {
+			runner.removeEventListener(Event.COMPLETE, onRunCompleted);
+			result.onRunCompleted(result);
+		}
 	}
 }
 

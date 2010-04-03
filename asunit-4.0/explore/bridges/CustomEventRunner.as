@@ -13,7 +13,7 @@ package asunit.fixtures {
 
         private var test:Class;
 
-		public function run(test:Class, result:IResult, testMethod:String=null, visualContext:DisplayObjectContainer=null):void {
+        public function run(test:Class, result:IResult, testMethod:String=null, visualContext:DisplayObjectContainer=null):void {
             this.test = test;
             // Dispatch a custom message type over the custom bridge:
             customBridge.dispatchEvent(new Event(CustomEventBridge.CUSTOM_METHOD_STARTED));

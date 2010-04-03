@@ -4,6 +4,58 @@ package asunit.framework {
 
     import flash.display.DisplayObjectContainer;
 	
+    /**
+     * This is the centralized entry point to an AsUnit test run.
+     * 
+     * This class does not extend a visual entity in order to make
+     * it dead-simple to integrate AsUnit with any programming, or
+     * development environment.
+     *
+     * This includes environments such as:
+     *
+     * ActionScript 3, Flash Authoring, Flex Builder
+     * Flex SDK, Flash Builder, FDT, Flash Develop, etc.
+     *
+     * The only requirement that AsUnit 4.0 has, is that you must be 
+     * able to compile ActionScript 3.0 and retain metadata declarations.
+     *
+     * @example The following code shows how an Document Class would
+     * instantiate and use the AsUnitCore class:
+     *
+     * <listing version="3.0">
+     *   package {
+     *
+     *      import asunit.framework.AsUnitCore;
+     *      import asunit.printers.TextPrinter;
+     *
+     *      import flash.display.MovieClip;
+     *
+     *      public class SomeProjectRunner extends MovieClip {
+     *
+     *          // Be sure to hold onto the reference so that 
+     *          // it doesn't get garbage collected while
+     *          // waiting for async test runs:
+     *          private var core:AsUnitCore;
+     *           
+     *          public function SomeProjectRunner() {
+     *              // Instantiate the Core class:
+     *              core = new AsUnitCore();
+     *              // Give it a DisplayObjectContainer to use
+     *              // for Visual tests:
+     *              // (Only necessary if you have visual tests)
+     *              core.setVisualContext(this);
+     *              // Add any number of TestObservers:
+     *              core.addObserver(new TextPrinter());
+     *
+     *              // Start the test run with a Suite or Test 
+     *              // class reference:
+     *              start(AllTests);
+     *          }
+     *      }
+     *  }
+     * </listing>
+     *
+     *
 	public class AsUnitCore {
 
         protected var visualContext:DisplayObjectContainer;

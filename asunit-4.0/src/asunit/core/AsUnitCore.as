@@ -1,4 +1,4 @@
-package asunit.runners {
+package asunit.core {
 
     import asunit.framework.IResult;
     import asunit.framework.IRunListener;
@@ -10,9 +10,12 @@ package asunit.runners {
 
     import flash.display.DisplayObjectContainer;
     import flash.events.Event;
+    import flash.events.EventDispatcher;
+    import flash.events.IEventDispatcher;
 	
-	public class AsUnitCore {
+	public class AsUnitCore implements IEventDispatcher {
 
+        protected var dispatcher:IEventDispatcher;
         protected var observers:Array;
         protected var legacyRunnerReference:LegacyRunner;
         protected var result:IResult;
@@ -21,9 +24,14 @@ package asunit.runners {
 
         public function AsUnitCore() {
             super();
+            initializeDispatcher();
             initializeResult();
             initializeObservers();
             initialize();
+        }
+
+        protected function initializeDispatcher():void {
+            dispatcher = new EventDispatcher();
         }
 
         /**
@@ -115,10 +123,34 @@ package asunit.runners {
 		    runner.run(testOrSuite, result, testMethodName, this.visualContext);
         }
 
-		protected function onRunCompleted(e:Event):void {
+		protected function onRunCompleted(event:Event):void {
 			runner.removeEventListener(Event.COMPLETE, onRunCompleted);
 			result.onRunCompleted(result);
 		}
+
+        // BEGIN: Implement the IEvent Dispatcher Interface:
+
+		public function addEventListener(type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void {
+			dispatcher.addEventListener(type, listener, useCapture, priority, useWeakReference);
+		}
+		
+		public function removeEventListener(type:String, listener:Function, useCapture:Boolean=false):void {
+			dispatcher.removeEventListener(type, listener, useCapture);
+		}
+		
+		public function dispatchEvent(event:Event):Boolean {
+			return dispatcher.dispatchEvent(event);
+		}
+		
+		public function hasEventListener(type:String):Boolean {
+			return dispatcher.hasEventListener(type);
+		}
+		
+		public function willTrigger(type:String):Boolean {
+			return dispatcher.willTrigger(type);
+		}
+
+        // END: Implement the IEvent Dispatcher Interface:
 	}
 }
 

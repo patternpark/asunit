@@ -1,11 +1,11 @@
-package asunit.runners {
+package asunit.core {
 
     import asunit.printers.TextPrinter;
 
     import flash.display.DisplayObjectContainer;
 
     /**
-     * AsUnitTextCore is just a simple helper class that
+     * TextCore is just a simple helper class that
      * configures the base class AsUnitCore to use the 
      * standard TextPrinter.
      *
@@ -15,7 +15,7 @@ package asunit.runners {
      * instantiate AsUnitCore and configure it however you
      * wish.
      */
-    public class AsUnitTextCore extends AsUnitCore {
+    public class TextCore extends AsUnitCore {
 
         private var textPrinter:TextPrinter;
 

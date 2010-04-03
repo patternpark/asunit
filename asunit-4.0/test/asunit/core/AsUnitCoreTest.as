@@ -1,4 +1,4 @@
-package asunit.runners {
+package asunit.core {
     
     import asunit.asserts.*;
 
@@ -37,7 +37,6 @@ package asunit.runners {
             var printer:TextPrinter = new TextPrinter();
             context.addChild(printer);
             core.addObserver(printer);
-
             core.start(SucceedAssertTrue);
         }
 	}

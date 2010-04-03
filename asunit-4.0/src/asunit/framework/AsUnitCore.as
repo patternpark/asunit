@@ -54,8 +54,7 @@ package asunit.framework {
      *      }
      *  }
      * </listing>
-     *
-     *
+     */
 	public class AsUnitCore {
 
         protected var visualContext:DisplayObjectContainer;

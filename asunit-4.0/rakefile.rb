@@ -82,11 +82,11 @@ end
 desc "Compile and run the test harness"
 flashplayer :run_test => "bin/#{test_input}.swf"
 
-# Run Flex 3 Harness:
-#flashplayer :run_test => "bin/Flex3#{test_input}.swf"
+desc "Compile and run the Flex 3 Harness"
+flashplayer :run_flex3_test => "bin/Flex3#{test_input}.swf"
 
-# Run Flex 4 Harness:
-#flashplayer :run_test => "bin/Flex4#{test_input}.swf"
+desc "Compile and run the Flex 4 Harness"
+flashplayer :run_flex4_test => "bin/Flex4#{test_input}.swf"
 
 task :test => :run_test
 

@@ -13,8 +13,8 @@ package asunit.framework {
         protected var index:int;
         protected var list:Array;
 				
-		public function SuiteIterator(testSuite:Class, result:IResult=null) {
-			list = getTestClasses(testSuite, result);
+		public function SuiteIterator(Suite:Class, result:IResult=null) {
+			list = getTestClasses(Suite, result);
 		}
 		
         private function getTestClasses(Suite:Class, result:IResult=null):Array {

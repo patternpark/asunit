@@ -2,6 +2,8 @@ package asunit.core {
     
     import asunit.asserts.*;
     import asunit.framework.IAsync;
+    import asunit.framework.IResult;
+    import asunit.framework.Result;
     import asunit.printers.TextPrinter;
     import asunit.support.CustomTestRunner;
     import asunit.support.SuiteWithOneCustomChildSuite;
@@ -10,13 +12,13 @@ package asunit.core {
     import flash.display.Sprite;
     import flash.events.Event;
 
-	public class AsUnitCoreTest {
+    public class AsUnitCoreTest {
 
         [Inject]
         public var async:IAsync;
 
         [Inject]
-		public var core:AsUnitCore;
+        public var core:AsUnitCore;
 
         [Inject]
         public var context:Sprite;
@@ -27,9 +29,9 @@ package asunit.core {
         }
 
         [Test]
-		public function shouldBeInstantiated():void {
-			assertTrue("core is AsUnitCore", core is AsUnitCore);
-		}
+        public function shouldBeInstantiated():void {
+            assertTrue("core is AsUnitCore", core is AsUnitCore);
+        }
 
         [Test]
         public function startShouldWork():void {
@@ -59,17 +61,21 @@ package asunit.core {
             core.start(SucceedAssertTrue);
         }
 
-        [Ignore(description="had to yak shave and uniquify the test run first, this is next")]
+        [Ignore(description="In order to support the RunWith on a Suite use case, we have to stop discarding Suites in the SuiteIterator")]
         [Test]
         public function testRunWithOnASuite():void {
-            core.addEventListener(Event.COMPLETE, async.add(verifyCustomRunnerCalled));
+            var result:IResult = new Result();
+            core.addObserver(result);
+
+            var handler:Function = function(event:Event):void {
+                var message:String = "CustomRunner.run was NOT called with correct count";
+                assertEquals(message, 3, CustomTestRunner.runCalledCount);
+                assertEquals("Total Test Count", 5, result.runCount);
+            }
+
+            core.addEventListener(Event.COMPLETE, async.add(handler));
             core.start(SuiteWithOneCustomChildSuite);
         }
-
-        private function verifyCustomRunnerCalled():void {
-            var message:String = "CustomRunner.run was NOT called with correct count";
-            assertEquals(message, 3, CustomTestRunner.runCalledCount);
-        }
-	}
+    }
 }
 

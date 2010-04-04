@@ -6,6 +6,7 @@ package asunit.core {
     import asunit.framework.Result;
     import asunit.printers.TextPrinter;
     import asunit.support.CustomTestRunner;
+    import asunit.support.SuiteWithCustomRunner;
     import asunit.support.SuiteWithOneCustomChildSuite;
     import asunit.support.SucceedAssertTrue;
 
@@ -61,20 +62,37 @@ package asunit.core {
             core.start(SucceedAssertTrue);
         }
 
-        [Ignore(description="In order to support the RunWith on a Suite use case, we have to stop discarding Suites in the SuiteIterator")]
-        [Test]
-        public function testRunWithOnASuite():void {
+        private function verifyRunWithOnASuite(Suite:Class, testCaseCount:int, testMethodCount:int):void {
             var result:IResult = new Result();
             core.addObserver(result);
 
             var handler:Function = function(event:Event):void {
                 var message:String = "CustomRunner.run was NOT called with correct count";
-                assertEquals(message, 3, CustomTestRunner.runCalledCount);
-                assertEquals("Total Test Count", 5, result.runCount);
+                // This is the number of Tests that will used the custom Runner:
+                assertEquals(message, testCaseCount, CustomTestRunner.runCalledCount);
+                // This is the number of test methods:
+                assertEquals("Total Test Count", testMethodCount, result.runCount);
             }
 
             core.addEventListener(Event.COMPLETE, async.add(handler));
-            core.start(SuiteWithOneCustomChildSuite);
+            core.start(Suite);
+        }
+
+        [Test]
+        public function shouldAssignRunWithUsingOuterSuite():void {
+            // This will work b/c the RunWith is on the outer Suite:
+            var testCaseCount:int = 2;
+            var testMethodCount:int = 4;
+            verifyRunWithOnASuite(SuiteWithCustomRunner, testCaseCount, testMethodCount);
+        }
+
+        [Ignore(description="This doesn't work because we discard the hierarchy of Suites in the SuiteIterator")]
+        [Test]
+        public function shouldAssignRunWithUsingChildSuite():void {
+            // This will work b/c the RunWith is on the outer Suite:
+            var testCaseCount:int = 2;
+            var testMethodCount:int = 4;
+            verifyRunWithOnASuite(SuiteWithOneCustomChildSuite, testCaseCount, testMethodCount);
         }
     }
 }

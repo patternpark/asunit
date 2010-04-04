@@ -1,5 +1,5 @@
 package asunit.framework {
-	
+
     import asunit.errors.UsageError;
     import asunit.runners.LegacyRunner;
     import asunit.runners.TestRunner;
@@ -10,7 +10,7 @@ package asunit.framework {
     import p2.reflect.Reflection;
     import p2.reflect.ReflectionMetaData;
 
-	public class RunnerFactory {
+	public class RunnerFactory implements IRunnerFactory {
 
         public static var DEFAULT_SUITE_RUNNER:Class = SuiteRunner;
 		public static var DEFAULT_TEST_RUNNER:Class = TestRunner;
@@ -76,18 +76,24 @@ package asunit.framework {
                 DefaultTestRunner = Constructor;
             }
             // Always return the default Suite Runner:
-            return new DefaultSuiteRunner();
+            var runner:IRunner = new DefaultSuiteRunner();
+            runner.factory = this;
+            return runner;
         }
 
         protected function getLegacyRunnerForTest(reflection:Reflection):IRunner {
-            return new LegacyRunner();
+            var runner:IRunner = new LegacyRunner();
+            runner.factory = this;
+            return runner;
         }
 
         protected function getRunnerForTest(reflection:Reflection):IRunner {
             // Use the provided RunWith class, or the DefaultTestRunner (this may
             // have been overridden by a parent Suite
             var Constructor:Class = getRunWithConstructor(reflection) || DefaultTestRunner;
-            return new Constructor();
+            var runner:IRunner = new Constructor();
+            runner.factory = this;
+            return runner;
         }
 
         protected function getRunWithConstructor(reflection:Reflection):Class {

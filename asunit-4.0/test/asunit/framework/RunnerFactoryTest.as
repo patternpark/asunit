@@ -29,6 +29,12 @@ package asunit.framework {
             assertTrue(result is SuiteRunner);
         }
 
+        [Test]
+        public function shouldAssignFactoryOnCreation():void {
+            var result:IRunner = factory.runnerFor(SingleSuccessSuite);
+            assertSame(factory, result.factory);
+        }
+
         [Test(expects="asunit.errors.UsageError")]
 		public function shouldFailWhenGivenANonTestOrSuite():void {
             factory.runnerFor(Sprite);

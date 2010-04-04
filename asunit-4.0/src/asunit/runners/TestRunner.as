@@ -7,6 +7,7 @@ package asunit.runners {
     import asunit.framework.IAsync;
     import asunit.framework.IResult;
     import asunit.framework.IRunner;
+	import asunit.framework.IRunnerFactory;
     import asunit.framework.Method;
     import asunit.framework.TestFailure;
     import asunit.framework.TestIterator;
@@ -59,6 +60,8 @@ package asunit.runners {
         protected var visualContext:DisplayObjectContainer;
         protected var visualInstances:Array;
 
+        private var _factory:IRunnerFactory;
+
         public function TestRunner() {
             async = new Async();
             timer = new Timer(0, 1);
@@ -68,6 +71,17 @@ package asunit.runners {
 
         public function run(testOrSuite:Class, result:IResult, methodName:String=null, visualContext:DisplayObjectContainer=null):void {
             runMethodByName(testOrSuite, result, methodName, visualContext);
+        }
+
+        // This class doesn't really use the runner factory,
+        // since it represents a leaf node in the test
+        // hierarchy...
+        public function set factory(factory:IRunnerFactory):void {
+            _factory = factory;
+        }
+
+        public function get factory():IRunnerFactory {
+            return _factory;
         }
 
         public function runMethodByName(test:Class, result:IResult, methodName:String=null, visualContext:DisplayObjectContainer=null):void {

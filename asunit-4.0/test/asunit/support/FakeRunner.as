@@ -3,6 +3,7 @@ package asunit.support {
     import asunit.framework.IRunner;
     import asunit.framework.IResult;
     import asunit.framework.TestSuccess;
+    import asunit.framework.IRunnerFactory;
 
     import flash.events.EventDispatcher;
     import flash.display.DisplayObjectContainer;
@@ -15,6 +16,12 @@ package asunit.support {
             result.onTestStarted(currentTest);
             result.onTestSuccess(new TestSuccess(currentTest, 'customTestMethod'));
             result.onTestCompleted(currentTest);
+        }
+
+        public function set factory(factory:IRunnerFactory):void {
+        }
+
+        public function get factory():IRunnerFactory {
         }
     }
 }

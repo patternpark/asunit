@@ -3,6 +3,8 @@ package asunit.core {
     import asunit.asserts.*;
     import asunit.framework.IAsync;
     import asunit.printers.TextPrinter;
+    import asunit.support.CustomTestRunner;
+    import asunit.support.SuiteWithCustomRunner;
     import asunit.support.SucceedAssertTrue;
 
     import flash.display.Sprite;
@@ -18,6 +20,11 @@ package asunit.core {
 
         [Inject]
         public var context:Sprite;
+
+        [After]
+        public function cleanUpStatics():void {
+            CustomTestRunner.runCalledCount = 0;
+        }
 
         [Test]
 		public function shouldBeInstantiated():void {
@@ -50,6 +57,17 @@ package asunit.core {
 
             core.addEventListener(Event.COMPLETE, async.add(handler));
             core.start(SucceedAssertTrue);
+        }
+
+        [Test]
+        public function testRunWithOnASuite():void {
+            core.addEventListener(Event.COMPLETE, async.add(verifyCustomRunnerCalled));
+            core.start(SuiteWithCustomRunner);
+        }
+
+        private function verifyCustomRunnerCalled():void {
+            var message:String = "CustomRunner.run was NOT called with correct count";
+            assertEquals(message, 3, CustomTestRunner.runCalledCount);
         }
 	}
 }

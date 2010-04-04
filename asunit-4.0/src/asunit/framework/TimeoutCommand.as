@@ -42,10 +42,7 @@ package asunit.framework {
          * already been exceeded.
          */
         public function execute():* {
-            if(timeout && timeout.running) {
-                return handler.apply(scope, params);
-            }
-            return null;
+            return handler.apply(scope, params);
         }
         
         /**
@@ -75,6 +72,9 @@ package asunit.framework {
         }
         
         protected function onTimeoutComplete(timerEvent:TimerEvent):void {
+            // Clobber handler so that original can no longer be called:
+            handler = function(...args):void {};
+            // Notify subscribers of the timeout:
             var event:TimeoutCommandEvent = new TimeoutCommandEvent(TimeoutCommandEvent.TIMED_OUT, this);
             dispatchEvent(event);
             if (failureHandler != null) failureHandler(event);

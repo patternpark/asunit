@@ -3,11 +3,8 @@ package asunit.runners {
     import asunit.asserts.*;
     import asunit.framework.IAsync;
     import asunit.framework.Result;
-    import asunit.framework.TestCase;
-    import asunit.support.CustomTestRunner;
     import asunit.support.DoubleFailSuite;
     import asunit.support.InjectionVerification;
-    import asunit.support.SuiteWithCustomRunner;
 
     import flash.events.Event;
 
@@ -21,11 +18,6 @@ package asunit.runners {
 
         [Inject]
         public var runnerResult:Result;
-
-        [After]
-        public function cleanUpStatics():void {
-            CustomTestRunner.runCalledCount = 0;
-        }
 
         public function testRunTriggersCompleteEvent():void {
             suiteRunner.addEventListener(Event.COMPLETE, async.add(checkResultWasNotSuccessful));
@@ -41,17 +33,6 @@ package asunit.runners {
             suiteRunner.addEventListener(Event.COMPLETE, async.add());
             suiteRunner.run(InjectionVerification, runnerResult);
             assertFalse(runnerResult.wasSuccessful);
-        }
-
-        [Test]
-        public function testRunWithOnASuite():void {
-            suiteRunner.addEventListener(Event.COMPLETE, async.add(verifyCustomRunnerCalled));
-            suiteRunner.run(SuiteWithCustomRunner, runnerResult);
-        }
-
-        private function verifyCustomRunnerCalled():void {
-            var message:String = "CustomRunner.run was NOT called with correct count";
-            assertEquals(message, 4, CustomTestRunner.runCalledCount);
         }
     }
 }

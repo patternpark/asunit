@@ -103,7 +103,7 @@ package asunit.framework {
         }
         
         protected function failIfCalled(e:Event = null):void {
-            fail("This function should not have been called");
+            fail("ProceedOnEventTest: This function should not have been called");
         }
     }
 }

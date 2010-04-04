@@ -6,7 +6,7 @@ package asunit.support {
 
         public var succeedAssertTrue:SucceedAssertTrue;
 		public var singleSuccessSuite:SingleSuccessSuite;
-		public var doubleFailSuite:DoubleFailSuite;
+        public var multiMethod:MultiMethod;
     }
 }
 

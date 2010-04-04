@@ -28,7 +28,7 @@ package asunit.runners {
 			suiteRunner  = null;
 			runnerResult = null;
 		}
-		
+
 		public function testRunTriggersCompleteEvent():void {
 			suiteRunner.addEventListener(Event.COMPLETE, addAsync(checkResultWasNotSuccessful, 500));
 			suiteRunner.run(DoubleFailSuite, runnerResult);

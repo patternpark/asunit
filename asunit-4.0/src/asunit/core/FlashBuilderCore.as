@@ -1,5 +1,9 @@
 package asunit.core {
 
+    import asunit.printers.FlashBuilderPrinter;
+
+    import flash.system.fscommand;
+
     public class FlashBuilderCore extends TextCore {
 
         override protected function initializeObservers():void {

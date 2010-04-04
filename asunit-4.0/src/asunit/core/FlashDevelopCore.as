@@ -1,10 +1,14 @@
 package asunit.core {
 
+    import asunit.printers.FlashDevelopPrinter;
+
+    import flash.system.fscommand;
+
     public class FlashDevelopCore extends TextCore {
 
         override protected function initializeObservers():void {
             super.initializeObservers();
-            addObserver(new FlashDelopPrinter());
+            addObserver(new FlashDevelopPrinter());
         }
 
 		override protected function onRunCompleted():void {

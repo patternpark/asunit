@@ -42,6 +42,7 @@ package asunit.framework {
          * runnerFor is the primary inerface to the RunnerFactory
          */
         public function runnerFor(testOrSuite:Class):IRunner {
+            //trace(">> runnerFor: " + testOrSuite + " with current default of: " + DefaultTestRunner);
             validate(testOrSuite);
             return getRunnerForTestOrSuite(testOrSuite);
         }

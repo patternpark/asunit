@@ -17,6 +17,10 @@ package asunit.support {
             result.onTestSuccess(new TestSuccess(currentTest, 'customTestMethod'));
             result.onTestCompleted(currentTest);
         }
+        
+        public function shouldRunTest(testClass:Class):Boolean {
+            return true;
+        }
 
         public function set factory(factory:IRunnerFactory):void {
         }

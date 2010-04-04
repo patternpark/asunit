@@ -4,6 +4,7 @@ package asunit.framework {
 	import asunit.framework.ITestFailure;
 
 	import flash.events.EventDispatcher;
+    import flash.utils.Dictionary;
 
 	/**
      * A <code>Result</code> collects the results of executing
@@ -26,6 +27,7 @@ package asunit.framework {
 
 		protected var listeners:Array;
         protected var runComplete:Boolean;
+        protected var knownTests:Dictionary;
 
         public function Result() {
 			_errors       = [];
@@ -34,6 +36,7 @@ package asunit.framework {
 			_successes    = [];
             _warnings     = [];
 			listeners     = [];
+            knownTests    = new Dictionary();
         }
 		
         public function get errors():Array { return _errors; }
@@ -69,6 +72,14 @@ package asunit.framework {
 		
 		public function get runTime():Number { return _runTime; }
 		public function set runTime(value:Number):void { _runTime = value; }
+
+        public function shouldRunTest(testClass:Class):Boolean {
+            if(!knownTests[testClass]) {
+                knownTests[testClass] = testClass;
+                return true;
+            }
+            return false;
+        }
 		
         public function addObserver(observer:TestObserver):void {
             if(!(observer is IRunListener)) {

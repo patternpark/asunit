@@ -8,6 +8,7 @@
 		function removeListener(listener:IRunListener):void;
 
         function addObserver(observer:TestObserver):void;
+        function shouldRunTest(testClass:Class):Boolean;
 		
 		function get errors():Array;
 		function get errorCount():uint;

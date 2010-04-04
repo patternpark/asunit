@@ -41,6 +41,10 @@ package asunit.runners {
             runSuite(suite, result);
         }
 
+        public function shouldRunTest(testClass:Class):Boolean {
+            return result.shouldRunTest(testClass);
+        }
+
         public function set factory(factory:IRunnerFactory):void {
             _factory = factory;
         }
@@ -50,7 +54,7 @@ package asunit.runners {
         }
 
         protected function runSuite(suite:*, result:IResult):void {
-            testClasses = new SuiteIterator(suite);
+            testClasses = new SuiteIterator(suite, result);
             timer.addEventListener(TimerEvent.TIMER, runNextTest);
             
             runNextTest();

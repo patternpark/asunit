@@ -10,14 +10,18 @@ package asunit.framework {
 
 	public class SuiteIterator implements Iterator {
 		
-        protected var list:Array;
         protected var index:int;
+        protected var list:Array;
 				
-		public function SuiteIterator(testSuite:Class) {
-			list = getTestClasses(testSuite);
+		public function SuiteIterator(testSuite:Class, result:IResult=null) {
+			list = getTestClasses(testSuite, result);
 		}
 		
-        private function getTestClasses(Suite:Class):Array {
+        private function getTestClasses(Suite:Class, result:IResult=null):Array {
+            // Careful - this behavior caused some headaches
+            // when I was getting a null result (it was from the recursion below)
+            if(result == null) result = new Result();
+
             var reflection:Reflection = Reflection.create(Suite);
 
             if(!isSuite(reflection) && isTest(reflection)) {
@@ -26,18 +30,18 @@ package asunit.framework {
 
             var variable:ReflectionVariable;
             var TestConstructor:Class;
-            var result:Array = [];
+            var response:Array = [];
             for each(variable in reflection.variables) {
                 TestConstructor = Class(getDefinitionByName(variable.type));
                 if(isSuite(Reflection.create(TestConstructor))) {
-                    result = result.concat( getTestClasses(TestConstructor) );
+                    response = response.concat( getTestClasses(TestConstructor, result) );
                 }
-                else {
-                    result.push(TestConstructor);
+                else if(result.shouldRunTest(TestConstructor)) {
+                    response.push(TestConstructor);
                 }
             }
-            result.sort();
-            return result;
+            response.sort();
+            return response;
         }
 
         public function get length():uint {

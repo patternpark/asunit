@@ -73,6 +73,10 @@ package asunit.runners {
             runMethodByName(testOrSuite, result, methodName, visualContext);
         }
 
+        public function shouldRunTest(testClass:Class):Boolean {
+            return result.shouldRunTest(testClass);
+        }
+
         // This class doesn't really use the runner factory,
         // since it represents a leaf node in the test
         // hierarchy...

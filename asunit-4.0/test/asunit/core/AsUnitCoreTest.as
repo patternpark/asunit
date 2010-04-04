@@ -4,7 +4,7 @@ package asunit.core {
     import asunit.framework.IAsync;
     import asunit.printers.TextPrinter;
     import asunit.support.CustomTestRunner;
-    import asunit.support.SuiteWithCustomRunner;
+    import asunit.support.SuiteWithOneCustomChildSuite;
     import asunit.support.SucceedAssertTrue;
 
     import flash.display.Sprite;
@@ -59,10 +59,11 @@ package asunit.core {
             core.start(SucceedAssertTrue);
         }
 
+        [Ignore(description="had to yak shave and uniquify the test run first, this is next")]
         [Test]
         public function testRunWithOnASuite():void {
             core.addEventListener(Event.COMPLETE, async.add(verifyCustomRunnerCalled));
-            core.start(SuiteWithCustomRunner);
+            core.start(SuiteWithOneCustomChildSuite);
         }
 
         private function verifyCustomRunnerCalled():void {

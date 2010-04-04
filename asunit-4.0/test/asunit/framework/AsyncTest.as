@@ -66,25 +66,31 @@
             assertEquals("event type", TimeoutCommandEvent.CALLED, e.type);
         }
         
-        [Ignore(description="Having trouble getting this test to make sense...")]
         [Test]
         public function addAsyncShouldSendErrorEventIfDelegateNotCalledInTime():void {
-            // set an extremely short timeout
-            var cancelTimeout:Function = orphanAsync.add(foo, 1);
-            
+
+            // This should be called by the orphanAsync instance when the timeout is exceeded:
+            var asyncMethodFailedHandler:Function = function(event:TimeoutCommandEvent):void {
+                assertEquals("event type", TimeoutCommandEvent.TIMED_OUT, event.type);
+                command.removeEventListener(TimeoutCommandEvent.CALLED, failIfCalled);
+                command.removeEventListener(TimeoutCommandEvent.TIMED_OUT, asyncMethodFailedHandler);
+            }
+
+            // Set a timeout on the orphanAsync, but also pass this
+            // to the actual, outer test run async - when this is called,
+            // the outer test run can continue.
+            var cancelTimeout:Function = async.add(orphanAsync.add(foo, 1), 500);
+
+            // Add subscriptions to the timeout command:
             command = orphanAsync.getPending()[0];
             command.addEventListener(TimeoutCommandEvent.CALLED, failIfCalled);
-            command.addEventListener(TimeoutCommandEvent.TIMED_OUT, orphanAsync.add(onAsyncMethodFailed));
+            command.addEventListener(TimeoutCommandEvent.TIMED_OUT, orphanAsync.add(asyncMethodFailedHandler));
 
-            // cancelTimeout isn't called fast enough
-            setTimeout(cancelTimeout, 100);
+            // we should attempt to call the async handler AFTER the timeout
+            // has already expired. The handler should NOT get called...
+            setTimeout(cancelTimeout, 10);
         }
         
-        private function onAsyncMethodFailed(e:TimeoutCommandEvent):void {
-            assertEquals("event type", TimeoutCommandEvent.TIMED_OUT, e.type);
-            command.removeEventListener(TimeoutCommandEvent.CALLED, failIfCalled);
-            command.removeEventListener(TimeoutCommandEvent.TIMED_OUT, onAsyncMethodFailed);
-        }
         
         private function failIfCalled(event:Event=null):void {
             fail("This function should not have been called");

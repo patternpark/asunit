@@ -78,7 +78,10 @@ class AsyncMethodTooSlowTest {
 
     [Test]
     public function shouldFailForBeingTooSlow():void {
+        // This will force an async timeout in 1 millisecond:
         var delegate:Function = async.add(null, 1);
+        // This will still call the async handler in 100ms,
+        // but the test run should have already continued:
         setTimeout(delegate, 100);
     }
 }

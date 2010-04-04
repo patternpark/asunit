@@ -1,7 +1,6 @@
 package {
 
     import asunit.core.TextCore;
-
     import flash.display.Sprite;
 
 	public class AsUnitRunner extends Sprite {

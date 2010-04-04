@@ -94,7 +94,7 @@ package asunit.framework {
 			return command.getCallback();
 		}
 		
-		public function proceedOnEvent(test:Object, target:IEventDispatcher, eventName:String, timeout:int=500, timeoutHandler:Function=null):void {
+		public function proceedOnEvent(target:IEventDispatcher, eventName:String, timeout:int=500, timeoutHandler:Function=null):void {
             var asyncHandler:Function = add(null, timeout);
 			target.addEventListener(eventName, asyncHandler, false, 0, true);
 		}

@@ -15,7 +15,7 @@ package asunit.framework {
         
 		function getPending():Array;
 
-		function proceedOnEvent(test:Object, target:IEventDispatcher, eventName:String, timeout:int = 500, timeoutHandler:Function = null):void;
+		function proceedOnEvent(target:IEventDispatcher, eventName:String, timeout:int = 500, timeoutHandler:Function = null):void;
     }
 }
 

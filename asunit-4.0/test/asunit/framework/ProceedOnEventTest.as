@@ -1,94 +1,109 @@
 package asunit.framework {
 
-	import asunit.framework.ErrorEvent;
-	import asunit.framework.TestCase;
-	import asunit.events.TimeoutCommandEvent;
-	import flash.events.Event;
-	import flash.events.EventDispatcher;
-	import flash.utils.clearTimeout;
-	import flash.utils.setTimeout;
+    import asunit.asserts.*;
+    import asunit.events.TimeoutCommandEvent;
+    import asunit.framework.ErrorEvent;
+    import asunit.framework.TestCase;
 
-	public class ProceedOnEventTest extends TestCase {
+    import flash.events.Event;
+    import flash.events.EventDispatcher;
+    import flash.events.IEventDispatcher;
+    import flash.utils.clearTimeout;
+    import flash.utils.setTimeout;
 
-        private var async:IAsync;
-		private var command:TimeoutCommand;
-		private var dispatcher:EventDispatcher;
-		private var timeoutID:int = -1;
+    public class ProceedOnEventTest {
 
-		public function ProceedOnEventTest(testMethod:String = null) {
-			super(testMethod);
-		}
+        [Inject]
+        public var async:IAsync;
 
-		protected override function setUp():void {
-            super.setUp();
-            async = new Async();
-			dispatcher = new EventDispatcher();
-		}
+        [Inject]
+        public var dispatcher:EventDispatcher;
 
-		protected override function tearDown():void {
-            super.tearDown();
-			command    = null;
-			dispatcher = null;
-			timeoutID  = -1;
-		}
+        private var orphanAsync:IAsync;
+        private var command:TimeoutCommand;
+        private var timeoutID:int = -1;
 
-		protected function foo():void { }
-		
-		public function test_proceedOnEvent_then_dispatch_correct_event_clears_pending_commands_for_test():void {
-			async.proceedOnEvent(this, dispatcher, Event.COMPLETE, 10);
-			
-			var commands:Array = async.getPending();
-			assertEquals("one pending command for test after proceedOnEvent()", 1, commands.length);
-			
-			// send the correct event synchronously
-			dispatchCompleteEvent();
-			
+        [Before]
+        public function setUp():void {
+            orphanAsync = new Async();
+        }
+
+        [After]
+        public function tearDown():void {
+            command     = null;
+            orphanAsync = null;
+            timeoutID   = -1;
+        }
+
+        protected function foo():void { }
+        
+        [Test]
+        public function proceedOnEventShouldDispatchCorrectEventAndClearPendingCommands():void {
+            orphanAsync.proceedOnEvent(dispatcher, Event.COMPLETE, 10);
+            
+            var commands:Array = orphanAsync.getPending();
+            assertEquals("one pending command for test after proceedOnEvent()", 1, commands.length);
+            
+            // send the correct event synchronously
+            dispatchCompleteEvent();
+            
             var message:String = "No pending commands for test after correct Event dispatched.";
-			assertEquals(message, 0, async.getPending().length);
-		}
-		
-		protected function dispatchCompleteEvent():void {
-			dispatcher.dispatchEvent(new Event(Event.COMPLETE));
-		}
-		
-		public function test_proceedOnEvent_then_dispatch_correct_event_too_slowly_sends_timed_out_Event():void {
-			async.proceedOnEvent(this, dispatcher, Event.COMPLETE, 0);
-			
-			var commands:Array = async.getPending();
-			var command:TimeoutCommand = commands[0];
-			//command.addEventListener(ErrorEvent.ERROR, async.add(onAsyncMethodFailed));
-			command.addEventListener(TimeoutCommandEvent.TIMED_OUT, addAsync(onAsyncMethodFailed));
-			
-			// send the correct event too slowly
-			timeoutID = setTimeout(dispatchCompleteEvent, 10);
-		}
-		
-		protected function onAsyncMethodFailed(e:TimeoutCommandEvent):void {
-			assertEquals("event type", TimeoutCommandEvent.TIMED_OUT, e.type);
-			clearTimeout(timeoutID);
-		}
-		
-		public function test_proceedOnEvent_then_dispatch_correct_event_in_time_sends_CALLED_Event():void {
-			async.proceedOnEvent(this, dispatcher, Event.COMPLETE, 10);
-			
-			command = async.getPending()[0];
-			
-			// Use AsUnit 3's async.add() to verify onAsyncMethodCalled is called.
-			command.addEventListener(TimeoutCommandEvent.CALLED, addAsync(onAsyncMethodCalled));
-			
-			// If all goes well, the ErrorEvent won't be dispatched.
-			command.addEventListener(ErrorEvent.ERROR, failIfCalled);
-			
-			// send the correct event faster than async.proceedOnEvent duration
-			setTimeout(dispatchCompleteEvent, 0);
-		}
-		
-		protected function onAsyncMethodCalled(e:Event):void {
-			assertEquals("event type", TimeoutCommandEvent.CALLED, e.type);
-		}
-		
-		protected function failIfCalled(e:Event = null):void {
-			fail("This function should not have been called");
-		}
-	}
+            assertEquals(message, 0, orphanAsync.getPending().length);
+        }
+        
+        protected function dispatchCompleteEvent():void {
+            dispatcher.dispatchEvent(new Event(Event.COMPLETE));
+        }
+        
+        [Test]
+        public function proceedOnEventShouldTimeoutAppropriately():void {
+
+            // Grab a reference to the Dispatcher so that we still have
+            // it after the test run (Fixing uncaught RTE null pointer exception)
+            var source:IEventDispatcher = dispatcher;
+
+            // This is the initial setup, we want test execution to pause
+            // for 1ms OR until the COMPLETE event fires:
+            orphanAsync.proceedOnEvent(source, Event.COMPLETE, 1);
+            
+            // Get the Command so that we can just wait for the TIMED_OUT event:
+            var commands:Array = orphanAsync.getPending();
+            var command:TimeoutCommand = commands[0];
+            command.addEventListener(TimeoutCommandEvent.TIMED_OUT, async.add(onAsyncMethodFailed, 500));
+            
+            // send the correct event too slowly
+            timeoutID = setTimeout(function():void {
+                source.dispatchEvent(new Event(Event.COMPLETE));
+            }, 10);
+        }
+        
+        protected function onAsyncMethodFailed(event:TimeoutCommandEvent):void {
+            assertEquals("event type", TimeoutCommandEvent.TIMED_OUT, event.type);
+            clearTimeout(timeoutID);
+        }
+        
+        [Test]
+        public function proceedOnEventShouldSendCALLEDEventAsExpected():void {
+            orphanAsync.proceedOnEvent(dispatcher, Event.COMPLETE, 10);
+            
+            command = orphanAsync.getPending()[0];
+            
+            // Use AsUnit 3's orphanAsync.add() to verify onAsyncMethodCalled is called.
+            command.addEventListener(TimeoutCommandEvent.CALLED, async.add(onAsyncMethodCalled));
+            
+            // If all goes well, the ErrorEvent won't be dispatched.
+            command.addEventListener(ErrorEvent.ERROR, failIfCalled);
+            
+            // send the correct event faster than orphanAsync.proceedOnEvent duration
+            setTimeout(dispatchCompleteEvent, 0);
+        }
+        
+        protected function onAsyncMethodCalled(e:Event):void {
+            assertEquals("event type", TimeoutCommandEvent.CALLED, e.type);
+        }
+        
+        protected function failIfCalled(e:Event = null):void {
+            fail("This function should not have been called");
+        }
+    }
 }

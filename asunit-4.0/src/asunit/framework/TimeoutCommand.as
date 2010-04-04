@@ -20,7 +20,7 @@ package asunit.framework {
         protected var timeout:Timer;
         protected var failureHandler:Function;
 
-        public function TimeoutCommand(scope:Object, handler:Function, duration:int = 0, failureHandler:Function=null) {
+        public function TimeoutCommand(scope:Object, handler:Function=null, duration:int=0, failureHandler:Function=null) {
             this.scope = scope;
             this.handler = handler || function(...args):* {};
             this.duration = duration;
@@ -31,19 +31,42 @@ package asunit.framework {
             timeout.addEventListener(TimerEvent.TIMER_COMPLETE, onTimeoutComplete);
             timeout.start();
         }
-        
+       
+        /**
+         * Called by TestRunner when the TimeoutCommandEvent.CALLED event is thrown.
+         *
+         * This needs to be triggered from the Runner so that the runner can handle
+         * any exceptions or errors appropriately.
+         *
+         * This should NOT actually call the provided handler if the timeout has
+         * already been exceeded.
+         */
         public function execute():* {
-            return handler.apply(scope, params);
+            if(timeout && timeout.running) {
+                return handler.apply(scope, params);
+            }
+            return null;
         }
         
+        /**
+         * Return the function handler that will be called when the Asynchronous
+         * feature works properly.
+         */
         public function getCallback():Function {
             return wrapHandlerWithCorrectNumberOfArgs();
         }
         
+        /**
+         * Stop waiting for the timeout event, and don't call anything.
+         */
         public function cancel():void {
             if (timeout) timeout.stop();
         }
         
+        /**
+         * Called by the returned closure, and dispatches the CALLED event so that
+         * a client (TestRunner) can call execute().
+         */
         protected function callback(...args):* {
             if (timeout) timeout.stop();
             this.params = args;

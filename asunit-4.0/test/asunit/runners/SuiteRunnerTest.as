@@ -1,48 +1,57 @@
 package asunit.runners {
 
-	import asunit.framework.TestCase;
-
-	import asunit.framework.Result;
-	import asunit.support.DoubleFailSuite;
+    import asunit.asserts.*;
+    import asunit.framework.IAsync;
+    import asunit.framework.Result;
+    import asunit.framework.TestCase;
+    import asunit.support.CustomTestRunner;
+    import asunit.support.DoubleFailSuite;
     import asunit.support.InjectionVerification;
+    import asunit.support.SuiteWithCustomRunner;
 
-	import flash.events.Event;
+    import flash.events.Event;
 
-	public class SuiteRunnerTest extends TestCase {
+    public class SuiteRunnerTest {
 
-		private var runnerResult:Result;
-		private var suiteRunner:SuiteRunner;
+        [Inject]
+        public var async:IAsync;
 
-		public function SuiteRunnerTest(testMethod:String = null) {
-			super(testMethod);
-		}
+        [Inject]
+        public var suiteRunner:SuiteRunner;
 
-		protected override function setUp():void {
-            super.setUp();
-			suiteRunner  = new SuiteRunner();
-			runnerResult = new Result();
-		}
+        [Inject]
+        public var runnerResult:Result;
 
-		protected override function tearDown():void {
-            super.tearDown();
-			suiteRunner  = null;
-			runnerResult = null;
-		}
+        [After]
+        public function cleanUpStatics():void {
+            CustomTestRunner.runCalled = false;
+        }
 
-		public function testRunTriggersCompleteEvent():void {
-			suiteRunner.addEventListener(Event.COMPLETE, addAsync(checkResultWasNotSuccessful, 500));
-			suiteRunner.run(DoubleFailSuite, runnerResult);
-		}
+        public function testRunTriggersCompleteEvent():void {
+            suiteRunner.addEventListener(Event.COMPLETE, async.add(checkResultWasNotSuccessful));
+            suiteRunner.run(DoubleFailSuite, runnerResult);
+        }
         
-		private function checkResultWasNotSuccessful(event:Event):void {
-			assertFalse(runnerResult.wasSuccessful);
-		}
+        private function checkResultWasNotSuccessful(event:Event):void {
+            assertFalse(runnerResult.wasSuccessful);
+        }
 
+        [Test]
         public function testCanHandATestToSuiteRunner():void {
+            suiteRunner.addEventListener(Event.COMPLETE, async.add());
             suiteRunner.run(InjectionVerification, runnerResult);
             assertFalse(runnerResult.wasSuccessful);
         }
 
-	}
+        [Test]
+        public function testRunWithOnASuite():void {
+            suiteRunner.addEventListener(Event.COMPLETE, async.add(verifyCustomRunnerCalled));
+            suiteRunner.run(SuiteWithCustomRunner, runnerResult);
+        }
+
+        private function verifyCustomRunnerCalled():void {
+            assertTrue("CustomRunner.run was NOT called", CustomTestRunner.runCalled);
+        }
+    }
 }
 

@@ -1,13 +1,17 @@
 package asunit.core {
     
     import asunit.asserts.*;
-
-    import asunit.support.SucceedAssertTrue;
+    import asunit.framework.IAsync;
     import asunit.printers.TextPrinter;
+    import asunit.support.SucceedAssertTrue;
 
     import flash.display.Sprite;
+    import flash.events.Event;
 
 	public class AsUnitCoreTest {
+
+        [Inject]
+        public var async:IAsync;
 
         [Inject]
 		public var core:AsUnitCore;
@@ -31,12 +35,19 @@ package asunit.core {
             assertEquals(context, core.visualContext);
         }
 
-        [Ignore(description="This should be turned off")]
         [Test]
         public function textPrinterShouldWork():void {
             var printer:TextPrinter = new TextPrinter();
-            context.addChild(printer);
             core.addObserver(printer);
+
+            // Wait for the complete event:
+            var handler:Function = function(event:Event):void {
+                var output:String = printer.toString();
+                assertTrue("should include test summary", output.indexOf('OK (1 test)') > -1);
+                assertTrue("should include provided test name", output.indexOf('asunit.support::SucceedAssertTrue') > -1);
+            }
+
+            core.addEventListener(Event.COMPLETE, async.add(handler));
             core.start(SucceedAssertTrue);
         }
 	}

@@ -118,14 +118,24 @@ package asunit.core {
             var factory:RunnerFactory = new RunnerFactory();
             runner = factory.runnerFor(testOrSuite);
             
-			runner.addEventListener(Event.COMPLETE, onRunCompleted);
+			runner.addEventListener(Event.COMPLETE, runCompleteHandler);
 			result.onRunStarted();
 		    runner.run(testOrSuite, result, testMethodName, this.visualContext);
         }
 
-		protected function onRunCompleted(event:Event):void {
+        private function runCompleteHandler(event:Event):void {
 			runner.removeEventListener(Event.COMPLETE, onRunCompleted);
 			result.onRunCompleted(result);
+            onRunCompleted();
+            dispatchEvent(event);
+        }
+
+
+        /**
+         * Template method that subclasses can override to perform some
+         * operation when the run is complete.
+         */
+		protected function onRunCompleted():void {
 		}
 
         // BEGIN: Implement the IEvent Dispatcher Interface:

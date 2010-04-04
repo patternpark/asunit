@@ -7,8 +7,8 @@ package asunit.core {
             addObserver(new FlashDelopPrinter());
         }
 
-		override protected function onRunCompleted(event:Event):void {
-            super.onRunCompleted(event);
+		override protected function onRunCompleted():void {
+            super.onRunCompleted();
 			fscommand('quit'); // fails silently if not in debug player
 			//System.exit(0); // generates SecurityError if not in debug player
 		}

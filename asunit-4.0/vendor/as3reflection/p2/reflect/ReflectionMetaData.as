@@ -9,11 +9,11 @@ package p2.reflect {
     dynamic public class ReflectionMetaData {
 
         private var _args:Array;
-		private var _description:XML;
+		private var _xmlDescription:XML;
 		private var _name:String;
 
-		public function ReflectionMetaData(description:XML) {
-			_description = description;
+		public function ReflectionMetaData(xmlDescription:XML) {
+			_xmlDescription = xmlDescription;
             // Have to parse args here, because the 
             // args are appended to this instance - there's
             // no getter to trigger the parse:
@@ -21,11 +21,11 @@ package p2.reflect {
         }
 
 		public function get name():String {
-			return _name ||= _description.@name;
+			return _name ||= _xmlDescription.@name;
 		}
 
-        public function get description():XML {
-            return _description;
+        public function get xmlDescription():XML {
+            return _xmlDescription;
         }
 
         public function get args():Array {
@@ -43,12 +43,12 @@ package p2.reflect {
         }
 
         public function toString():String {
-            return description;
+            return xmlDescription;
         }
 
         private function parseArgs():Array {
             var items:Array = [];
-            var list:XMLList = description..arg;
+            var list:XMLList = xmlDescription..arg;
             var item:XML;
             var key:String;
             var value:*;

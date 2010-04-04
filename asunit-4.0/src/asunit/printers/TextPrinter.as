@@ -251,6 +251,7 @@ package asunit.printers {
             backgroundFill.height = stage.stageHeight;
             textDisplay.width     = stage.stageWidth;
             textDisplay.height    = stage.stageHeight;
+            updateResultBar();
         }
         
         private function initializeDisplay():void {

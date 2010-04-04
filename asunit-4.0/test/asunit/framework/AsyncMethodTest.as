@@ -47,17 +47,6 @@ package asunit.framework {
             assertTrue(sprite is Sprite);
         }
 
-        [Ignore(description="This test wasn't getting called...")]
-        [Test]
-        public function testAsyncFailure():void {
-            var handler:Function = async.add(asyncFailure, 2);
-            setTimeout(handler, 10);
-        } 
-
-        private function asyncFailure():void {
-            assertTrue(true);
-        }
-        
         [Test]
         public function testAsyncVisualEntity2():void {
             var handler:Function = async.add(spriteHandler);

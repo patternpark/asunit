@@ -10,6 +10,7 @@
 
 		public var expects:String;
 		public var ignore:Boolean;
+        public var ignoreDescription:String;
 		public var metadata:ReflectionMetaData;
 		public var name:String;
 		public var order:int      = 0;
@@ -25,7 +26,11 @@
             metadata = reflection.getMetaDataByName('Test');
 
             if(metadata != null) {
-                ignore  = (reflection.getMetaDataByName('Ignore') != null);
+                var ignoreReflection:ReflectionMetaData = reflection.getMetaDataByName('Ignore');
+                if(ignoreReflection) {
+                    ignore = true;
+                    ignoreDescription = ignoreReflection.getValueFor('description');
+                }
 
                 handleTimeoutMetaData();
                 applyMetaData('expects');

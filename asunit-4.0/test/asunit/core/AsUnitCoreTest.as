@@ -31,7 +31,7 @@ package asunit.core {
             assertEquals(context, core.visualContext);
         }
 
-        [Ignore]
+        [Ignore(description="This should be turned off")]
         [Test]
         public function textPrinterShouldWork():void {
             var printer:TextPrinter = new TextPrinter();

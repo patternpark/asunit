@@ -102,7 +102,11 @@ package asunit.printers {
         }
 
         private function getIgnoreFromMethod(method:Method):String {
-            return "[Ignore] found at: " + method.scopeName + "." + method.toString();
+            var message:String = "[Ignore] found at: " + method.scopeName + "." + method.toString();
+            if(method.ignoreDescription) {
+               message += " (" + method.ignoreDescription + ")"; 
+            }
+            return message;
         }
 
         public function onWarning(warning:ITestWarning):void {

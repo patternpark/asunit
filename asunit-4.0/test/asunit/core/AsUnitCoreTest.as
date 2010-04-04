@@ -38,6 +38,7 @@ package asunit.core {
         [Test]
         public function textPrinterShouldWork():void {
             var printer:TextPrinter = new TextPrinter();
+            printer.traceOnComplete = false;
             core.addObserver(printer);
 
             // Wait for the complete event:

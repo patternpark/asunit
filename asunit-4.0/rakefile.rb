@@ -42,6 +42,7 @@ def configure_test_task(t)
   t.library_path << 'lib/Reflection.swc'
   t.debug = true
   t.static_link_runtime_shared_libraries = true
+  t.keep_generated_actionscript = true
   apply_as3_meta_data_args(t)
 end
 

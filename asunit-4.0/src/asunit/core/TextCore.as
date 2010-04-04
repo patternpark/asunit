@@ -35,6 +35,15 @@ package asunit.core {
             return textPrinter.displayPerformanceDetails;
         }
 
+        public function set traceOnComplete(should:Boolean):void {
+            textPrinter.traceOnComplete = should;
+        }
+
+        public function get traceOnComplete():Boolean {
+            return textPrinter.traceOnComplete;
+        }
+        
+
         override public function set visualContext(context:DisplayObjectContainer):void {
             super.visualContext = context;
             // Add the TextPrinter to the Display List:

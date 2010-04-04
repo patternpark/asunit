@@ -23,10 +23,11 @@ package asunit.printers {
         public static var FONT_SIZE:int = 12;
         public static var TEXT_COLOR:uint = 0xffffff;
 
-        public var backgroundColor:uint = BACKGROUND_COLOR;
+        public var backgroundColor:uint              = BACKGROUND_COLOR;
         public var displayPerformanceDetails:Boolean = true;
         public var localPathPattern:RegExp;
-        public var textColor:uint       = TEXT_COLOR;
+        public var textColor:uint                    = TEXT_COLOR;
+        public var traceOnComplete:Boolean           = true;
 
         protected var textDisplay:TextField;
 
@@ -59,13 +60,14 @@ package asunit.printers {
             footer           = '';
             header           = DEFAULT_HEADER;
             localPathPattern = LOCAL_PATH_PATTERN;
+
             if(stage) {
                 initializeDisplay();
             } else {
                 addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
             }
         }
-        
+
         public function onRunStarted():void {
             updateTextDisplay();
         }
@@ -154,7 +156,9 @@ package asunit.printers {
         }
 
         protected function logResult():void {
-            trace(toString());
+            if(traceOnComplete) {
+                trace(toString());
+            }
         }
         
         private function print(str:String):void {

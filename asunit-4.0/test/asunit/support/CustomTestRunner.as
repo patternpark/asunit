@@ -10,10 +10,10 @@ package asunit.support {
         // Used so that test cases can 
         // verify that this custom runner
         // worked.
-        public static var runCalled:Boolean;
+        public static var runCalledCount:int;
 
         override public function run(suite:Class, result:IResult, testMethod:String=null, visualContext:DisplayObjectContainer=null):void {
-            runCalled = true;
+            runCalledCount++;
             super.run(suite, result, testMethod, visualContext);
         }
     }

@@ -24,7 +24,7 @@ package asunit.runners {
 
         [After]
         public function cleanUpStatics():void {
-            CustomTestRunner.runCalled = false;
+            CustomTestRunner.runCalledCount = 0;
         }
 
         public function testRunTriggersCompleteEvent():void {
@@ -50,8 +50,10 @@ package asunit.runners {
         }
 
         private function verifyCustomRunnerCalled():void {
-            assertTrue("CustomRunner.run was NOT called", CustomTestRunner.runCalled);
+            var message:String = "CustomRunner.run was NOT called with correct count";
+            assertEquals(message, 4, CustomTestRunner.runCalledCount);
         }
     }
 }
+
 

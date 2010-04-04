@@ -1,4 +1,4 @@
-//Assume we have a feature that performs some asynchronous action:
+// Assume we have a feature that performs some asynchronous action:
 
 package net {
 
@@ -17,7 +17,7 @@ package net {
     }
 }
 
-//We can test this feature with the following test case:
+// We can test this feature with the following test case:
 package net {
 
     import asunit.framework.TestCase;

@@ -34,19 +34,62 @@ def apply_as3_meta_data_args(t)
 end
 
 ##########################################
-# Compile the Test Harness
+# Configure a Test Build:
 
-desc "Compile the test harness"
-mxmlc "bin/#{test_input}.swf" do |t|
-  t.gem_name = 'sprout-flex4sdk-tool'
+def configure_test_task(t)
   t.default_size = '1000 600'
   t.source_path << 'src'
   t.library_path << 'lib/Reflection.swc'
-  t.input = "test/#{test_input}.as"
   t.debug = true
   t.static_link_runtime_shared_libraries = true
   apply_as3_meta_data_args(t)
 end
+
+##########################################
+# Compile the Test Harness(es)
+
+desc "Compile the ActionScript test harness"
+mxmlc "bin/#{test_input}.swf" do |t|
+  t.input = "test/AsUnitRunner.as"
+  t.gem_name = 'sprout-flex4sdk-tool'
+  configure_test_task t
+end
+
+desc "Compile the Flex 3 test harness"
+mxmlc "bin/Flex3#{test_input}.swf" do |t|
+  t.input = "test/Flex3Runner.mxml"
+  t.gem_name = 'sprout-flex3sdk-tool'
+  configure_test_task t
+end
+
+desc "Compile the Flex 4 test harness"
+mxmlc "bin/Flex4#{test_input}.swf" do |t|
+  t.input = "test/Flex4Runner.mxml"
+  t.gem_name = 'sprout-flex4sdk-tool'
+  configure_test_task t
+end
+
+desc "Compile the Flex 4 test harness"
+mxmlc "bin/AIR2#{test_input}.swf" do |t|
+  t.input = "test/AIR2Runner.mxml"
+  t.gem_name = 'sprout-flex4sdk-tool'
+  configure_test_task t
+end
+
+##########################################
+# Launch the selected Test Harness
+
+desc "Compile and run the test harness"
+flashplayer :run_test => "bin/#{test_input}.swf"
+
+# Run Flex 3 Harness:
+#flashplayer :run_test => "bin/Flex3#{test_input}.swf"
+
+# Run Flex 4 Harness:
+#flashplayer :run_test => "bin/Flex4#{test_input}.swf"
+#flashplayer :run_test => "bin/AIR2#{test_input}.swf"
+
+task :test => :run_test
 
 ##########################################
 # Compile the SWC
@@ -108,12 +151,6 @@ asdoc 'doc' do |t|
 end
 
 ##########################################
-# Launch the Test Harness
-
-desc "Compile and run the test harness"
-flashplayer :run => "bin/#{test_input}.swf"
-
-##########################################
 # Package framework ZIPs
 
 archive = "bin/AsUnit#{ASUNIT_VERSION}.zip"
@@ -151,5 +188,3 @@ task :zip => [:clean, 'dist', archive, :remove_dist]
 
 task :default => :test
 
-desc "Alias to the default task"
-task :test => :run

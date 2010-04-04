@@ -11,7 +11,6 @@ package {
     import asunit.framework.AssertEqualsArraysTest;
     import asunit.framework.AssertTest;
     import asunit.framework.AssertThrowsTest;
-    import asunit.framework.AsyncFailureTest;
     import asunit.framework.AsyncMethodTest;
     import asunit.framework.AsyncTest;
     import asunit.framework.CallbackBridgeTest;
@@ -44,7 +43,6 @@ package {
         public var asunit_framework_AssertEqualsArraysTest:asunit.framework.AssertEqualsArraysTest;
         public var asunit_framework_AssertTest:asunit.framework.AssertTest;
         public var asunit_framework_AssertThrowsTest:asunit.framework.AssertThrowsTest;
-        public var asunit_framework_AsyncFailureTest:asunit.framework.AsyncFailureTest;
         public var asunit_framework_AsyncMethodTest:asunit.framework.AsyncMethodTest;
         public var asunit_framework_AsyncTest:asunit.framework.AsyncTest;
         public var asunit_framework_CallbackBridgeTest:asunit.framework.CallbackBridgeTest;

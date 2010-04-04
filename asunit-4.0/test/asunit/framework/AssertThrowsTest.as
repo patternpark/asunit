@@ -1,17 +1,17 @@
 package asunit.framework {
+
+    import asunit.asserts.*;
 	import asunit.errors.AssertionFailedError;
 
-    public class AssertThrowsTest extends TestCase {
+    public class AssertThrowsTest {
 
-        public function AssertThrowsTest(testMethod:String = null) {
-            super(testMethod);
-        }
-	
-		public function test_throwing_correct_error_passes():void {
+        [Test]
+		public function throwingExpectedErrorShouldPass():void {
 			assertThrows(ArgumentError, function():void { throw new ArgumentError(); } );
 		}
 		
-		public function test_throwing_incorrect_error_fails_with_expected_message():void {
+        [Test]
+		public function throwingUnexpectedErrorShouldFailWithMessage():void {
 			try {
 				assertThrows(ArgumentError, function():void { throw new Error("wrong error type"); } );
 			}
@@ -26,7 +26,8 @@ package asunit.framework {
 		 * Captures a bug in original assertThrows implementation
 		 * where the message when nothing was thrown said "but was:<AssertionFailedError>".
 		 */
-		public function test_throwing_no_error_fails_with_message_that_none_was_thrown():void {
+        [Test]
+		public function throwingNoErrorShouldFailWithMessage():void {
 			try {
 				assertThrows(ArgumentError, function():void { } );
 			}
@@ -36,7 +37,6 @@ package asunit.framework {
 			}
 			fail('failed assertThrows() should have thrown AssertionFailedError');
 		}
-		
-		
 	}
 }
+

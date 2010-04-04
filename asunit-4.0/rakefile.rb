@@ -87,6 +87,8 @@ flashplayer :run_test => "bin/#{test_input}.swf"
 
 # Run Flex 4 Harness:
 #flashplayer :run_test => "bin/Flex4#{test_input}.swf"
+
+# Run AIR 2 Harness:
 #flashplayer :run_test => "bin/AIR2#{test_input}.swf"
 
 task :test => :run_test

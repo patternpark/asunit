@@ -92,6 +92,7 @@ package asunit.framework {
             // Use the provided RunWith class, or the DefaultTestRunner (this may
             // have been overridden by a parent Suite
             var Constructor:Class = getRunWithConstructor(reflection) || DefaultTestRunner;
+			//FIXME: This will choke if given a class with constructor arguments!
             var runner:IRunner = new Constructor();
             runner.factory = this;
             return runner;

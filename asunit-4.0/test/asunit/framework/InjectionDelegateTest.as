@@ -12,24 +12,42 @@ package asunit.framework {
 			assertTrue("instance is InjectionDelegate", injector is InjectionDelegate);
 		}
 
-		[Ignore]
 		[Test]
 		public function testUpdateInjectionPoints():void {
-			var addict:Object = {};
+			var addict:Addict = new Addict();
 			injector.updateInjectionPoints(addict);
-			assertTrue("Failing test", false);
+			assertNotNull(addict.array);
 		}
 		
 		[Test(expects="asunit.errors.UsageError")]
 		public function shouldThrowUsageErrorOnInvalidAddict():void
 		{
-			var invalidAddict:InvalidAddict = new InvalidAddict();
+			var invalidAddict:AddictWithNoInjections = new AddictWithNoInjections();
 			injector.updateInjectionPoints(invalidAddict);
 		}
 		
+		[Test(expects="asunit.errors.UsageError")]
+		public function shouldThrowUsageErrorIfNoVariableInjectionsFound():void
+		{
+			var invalidAddict:AddictWithOnlyMethodInjection = new AddictWithOnlyMethodInjection();
+			injector.updateInjectionPoints(invalidAddict);
+		}
 		
 	}
 }
 
 //An addict that has no inject annotations
-class InvalidAddict {}
+class AddictWithNoInjections {}
+
+class AddictWithOnlyMethodInjection {
+	[Inject]
+	public function pleaseInjectMe(array:Array):void{};
+}
+
+class Addict {
+	[Inject]
+	public var array:Array;
+	
+	[Inject]
+	public function pleaseInjectMe(array:Array):void{};
+}

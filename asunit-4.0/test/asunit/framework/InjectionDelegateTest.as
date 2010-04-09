@@ -19,6 +19,18 @@ package asunit.framework {
 			assertNotNull(addict.array);
 		}
 		
+		[Test]
+		public function injectedInstancesShouldBeCached():void {			
+			var addict:Addict = new Addict();			
+			var addict2:Addict = new Addict();
+			
+			injector.updateInjectionPoints(addict);			
+			injector.updateInjectionPoints(addict2);			
+			
+			assertSame(addict.array, addict2.array);
+			
+		}
+		
 		[Test(expects="asunit.errors.UsageError")]
 		public function shouldThrowUsageErrorOnInvalidAddict():void
 		{
@@ -32,7 +44,7 @@ package asunit.framework {
 			var invalidAddict:AddictWithOnlyMethodInjection = new AddictWithOnlyMethodInjection();
 			injector.updateInjectionPoints(invalidAddict);
 		}
-		
+			
 	}
 }
 

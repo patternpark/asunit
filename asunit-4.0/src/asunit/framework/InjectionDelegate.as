@@ -16,11 +16,13 @@ package asunit.framework {
 
 		public static const INJECT_ANNOTATION:String = "Inject";
 		
-		protected var entities:Dictionary;
+		private var entities:Dictionary;
 		
-		public function InjectionDelegate() {
-		} 
-				
+		public function InjectionDelegate()
+		{
+			entities = new Dictionary();
+		}
+		
 		/**
 		 * @param addict * an entity with at least one [Inject] annotation
 		*/
@@ -53,7 +55,7 @@ package asunit.framework {
 		 * @private
 		 * @return 
 		*/
-		protected function updateInjectionPoint(addict:*, member:ReflectionVariable):void {
+		private function updateInjectionPoint(addict:*, member:ReflectionVariable):void {
 			var instance:* = getInstanceFromTypeName(member.type);
 			//FIXME: This actually could be a getter. If someone has their head up their booty.
 			addict[member.name] = instance;
@@ -61,14 +63,23 @@ package asunit.framework {
 		
 		private function getInstanceFromTypeName(name:String):* {
 			var clazz:Class = getDefinitionByName(name) as Class;
-			//FIXME: This will choke if given a class with constructor arguments!
-			return new clazz();
+			 return getOrCacheInstanceFromClass(clazz);
+		}
+		
+		private function getOrCacheInstanceFromClass(clazz:Class):* {
+			if (!entities[clazz])
+			{
+				//FIXME: This will choke if given a class with constructor arguments!
+				entities[clazz] = new clazz();
+			}
+
+			return entities[clazz];
 		}
 		
 		/**
 		 * @private
 		 */
-		protected function validateMembers(members:Array, name:String):void
+		private function validateMembers(members:Array, name:String):void
 		{
 			if (!members || members.length == 0)
 			{

@@ -77,10 +77,11 @@
                 command.removeEventListener(TimeoutCommandEvent.TIMED_OUT, asyncMethodFailedHandler);
             }
 
+            var timeoutHandler:Function = orphanAsync.add(null, 1);
             // Set a timeout on the orphanAsync, but also pass this
             // to the actual, outer test run async - when this is called,
             // the outer test run can continue.
-            var cancelTimeout:Function = async.add(orphanAsync.add(foo, 1), 500);
+            var cancelTimeout:Function = async.add(timeoutHandler, 500);
 
             // Add subscriptions to the timeout command:
             command = orphanAsync.getPending()[0];
@@ -96,7 +97,7 @@
         private function failIfCalled(event:Event=null):void {
             fail("AsyncTest: This function should not have been called");
         }
-
+		//TODO: You might want to delete this since it is basically a no-op handler. You could send instead now.
         private function foo():void {};
     }
 }

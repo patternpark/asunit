@@ -44,10 +44,29 @@ package asunit.framework {
         }
 
 		[Test]
-		public function shouldHaveRunCount():void
+		public function shouldHaveDefaultRunCount():void
 		{
 			assertEquals(0, bridge.runCount);
 		}
+		
+		[Test]
+		public function shouldHaveCumulativeRunCount():void
+		{
+			/*
+				function onTestStarted(test:Object):void;
+				function onTestCompleted(test:Object):void;
+				function onTestFailure(failure:ITestFailure):void;
+				function onTestSuccess(success:ITestSuccess):void;
+			*/
+			bridge.onTestStarted(null);
+			bridge.onTestSuccess(null);
+			bridge.onTestCompleted(null);
+			bridge.onTestStarted(null);
+			bridge.onTestSuccess(null);
+			bridge.onTestCompleted(null);
+			assertEquals(2, bridge.runCount);
+		}
+		
 	}
 }
 

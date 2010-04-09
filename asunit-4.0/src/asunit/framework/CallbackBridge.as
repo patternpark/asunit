@@ -21,48 +21,56 @@ package asunit.framework {
         }
 
 		public function onRunStarted():void {
+			model.onRunStarted();
             listeners.forEach(function(listener:IRunListener, index:int, items:Array):void {
                 listener.onRunStarted();
             });
         }
 
 		public function onRunCompleted(result:IResult):void {
+			model.onRunCompleted(result);
             listeners.forEach(function(listener:IRunListener, index:int, items:Array):void {
                 listener.onRunCompleted(result);
             });
         }
 
 		public function onTestStarted(test:Object):void {
+			model.onTestStarted(test);
             listeners.forEach(function(listener:IRunListener, index:int, items:Array):void {
                 listener.onTestStarted(test);
             });
         }
 
 		public function onTestCompleted(test:Object):void {
+			model.onTestCompleted(test);
             listeners.forEach(function(listener:IRunListener, index:int, items:Array):void {
                 listener.onTestCompleted(test);
             });
         }
 
 		public function onTestFailure(failure:ITestFailure):void {
+			model.onTestFailure(failure);
             listeners.forEach(function(listener:IRunListener, index:int, items:Array):void {
                 listener.onTestFailure(failure);
             });
         }
 
 		public function onTestSuccess(success:ITestSuccess):void {
+			model.onTestSuccess(success);
             listeners.forEach(function(listener:IRunListener, index:int, items:Array):void {
                 listener.onTestSuccess(success);
             });
         }
 
 		public function onTestIgnored(method:Method):void {
+			model.onTestIgnored(method);
             listeners.forEach(function(listener:IRunListener, index:int, items:Array):void {
                 listener.onTestIgnored(method);
             });
         }
 
         public function onWarning(warning:ITestWarning):void {
+			model.onWarning(warning);
             listeners.forEach(function(listener:IRunListener, index:int, items:Array):void {
                 listener.onWarning(warning);
             });

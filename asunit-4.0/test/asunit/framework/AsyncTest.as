@@ -66,7 +66,7 @@
             assertEquals("event type", TimeoutCommandEvent.CALLED, e.type);
         }
         
-        [Ignore(description="Async failure, need to make time to resolve this")]
+        [Ignore(description="Async failure, but I'm no longer convinced that there is any value in this test case. Do we care if the TimeoutCommand can throw events? So long as we verify our failure state from the runner?")]
         [Test]
         public function addAsyncShouldSendErrorEventIfDelegateNotCalledInTime():void {
 

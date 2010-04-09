@@ -1,19 +1,23 @@
 package asunit.framework {
     
-    public class CallbackBridge implements MessageBridge, IRunListener {
-
+    public class CallbackBridge implements MessageBridge, IRunListener, IResult {
+	
         private var listeners:Array;
 
-        public function CallbackBridge() {
-            listeners = [];
-        }
+		protected var model:IResult;
 
+        public function CallbackBridge() {
+			initialize();
+        }
+		
+		protected function initialize():void
+		{
+			listeners = [];
+			model = new Result();
+		}
+		
         public function get length():int {
             return listeners.length;
-        }
-
-        public function addListener(listener:IRunListener):void {
-            listeners.push(listener);
         }
 
 		public function onRunStarted():void {
@@ -63,6 +67,100 @@ package asunit.framework {
                 listener.onWarning(warning);
             });
         }
+
+		//---------------------------------------
+		// IResult Implementation
+		//---------------------------------------
+
+		public function get errors():Array
+		{
+			return model.errors;
+		}
+
+		public function get errorCount():uint
+		{
+			return model.errorCount;
+		}
+
+		public function get failures():Array
+		{
+			return model.failures;
+		}
+
+		public function get failureCount():uint
+		{
+			return model.failureCount;
+		}
+
+		public function get successes():Array
+		{
+			return model.successes;
+		}
+
+		public function get successCount():uint
+		{
+			return model.successCount;
+		}
+
+		public function get warnings():Array
+		{
+			return model.warnings;
+		}
+
+		public function get ignoredTests():Array
+		{
+			return model.ignoredTests;
+		}
+
+		public function get ignoredTestCount():uint
+		{
+			return model.ignoredTestCount;
+		}
+
+		public function get runCount():uint
+		{
+			return model.runCount;
+		}
+
+		public function get failureEncountered():Boolean
+		{
+			return model.failureEncountered;
+		}
+
+		public function get wasSuccessful():Boolean
+		{
+			return model.wasSuccessful;
+		}
+
+		public function get runTime():Number
+		{
+			return model.runTime;
+		}
+
+		public function set runTime(value:Number):void
+		{
+			model.runTime = value;
+		}
+
+		public function addListener(listener:IRunListener):void
+		{
+			model.addListener(listener);
+			listeners.push(listener);
+		}
+
+		public function removeListener(listener:IRunListener):void
+		{
+			model.removeListener(listener);
+		}
+
+		public function addObserver(observer:TestObserver):void
+		{
+			model.addObserver(observer);
+		}
+
+		public function shouldRunTest(testClass:Class):Boolean
+		{
+			return model.shouldRunTest(testClass);
+		}
     }
 }
-

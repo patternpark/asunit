@@ -42,6 +42,12 @@ package asunit.framework {
             bridge.onTestStarted(null);
             assertTrue(observer.onTestStartedCalled);
         }
+
+		[Test]
+		public function shouldHaveRunCount():void
+		{
+			assertEquals(0, bridge.runCount);
+		}
 	}
 }
 

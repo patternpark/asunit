@@ -11,7 +11,6 @@ package asunit.runners {
 
     public class LegacyRunnerTest extends TestCase {
 
-        private var testResult:CallbackBridge;
         private var testRunner:LegacyRunner;
 
         public function LegacyRunnerTest(methodName:String=null) {
@@ -21,23 +20,20 @@ package asunit.runners {
         override protected function setUp():void {
             super.setUp();
             LegacyTestCase.callCount = 0;
-            testResult = new CallbackBridge();
             testRunner = new LegacyRunner();
         }
 
         override protected function tearDown():void {
             super.tearDown();
-            testResult = null;
             testRunner = null;
         }
 
         public function testSimpleSubclass():void {
             var handler:Function = function(event:Event):void {
-                assertEquals(0, testResult.failureCount);
-                assertEquals(2, testResult.runCount);
+                assertEquals(0, testRunner.bridge.failureCount);
+                assertEquals(2, testRunner.bridge.runCount);
             };
             testRunner.addEventListener(Event.COMPLETE, addAsync(handler));
-			testRunner.bridge = testResult;
             testRunner.run(LegacyTestCase);
         }
     }

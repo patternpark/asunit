@@ -62,8 +62,9 @@ package asunit.runners {
         private var _factory:IRunnerFactory;
 
         public function TestRunner() {
-            async = new Async();
-            timer = new Timer(0, 1);
+            async  = new Async();
+            bridge = new CallbackBridge();
+            timer  = new Timer(0, 1);
             timer.addEventListener(TimerEvent.TIMER, runNextMethod);
             visualInstances = [];
         }

@@ -26,13 +26,11 @@ package asunit.runners {
         public var context:Sprite;
 
         private var runner:TestRunner;
-        private var runnerResult:Result;
         private var test:Class;
 
         [Before]
         public function setUp():void {
             runner = new TestRunner();
-            runnerResult = new Result();
 
             // Yes, statics are ugly, but we're testing 
             // that static methods are called, e.g. [BeforeClass].
@@ -99,10 +97,10 @@ package asunit.runners {
         }
         
         private function checkResultWasNotSuccessful(e:Event):void {
-            assertTrue(runnerResult.failureEncountered);
-            assertFalse(runnerResult.wasSuccessful);
+            assertTrue(runner.bridge.failureEncountered);
+            assertFalse(runner.bridge.wasSuccessful);
             
-            var failures:Array = runnerResult.failures;
+            var failures:Array = runner.bridge.failures;
             assertEquals('one failure in testResult', 1, failures.length);
             
             var failure0:ITestFailure = failures[0] as TestFailure;
@@ -145,13 +143,13 @@ package asunit.runners {
         [Test]
         public function shouldInjectTypes():void {
             runner.run(InjectionVerification, null, context);
-            assertFalse("Should not have encountered failures: " + runnerResult.failures.join("\n\n"), runnerResult.failureEncountered);
+            assertFalse("Should not have encountered failures: " + runner.bridge.failures.join("\n\n"), runner.bridge.failureEncountered);
         }
 
         [Test]
         public function shouldInjectWithUnknownAttribute():void {
             runner.run(InjectionFailure);
-            var warnings:Array = runnerResult.warnings;
+            var warnings:Array = runner.bridge.warnings;
             assertEquals(1, warnings.length);
         }
 
@@ -166,7 +164,7 @@ package asunit.runners {
         [Test]
         public function annotationsOnSuperClassShouldBeRespected():void {
             runner.run(AnnotatedSubClass);
-            assertFalse("Should not have failures: " + runnerResult.failures.join("\n\n"), runnerResult.failureEncountered);
+            assertFalse("Should not have failures: " + runner.bridge.failures.join("\n\n"), runner.bridge.failureEncountered);
         }
     }
 }

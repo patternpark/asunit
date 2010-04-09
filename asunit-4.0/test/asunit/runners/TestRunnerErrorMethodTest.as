@@ -12,7 +12,6 @@ package asunit.runners {
 	public class TestRunnerErrorMethodTest extends TestCase {
 
 		private var runner:TestRunner;
-		private var runnerResult:Result;
 		private var testWithError:ErrorInMethod;
 
 		public function TestRunnerErrorMethodTest(testMethod:String = null) {
@@ -22,14 +21,12 @@ package asunit.runners {
 		protected override function setUp():void {
             super.setUp();
 			runner        = new TestRunner();
-			runnerResult  = new Result();
 			testWithError = new ErrorInMethod();
 		}
 
 		protected override function tearDown():void {
             super.tearDown();
 			runner        = null;
-			runnerResult  = null;
 			testWithError = null;
 		}
 
@@ -43,6 +40,7 @@ package asunit.runners {
 		}
 		
 		private function check_Result_has_one_error(e:Event):void {
+            var runnerResult:IResult = runner.bridge;
 			assertFalse('runnerResult.wasSuccessful', runnerResult.wasSuccessful);
 			
 			assertEquals('one error in testResult',   1, runnerResult.errorCount);

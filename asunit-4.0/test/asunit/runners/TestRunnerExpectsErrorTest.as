@@ -15,7 +15,6 @@ package asunit.runners {
 		private var successTest:Class;
 		private var throwNothingTest:Class;
 		private var throwWrongErrorTest:Class;
-		private var runnerResult:Result;
 
 		public function TestRunnerExpectsErrorTest(testMethod:String = null) {
 			super(testMethod);
@@ -24,7 +23,6 @@ package asunit.runners {
 		protected override function setUp():void {
             super.setUp();
 			runner = new TestRunner();
-			runnerResult = new Result();
 			successTest = TestExpectsArgumentErrorAndThrowsIt;
 			throwNothingTest = TestExpectsArgumentErrorButThrowsNothing;
 			throwWrongErrorTest = TestExpectsArgumentErrorButThrowsWrongError;
@@ -33,7 +31,6 @@ package asunit.runners {
 		protected override function tearDown():void {
             super.tearDown();
 			runner              = null;
-			runnerResult        = null;
 			successTest         = null;
 			throwNothingTest    = null;
 			throwWrongErrorTest = null;
@@ -45,6 +42,7 @@ package asunit.runners {
 		}
 		
 		private function check_Result_has_no_errors(e:Event):void {
+            var runnerResult:IResult = runner.bridge;
 			assertEquals('no errors in testResult',   0, runnerResult.errorCount);
 			assertEquals('no failures in testResult', 0, runnerResult.failureCount);
 		}
@@ -55,6 +53,7 @@ package asunit.runners {
 		}
 		
 		private function check_Result_has_one_assertion_failure(e:Event):void {
+            var runnerResult:IResult = runner.bridge;
 			assertFalse(runnerResult.wasSuccessful);
 			
 			assertEquals('one failure in testResult', 1, runnerResult.failureCount);

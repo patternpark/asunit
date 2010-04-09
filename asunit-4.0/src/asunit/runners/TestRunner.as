@@ -38,6 +38,15 @@ package asunit.runners {
         public static var IASYNC_NAME:String = 'asunit.framework::IAsync';
         public static var DISPLAY_OBJECT_CONTAINER:String = 'flash.display::DisplayObjectContainer';
 
+        /**
+         * This is how the Runner connects to a printer.
+         * The AsUnitCore will inject the requested bridge
+         * based on the concrete data type.
+         *
+         * There should be a similar Injection point on
+         * whatever printers are interested in what this
+         * concrete runner will dispatch.
+         */
         [Inject]
         public var bridge:CallbackBridge;
 

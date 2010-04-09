@@ -67,9 +67,9 @@ package asunit.core {
          * variable where a bridge will be injected.
          *
          * Concrete observers are coupled to concrete runners
-         * by using metadata and Bridges for message passing.
+         * by using [Inject] metadata and Bridges for message passing.
          *
-         * The primary TestRunner, CoreCallbackBridge and TextPrinter
+         * The primary TestRunner, CallbackBridge and TextPrinter
          * are good examples of how to build this relationship.
          * 
          * To use a different TestRunner on a Suite or Test, simply set:
@@ -79,11 +79,13 @@ package asunit.core {
          * If you call RunWith on a Suite, it should change the 
          * default TestRunner for all subsequent tests.
          *
+         * A Printer can inject any number of concrete Bridges,
+         * so you can still subscribe to the standard test execution
+         * callbacks, while also handling some new functionality
+         * provided by a couple of concrete runners.
+         *
          */
         public function addObserver(observer:TestObserver):void {
-			//TODO: look for injection points on the observer. 
-			//If we don't have a bridge of the type requested, instantiate one store it for future use. ( Dictionary of bridges with a key of their constructor )
-			//The bridge requested will then be injected into the observer.
 			bridgeInjector.updateInjectionPoints(observer);
         }
 

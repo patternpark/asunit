@@ -48,6 +48,17 @@ package asunit.printers {
         private var testTimes:Array;
         private var warnings:Array;
 
+        /**
+         * The bridge provides the connection between the printer
+         * and the Runner(s) that it's interested in.
+         *
+         * Generally, a bridge can observe Runners, and build up
+         * state over the course of a test run.
+         *
+         * If you create a custom Runner, Printer and Bridge,
+         * you can decide to manage notifications however you wish.
+         *
+         */
 		[Inject]
 		public function set bridge(value:CallbackBridge):void
 		{

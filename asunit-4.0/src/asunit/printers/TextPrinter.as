@@ -9,6 +9,8 @@ package asunit.printers {
 
     import flash.display.Shape;
     import flash.display.Sprite;
+    import flash.display.StageAlign;
+    import flash.display.StageScaleMode;
     import flash.events.Event;
     import flash.system.Capabilities;
     import flash.text.TextField;
@@ -266,6 +268,8 @@ package asunit.printers {
         }
         
         private function initializeDisplay():void {
+            stage.align     = StageAlign.TOP_LEFT;
+            stage.scaleMode = StageScaleMode.NO_SCALE;
             stage.addEventListener(Event.RESIZE, onStageResize);
 
             backgroundFill = new Shape();

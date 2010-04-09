@@ -35,14 +35,15 @@ package asunit.framework {
 		
         public function RunnerFactory() {
             DefaultSuiteRunner = DEFAULT_SUITE_RUNNER;
-            DefaultTestRunner = DEFAULT_TEST_RUNNER;
+            DefaultTestRunner  = DEFAULT_TEST_RUNNER;
+            injector           = new InjectionDelegate();
         }
 		
 		private var _injector:InjectionDelegate;
 		
 		public function get injector():InjectionDelegate
 		{
-			return _injector ||= new InjectionDelegate();
+			return _injector;
 		}
 		
 		public function set injector(value:InjectionDelegate):void

@@ -3,8 +3,6 @@ package asunit.core {
     import asunit.printers.TextPrinter;
 
     import flash.display.DisplayObjectContainer;
-    import flash.display.StageAlign;
-    import flash.display.StageScaleMode;
 
     /**
      * TextCore is just a simple helper class that
@@ -48,10 +46,6 @@ package asunit.core {
 
         override public function set visualContext(context:DisplayObjectContainer):void {
             super.visualContext = context;
-            if(context.stage) {
-                context.stage.align = StageAlign.TOP_LEFT;
-                context.stage.scaleMode = StageScaleMode.NO_SCALE;
-            }
             // Add the TextPrinter to the Display List:
             visualContext.addChild(textPrinter);
         }

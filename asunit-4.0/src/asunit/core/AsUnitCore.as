@@ -18,7 +18,7 @@ package asunit.core {
 	public class AsUnitCore implements IEventDispatcher {
 
 		[Inject]
-        public var defaultBridge:CallbackBridge;
+        public var bridge:CallbackBridge;
 
 		protected var bridgeInjector:InjectionDelegate;
         protected var dispatcher:IEventDispatcher;
@@ -118,6 +118,9 @@ package asunit.core {
 		public function start(testOrSuite:Class, testMethodName:String=null, visualContext:DisplayObjectContainer=null):void {
 
 			// Will instantiate a new CallbackBridge:
+            // and set it on this instance - but share it
+            // with any Runners or Observers that also
+            // use the CallbackBridge.
 			bridgeInjector.updateInjectionPoints(this);
 			
             // Must use the accessor, not the _ value:
@@ -126,15 +129,14 @@ package asunit.core {
             var factory:RunnerFactory = new RunnerFactory();
 			factory.injector = bridgeInjector;
             runner = factory.runnerFor(testOrSuite);
-            
 			runner.addEventListener(Event.COMPLETE, runCompleteHandler);
-			defaultBridge.onRunStarted();
+			bridge.onRunStarted();
 		    runner.run(testOrSuite, testMethodName, this.visualContext);
         }
 
         private function runCompleteHandler(event:Event):void {
 			runner.removeEventListener(Event.COMPLETE, onRunCompleted);
-			defaultBridge.onRunCompleted(defaultBridge);
+			bridge.onRunCompleted(bridge);
             onRunCompleted();
             dispatchEvent(event);
         }

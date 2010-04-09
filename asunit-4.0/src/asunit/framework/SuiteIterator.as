@@ -12,9 +12,6 @@ package asunit.framework {
 		
         protected var index:int;
         protected var list:Array;
-
-		[Inject]
-		public var bridge:CallbackBridge;
 				
 		public function SuiteIterator(Suite:Class, bridge:CallbackBridge=null) {
 			list = getTestClasses(Suite, bridge);
@@ -35,7 +32,7 @@ package asunit.framework {
             for each(variable in reflection.variables) {
                 TestConstructor = Class(getDefinitionByName(variable.type));
                 if(isSuite(Reflection.create(TestConstructor))) {
-                    response = response.concat( getTestClasses(TestConstructor) );
+                    response = response.concat( getTestClasses(TestConstructor, bridge) );
                 }
                 else if(bridge.shouldRunTest(TestConstructor)) {
                     response.push(TestConstructor);

@@ -1,5 +1,6 @@
 package asunit.support {
 
+    import asunit.framework.CallbackBridge;
     import asunit.framework.IResult;
     import asunit.runners.TestRunner;
 
@@ -13,7 +14,6 @@ package asunit.support {
         public static var runCalledCount:int;
 
         override public function run(testClass:Class, testMethod:String=null, visualContext:DisplayObjectContainer=null):void {
-            trace(">> Custom.run with: " + testClass);
             runCalledCount++;
             super.run(testClass, testMethod, visualContext);
         }

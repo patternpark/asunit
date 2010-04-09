@@ -64,22 +64,19 @@ package asunit.core {
         }
 
         private function verifyRunWithOnASuite(Suite:Class, testCaseCount:int, testMethodCount:int):void {
-            var result:CallbackBridge = new CallbackBridge();
-			core.defaultBridge = result;
 
             var handler:Function = function(event:Event):void {
                 var message:String = "CustomRunner.run was NOT called with correct count";
                 // This is the number of Tests that will used the custom Runner:
                 assertEquals(message, testCaseCount, CustomTestRunner.runCalledCount);
                 // This is the number of test methods:
-                assertEquals("Total Test Count", testMethodCount, result.runCount);
+                assertEquals("Total Test Count", testMethodCount, core.bridge.runCount);
             }
 
             core.addEventListener(Event.COMPLETE, async.add(handler));
             core.start(Suite);
         }
 
-        [Ignore(description="firerunner")]
         [Test]
         public function shouldAssignRunWithUsingOuterSuite():void {
             // This will work b/c the RunWith is on the outer Suite:

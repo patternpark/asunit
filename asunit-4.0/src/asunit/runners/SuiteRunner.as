@@ -1,5 +1,6 @@
 package asunit.runners {
     
+    import asunit.framework.CallbackBridge;
     import asunit.framework.IResult;
     import asunit.framework.IRunner;
     import asunit.framework.IRunnerFactory;
@@ -17,7 +18,6 @@ package asunit.runners {
 
     import p2.reflect.Reflection;
     import p2.reflect.ReflectionMetaData;
-    import asunit.framework.CallbackBridge;
 
     public class SuiteRunner implements IEventDispatcher, IRunner {
 

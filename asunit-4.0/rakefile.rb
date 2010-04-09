@@ -43,7 +43,7 @@ def configure_test_task(t)
   t.debug = true
   t.static_link_runtime_shared_libraries = true
   t.keep_generated_actionscript = true
-  t.use_fcsh = true
+  #t.use_fcsh = true
   apply_as3_meta_data_args(t)
 end
 

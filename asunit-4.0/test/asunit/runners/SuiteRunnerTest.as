@@ -21,7 +21,7 @@ package asunit.runners {
 
         public function testRunTriggersCompleteEvent():void {
             suiteRunner.addEventListener(Event.COMPLETE, async.add(checkResultWasNotSuccessful));
-            suiteRunner.run(DoubleFailSuite, runnerResult);
+            suiteRunner.run(DoubleFailSuite);
         }
         
         private function checkResultWasNotSuccessful(event:Event):void {
@@ -31,7 +31,7 @@ package asunit.runners {
         [Test]
         public function testCanHandATestToSuiteRunner():void {
             suiteRunner.addEventListener(Event.COMPLETE, async.add());
-            suiteRunner.run(InjectionVerification, runnerResult);
+            suiteRunner.run(InjectionVerification);
             assertFalse(runnerResult.wasSuccessful);
         }
     }

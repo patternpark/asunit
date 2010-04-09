@@ -17,13 +17,16 @@ package asunit.runners {
 
     import p2.reflect.Reflection;
     import p2.reflect.ReflectionMetaData;
+    import asunit.framework.CallbackBridge;
 
     public class SuiteRunner implements IEventDispatcher, IRunner {
-        
+
+		[Inject]
+        public var bridge:CallbackBridge;
+		
         protected var dispatcher:IEventDispatcher;
         protected var testClasses:Iterator;
         protected var timer:Timer;
-        protected var result:IResult;
         protected var visualContext:DisplayObjectContainer;
         protected var testMethod:String;
 
@@ -34,15 +37,14 @@ package asunit.runners {
             dispatcher = new EventDispatcher();
         }
         
-        public function run(suite:Class, result:IResult, testMethod:String=null, visualContext:DisplayObjectContainer=null):void {
-            this.result = result;
+        public function run(suite:Class, testMethod:String=null, visualContext:DisplayObjectContainer=null):void {
             this.visualContext = visualContext;
             this.testMethod = testMethod;
-            runSuite(suite, result);
+            runSuite(suite);
         }
 
         public function shouldRunTest(testClass:Class):Boolean {
-            return result.shouldRunTest(testClass);
+            return bridge.shouldRunTest(testClass);
         }
 
         public function set factory(factory:IRunnerFactory):void {
@@ -53,8 +55,8 @@ package asunit.runners {
             return _factory ||= new RunnerFactory();
         }
 
-        protected function runSuite(suite:*, result:IResult):void {
-            testClasses = new SuiteIterator(suite, result);
+        protected function runSuite(suite:*):void {
+            testClasses = new SuiteIterator(suite, bridge);
             timer.addEventListener(TimerEvent.TIMER, runNextTest);
             
             runNextTest();
@@ -74,7 +76,7 @@ package asunit.runners {
             // [luke] TODO: There should be a clear search,
             // and clear failure when testMethod is provided,
             // but not found...
-            runner.run(testClass, result, testMethod, visualContext);
+            runner.run(testClass, testMethod, visualContext);
         }
         
         protected function onTestCompleted(e:Event):void {

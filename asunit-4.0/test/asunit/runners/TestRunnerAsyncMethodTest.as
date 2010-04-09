@@ -27,13 +27,13 @@ package asunit.runners {
         [Test]
         public function asyncShouldWork():void {
             runner.addEventListener(Event.COMPLETE, async.add(ensureRunnerHasNotYetFailed, 100));
-            runner.run(AsyncMethodSuccessTest, runnerResult);
+            runner.run(AsyncMethodSuccessTest);
         }
 
         [Test]
         public function runAsyncCallsAsyncDelegate():void {
             runner.addEventListener(Event.COMPLETE, async.add(ensureRunnerHasNotYetFailed, 10));
-            runner.run(AsyncDelegateCalledSynchronouslyTest, runnerResult);
+            runner.run(AsyncDelegateCalledSynchronouslyTest);
         }
         
         private function ensureRunnerHasNotYetFailed(e:Event):void {
@@ -43,7 +43,7 @@ package asunit.runners {
         [Test]
         public function shouldSeeErrorWhenAsyncFailure():void {
             runner.addEventListener(Event.COMPLETE, async.add(checkResultForIllegalOperationError, 200));
-            runner.run(AsyncMethodTooSlowTest, runnerResult);
+            runner.run(AsyncMethodTooSlowTest);
         }
         
         private function checkResultForIllegalOperationError(e:Event):void {

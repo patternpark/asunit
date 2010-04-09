@@ -12,10 +12,10 @@ package asunit.support {
         // worked.
         public static var runCalledCount:int;
 
-        override public function run(testClass:Class, result:IResult, testMethod:String=null, visualContext:DisplayObjectContainer=null):void {
+        override public function run(testClass:Class, testMethod:String=null, visualContext:DisplayObjectContainer=null):void {
             trace(">> Custom.run with: " + testClass);
             runCalledCount++;
-            super.run(testClass, result, testMethod, visualContext);
+            super.run(testClass, testMethod, visualContext);
         }
     }
 }

@@ -7,10 +7,11 @@ package asunit.runners {
     import asunit.support.LegacyTestCase;
 
     import flash.events.Event;
+    import asunit.framework.CallbackBridge;
 
     public class LegacyRunnerTest extends TestCase {
 
-        private var testResult:IResult;
+        private var testResult:CallbackBridge;
         private var testRunner:LegacyRunner;
 
         public function LegacyRunnerTest(methodName:String=null) {
@@ -20,7 +21,7 @@ package asunit.runners {
         override protected function setUp():void {
             super.setUp();
             LegacyTestCase.callCount = 0;
-            testResult = new Result();
+            testResult = new CallbackBridge();
             testRunner = new LegacyRunner();
         }
 
@@ -36,8 +37,8 @@ package asunit.runners {
                 assertEquals(2, testResult.runCount);
             };
             testRunner.addEventListener(Event.COMPLETE, addAsync(handler));
-            testRunner.run(LegacyTestCase, testResult);
+			testRunner.bridge = testResult;
+            testRunner.run(LegacyTestCase);
         }
     }
 }
-

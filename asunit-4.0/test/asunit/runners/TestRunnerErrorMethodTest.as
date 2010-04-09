@@ -39,7 +39,7 @@ package asunit.runners {
 		
 		public function test_run_with_errors():void {
 			runner.addEventListener(Event.COMPLETE, addAsync(check_Result_has_one_error, 100));
-			runner.run(ErrorInMethod, runnerResult);
+			runner.run(ErrorInMethod);
 		}
 		
 		private function check_Result_has_one_error(e:Event):void {

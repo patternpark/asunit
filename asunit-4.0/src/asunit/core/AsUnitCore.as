@@ -12,34 +12,35 @@ package asunit.core {
     import flash.events.Event;
     import flash.events.EventDispatcher;
     import flash.events.IEventDispatcher;
+    import asunit.framework.InjectionDelegate;
+    import asunit.framework.CallbackBridge;
 	
 	public class AsUnitCore implements IEventDispatcher {
 
+		[Inject]
+        public var defaultBridge:CallbackBridge;
+
+		protected var bridgeInjector:InjectionDelegate;
         protected var dispatcher:IEventDispatcher;
-        protected var observers:Array;
         protected var legacyRunnerReference:LegacyRunner;
-        protected var result:IResult;
+        protected var observers:Array;
         protected var runner:IRunner;
         protected var _visualContext:DisplayObjectContainer;
 
         public function AsUnitCore() {
             super();
+			initializeBridgeInjector();
             initializeDispatcher();
-            initializeResult();
             initializeObservers();
             initialize();
         }
 
+		protected function initializeBridgeInjector():void {
+			bridgeInjector = new InjectionDelegate();
+		}
+		
         protected function initializeDispatcher():void {
             dispatcher = new EventDispatcher();
-        }
-
-        /**
-         * Template method for subclasses to override
-         * and change the Result instance.
-         */
-        protected function initializeResult():void {
-            result = new Result();
         }
 
         /**
@@ -83,8 +84,7 @@ package asunit.core {
 			//TODO: look for injection points on the observer. 
 			//If we don't have a bridge of the type requested, instantiate one store it for future use. ( Dictionary of bridges with a key of their constructor )
 			//The bridge requested will then be injected into the observer.
-			
-            result.addObserver(observer);
+			bridgeInjector.updateInjectionPoints(observer);
         }
 
         /**
@@ -116,21 +116,25 @@ package asunit.core {
          * while test-driving their development.
          */
 		public function start(testOrSuite:Class, testMethodName:String=null, visualContext:DisplayObjectContainer=null):void {
+
+			// Will instantiate a new CallbackBridge:
+			bridgeInjector.updateInjectionPoints(this);
+			
             // Must use the accessor, not the _ value:
             if(visualContext) this.visualContext = visualContext;
 
             var factory:RunnerFactory = new RunnerFactory();
+			factory.injector = bridgeInjector;
             runner = factory.runnerFor(testOrSuite);
             
 			runner.addEventListener(Event.COMPLETE, runCompleteHandler);
-			result.onRunStarted();
-			//Can remove result from run signature because we will inject bridges instead!!! FTW
-		    runner.run(testOrSuite, result, testMethodName, this.visualContext);
+			defaultBridge.onRunStarted();
+		    runner.run(testOrSuite, testMethodName, this.visualContext);
         }
 
         private function runCompleteHandler(event:Event):void {
 			runner.removeEventListener(Event.COMPLETE, onRunCompleted);
-			result.onRunCompleted(result);
+			defaultBridge.onRunCompleted(defaultBridge);
             onRunCompleted();
             dispatchEvent(event);
         }
@@ -168,4 +172,3 @@ package asunit.core {
         // END: Implement the IEvent Dispatcher Interface:
 	}
 }
-

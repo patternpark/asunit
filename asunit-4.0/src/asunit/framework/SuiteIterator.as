@@ -12,16 +12,17 @@ package asunit.framework {
 		
         protected var index:int;
         protected var list:Array;
+
+		[Inject]
+		public var bridge:CallbackBridge;
 				
-		public function SuiteIterator(Suite:Class, result:IResult=null) {
-			list = getTestClasses(Suite, result);
+		public function SuiteIterator(Suite:Class, bridge:CallbackBridge=null) {
+			list = getTestClasses(Suite, bridge);
 		}
 		
-        private function getTestClasses(Suite:Class, result:IResult=null):Array {
-            // Careful - this behavior caused some headaches
-            // when I was getting a null result (it was from the recursion below)
-            if(result == null) result = new Result();
-
+        private function getTestClasses(Suite:Class, bridge:CallbackBridge=null):Array {
+			if(bridge == null) bridge = new CallbackBridge();
+			
             var reflection:Reflection = Reflection.create(Suite);
 
             if(!isSuite(reflection) && isTest(reflection)) {
@@ -34,9 +35,9 @@ package asunit.framework {
             for each(variable in reflection.variables) {
                 TestConstructor = Class(getDefinitionByName(variable.type));
                 if(isSuite(Reflection.create(TestConstructor))) {
-                    response = response.concat( getTestClasses(TestConstructor, result) );
+                    response = response.concat( getTestClasses(TestConstructor) );
                 }
-                else if(result.shouldRunTest(TestConstructor)) {
+                else if(bridge.shouldRunTest(TestConstructor)) {
                     response.push(TestConstructor);
                 }
             }

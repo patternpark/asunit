@@ -59,7 +59,7 @@ package asunit.runners {
         [Test]
         public function shouldRunMethodsAlphabetically():void {
             runner.addEventListener(Event.COMPLETE, async.add(checkMethodsCalledAfterRunningTestInstance, 500));
-            runner.run(test, runnerResult);
+            runner.run(test);
         }
         
         private function checkMethodsCalledAfterRunningTestInstance(e:Event):void {
@@ -95,7 +95,7 @@ package asunit.runners {
         [Test]
         public function runShouldTriggerResultEvent():void {
             runner.addEventListener(Event.COMPLETE, async.add(checkResultWasNotSuccessful, 500));
-            runner.run(test, runnerResult);
+            runner.run(test);
         }
         
         private function checkResultWasNotSuccessful(e:Event):void {
@@ -115,7 +115,7 @@ package asunit.runners {
             runner.addEventListener(Event.COMPLETE, delegate);
             
             var testMethodName:String = 'stage_is_null_by_default';
-            runner.runMethodByName(test, runnerResult, testMethodName);
+            runner.runMethodByName(test, testMethodName);
         }
 
         private function checkMethodsCalledAfterRunningTestMethodByName(e:Event):void {
@@ -144,13 +144,13 @@ package asunit.runners {
         // and outputing any failures to the message...
         [Test]
         public function shouldInjectTypes():void {
-            runner.run(InjectionVerification, runnerResult, null, context);
+            runner.run(InjectionVerification, null, context);
             assertFalse("Should not have encountered failures: " + runnerResult.failures.join("\n\n"), runnerResult.failureEncountered);
         }
 
         [Test]
         public function shouldInjectWithUnknownAttribute():void {
-            runner.run(InjectionFailure, runnerResult);
+            runner.run(InjectionFailure);
             var warnings:Array = runnerResult.warnings;
             assertEquals(1, warnings.length);
         }
@@ -159,13 +159,13 @@ package asunit.runners {
         public function shouldInjectAsyncTimeout():void {
             var async:IAsync = runner.async;
             assertEquals(Async.DEFAULT_TIMEOUT, async.timeout);
-            runner.run(InjectTimeoutOnAsync, runnerResult);
+            runner.run(InjectTimeoutOnAsync);
             assertEquals(5, async.timeout);
         }
 
         [Test]
         public function annotationsOnSuperClassShouldBeRespected():void {
-            runner.run(AnnotatedSubClass, runnerResult);
+            runner.run(AnnotatedSubClass);
             assertFalse("Should not have failures: " + runnerResult.failures.join("\n\n"), runnerResult.failureEncountered);
         }
     }

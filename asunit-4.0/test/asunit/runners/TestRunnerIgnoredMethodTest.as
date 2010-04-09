@@ -33,7 +33,7 @@ package asunit.runners {
 
         public function testRunWithIgnoredMethod():void {
             runner.addEventListener(Event.COMPLETE, addAsync(checkResultHasOneIgnoredMethod, 100));
-            runner.run(ignoredTest, runnerResult);
+            runner.run(ignoredTest);
         }
         
         private function checkResultHasOneIgnoredMethod(e:Event):void {

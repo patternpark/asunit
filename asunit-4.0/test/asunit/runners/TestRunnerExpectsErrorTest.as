@@ -12,12 +12,6 @@ package asunit.runners {
 	public class TestRunnerExpectsErrorTest extends TestCase {
 
 		private var runner:TestRunner;
-//<<<<<<< HEAD
-		//private var runnerResult:Result;
-		//private var successTest:TestExpectsArgumentErrorAndThrowsIt;
-		//private var throwNothingTest:TestExpectsArgumentErrorButThrowsNothing;
-		//private var throwWrongErrorTest:TestExpectsArgumentErrorButThrowsWrongError;
-//=======
 		private var successTest:Class;
 		private var throwNothingTest:Class;
 		private var throwWrongErrorTest:Class;
@@ -28,14 +22,7 @@ package asunit.runners {
 		}
 
 		protected override function setUp():void {
-//<<<<<<< HEAD
             super.setUp();
-			//runner              = new TestRunner();
-			//runnerResult        = new Result();
-			//successTest         = new TestExpectsArgumentErrorAndThrowsIt();
-			//throwNothingTest    = new TestExpectsArgumentErrorButThrowsNothing();
-			//throwWrongErrorTest = new TestExpectsArgumentErrorButThrowsWrongError();
-//=======
 			runner = new TestRunner();
 			runnerResult = new Result();
 			successTest = TestExpectsArgumentErrorAndThrowsIt;
@@ -54,7 +41,7 @@ package asunit.runners {
 
 		public function test_method_expects_specific_error_and_throws_it_yields_successful_test_result():void {
 			runner.addEventListener(Event.COMPLETE, addAsync(check_Result_has_no_errors, 100));
-			runner.run(successTest, runnerResult);
+			runner.run(successTest);
 		}
 		
 		private function check_Result_has_no_errors(e:Event):void {
@@ -64,7 +51,7 @@ package asunit.runners {
 		
 		public function test_method_expects_specific_error_but_nothing_thrown_yields_assertion_failure():void {
 			runner.addEventListener(Event.COMPLETE, addAsync(check_Result_has_one_assertion_failure, 100));
-			runner.run(throwNothingTest, runnerResult);
+			runner.run(throwNothingTest);
 		}
 		
 		private function check_Result_has_one_assertion_failure(e:Event):void {
@@ -81,7 +68,7 @@ package asunit.runners {
 		
 		public function test_method_expects_specific_error_but_wrong_one_thrown_yields_assertion_failure():void {
 			runner.addEventListener(Event.COMPLETE, addAsync(check_Result_has_one_assertion_failure, 100));
-			runner.run(throwNothingTest, runnerResult);
+			runner.run(throwNothingTest);
 		}
 	}
 }

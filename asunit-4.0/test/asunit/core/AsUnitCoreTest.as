@@ -1,6 +1,7 @@
 package asunit.core {
     
     import asunit.asserts.*;
+    import asunit.framework.CallbackBridge;
     import asunit.framework.IAsync;
     import asunit.framework.IResult;
     import asunit.framework.Result;
@@ -63,8 +64,8 @@ package asunit.core {
         }
 
         private function verifyRunWithOnASuite(Suite:Class, testCaseCount:int, testMethodCount:int):void {
-            var result:IResult = new Result();
-            core.addObserver(result);
+            var result:CallbackBridge = new CallbackBridge();
+			core.defaultBridge = result;
 
             var handler:Function = function(event:Event):void {
                 var message:String = "CustomRunner.run was NOT called with correct count";
@@ -96,4 +97,3 @@ package asunit.core {
         }
     }
 }
-

@@ -1,6 +1,6 @@
 package asunit.framework {
     
-    public class CallbackBridge implements MessageBridge, IRunListener, IResult {
+    public class CallbackBridge implements IResult {
 	
         private var listeners:Array;
 

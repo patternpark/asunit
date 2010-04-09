@@ -32,12 +32,24 @@ package asunit.framework {
          * we use for all TestSuites
          */
         public var DefaultSuiteRunner:Class;
-
+		
         public function RunnerFactory() {
             DefaultSuiteRunner = DEFAULT_SUITE_RUNNER;
             DefaultTestRunner = DEFAULT_TEST_RUNNER;
         }
-
+		
+		private var _injector:InjectionDelegate;
+		
+		public function get injector():InjectionDelegate
+		{
+			return _injector ||= new InjectionDelegate();
+		}
+		
+		public function set injector(value:InjectionDelegate):void
+		{
+			_injector = value;
+		}
+		
         /**
          * runnerFor is the primary inerface to the RunnerFactory
          */
@@ -78,13 +90,13 @@ package asunit.framework {
             }
             // Always return the default Suite Runner:
             var runner:IRunner = new DefaultSuiteRunner();
-            runner.factory = this;
+            configureRunner(runner);
             return runner;
         }
 
         protected function getLegacyRunnerForTest(reflection:Reflection):IRunner {
             var runner:IRunner = new LegacyRunner();
-            runner.factory = this;
+            configureRunner(runner);
             return runner;
         }
 
@@ -94,7 +106,7 @@ package asunit.framework {
             var Constructor:Class = getRunWithConstructor(reflection) || DefaultTestRunner;
 			//FIXME: This will choke if given a class with constructor arguments!
             var runner:IRunner = new Constructor();
-            runner.factory = this;
+            configureRunner(runner);
             return runner;
         }
 
@@ -138,6 +150,15 @@ package asunit.framework {
 	        }
 	        return null;
 	    }
+	
+		/**
+		 * @private
+		 */
+		protected function configureRunner(runner:IRunner):void
+		{
+			runner.factory = this;
+			injector.updateInjectionPoints(runner);
+		}
 
 		public static function isSuite(reflection:Reflection):Boolean {
             return (reflection.getMetaDataByName('Suite') != null);

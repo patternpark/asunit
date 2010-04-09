@@ -53,7 +53,6 @@ package asunit.runners {
         protected var methodPassed:Boolean = true;
         protected var methodTimeoutID:Number;
         protected var methodsToRun:TestIterator;
-        protected var result:IResult;
         protected var startTime:Number;
         protected var testMethodNameReceived:Boolean;
         protected var timer:Timer;
@@ -69,12 +68,12 @@ package asunit.runners {
             visualInstances = [];
         }
 
-        public function run(testOrSuite:Class, result:IResult, methodName:String=null, visualContext:DisplayObjectContainer=null):void {
-            runMethodByName(testOrSuite, result, methodName, visualContext);
+        public function run(testOrSuite:Class, methodName:String=null, visualContext:DisplayObjectContainer=null):void {
+            runMethodByName(testOrSuite, methodName, visualContext);
         }
 
         public function shouldRunTest(testClass:Class):Boolean {
-            return result.shouldRunTest(testClass);
+            return bridge.shouldRunTest(testClass);
         }
 
         // This class doesn't really use the runner factory,
@@ -88,9 +87,8 @@ package asunit.runners {
             return _factory;
         }
 
-        public function runMethodByName(test:Class, result:IResult, methodName:String=null, visualContext:DisplayObjectContainer=null):void {
+        public function runMethodByName(test:Class, methodName:String=null, visualContext:DisplayObjectContainer=null):void {
             currentTestReflection  = Reflection.create(test);
-            this.result            = result;
             this.visualContext     = visualContext;
             currentMethod          = null;
             testMethodNameReceived = (methodName != null);
@@ -109,7 +107,7 @@ package asunit.runners {
             async.addEventListener(TimeoutCommandEvent.TIMED_OUT,  onAsyncMethodTimedOut);
             
             startTime = getTimer();
-            result.onTestStarted(currentTest);
+            bridge.onTestStarted(currentTest);
             
             methodsToRun = createTestIterator(currentTest, methodName);
 
@@ -151,7 +149,7 @@ package asunit.runners {
             methodPassed = true; // innocent until proven guilty by recordFailure()
             
             if (currentMethod.ignore) {
-                result.onTestIgnored(currentMethod);
+                bridge.onTestIgnored(currentMethod);
                 onMethodCompleted();
                 return;
             }
@@ -193,7 +191,7 @@ package asunit.runners {
             async.cancelPending();
             
             if (currentMethod.isTest && methodPassed && !currentMethod.ignore) {
-                result.onTestSuccess(new TestSuccess(currentTest, currentMethod.name));
+                bridge.onTestSuccess(new TestSuccess(currentTest, currentMethod.name));
             }
 
             // Calling synchronously is faster but keeps adding to the call stack.
@@ -223,7 +221,7 @@ package asunit.runners {
         
         protected function recordFailure(error:Error):void {
             methodPassed = false;
-            result.onTestFailure(new TestFailure(currentTest, currentMethod.name, error));
+            bridge.onTestFailure(new TestFailure(currentTest, currentMethod.name, error));
         }
 
         protected function onAsyncMethodCompleted(event:Event = null):void {
@@ -237,7 +235,7 @@ package asunit.runners {
             async.removeEventListener(TimeoutCommandEvent.TIMED_OUT,   onAsyncMethodTimedOut);
             async.cancelPending();
             
-            result.onTestCompleted(currentTest);
+            bridge.onTestCompleted(currentTest);
             
             dispatchEvent(new Event(Event.COMPLETE));
         }
@@ -361,7 +359,7 @@ package asunit.runners {
         }
 
         protected function warn(message:String, method:Method=null):void {
-            result.onWarning(new TestWarning(message, method));
+            bridge.onWarning(new TestWarning(message, method));
         }
 
         protected function getClassReferenceFromReflection(reflection:Reflection):Class {

@@ -15,6 +15,7 @@ package asunit.printers {
     import flash.text.TextFormat;
     import flash.utils.getQualifiedClassName;
     import flash.utils.getTimer;
+    import asunit.framework.CallbackBridge;
 
     public class TextPrinter extends Sprite implements IRunListener {
         public static var LOCAL_PATH_PATTERN:RegExp = /([A-Z]:\\[^\/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^\/:\*\?<>\|]+\.\w{2,6})/g;
@@ -44,6 +45,12 @@ package asunit.printers {
         private var successes:Array;
         private var testTimes:Array;
         private var warnings:Array;
+
+		[Inject]
+		public function set bridge(value:CallbackBridge):void
+		{
+			value.addObserver(this);
+		}
 
         public function TextPrinter() {
             initialize();
@@ -289,4 +296,3 @@ package asunit.printers {
         }
     }
 }
-

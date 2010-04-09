@@ -80,6 +80,10 @@ package asunit.core {
          *
          */
         public function addObserver(observer:TestObserver):void {
+			//TODO: look for injection points on the observer. 
+			//If we don't have a bridge of the type requested, instantiate one store it for future use. ( Dictionary of bridges with a key of their constructor )
+			//The bridge requested will then be injected into the observer.
+			
             result.addObserver(observer);
         }
 
@@ -120,6 +124,7 @@ package asunit.core {
             
 			runner.addEventListener(Event.COMPLETE, runCompleteHandler);
 			result.onRunStarted();
+			//Can remove result from run signature because we will inject bridges instead!!! FTW
 		    runner.run(testOrSuite, result, testMethodName, this.visualContext);
         }
 

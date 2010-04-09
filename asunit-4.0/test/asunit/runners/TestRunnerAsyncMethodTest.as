@@ -35,7 +35,7 @@ package asunit.runners {
         }
         
         private function ensureRunnerHasNotYetFailed(e:Event):void {
-            assertFalse('runner result has not failed', bridge.failureEncountered);
+            assertFalse('runner result has not failed', runner.bridge.failureEncountered);
         }
         
         [Test]

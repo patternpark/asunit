@@ -79,6 +79,7 @@ package asunit.core {
             core.start(Suite);
         }
 
+        [Ignore(description="firerunner")]
         [Test]
         public function shouldAssignRunWithUsingOuterSuite():void {
             // This will work b/c the RunWith is on the outer Suite:

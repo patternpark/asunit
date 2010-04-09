@@ -11,7 +11,6 @@ package asunit.runners {
 
         private var ignoredTest:Class;
         private var runner:TestRunner;
-        private var runnerResult:Result;
         
         public function TestRunnerIgnoredMethodTest(testMethod:String = null) {
             super(testMethod);
@@ -21,14 +20,12 @@ package asunit.runners {
             super.setUp();
             ignoredTest  = IgnoredMethod;
             runner       = new TestRunner();
-            runnerResult = new Result();
         }
 
         protected override function tearDown():void {
             super.tearDown();
             ignoredTest  = null;
             runner       = null;
-            runnerResult = null;
         }
 
         public function testRunWithIgnoredMethod():void {
@@ -37,8 +34,8 @@ package asunit.runners {
         }
         
         private function checkResultHasOneIgnoredMethod(e:Event):void {
-            assertFalse('runnerResult.failureEncountered', runnerResult.failureEncountered);
-            assertEquals('one ignored test in result', 1, runnerResult.ignoredTests.length);
+            assertFalse('runnerResult.failureEncountered', runner.bridge.failureEncountered);
+            assertEquals('one ignored test in result', 1, runner.bridge.ignoredTests.length);
         }
     }
 }

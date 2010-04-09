@@ -1,7 +1,7 @@
 require 'sprout'
 sprout 'as3'
 
-ASUNIT_VERSION = '4.1'
+ASUNIT_VERSION = '4.1.2'
 
 test_input = "AsUnitRunner"
 
@@ -73,8 +73,11 @@ end
 
 desc "Compile the Flex 4 test harness"
 mxmlc "bin/AIR2#{test_input}.swf" do |t|
-  t.input = "test/AIR2Runner.mxml"
+  t.input = "air/AIR2Runner.mxml"
   t.gem_name = 'sprout-flex4sdk-tool'
+  t.source_path << 'air'
+  t.library_path << 'lib/airglobal.swc'
+  t.library_path << 'lib/airframework.swc'
   configure_test_task t
 end
 
@@ -82,15 +85,26 @@ end
 # Launch the selected Test Harness
 
 desc "Compile and run the test harness"
-flashplayer :run_test => "bin/#{test_input}.swf"
+flashplayer :test_as3 => "bin/#{test_input}.swf"
 
 desc "Compile and run the Flex 3 Harness"
-flashplayer :run_flex3_test => "bin/Flex3#{test_input}.swf"
+flashplayer :text_flex3 => "bin/Flex3#{test_input}.swf"
 
 desc "Compile and run the Flex 4 Harness"
-flashplayer :run_flex4_test => "bin/Flex4#{test_input}.swf"
+flashplayer :test_flex4 => "bin/Flex4#{test_input}.swf"
 
-task :test => :run_test
+desc "Compile and run the AIR 2 Harness"
+adl :test_air2 => "bin/AIR2#{test_input}.swf" do |t|
+  t.gem_name = "sprout-flex4sdk-tool"
+  t.root_directory = Dir.pwd
+  t.application_descriptor = "air/AIR2RunnerDescriptor.xml"
+end
+
+desc "Compile and run the ActionScript 3 test harness"
+task :test => :test_as3
+
+desc "Compile and run test harnesses for all supported environments"
+task :test_all => [:test_as3, :test_flex3, :test_flex4, :test_air2]
 
 ##########################################
 # Compile the SWC
@@ -104,33 +118,11 @@ def configure_swc_task(t)
   apply_as3_meta_data_args(t)
 end
 
-compc "bin/asunit#{ASUNIT_VERSION}-alpha.swc" do |t|
+compc "bin/AsUnit-#{ASUNIT_VERSION}.swc" do |t|
   configure_swc_task t
 end
 
-# TODO: The :swc task should also call
-# this task to build the AIR-support
-# version of the SWC
-# Had trouble creating a SWC with 
-# AIR dependencies without including
-# a bunch of AIR-only classes.
-compc "bin/asunit#{ASUNIT_VERSION}-AIR-alpha.swc" do |t|
-  configure_swc_task t
-
-  t.include_sources << 'air'
-  t.source_path << 'air'
-  
-  # Include air swcs to avoid failures
-  # on AirRunner:
-  t.include_libraries << 'lib/airglobal.swc'
-  t.include_libraries << 'lib/airframework.swc'
-
-  apply_as3_meta_data_args(t)
-end
-
-desc "Compile the AsUnit swc"
-#task :swc => ["bin/asunit#{ASUNIT_VERSION}-alpha.swc", "bin/asunit#{ASUNIT_VERSION}-AIR-alpha.swc"]
-task :swc => "bin/asunit#{ASUNIT_VERSION}-alpha.swc"
+task :swc => "bin/AsUnit-#{ASUNIT_VERSION}.swc"
 
 ##########################################
 # Generate documentation
@@ -142,11 +134,6 @@ asdoc 'doc' do |t|
   t.doc_classes << 'AsUnit'
   t.library_path << 'lib/Reflection.swc'
 
-  # Include air swcs to avoid failures
-  # on AirRunner:
-  t.library_path << 'lib/airglobal.swc'
-  t.library_path << 'lib/airframework.swc'
-
   # Not on asdoc?
   #t.static_link_runtime_shared_libraries = true
 end
@@ -154,7 +141,7 @@ end
 ##########################################
 # Package framework ZIPs
 
-archive = "bin/AsUnit#{ASUNIT_VERSION}.zip"
+archive = "bin/AsUnit-#{ASUNIT_VERSION}.zip"
 
 # Create the dist package so that we can 
 # distribute src and examples packages.
@@ -162,11 +149,10 @@ file 'dist' => :swc do
   FileUtils.mkdir_p 'dist'
   FileUtils.mkdir_p 'dist/libs'
   
-  FileUtils.cp_r 'bin/asunit4-alpha.swc', 'dist/libs/'
+  FileUtils.cp_r 'bin/AsUnit-#{ASUNIT_VERSION}.swc', 'dist/libs/'
   FileUtils.cp_r 'src', 'dist/src'
   FileUtils.cp_r 'lib/as3reflection/p2', 'dist/src'
   FileUtils.cp_r 'examples', 'dist/examples'
-  FileUtils.cp_r 'air/asunit/textui/AirRunner.as', 'dist/src/asunit/textui/AirRunner.as'
 end
 
 # Remove the dist package
@@ -182,7 +168,7 @@ CLEAN.add 'bin/*.zip'
 CLEAN.add 'dist'
 
 desc "Create zip archives"
-task :zip => [:clean, 'dist', archive, :remove_dist]
+task :zip => [:clean, :test_all, 'dist', archive, :remove_dist]
 
 ##########################################
 # Set up task wrappers

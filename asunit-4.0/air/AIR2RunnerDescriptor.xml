@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<application xmlns="http://ns.adobe.com/air/application/1.5"> 
+    <id>AsUnitAIRRunner</id> 
+    <version>2.0</version> 
+    <filename>AsUnitAIRRunner</filename> 
+    <name>AsUnit AIR Runner</name> 
+     <description> 
+        <text xml:lang="en">AsUnit AIR Runner</text>
+    </description> 
+    <copyright>Copyright (c) 2010 Example Co.</copyright> 
+    <initialWindow> 
+        <title>AsUnit</title> 
+        <content> 
+            bin/AIR2AsUnitRunner.swf
+        </content> 
+        <systemChrome>standard</systemChrome> 
+        <transparent>false</transparent> 
+        <visible>true</visible> 
+        <minimizable>true</minimizable> 
+        <maximizable>true</maximizable> 
+        <resizable>true</resizable> 
+        <width>900</width> 
+        <height>500</height> 
+        <minSize>640 480</minSize> 
+        <maxSize>1280 960</maxSize> 
+    </initialWindow>  
+    <installFolder>AsUnit/AIR2Runner</installFolder> 
+    <programMenuFolder>AsUnit/AIR2Runner</programMenuFolder> 
+    <icon> 
+        <image16x16>icons/smallIcon.png</image16x16> 
+        <image32x32>icons/mediumIcon.png</image32x32> 
+        <image48x48>icons/bigIcon.png</image48x48> 
+        <image128x128>icons/biggestIcon.png</image128x128>  
+    </icon> 
+    <customUpdateUI>true</customUpdateUI> 
+    <allowBrowserInvocation>false</allowBrowserInvocation> 
+</application>
+

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute" 
+    backgroundColor="#333333"
+    backgroundImage=""
+	creationComplete="creationCompleteHandler(event)"
+	>
+	<mx:Script>
+		<![CDATA[
+            import asunit.core.TextCore;
+
+            private var core:TextCore;
+			
+			private function creationCompleteHandler(event:Event):void {
+                core = new TextCore();
+                core.start(AllTests, null, visualContext);
+			}
+		]]>
+	</mx:Script>
+    <mx:UIComponent id="visualContext" width="100%" height="100%" />
+</mx:WindowedApplication>

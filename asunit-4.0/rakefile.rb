@@ -88,7 +88,7 @@ desc "Compile and run the test harness"
 flashplayer :test_as3 => "bin/#{test_input}.swf"
 
 desc "Compile and run the Flex 3 Harness"
-flashplayer :text_flex3 => "bin/Flex3#{test_input}.swf"
+flashplayer :test_flex3 => "bin/Flex3#{test_input}.swf"
 
 desc "Compile and run the Flex 4 Harness"
 flashplayer :test_flex4 => "bin/Flex4#{test_input}.swf"

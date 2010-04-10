@@ -149,7 +149,7 @@ file 'dist' => :swc do
   FileUtils.mkdir_p 'dist'
   FileUtils.mkdir_p 'dist/libs'
   
-  FileUtils.cp_r 'bin/AsUnit-#{ASUNIT_VERSION}.swc', 'dist/libs/'
+  FileUtils.cp_r "bin/AsUnit-#{ASUNIT_VERSION}.swc", 'dist/libs/'
   FileUtils.cp_r 'src', 'dist/src'
   FileUtils.cp_r 'lib/as3reflection/p2', 'dist/src'
   FileUtils.cp_r 'examples', 'dist/examples'
@@ -168,7 +168,33 @@ CLEAN.add 'bin/*.zip'
 CLEAN.add 'dist'
 
 desc "Create zip archives"
-task :zip => [:clean, :test_all, 'dist', archive, :remove_dist]
+task :zip => ['dist', archive, :remove_dist]
+#task :zip => [:clean, :test_all, 'dist', archive, :remove_dist]
+
+
+##########################################
+# Create a Sprout library gem
+
+gem_wrap :asunit4 => :zip do |t|
+  t.version       = ASUNIT_VERSION
+  t.summary       = "AsUnit3 is an ActionScript unit test framework for AIR, Flex 2/3/4 and ActionScript 3 projects"
+  t.author        = "Luke Bayes and Ali Mills"
+  t.email         = "projectsprouts@googlegroups.com"
+  t.homepage      = "http://asunit.org"
+  t.sprout_spec   =<<EOF
+- !ruby/object:Sprout::RemoteFileTarget 
+  platform: universal
+  filename: AsUnit.zip
+  library_path: asunit3
+  archive_type: zip
+  url: http://github.com/lukebayes/asunit/zipball/4.0.3
+  md5: 243c963f4d7191081ae200600aa698cb
+  archive_path: 'lukebayes-asunit-e2af845/as3/src'
+EOF
+end
+
+desc "Create a Sprout library gem"
+task :gem => :asunit4
 
 ##########################################
 # Set up task wrappers

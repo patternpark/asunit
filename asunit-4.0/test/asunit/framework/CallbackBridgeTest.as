@@ -2,17 +2,19 @@ package asunit.framework {
 
     import asunit.asserts.*;
     import asunit.support.FakeObserver;
+    import asunit.framework.Result;
+    import asunit.framework.CallbackBridge;
 
 	public class CallbackBridgeTest {
 
-        [Inject]
-        public var bridge:CallbackBridge;
+        private var bridge:CallbackBridge;
 
         private var observer:FakeObserver;
 
         [Before]
         public function createObserver():void {
             observer = new FakeObserver();
+			bridge = new CallbackBridge();
             bridge.addListener(observer);
         }
 
@@ -69,4 +71,3 @@ package asunit.framework {
 		
 	}
 }
-

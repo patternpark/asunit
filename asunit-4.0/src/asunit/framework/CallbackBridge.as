@@ -3,8 +3,9 @@ package asunit.framework {
     public class CallbackBridge implements IResult {
 	
         private var listeners:Array;
-
-		protected var model:IResult;
+		
+		[Inject]
+	 	public var model:Result;
 
         public function CallbackBridge() {
 			initialize();

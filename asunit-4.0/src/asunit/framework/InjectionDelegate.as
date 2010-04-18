@@ -13,7 +13,8 @@ package asunit.framework {
 		//---------------------------------------
 		// CLASS CONSTANTS
 		//---------------------------------------
-
+		
+		public static const THROW_ERROR_ON_MISSING_INJECTION_POINT:Boolean = true;
 		public static const INJECT_ANNOTATION:String = "Inject";
 		
 		private var entities:Dictionary;
@@ -26,12 +27,14 @@ package asunit.framework {
 		/**
 		 * @param addict * an entity with at least one [Inject] annotation
 		*/
-		public function updateInjectionPoints(addict:*):void {
+		public function updateInjectionPoints(addict:*, throwErrorOnMissingInjection:Boolean=false):void {
 			var reflection:Reflection = Reflection.create(addict);
 			var members:Array = reflection.getMembersByMetaData(INJECT_ANNOTATION);
 			var addictName:String = reflection.name
-			validateMembers(members, addictName);
-			
+			if (throwErrorOnMissingInjection)
+			{
+				validateMembers(members, addictName);
+			}			
 			var reflectionVariable:ReflectionVariable;
 			var injectionPointFound:Boolean;
 			members.forEach(function(member:ReflectionMember, index:int, items:Array):void {
@@ -43,7 +46,7 @@ package asunit.framework {
 				}
 			});
 			
-			if (!injectionPointFound)
+			if (!injectionPointFound && throwErrorOnMissingInjection)
 			{
 				throw new UsageError("InjectionDelegate expected at least one [Inject] annotation on a variable or accessor on" + addictName);
 			}
@@ -56,8 +59,8 @@ package asunit.framework {
 		 * @return 
 		*/
 		private function updateInjectionPoint(addict:*, member:ReflectionVariable):void {
-			var instance:* = getInstanceFromTypeName(member.type);
 			//FIXME: This actually could be a getter. If someone has their head up their booty.
+			var instance:* = getInstanceFromTypeName(member.type);
 			addict[member.name] = instance;
 		}
 		
@@ -71,6 +74,7 @@ package asunit.framework {
 			{
 				//FIXME: This will choke if given a class with constructor arguments!
 				entities[clazz] = new clazz();
+				updateInjectionPoints(entities[clazz]);
 			}
 
 			return entities[clazz];

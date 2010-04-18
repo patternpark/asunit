@@ -9,6 +9,7 @@ package asunit.framework {
 
     import p2.reflect.Reflection;
     import p2.reflect.ReflectionMetaData;
+    import asunit.framework.InjectionDelegate;
 
 	public class RunnerFactory implements IRunnerFactory {
 
@@ -36,7 +37,7 @@ package asunit.framework {
         public function RunnerFactory() {
             DefaultSuiteRunner = DEFAULT_SUITE_RUNNER;
             DefaultTestRunner  = DEFAULT_TEST_RUNNER;
-            injector           = new InjectionDelegate();
+            injector = new InjectionDelegate();
         }
 		
 		private var _injector:InjectionDelegate;
@@ -158,7 +159,7 @@ package asunit.framework {
 		protected function configureRunner(runner:IRunner):void
 		{
 			runner.factory = this;
-			injector.updateInjectionPoints(runner);
+			injector.updateInjectionPoints(runner, InjectionDelegate.THROW_ERROR_ON_MISSING_INJECTION_POINT);
 		}
 
 		public static function isSuite(reflection:Reflection):Boolean {
@@ -176,4 +177,3 @@ package asunit.framework {
         }
 	}
 }
-

@@ -86,7 +86,7 @@ package asunit.core {
          *
          */
         public function addObserver(observer:TestObserver):void {
-			bridgeInjector.updateInjectionPoints(observer);
+			bridgeInjector.updateInjectionPoints(observer, InjectionDelegate.THROW_ERROR_ON_MISSING_INJECTION_POINT);
         }
 
         /**
@@ -123,8 +123,7 @@ package asunit.core {
             // and set it on this instance - but share it
             // with any Runners or Observers that also
             // use the CallbackBridge.
-			bridgeInjector.updateInjectionPoints(this);
-			
+			bridgeInjector.updateInjectionPoints(this, InjectionDelegate.THROW_ERROR_ON_MISSING_INJECTION_POINT);
             // Must use the accessor, not the _ value:
             if(visualContext) this.visualContext = visualContext;
 

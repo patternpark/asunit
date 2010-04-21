@@ -10,7 +10,7 @@ package asunit.framework {
 	public class NestedSuiteIteratorTest extends TestCase {
 		private var iterator:SuiteIterator;
 		private var suiteClass:Class;
-
+		
 		public function NestedSuiteIteratorTest(testMethod:String = null) {
 			super(testMethod);
 		}

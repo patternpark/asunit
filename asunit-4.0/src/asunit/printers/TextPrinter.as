@@ -59,12 +59,23 @@ package asunit.printers {
          * you can decide to manage notifications however you wish.
          *
          */
+		private var _bridge:CallbackBridge;
+		
 		[Inject]
 		public function set bridge(value:CallbackBridge):void
 		{
-			value.addObserver(this);
+			if (value !== _bridge)
+			{
+				_bridge = value;
+				_bridge.addObserver(this);
+			}
 		}
 
+		public function get bridge():CallbackBridge
+		{
+			return _bridge;
+		}
+		
         public function TextPrinter() {
             initialize();
         }

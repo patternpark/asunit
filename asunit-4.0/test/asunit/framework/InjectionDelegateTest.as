@@ -35,11 +35,25 @@ package asunit.framework {
 		public function shouldThrowUsageErrorOnInvalidAddict():void
 		{
 			var invalidAddict:AddictWithNoInjections = new AddictWithNoInjections();
-			injector.updateInjectionPoints(invalidAddict);
+			injector.updateInjectionPoints(invalidAddict, InjectionDelegate.THROW_ERROR_ON_MISSING_INJECTION_POINT);
 		}
 		
 		[Test(expects="asunit.errors.UsageError")]
 		public function shouldThrowUsageErrorIfNoVariableInjectionsFound():void
+		{
+			var invalidAddict:AddictWithOnlyMethodInjection = new AddictWithOnlyMethodInjection();
+			injector.updateInjectionPoints(invalidAddict, InjectionDelegate.THROW_ERROR_ON_MISSING_INJECTION_POINT);
+		}
+		
+		[Test]
+		public function shouldNotThrowUsageErrorOnInvalidAddict():void
+		{
+			var invalidAddict:AddictWithNoInjections = new AddictWithNoInjections();
+			injector.updateInjectionPoints(invalidAddict);
+		}
+		
+		[Test]
+		public function shouldNotThrowUsageErrorIfNoVariableInjectionsFound():void
 		{
 			var invalidAddict:AddictWithOnlyMethodInjection = new AddictWithOnlyMethodInjection();
 			injector.updateInjectionPoints(invalidAddict);

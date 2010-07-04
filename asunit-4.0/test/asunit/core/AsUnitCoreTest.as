@@ -73,7 +73,7 @@ package asunit.core {
                 assertEquals("Total Test Count", testMethodCount, core.bridge.runCount);
             }
 
-            core.addEventListener(Event.COMPLETE, async.add(handler));
+            core.addEventListener(Event.COMPLETE, async.add(handler, 200));
             core.start(Suite);
         }
 

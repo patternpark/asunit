@@ -1,7 +1,8 @@
-require 'sprout'
-sprout 'as3'
+require 'bundler'
+Bundler.require 
 
-require File.dirname(__FILE__) + '/config/version'
+require 'rake/clean'
+require File.join(File.dirname(__FILE__), 'sprout', 'lib', 'asunit4')
 
 test_input = "AsUnitRunner"
 
@@ -37,7 +38,7 @@ end
 # Configure a Test Build:
 
 def configure_test_task(t)
-  t.default_size = '1000 600'
+  t.default_size = '1000,600'
   t.source_path << 'src'
   t.library_path << 'lib/Reflection.swc'
   t.debug = true
@@ -51,28 +52,28 @@ end
 desc "Compile the ActionScript test harness"
 mxmlc "bin/#{test_input}.swf" do |t|
   t.input = "test/AsUnitRunner.as"
-  t.gem_name = 'sprout-flex4sdk-tool'
+  t.pkg_name = 'flex4'
   configure_test_task t
 end
 
 desc "Compile the Flex 3 test harness"
 mxmlc "bin/Flex3#{test_input}.swf" do |t|
   t.input = "test/Flex3Runner.mxml"
-  t.gem_name = 'sprout-flex3sdk-tool'
+  t.pkg_name = 'flex3'
   configure_test_task t
 end
 
 desc "Compile the Flex 4 test harness"
 mxmlc "bin/Flex4#{test_input}.swf" do |t|
   t.input = "test/Flex4Runner.mxml"
-  t.gem_name = 'sprout-flex4sdk-tool'
+  t.pkg_name = 'flex4'
   configure_test_task t
 end
 
-desc "Compile the Flex 4 test harness"
+desc "Compile the AIR 2 test harness"
 mxmlc "bin/AIR2#{test_input}.swf" do |t|
   t.input = "air/AIR2Runner.mxml"
-  t.gem_name = 'sprout-flex4sdk-tool'
+  t.pkg_name = 'flex4'
   t.source_path << 'air'
   t.source_path << 'test'
   t.library_path << 'lib/airglobal.swc'
@@ -92,12 +93,17 @@ flashplayer :test_flex3 => "bin/Flex3#{test_input}.swf"
 desc "Compile and run the Flex 4 Harness"
 flashplayer :test_flex4 => "bin/Flex4#{test_input}.swf"
 
-desc "Compile and run the AIR 2 Harness"
-adl :test_air2 => "bin/AIR2#{test_input}.swf" do |t|
-  t.gem_name = "sprout-flex4sdk-tool"
-  t.root_directory = Dir.pwd
-  t.application_descriptor = "air/AIR2RunnerDescriptor.xml"
-end
+# TODO: Reactivate this once the new sprout harness
+# support adl / adt
+
+task :test_air2
+
+#desc "Compile and run the AIR 2 Harness"
+#adl :test_air2 => "bin/AIR2#{test_input}.swf" do |t|
+  #t.pkg_name = 'flex4'
+  #t.root_directory = Dir.pwd
+  #t.application_descriptor = "air/AIR2RunnerDescriptor.xml"
+#end
 
 desc "Compile and run the ActionScript 3 test harness"
 task :test => :test_as3
@@ -106,10 +112,24 @@ desc "Compile and run test harnesses for all supported environments"
 task :test_all => [:test_as3, :test_flex3, :test_flex4, :test_air2]
 
 ##########################################
+# Run the Sprout Ruby tests
+
+require 'rake/testtask'
+
+namespace :sprout do
+  desc "Run the Sprout Generator tests"
+  Rake::TestTask.new(:test) do |t|
+    t.libs << "test/unit"
+    t.test_files = FileList["sprout/test/unit/*_test.rb"]
+    t.verbose = true
+  end
+end
+
+##########################################
 # Compile the SWC
 
-def configure_swc_task(t)
-  t.gem_name = 'sprout-flex4sdk-tool'
+compc "bin/AsUnit-#{AsUnit::VERSION}.swc" do |t|
+  t.pkg_name = 'flex4'
   t.include_sources << 'src'
   t.source_path << 'src'
   t.library_path << 'lib/Reflection.swc'
@@ -117,25 +137,34 @@ def configure_swc_task(t)
   apply_as3_meta_data_args(t)
 end
 
-compc "bin/AsUnit-#{AsUnit::VERSION}.swc" do |t|
-  configure_swc_task t
+task :swc => "bin/AsUnit-#{AsUnit::VERSION}.swc"
+
+##########################################
+# Compile the Gem
+
+file "bin/asunit4-#{AsUnit::VERSION}.gem" do
+  sh "gem build asunit4.gemspec"
+  mv "asunit4-#{AsUnit::VERSION}.gem", "bin/"
 end
 
-task :swc => "bin/AsUnit-#{AsUnit::VERSION}.swc"
+CLEAN.add("bin/*.gem")
+
+desc "Build the rubygem"
+task :gem => [:clean, :swc, "bin/asunit4-#{AsUnit::VERSION}.gem"]
 
 ##########################################
 # Generate documentation
 
-desc "Generate documentation"
-asdoc 'doc' do |t|
-  t.appended_args = '-examples-path=examples'
-  t.source_path << 'src'
-  t.doc_classes << 'AsUnit'
-  t.library_path << 'lib/Reflection.swc'
+#desc "Generate documentation"
+#asdoc 'doc' do |t|
+  #t.appended_args = '-examples-path=examples'
+  #t.source_path << 'src'
+  #t.doc_classes << 'AsUnit'
+  #t.library_path << 'lib/Reflection.swc'
 
   # Not on asdoc?
   #t.static_link_runtime_shared_libraries = true
-end
+#end
 
 ##########################################
 # Package framework ZIPs
@@ -148,6 +177,8 @@ end
 
 CLEAN.add '*.gem'
 
+=begin
+# TODO: Add back when zip task is working
 archive = "AsUnit-#{AsUnit::VERSION}.zip"
 
 zip archive do |t|
@@ -158,6 +189,7 @@ CLEAN.add '*.zip'
 
 desc "Create zip archives"
 task :zip => [:clean, :test_all, archive]
+=end
 
 ##########################################
 # Set up task wrappers

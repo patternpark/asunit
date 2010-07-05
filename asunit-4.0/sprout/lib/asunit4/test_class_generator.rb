@@ -7,7 +7,7 @@ module AsUnit4
         template "#{test_class_name}.as", 'AsUnit4TestClass.as'
       end
 
-      generator :suite_class
+      generator :suite_class, {:input => 'AllTests.as'}
     end
 
   end

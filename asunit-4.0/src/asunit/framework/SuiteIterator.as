@@ -1,26 +1,22 @@
 package asunit.framework {
+	import asunit.util.Iterator;
 
-    import asunit.util.Iterator;
+	import p2.reflect.Reflection;
+	import p2.reflect.ReflectionVariable;
 
 	import flash.utils.getDefinitionByName;
-
-    import p2.reflect.Reflection;
-    import p2.reflect.ReflectionVariable;
-    import p2.reflect.ReflectionMetaData;
 
 	public class SuiteIterator implements Iterator {
 		
         protected var index:int;
         protected var list:Array;
 				
-		public function SuiteIterator(Suite:Class, bridge:CallbackBridge=null) {
-			list = getTestClasses(Suite, bridge);
+		public function SuiteIterator(Suite:Class) {
+			list = getTestClasses(Suite);
 		}
 		
-        private function getTestClasses(Suite:Class, bridge:CallbackBridge=null):Array {
-			if(bridge == null) bridge = new CallbackBridge();
-			
-            var reflection:Reflection = Reflection.create(Suite);
+        private function getTestClasses(Suite:Class):Array {
+           var reflection:Reflection = Reflection.create(Suite);
 
             if(!isSuite(reflection) && isTest(reflection)) {
                 return [Suite];
@@ -32,14 +28,22 @@ package asunit.framework {
             for each(variable in reflection.variables) {
                 TestConstructor = Class(getDefinitionByName(variable.type));
                 if(isSuite(Reflection.create(TestConstructor))) {
-                    response = response.concat( getTestClasses(TestConstructor, bridge) );
-                }
-                else if(bridge.shouldRunTest(TestConstructor)) {
-                    response.push(TestConstructor);
+					var testClasses:Array = getTestClasses(TestConstructor);
+					for each(var testClass:Class in testClasses) {
+						pushIfNotInArray(testClass, response);
+					}
+ 				}
+				else { 
+                    pushIfNotInArray(TestConstructor, response)
                 }
             }
             response.sort();
             return response;
+        }
+        
+        private function pushIfNotInArray(item:Object, array:Array):void {
+        	if (array.indexOf(item) >= 0) return;
+        	array[array.length] = item;
         }
 
         public function get length():uint {
@@ -58,7 +62,9 @@ package asunit.framework {
             return list[index] != null;
         }
 
-        // Returns a Class reference:
+        /**
+         * Returns a test Class.
+         */
         public function next():* {
             return list[index++];
         }

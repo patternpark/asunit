@@ -72,14 +72,6 @@ package asunit.framework {
 		
 		public function get runTime():Number { return _runTime; }
 		public function set runTime(value:Number):void { _runTime = value; }
-
-        public function shouldRunTest(testClass:Class):Boolean {
-            if(!knownTests[testClass]) {
-                knownTests[testClass] = testClass;
-                return true;
-            }
-            return false;
-        }
 		
         public function addObserver(observer:TestObserver):void {
             if(!(observer is IRunListener)) {

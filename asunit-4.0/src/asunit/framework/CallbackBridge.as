@@ -1,5 +1,5 @@
 package asunit.framework {
-    
+ 
     public class CallbackBridge implements IResult {
 	
         private var listeners:Array;
@@ -167,9 +167,5 @@ package asunit.framework {
 			model.addObserver(observer);
 		}
 
-		public function shouldRunTest(testClass:Class):Boolean
-		{
-			return model.shouldRunTest(testClass);
-		}
     }
 }

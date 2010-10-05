@@ -43,10 +43,6 @@ package asunit.runners {
             runSuite(suite);
         }
 
-        public function shouldRunTest(testClass:Class):Boolean {
-            return bridge.shouldRunTest(testClass);
-        }
-
         public function set factory(factory:IRunnerFactory):void {
             _factory = factory;
         }

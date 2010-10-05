@@ -1,9 +1,9 @@
 package asunit.core {
 
-    import asunit.printers.TextPrinter;
+	import asunit.printers.TextPrinter;
 
-    import flash.display.DisplayObjectContainer;
-
+	import flash.display.DisplayObjectContainer;
+	
     /**
      * TextCore is just a simple helper class that
      * configures the base class AsUnitCore to use the 

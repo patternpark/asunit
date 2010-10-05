@@ -1,37 +1,32 @@
 package asunit.runners {
-
-    import asunit.events.TimeoutCommandEvent;
-    import asunit.framework.Assert;
-    import asunit.framework.Async;
-    import asunit.framework.CallbackBridge;
-    import asunit.framework.IAsync;
-    import asunit.framework.IResult;
-    import asunit.framework.IRunner;
+	
+	import asunit.events.TimeoutCommandEvent;
+	import asunit.framework.Assert;
+	import asunit.framework.Async;
+	import asunit.framework.CallbackBridge;
+	import asunit.framework.IAsync;
+	import asunit.framework.IRunner;
 	import asunit.framework.IRunnerFactory;
-    import asunit.framework.Method;
-    import asunit.framework.TestFailure;
-    import asunit.framework.TestIterator;
-    import asunit.framework.TestSuccess;
-    import asunit.framework.TestWarning;
-    import asunit.util.ArrayIterator;
-    import asunit.util.Iterator;
+	import asunit.framework.Method;
+	import asunit.framework.TestFailure;
+	import asunit.framework.TestIterator;
+	import asunit.framework.TestSuccess;
+	import asunit.framework.TestWarning;
+	import asunit.util.ArrayIterator;
+	import asunit.util.Iterator;
 
-    import flash.display.DisplayObjectContainer;
-    import flash.errors.IllegalOperationError;
-    import flash.events.Event;
-    import flash.events.EventDispatcher;
-    import flash.events.IEventDispatcher;
-    import flash.events.TimerEvent;
-    import flash.utils.Timer;
-    import flash.utils.clearTimeout;
-    import flash.utils.getDefinitionByName;
-    import flash.utils.getTimer;
-    import flash.utils.setTimeout;
+	import p2.reflect.Reflection;
+	import p2.reflect.ReflectionMetaData;
+	import p2.reflect.ReflectionVariable;
 
-    import p2.reflect.Reflection;
-    import p2.reflect.ReflectionMember;
-    import p2.reflect.ReflectionMetaData;
-    import p2.reflect.ReflectionVariable;
+	import flash.display.DisplayObjectContainer;
+	import flash.errors.IllegalOperationError;
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
+	import flash.utils.getDefinitionByName;
+	import flash.utils.getTimer;
 
     public class TestRunner extends EventDispatcher implements IRunner {
         public static var ASYNC_NAME:String = 'asunit.framework::Async';

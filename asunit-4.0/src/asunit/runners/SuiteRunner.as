@@ -1,24 +1,19 @@
 package asunit.runners {
+	
+	import asunit.framework.CallbackBridge;
+	import asunit.framework.IRunner;
+	import asunit.framework.IRunnerFactory;
+	import asunit.framework.RunnerFactory;
+	import asunit.framework.SuiteIterator;
+	import asunit.util.Iterator;
+
+	import flash.display.DisplayObjectContainer;
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.events.IEventDispatcher;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
     
-    import asunit.framework.CallbackBridge;
-    import asunit.framework.IResult;
-    import asunit.framework.IRunner;
-    import asunit.framework.IRunnerFactory;
-    import asunit.framework.RunnerFactory;
-    import asunit.util.Iterator;
-    import asunit.framework.SuiteIterator;
-
-    import flash.display.DisplayObjectContainer;
-    import flash.events.Event;
-    import flash.events.EventDispatcher;
-    import flash.events.IEventDispatcher;
-    import flash.events.TimerEvent;
-    import flash.utils.Timer;
-    import flash.utils.getDefinitionByName;
-
-    import p2.reflect.Reflection;
-    import p2.reflect.ReflectionMetaData;
-
     public class SuiteRunner implements IEventDispatcher, IRunner {
 
 		[Inject]
@@ -52,7 +47,7 @@ package asunit.runners {
         }
 
         protected function runSuite(suite:*):void {
-            testClasses = new SuiteIterator(suite, bridge);
+            testClasses = new SuiteIterator(suite);
             timer.addEventListener(TimerEvent.TIMER, runNextTest);
             
             runNextTest();

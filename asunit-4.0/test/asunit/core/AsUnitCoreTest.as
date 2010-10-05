@@ -66,7 +66,7 @@ package asunit.core {
         private function verifyRunWithOnASuite(Suite:Class, testCaseCount:int, testMethodCount:int):void {
 
             var handler:Function = function(event:Event):void {
-                var message:String = "CustomRunner.run was NOT called with correct count";
+                var message:String = "CustomTestRunner.run was NOT called with correct count";
                 // This is the number of Tests that will used the custom Runner:
                 assertEquals(message, testCaseCount, CustomTestRunner.runCalledCount);
                 // This is the number of test methods:

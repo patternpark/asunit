@@ -2,7 +2,7 @@
 
 	import asunit.framework.ITestFailure;
 
-	public interface IResult extends MessageBridge, IRunListener, ITestListener {
+	public interface IResult extends IRunListener, ITestListener {
 		
 		function addListener(listener:IRunListener):void;
 		function removeListener(listener:IRunListener):void;

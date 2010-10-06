@@ -30,7 +30,7 @@ package asunit.framework {
 
         [Test]
 		public function addListenerWorked():void {
-            assertEquals(1, bridge.length);
+            assertEquals(1, bridge.numListeners);
 		}
 
         [Test]

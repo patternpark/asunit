@@ -1,7 +1,7 @@
 package asunit.support {
 
     [Suite]
-    [RunWith("asunit.support.CustomTestRunner")]
+    [RunWith("asunit.support.CustomSuiteRunner")]
     public class SuiteWithCustomRunner {
 
         public var succeedAssertTrue:SucceedAssertTrue;

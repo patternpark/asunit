@@ -2,7 +2,6 @@ package asunit.runners {
 
     import asunit.framework.TestCase;
 
-    import asunit.framework.Result;
     import asunit.support.IgnoredMethod;
 
     import flash.events.Event;

@@ -22,25 +22,18 @@ package asunit.runners {
         protected var visualContext:DisplayObjectContainer;
         protected var testMethod:String;
 
-        private var _factory:IRunnerFactory;
+        private var factory:IRunnerFactory;
         
-        public function SuiteRunner() {
+        public function SuiteRunner(factory:IRunnerFactory = null) {
             timer      = new Timer(0, 1);
             dispatcher = new EventDispatcher();
+			this.factory = factory || new RunnerFactory();
         }
         
         public function run(suite:Class, testMethod:String=null, visualContext:DisplayObjectContainer=null):void {
             this.visualContext = visualContext;
             this.testMethod = testMethod;
             runSuite(suite);
-        }
-
-        public function set factory(factory:IRunnerFactory):void {
-            _factory = factory;
-        }
-
-        public function get factory():IRunnerFactory {
-            return _factory ||= new RunnerFactory();
         }
 
         protected function runSuite(suite:*):void {

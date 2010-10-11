@@ -9,7 +9,7 @@ package asunit.framework {
 
     import p2.reflect.Reflection;
     import p2.reflect.ReflectionMetaData;
-    import asunit.framework.InjectionDelegate;
+    import org.swiftsuspenders.Injector;
 
 	public class RunnerFactory implements IRunnerFactory {
 
@@ -34,20 +34,20 @@ package asunit.framework {
          */
         public var DefaultSuiteRunner:Class;
 		
-        public function RunnerFactory() {
+        public function RunnerFactory(injector:Injector = null) {
             DefaultSuiteRunner = DEFAULT_SUITE_RUNNER;
             DefaultTestRunner  = DEFAULT_TEST_RUNNER;
-            injector = new InjectionDelegate();
+            this.injector = injector || new Injector();
         }
 		
-		private var _injector:InjectionDelegate;
+		private var _injector:Injector;
 		
-		public function get injector():InjectionDelegate
+		public function get injector():Injector
 		{
 			return _injector;
 		}
 		
-		public function set injector(value:InjectionDelegate):void
+		public function set injector(value:Injector):void
 		{
 			_injector = value;
 		}
@@ -84,31 +84,21 @@ package asunit.framework {
         }
 
         protected function getRunnerForSuite(reflection:Reflection):IRunner {
-            // First update the DefaultTestRunner with the provided RunWith
-            // if necessary...
-            var Constructor:Class = getRunWithConstructor(reflection);
-            if(Constructor) {
-                DefaultTestRunner = Constructor;
-            }
-            // Always return the default Suite Runner:
-            var runner:IRunner = new DefaultSuiteRunner();
-            configureRunner(runner);
+            // Use the provided RunWith class, or the DefaultSuiteRunner
+            var Constructor:Class = getRunWithConstructor(reflection) || DefaultSuiteRunner;
+            var runner:IRunner = injector.instantiate(Constructor);
             return runner;
         }
 
         protected function getLegacyRunnerForTest(reflection:Reflection):IRunner {
-            var runner:IRunner = new LegacyRunner();
-            configureRunner(runner);
+            var runner:IRunner = injector.instantiate(LegacyRunner);
             return runner;
         }
 
         protected function getRunnerForTest(reflection:Reflection):IRunner {
-            // Use the provided RunWith class, or the DefaultTestRunner (this may
-            // have been overridden by a parent Suite
+            // Use the provided RunWith class, or the DefaultTestRunner
             var Constructor:Class = getRunWithConstructor(reflection) || DefaultTestRunner;
-			//FIXME: This will choke if given a class with constructor arguments!
-            var runner:IRunner = new Constructor();
-            configureRunner(runner);
+            var runner:IRunner = injector.instantiate(Constructor);
             return runner;
         }
 
@@ -152,15 +142,6 @@ package asunit.framework {
 	        }
 	        return null;
 	    }
-	
-		/**
-		 * @private
-		 */
-		protected function configureRunner(runner:IRunner):void
-		{
-			runner.factory = this;
-			injector.updateInjectionPoints(runner, false);
-		}
 
 		public static function isSuite(reflection:Reflection):Boolean {
             return (reflection.getMetaDataByName('Suite') != null);

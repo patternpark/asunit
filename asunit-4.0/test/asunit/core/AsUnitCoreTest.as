@@ -5,7 +5,7 @@ package asunit.core {
     import asunit.framework.IResult;
     import asunit.framework.Result;
     import asunit.printers.TextPrinter;
-    import asunit.support.CustomTestRunner;
+    import asunit.support.CustomSuiteRunner;
     import asunit.support.SuiteWithCustomRunner;
     import asunit.support.SuiteWithOneCustomChildSuite;
     import asunit.support.SucceedAssertTrue;
@@ -27,7 +27,7 @@ package asunit.core {
 
         [After]
         public function cleanUpStatics():void {
-            CustomTestRunner.runCalledCount = 0;
+            CustomSuiteRunner.runCalledCount = 0;
         }
 
         [Test]
@@ -84,9 +84,9 @@ package asunit.core {
         private function verifyRunWithOnASuite(Suite:Class, testCaseCount:int, testMethodCount:int):void {
 
             var handler:Function = function(event:Event):void {
-                var message:String = "CustomTestRunner.run was NOT called with correct count";
+                var message:String = "CustomSuiteRunner.run was NOT called with correct count";
                 // This is the number of Tests that will used the custom Runner:
-                assertEquals(message, testCaseCount, CustomTestRunner.runCalledCount);
+                assertEquals(message, testCaseCount, CustomSuiteRunner.runCalledCount);
                 // This is the number of test methods:
                 assertEquals("Total Test Count", testMethodCount, core.result.runCount);
             }
@@ -96,9 +96,9 @@ package asunit.core {
         }
 
         [Test]
-        public function shouldAssignRunWithUsingOuterSuite():void {
-            // This will work b/c the RunWith is on the outer Suite:
-            var testCaseCount:int = 2;
+        public function shouldUseRunWithOnlyOnItsSuiteNotChildren():void {
+            // TheRunWith is on the outer Suite:
+            var testCaseCount:int = 1;
             var testMethodCount:int = 4;
             verifyRunWithOnASuite(SuiteWithCustomRunner, testCaseCount, testMethodCount);
         }

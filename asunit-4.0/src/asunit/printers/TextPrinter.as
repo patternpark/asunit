@@ -6,7 +6,6 @@ package asunit.printers {
     import asunit.framework.ITestSuccess;
     import asunit.framework.ITestWarning;
     import asunit.framework.Method;
-	import asunit.framework.Result;
 
     import flash.display.Shape;
     import flash.display.Sprite;
@@ -48,34 +47,6 @@ package asunit.printers {
         private var testTimes:Array;
         private var warnings:Array;
 
-        /**
-         * The bridge provides the connection between the printer
-         * and the Runner(s) that it's interested in.
-         *
-         * Generally, a bridge can observe Runners, and build up
-         * state over the course of a test run.
-         *
-         * If you create a custom Runner, Printer and Bridge,
-         * you can decide to manage notifications however you wish.
-         *
-         */
-		private var _result:Result;
-		
-		[Inject]
-		public function set result(value:Result):void
-		{
-			if (value !== _result)
-			{
-				_result = value;
-				_result.addObserver(this);
-			}
-		}
-
-		public function get result():Result
-		{
-			return _result;
-		}
-		
         public function TextPrinter() {
             initialize();
         }

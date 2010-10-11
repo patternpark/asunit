@@ -3,6 +3,7 @@ package asunit.runners {
 	import asunit.events.TimeoutCommandEvent;
 	import asunit.framework.Assert;
 	import asunit.framework.Async;
+	import asunit.framework.IResult;
 	import asunit.framework.Result;
 	import asunit.framework.IAsync;
 	import asunit.framework.IRunner;
@@ -42,8 +43,7 @@ package asunit.runners {
          * whatever printers are interested in what this
          * concrete runner will dispatch.
          */
-        [Inject]
-        public var result:Result;
+        public var result:IResult;
 
         // partially exposed for unit testing
         internal var currentTest:Object;
@@ -63,11 +63,9 @@ package asunit.runners {
         protected var visualContext:DisplayObjectContainer;
         protected var visualInstances:Array;
 
-        private var _factory:IRunnerFactory;
-
-        public function TestRunner() {
+        public function TestRunner(result:IResult = null) {
             async  = new Async();
-            result = new Result();
+            this.result = result || new Result();
             timer  = new Timer(0, 1);
             timer.addEventListener(TimerEvent.TIMER, runNextMethod);
             visualInstances = [];
@@ -75,17 +73,6 @@ package asunit.runners {
 
         public function run(testOrSuite:Class, methodName:String=null, visualContext:DisplayObjectContainer=null):void {
             runMethodByName(testOrSuite, methodName, visualContext);
-        }
-
-        // This class doesn't really use the runner factory,
-        // since it represents a leaf node in the test
-        // hierarchy...
-        public function set factory(factory:IRunnerFactory):void {
-            _factory = factory;
-        }
-
-        public function get factory():IRunnerFactory {
-            return _factory;
         }
 
         public function runMethodByName(test:Class, methodName:String=null, visualContext:DisplayObjectContainer=null):void {

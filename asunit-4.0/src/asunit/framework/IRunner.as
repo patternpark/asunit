@@ -7,8 +7,6 @@ package asunit.framework {
 
 		function run(testOrSuite:Class, testMethodName:String=null, visualContext:DisplayObjectContainer=null):void;
 
-        function set factory(factory:IRunnerFactory):void;
-        function get factory():IRunnerFactory;
 	}
 }
 

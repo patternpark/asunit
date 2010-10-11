@@ -1,11 +1,14 @@
 package asunit.core {
 	
+	import asunit.framework.IResult;
+	import asunit.framework.IRunnerFactory;
 	import asunit.framework.Result;
 	import asunit.framework.IRunner;
 	import asunit.framework.InjectionDelegate;
 	import asunit.framework.RunnerFactory;
 	import asunit.framework.TestObserver;
 	import asunit.runners.LegacyRunner;
+	import org.swiftsuspenders.Injector;
 
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
@@ -14,9 +17,9 @@ package asunit.core {
 	
 	public class AsUnitCore implements IEventDispatcher {
 
-		[Inject]
-        public var result:Result;
+        internal var result:IResult;
 
+		protected var injector:Injector;
 		protected var bridgeInjector:InjectionDelegate;
         protected var dispatcher:IEventDispatcher;
         protected var legacyRunnerReference:LegacyRunner;
@@ -26,14 +29,18 @@ package asunit.core {
 
         public function AsUnitCore() {
             super();
-			initializeBridgeInjector();
+			initializeInjector();
             initializeDispatcher();
             initializeObservers();
             initialize();
         }
 
-		protected function initializeBridgeInjector():void {
-			bridgeInjector = new InjectionDelegate();
+		protected function initializeInjector():void {
+			injector = new Injector();
+			injector.mapValue(Injector, injector);
+			injector.mapClass(IRunnerFactory, RunnerFactory);
+ 			result = new Result();
+			injector.mapValue(IResult, result);
 		}
 		
         protected function initializeDispatcher():void {
@@ -83,8 +90,8 @@ package asunit.core {
          *
          */
         public function addObserver(observer:TestObserver):void {
-			bridgeInjector.updateInjectionPoints(observer, InjectionDelegate.THROW_ERROR_ON_MISSING_INJECTION_POINT);
-        }
+			result.addObserver(observer);
+		}
 
         /**
          * Set the visual context that will parent all injected
@@ -116,17 +123,10 @@ package asunit.core {
          */
 		public function start(testOrSuite:Class, testMethodName:String=null, visualContext:DisplayObjectContainer=null):void {
 
-			// Will instantiate a new CallbackBridge:
-			// and set it on this instance - but share it
-			// with any Runners or Observers that also
-			// use the CallbackBridge.
-			bridgeInjector.updateInjectionPoints(this, InjectionDelegate.THROW_ERROR_ON_MISSING_INJECTION_POINT);
-
 			// Must use the accessor, not the _ value:
 			if(visualContext) this.visualContext = visualContext;
 
-			var factory:RunnerFactory = new RunnerFactory();
-			factory.injector = bridgeInjector;
+			var factory:IRunnerFactory = injector.getInstance(IRunnerFactory);
 			runner = factory.runnerFor(testOrSuite);
 			runner.addEventListener(Event.COMPLETE, runCompleteHandler);
 			result.onRunStarted();
@@ -148,7 +148,7 @@ package asunit.core {
 		protected function onRunCompleted():void {
 		}
 
-        // BEGIN: Implement the IEvent Dispatcher Interface:
+        // BEGIN: Implement the IEventDispatcher Interface:
 
 		public function addEventListener(type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void {
 			dispatcher.addEventListener(type, listener, useCapture, priority, useWeakReference);

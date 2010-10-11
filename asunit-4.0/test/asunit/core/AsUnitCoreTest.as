@@ -39,6 +39,23 @@ package asunit.core {
         public function startShouldWork():void {
             core.start(SucceedAssertTrue);
         }
+		
+		[Test]
+		public function shouldDispatchSelfAsCurrentTarget():void {
+			var handlerCalled:Boolean = false;
+			var handler:Function = function(event:Event):void {
+				assertSame("currentTarget should be the core", core, event.currentTarget);
+				handlerCalled = true;
+				core.removeEventListener(event.type, arguments.callee);
+			}
+
+			var eventType:String = "foo";
+			core.addEventListener(eventType, handler);
+			// when
+			core.dispatchEvent(new Event(eventType));
+			// then
+			assertTrue("handler called", handlerCalled);
+		}		
 
         [Test]
         public function setVisualContextShouldWork():void {

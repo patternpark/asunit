@@ -37,7 +37,7 @@ package asunit.core {
 		}
 		
         protected function initializeDispatcher():void {
-            dispatcher = new EventDispatcher();
+            dispatcher = new EventDispatcher(this);
         }
 
         /**

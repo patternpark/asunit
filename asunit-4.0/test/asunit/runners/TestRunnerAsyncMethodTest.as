@@ -1,7 +1,6 @@
 package asunit.runners {
 
     import asunit.asserts.*;
-    import asunit.framework.CallbackBridge;
     import asunit.framework.TestCase;
     import asunit.util.Iterator;
 

@@ -1,7 +1,6 @@
 package asunit.core {
     
     import asunit.asserts.*;
-    import asunit.framework.CallbackBridge;
     import asunit.framework.IAsync;
     import asunit.framework.IResult;
     import asunit.framework.Result;

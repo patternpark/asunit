@@ -18,7 +18,6 @@ package asunit.printers {
     import flash.text.TextFormat;
     import flash.utils.getQualifiedClassName;
     import flash.utils.getTimer;
-    import asunit.framework.CallbackBridge;
 
     public class TextPrinter extends Sprite implements IRunListener {
         public static var LOCAL_PATH_PATTERN:RegExp = /([A-Z]:\\[^\/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^\/:\*\?<>\|]+\.\w{2,6})/g;

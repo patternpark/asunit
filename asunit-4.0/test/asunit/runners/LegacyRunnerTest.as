@@ -7,7 +7,6 @@ package asunit.runners {
     import asunit.support.LegacyTestCase;
 
     import flash.events.Event;
-    import asunit.framework.CallbackBridge;
 
     public class LegacyRunnerTest extends TestCase {
 

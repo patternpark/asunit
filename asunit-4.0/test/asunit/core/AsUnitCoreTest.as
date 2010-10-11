@@ -19,11 +19,12 @@ package asunit.core {
         [Inject]
         public var async:IAsync;
 
-        [Inject]
-        public var core:AsUnitCore;
+		private var core:AsUnitCore;
 
-        [Inject]
-        public var context:Sprite;
+		[Before]
+		public function setUp():void {
+			core = new AsUnitCore();
+		}
 
         [After]
         public function cleanUpStatics():void {
@@ -59,8 +60,9 @@ package asunit.core {
 
         [Test]
         public function setVisualContextShouldWork():void {
+			var context:Sprite = new Sprite();
             core.visualContext = context;
-            assertEquals(context, core.visualContext);
+            assertSame(context, core.visualContext);
         }
 
         [Test]

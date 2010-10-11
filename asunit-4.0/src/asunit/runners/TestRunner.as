@@ -3,7 +3,7 @@ package asunit.runners {
 	import asunit.events.TimeoutCommandEvent;
 	import asunit.framework.Assert;
 	import asunit.framework.Async;
-	import asunit.framework.CallbackBridge;
+	import asunit.framework.Result;
 	import asunit.framework.IAsync;
 	import asunit.framework.IRunner;
 	import asunit.framework.IRunnerFactory;
@@ -43,7 +43,7 @@ package asunit.runners {
          * concrete runner will dispatch.
          */
         [Inject]
-        public var bridge:CallbackBridge;
+        public var result:Result;
 
         // partially exposed for unit testing
         internal var currentTest:Object;
@@ -67,7 +67,7 @@ package asunit.runners {
 
         public function TestRunner() {
             async  = new Async();
-            bridge = new CallbackBridge();
+            result = new Result();
             timer  = new Timer(0, 1);
             timer.addEventListener(TimerEvent.TIMER, runNextMethod);
             visualInstances = [];
@@ -108,7 +108,7 @@ package asunit.runners {
             async.addEventListener(TimeoutCommandEvent.TIMED_OUT,  onAsyncMethodTimedOut);
             
             startTime = getTimer();
-            bridge.onTestStarted(currentTest);
+            result.onTestStarted(currentTest);
             
             methodsToRun = createTestIterator(currentTest, methodName);
 
@@ -150,7 +150,7 @@ package asunit.runners {
             methodPassed = true; // innocent until proven guilty by recordFailure()
             
             if (currentMethod.ignore) {
-                bridge.onTestIgnored(currentMethod);
+                result.onTestIgnored(currentMethod);
                 onMethodCompleted();
                 return;
             }
@@ -192,7 +192,7 @@ package asunit.runners {
             async.cancelPending();
             
             if (currentMethod.isTest && methodPassed && !currentMethod.ignore) {
-                bridge.onTestSuccess(new TestSuccess(currentTest, currentMethod.name));
+                result.onTestSuccess(new TestSuccess(currentTest, currentMethod.name));
             }
 
             // Calling synchronously is faster but keeps adding to the call stack.
@@ -222,7 +222,7 @@ package asunit.runners {
         
         protected function recordFailure(error:Error):void {
             methodPassed = false;
-            bridge.onTestFailure(new TestFailure(currentTest, currentMethod.name, error));
+            result.onTestFailure(new TestFailure(currentTest, currentMethod.name, error));
         }
 
         protected function onAsyncMethodCompleted(event:Event = null):void {
@@ -236,7 +236,7 @@ package asunit.runners {
             async.removeEventListener(TimeoutCommandEvent.TIMED_OUT,   onAsyncMethodTimedOut);
             async.cancelPending();
             
-            bridge.onTestCompleted(currentTest);
+            result.onTestCompleted(currentTest);
             
             dispatchEvent(new Event(Event.COMPLETE));
         }
@@ -360,7 +360,7 @@ package asunit.runners {
         }
 
         protected function warn(message:String, method:Method=null):void {
-            bridge.onWarning(new TestWarning(message, method));
+            result.onWarning(new TestWarning(message, method));
         }
 
         protected function getClassReferenceFromReflection(reflection:Reflection):Class {

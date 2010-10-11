@@ -30,8 +30,8 @@ package asunit.runners {
 
         public function testSimpleSubclass():void {
             var handler:Function = function(event:Event):void {
-                assertEquals(0, testRunner.bridge.failureCount);
-                assertEquals(2, testRunner.bridge.runCount);
+                assertEquals(0, testRunner.result.failureCount);
+                assertEquals(2, testRunner.result.runCount);
             };
             testRunner.addEventListener(Event.COMPLETE, addAsync(handler));
             testRunner.run(LegacyTestCase);

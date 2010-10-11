@@ -1,6 +1,6 @@
 package asunit.core {
 	
-	import asunit.framework.CallbackBridge;
+	import asunit.framework.Result;
 	import asunit.framework.IRunner;
 	import asunit.framework.InjectionDelegate;
 	import asunit.framework.RunnerFactory;
@@ -15,7 +15,7 @@ package asunit.core {
 	public class AsUnitCore implements IEventDispatcher {
 
 		[Inject]
-        public var bridge:CallbackBridge;
+        public var result:Result;
 
 		protected var bridgeInjector:InjectionDelegate;
         protected var dispatcher:IEventDispatcher;
@@ -117,24 +117,25 @@ package asunit.core {
 		public function start(testOrSuite:Class, testMethodName:String=null, visualContext:DisplayObjectContainer=null):void {
 
 			// Will instantiate a new CallbackBridge:
-            // and set it on this instance - but share it
-            // with any Runners or Observers that also
-            // use the CallbackBridge.
+			// and set it on this instance - but share it
+			// with any Runners or Observers that also
+			// use the CallbackBridge.
 			bridgeInjector.updateInjectionPoints(this, InjectionDelegate.THROW_ERROR_ON_MISSING_INJECTION_POINT);
-            // Must use the accessor, not the _ value:
-            if(visualContext) this.visualContext = visualContext;
 
-            var factory:RunnerFactory = new RunnerFactory();
+			// Must use the accessor, not the _ value:
+			if(visualContext) this.visualContext = visualContext;
+
+			var factory:RunnerFactory = new RunnerFactory();
 			factory.injector = bridgeInjector;
-            runner = factory.runnerFor(testOrSuite);
+			runner = factory.runnerFor(testOrSuite);
 			runner.addEventListener(Event.COMPLETE, runCompleteHandler);
-			bridge.onRunStarted();
-		    runner.run(testOrSuite, testMethodName, this.visualContext);
-        }
+			result.onRunStarted();
+			runner.run(testOrSuite, testMethodName, this.visualContext);
+		}
 
         private function runCompleteHandler(event:Event):void {
 			runner.removeEventListener(Event.COMPLETE, onRunCompleted);
-			bridge.onRunCompleted(bridge);
+			result.onRunCompleted(result);
             onRunCompleted();
             dispatchEvent(event);
         }

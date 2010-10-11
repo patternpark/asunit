@@ -16,9 +16,6 @@ package asunit.runners {
     
     public class SuiteRunner implements IEventDispatcher, IRunner {
 
-		[Inject]
-        public var bridge:CallbackBridge;
-		
         protected var dispatcher:IEventDispatcher;
         protected var testClasses:Iterator;
         protected var timer:Timer;

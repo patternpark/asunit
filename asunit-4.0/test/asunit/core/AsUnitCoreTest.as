@@ -89,7 +89,7 @@ package asunit.core {
                 // This is the number of Tests that will used the custom Runner:
                 assertEquals(message, testCaseCount, CustomTestRunner.runCalledCount);
                 // This is the number of test methods:
-                assertEquals("Total Test Count", testMethodCount, core.bridge.runCount);
+                assertEquals("Total Test Count", testMethodCount, core.result.runCount);
             }
 
             core.addEventListener(Event.COMPLETE, async.add(handler, 200));

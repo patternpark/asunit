@@ -34,8 +34,8 @@ package asunit.runners {
         }
         
         private function checkResultHasOneIgnoredMethod(e:Event):void {
-            assertFalse('runnerResult.failureEncountered', runner.bridge.failureEncountered);
-            assertEquals('one ignored test in result', 1, runner.bridge.ignoredTests.length);
+            assertFalse('runnerResult.failureEncountered', runner.result.failureEncountered);
+            assertEquals('one ignored test in result', 1, runner.result.ignoredTests.length);
         }
     }
 }

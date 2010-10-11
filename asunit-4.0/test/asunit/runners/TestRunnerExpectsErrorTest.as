@@ -42,7 +42,7 @@ package asunit.runners {
 		}
 		
 		private function check_Result_has_no_errors(e:Event):void {
-            var runnerResult:IResult = runner.bridge;
+            var runnerResult:IResult = runner.result;
 			assertEquals('no errors in testResult',   0, runnerResult.errorCount);
 			assertEquals('no failures in testResult', 0, runnerResult.failureCount);
 		}
@@ -53,7 +53,7 @@ package asunit.runners {
 		}
 		
 		private function check_Result_has_one_assertion_failure(e:Event):void {
-            var runnerResult:IResult = runner.bridge;
+            var runnerResult:IResult = runner.result;
 			assertFalse(runnerResult.wasSuccessful);
 			
 			assertEquals('one failure in testResult', 1, runnerResult.failureCount);

@@ -97,10 +97,10 @@ package asunit.runners {
         }
         
         private function checkResultWasNotSuccessful(e:Event):void {
-            assertTrue(runner.bridge.failureEncountered);
-            assertFalse(runner.bridge.wasSuccessful);
+            assertTrue(runner.result.failureEncountered);
+            assertFalse(runner.result.wasSuccessful);
             
-            var failures:Array = runner.bridge.failures;
+            var failures:Array = runner.result.failures;
             assertEquals('one failure in testResult', 1, failures.length);
             
             var failure0:ITestFailure = failures[0] as TestFailure;
@@ -143,13 +143,13 @@ package asunit.runners {
         [Test]
         public function shouldInjectTypes():void {
             runner.run(InjectionVerification, null, context);
-            assertFalse("Should not have encountered failures: " + runner.bridge.failures.join("\n\n"), runner.bridge.failureEncountered);
+            assertFalse("Should not have encountered failures: " + runner.result.failures.join("\n\n"), runner.result.failureEncountered);
         }
 
         [Test]
         public function shouldInjectWithUnknownAttribute():void {
             runner.run(InjectionFailure);
-            var warnings:Array = runner.bridge.warnings;
+            var warnings:Array = runner.result.warnings;
             assertEquals(1, warnings.length);
         }
 
@@ -164,7 +164,7 @@ package asunit.runners {
         [Test]
         public function annotationsOnSuperClassShouldBeRespected():void {
             runner.run(AnnotatedSubClass);
-            assertFalse("Should not have failures: " + runner.bridge.failures.join("\n\n"), runner.bridge.failureEncountered);
+            assertFalse("Should not have failures: " + runner.result.failures.join("\n\n"), runner.result.failureEncountered);
         }
     }
 }

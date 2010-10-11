@@ -159,7 +159,7 @@ package asunit.framework {
 		protected function configureRunner(runner:IRunner):void
 		{
 			runner.factory = this;
-			injector.updateInjectionPoints(runner, InjectionDelegate.THROW_ERROR_ON_MISSING_INJECTION_POINT);
+			injector.updateInjectionPoints(runner, false);
 		}
 
 		public static function isSuite(reflection:Reflection):Boolean {

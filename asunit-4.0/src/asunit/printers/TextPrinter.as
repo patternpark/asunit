@@ -6,6 +6,7 @@ package asunit.printers {
     import asunit.framework.ITestSuccess;
     import asunit.framework.ITestWarning;
     import asunit.framework.Method;
+	import asunit.framework.Result;
 
     import flash.display.Shape;
     import flash.display.Sprite;
@@ -59,21 +60,21 @@ package asunit.printers {
          * you can decide to manage notifications however you wish.
          *
          */
-		private var _bridge:CallbackBridge;
+		private var _result:Result;
 		
 		[Inject]
-		public function set bridge(value:CallbackBridge):void
+		public function set result(value:Result):void
 		{
-			if (value !== _bridge)
+			if (value !== _result)
 			{
-				_bridge = value;
-				_bridge.addObserver(this);
+				_result = value;
+				_result.addObserver(this);
 			}
 		}
 
-		public function get bridge():CallbackBridge
+		public function get result():Result
 		{
-			return _bridge;
+			return _result;
 		}
 		
         public function TextPrinter() {

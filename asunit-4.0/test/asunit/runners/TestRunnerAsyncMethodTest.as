@@ -35,7 +35,7 @@ package asunit.runners {
         }
         
         private function ensureRunnerHasNotYetFailed(e:Event):void {
-            assertFalse('runner result has not failed', runner.bridge.failureEncountered);
+            assertFalse('runner result has not failed', runner.result.failureEncountered);
         }
         
         [Test]
@@ -45,8 +45,8 @@ package asunit.runners {
         }
         
         private function checkResultForIllegalOperationError(e:Event):void {
-            assertEquals('number of errors', 1, runner.bridge.errors.length);
-            var failure0:TestFailure = runner.bridge.errors[0] as TestFailure;
+            assertEquals('number of errors', 1, runner.result.errors.length);
+            var failure0:TestFailure = runner.result.errors[0] as TestFailure;
             assertEquals('exception type', 'flash.errors::IllegalOperationError', getQualifiedClassName(failure0.thrownException));
             assertEquals('failed method name', 'shouldFailForBeingTooSlow', failure0.failedMethod);
         }

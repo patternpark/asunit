@@ -40,7 +40,7 @@ package asunit.runners {
 		}
 		
 		private function check_Result_has_one_error(e:Event):void {
-            var runnerResult:IResult = runner.bridge;
+            var runnerResult:IResult = runner.result;
 			assertFalse('runnerResult.wasSuccessful', runnerResult.wasSuccessful);
 			
 			assertEquals('one error in testResult',   1, runnerResult.errorCount);

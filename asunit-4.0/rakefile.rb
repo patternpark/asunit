@@ -41,6 +41,7 @@ def configure_test_task(t)
   t.default_size = '1000,600'
   t.source_path << 'src'
   t.library_path << 'lib/Reflection.swc'
+  t.library_path << 'lib/SwiftSuspenders-v1.5.1.swc'
   t.debug = true
   t.static_link_runtime_shared_libraries = true
   apply_as3_meta_data_args(t)
@@ -133,6 +134,7 @@ compc "bin/AsUnit-#{AsUnit::VERSION}.swc" do |t|
   t.include_sources << 'src'
   t.source_path << 'src'
   t.library_path << 'lib/Reflection.swc'
+  t.library_path << 'lib/SwiftSuspenders-v1.5.1.swc'
   t.static_link_runtime_shared_libraries = true
   apply_as3_meta_data_args(t)
 end

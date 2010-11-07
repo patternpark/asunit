@@ -5,6 +5,7 @@ package asunit.runners {
     import asunit.framework.Result;
     import asunit.framework.TestCase;
     import asunit.support.LegacyTestCase;
+	import flash.display.Sprite;
 
     import flash.events.Event;
 
@@ -33,7 +34,7 @@ package asunit.runners {
                 assertEquals(2, testRunner.result.runCount);
             };
             testRunner.addEventListener(Event.COMPLETE, addAsync(handler));
-            testRunner.run(LegacyTestCase);
+            testRunner.run(LegacyTestCase, null, new Sprite());
         }
     }
 }

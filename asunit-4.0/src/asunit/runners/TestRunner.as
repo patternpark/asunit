@@ -64,16 +64,16 @@ package asunit.runners {
 			testInjector.mapValue(IAsync, async);
 			testInjector.mapValue(Async, async);
             timer = new Timer(0, 1);
-            timer.addEventListener(TimerEvent.TIMER, runNextMethod);
+            timer.addEventListener(TimerEvent.TIMER, runNextMethods);
             visualInstances = [];
         }
 
-        public function run(testOrSuite:Class, methodName:String=null, visualContext:DisplayObjectContainer=null):void {
-            runMethodByName(testOrSuite, methodName, visualContext);
+        public function runMethodByName(testOrSuite:Class, methodName:String=null, visualContext:DisplayObjectContainer=null):void {
+            run(testOrSuite, methodName, visualContext);
         }
 
-        public function runMethodByName(test:Class, methodName:String=null, visualContext:DisplayObjectContainer=null):void {
-            currentTestReflection  = Reflection.create(test);
+        public function run(test:Class, methodName:String=null, visualContext:DisplayObjectContainer=null):void {
+			currentTestReflection  = Reflection.create(test);
             this.visualContext     = visualContext;
 			testInjector.mapValue(Sprite, visualContext);
             currentMethod          = null;
@@ -98,31 +98,39 @@ package asunit.runners {
             if(methodsToRun.length == 0) {
                 warn(">> We were unable to find any test methods in " + currentTestReflection.name + ". Did you set the --keep-as3-metadata flag?");
             }
-            runNextMethod();
+			
+            runNextMethods();
         }
 
         protected function createTestIterator(test:*, testMethodName:String):TestIterator {
             return new TestIterator(test, testMethodName);
         }
 
-        protected function runNextMethod(e:TimerEvent = null):void {
-            if (testCompleted) {
-                onTestCompleted();
-                return;
-            }
-
-            runMethod(methodsToRun.next());
+        protected function runNextMethods(e:TimerEvent = null):void {
+			// Loop through as many as possible without hitting asynchronous tests.
+			// This keeps the call stack small.
+			while (methodsToRun.hasNext()) {
+				var hasAsyncPending:Boolean = runMethod(methodsToRun.next());
+				if (hasAsyncPending) return;
+			}
+			
+			onTestCompleted();
         }
         
-        protected function runMethod(method:Method):void {
-            if (!method) return;
+		/**
+		 * 
+		 * @param	method
+		 * @return	true if asynchronous calls are pending after calling the test method.
+		 */
+        protected function runMethod(method:Method):Boolean {
+            if (!method) return false;
             currentMethod = method;
             methodPassed = true; // innocent until proven guilty by recordFailure()
             
             if (currentMethod.ignore) {
                 result.onTestIgnored(currentMethod);
                 onMethodCompleted();
-                return;
+                return false;
             }
 
             // This is used to prevent async callbacks from triggering onMethodCompleted too early.
@@ -153,22 +161,23 @@ package asunit.runners {
             
             methodIsExecuting = false;
             
-            if (async.hasPending) return;
+            if (async.hasPending) return true;
 
             onMethodCompleted();
+			return false;
         }
 
-        protected function onMethodCompleted():void {
+        protected function onMethodCompleted(wasAsync:Boolean = false):void {
             async.cancelPending();
             
             if (currentMethod.isTest && methodPassed && !currentMethod.ignore) {
                 result.onTestSuccess(new TestSuccess(currentTest, currentMethod.name));
             }
 
-            // Calling synchronously is faster but keeps adding to the call stack.
-            runNextMethod();
+            if (wasAsync)
+				runNextMethods();
             
-            // green thread for runNextMethod()
+            // green thread for runNextMethods()
             // This runs much slower in Flash Player 10.1.
             //timer.reset();
             //timer.start();
@@ -197,7 +206,7 @@ package asunit.runners {
 
         protected function onAsyncMethodCompleted(event:Event = null):void {
             if (!methodIsExecuting && !async.hasPending) {
-                onMethodCompleted();
+                onMethodCompleted(true);
             }
         }
         

@@ -14,7 +14,13 @@
 	<property name="libs.dir" location="${root.dir}/lib"/>
 	<property name="output.dir" location="${root.dir}/bin"/>
 	<property name="output.swc" location="${output.dir}/asunit.swc"/>
-			
+	<property name="tests.swf" location="${root.dir}/AsUnitCIRunner.swf"/>
+	<property name="report.dir" location="${root.dir}/report"/>
+	
+	<taskdef resource="flexUnitTasks.tasks" classpath="${libs.dir}/flexUnitTasks.jar" />
+
+	<!-- TARGETS -->
+
 	<target name="swc" depends="" description="Compile AS3 code into a SWC">
 		<echo>Using Flex SDK at: ${FLEX_HOME}</echo>
 			
@@ -41,6 +47,40 @@
 			<arg value="-output=${output.swc}" />
 		</java>
 			
+	</target>
+	
+	<target name="ci" depends="swc" description="Run continuous integration">
+		<echo>[test] Running Unit Tests</echo>
+		<delete dir="${report.dir}" quiet="true"/>
+		<mkdir dir="${report.dir}"/>
+		
+		<!-- Compile SWF -->
+		<java jar="${FLEX_HOME}/lib/mxmlc.jar" dir="${FLEX_HOME}/frameworks" fork="true" failonerror="true">
+			<arg value="${test.dir}/AsUnitCIRunner.as"/>
+			<arg value="-incremental=true"/>
+			<arg value="-source-path+=${src.dir}"/>
+			<arg value="-output=${tests.swf}"/>
+			<arg value="-target-player=10"/>
+			<arg value="-default-size=1000,800"/>
+			<arg value="-default-background-color=0x000000"/>
+			<arg value="-static-link-runtime-shared-libraries=true"/>
+			<!-- Include classes from SWCs in this folder, but only the ones we use. -->
+			<arg value="-library-path+=${libs.dir}"/>
+			<arg value="-verbose-stacktraces=true"/>
+			<arg value="-headless-server=true"/>
+			<arg value="-keep-as3-metadata+=Test,Suite,Before,BeforeClass,After,AfterClass,RunWith,Ignore,Inject"/>
+		</java>
+		
+		<!-- Execute TestRunner.swf as FlexUnit tests and publish reports -->
+		<flexunit swf="${tests.swf}" toDir="${report.dir}" haltonfailure="false" verbose="true" localTrusted="false" />
+
+		<!-- Generate readable JUnit-style reports -->
+		<junitreport todir="${report.dir}">
+			<fileset dir="${report.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${report.dir}/html" />
+		</junitreport>
 	</target>
 		
 </project>

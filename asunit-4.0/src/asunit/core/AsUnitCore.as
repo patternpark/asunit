@@ -120,7 +120,6 @@ package asunit.core {
        protected function onRunCompleted(event:Event):void {
 			runner.removeEventListener(Event.COMPLETE, onRunCompleted);
 			result.onRunCompleted(result);
-            onRunCompleted();
             dispatchEvent(event);
         }
 	}

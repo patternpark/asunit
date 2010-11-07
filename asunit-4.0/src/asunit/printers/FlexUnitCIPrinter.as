@@ -19,7 +19,7 @@ package asunit.printers {
 	import flash.utils.getQualifiedClassName;
 	import flash.utils.getTimer;
 	
-	public class FlexUnitCIPrinter extends EventDispatcher implements IRunListener, TestObserver
+	public class FlexUnitCIPrinter extends EventDispatcher implements IRunListener
 	{
 		protected static const DEFAULT_SERVER:String = "127.0.0.1";
 		protected static const DEFAULT_PORT:uint = 1024;
@@ -31,8 +31,6 @@ package asunit.printers {
 		private static const ERROR:String = "error";
 		private static const FAILURE:String = "failure";
 		private static const IGNORE:String = "ignore";
-		
-		private var _ready:Boolean = false;
 		
 		private static const START_OF_TEST_RUN_ACK : String = "<startOfTestRunAck/>";
 		private static const END_OF_TEST_ACK : String ="<endOfTestRunAck/>";
@@ -78,12 +76,6 @@ package asunit.printers {
 			throw new Error('Timed out waiting to connect to socket.');
 		}
 		
-		[Bindable(event="listenerReady")]
-		public function get ready():Boolean 
-		{
-			return _ready;
-		}
-				
 		public function onTestIgnored(method:Method):void {
 			var xmlMessageIgnore:String = "<testcase classname='" + getQualifiedClassName(method.scope)
 				+ "' name='" + method.name + "' status='"+IGNORE+"'>"
@@ -106,7 +98,8 @@ package asunit.printers {
 
 		protected function getFailureMessage(failure:ITestFailure):String {
 			var status:String = failure.isFailure ? FAILURE : ERROR;
-//			var stackTrace:String = xmlEscapeMessage(failure.thrownException.getStackTrace());			var stackTrace:String = failure.thrownException.getStackTrace();
+//			var stackTrace:String = xmlEscapeMessage(failure.thrownException.getStackTrace());
+			var stackTrace:String = failure.thrownException.getStackTrace();
 			var xml:String =
 				"<testcase classname='" + getQualifiedClassName(failure.failedTest)
 				+ "' name='" + failure.failedMethod
@@ -128,19 +121,8 @@ package asunit.printers {
 				return;
 			}
 			socket.send(message);
-			trace('+++++++++ sendMessage() - \n' + message + '\n');
 		}
 	
-//		protected function sendResults(msg:String):void
-//		{
-//			if(socket.connected)
-//			{
-//				socket.send( msg );				
-//			}
-//			
-//			trace(msg);
-//		}
-		
 		protected function onConnect(event:Event):void {
 			connectTimeout.stop();
 			sendQueuedMessages();
@@ -154,15 +136,7 @@ package asunit.printers {
 
 		private function onData( event : DataEvent ) : void
 		{
-			trace('onData: ' + event.data);
-			
-//			// If we received an acknowledgement on startup, the java server is ready and we can start sending.			
-//			if ( data == START_OF_TEST_RUN_ACK ) {
-//				setStatusReady();
-//			} else 
-
 			if (event.data == END_OF_TEST_ACK) {
-				// If we received an acknowledgement finish-up.
 				exit();
 			}
 		}
@@ -196,16 +170,13 @@ package asunit.printers {
 			sendMessage(END_OF_TEST_RUN);
 		}		
 		
-		/**
-		 * Exit the test runner by calling the ApplicationCloser.
-		 */
 		protected function exit():void
 		{
 			socket.close();
 			fscommand("quit");
 		}
 
-		public function onWarning(warning : ITestWarning) : void {
+		public function onWarning(warning:ITestWarning) : void {
 		}
 	}
 }

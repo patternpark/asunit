@@ -2,8 +2,6 @@ package asunit.framework {
 	
 	import asunit.errors.UsageError;
 
-	import flash.events.EventDispatcher;
-
 	/**
      * A <code>Result</code> collects the results of executing
      * a test case. It is an instance of the Collecting Parameter pattern.
@@ -13,7 +11,7 @@ package asunit.framework {
      *
      * @see Test
      */
-    public class Result extends EventDispatcher implements IResult {
+    public class Result implements IResult {
 
 		protected var _runCount:uint = 0;
 		protected var _runTime:Number;

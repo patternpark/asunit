@@ -1,6 +1,5 @@
 package asunit.runners {
 	
-	import asunit.framework.CallbackBridge;
 	import asunit.framework.IResult;
 	import asunit.framework.IRunner;
 	import asunit.framework.IRunnerFactory;

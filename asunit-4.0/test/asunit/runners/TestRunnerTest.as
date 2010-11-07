@@ -8,8 +8,6 @@ package asunit.runners {
     import asunit.framework.Result;
     import asunit.framework.TestCase;
     import asunit.framework.TestFailure;
-    import asunit.support.AnnotatedSubClass;
-    import asunit.support.InjectTimeoutOnAsync;
     import asunit.support.InjectionFailure;
     import asunit.support.InjectionVerification;
     import asunit.support.MultiMethod;
@@ -144,27 +142,6 @@ package asunit.runners {
         public function shouldInjectTypes():void {
             runner.run(InjectionVerification, null, context);
             assertFalse("Should not have encountered failures: " + runner.result.failures.join("\n\n"), runner.result.failureEncountered);
-        }
-
-        [Test]
-        public function shouldInjectWithUnknownAttribute():void {
-            runner.run(InjectionFailure);
-            var warnings:Array = runner.result.warnings;
-            assertEquals(1, warnings.length);
-        }
-
-        [Test]
-        public function shouldInjectAsyncTimeout():void {
-            var async:IAsync = runner.async;
-            assertEquals(Async.DEFAULT_TIMEOUT, async.timeout);
-            runner.run(InjectTimeoutOnAsync);
-            assertEquals(5, async.timeout);
-        }
-
-        [Test]
-        public function annotationsOnSuperClassShouldBeRespected():void {
-            runner.run(AnnotatedSubClass);
-            assertFalse("Should not have failures: " + runner.result.failures.join("\n\n"), runner.result.failureEncountered);
         }
     }
 }

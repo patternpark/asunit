@@ -15,6 +15,8 @@ package asunit.runners {
 	import asunit.framework.TestWarning;
 	import asunit.util.ArrayIterator;
 	import asunit.util.Iterator;
+	import flash.display.Sprite;
+	import org.swiftsuspenders.Injector;
 
 	import p2.reflect.Reflection;
 	import p2.reflect.ReflectionMetaData;
@@ -30,29 +32,21 @@ package asunit.runners {
 	import flash.utils.getTimer;
 
     public class TestRunner extends EventDispatcher implements IRunner {
-        public static var ASYNC_NAME:String = 'asunit.framework::Async';
-        public static var IASYNC_NAME:String = 'asunit.framework::IAsync';
-        public static var DISPLAY_OBJECT_CONTAINER:String = 'flash.display::DisplayObjectContainer';
-
-        /**
-         * This is how the Runner connects to a printer.
-         * The AsUnitCore will inject the requested bridge
-         * based on the concrete data type.
-         *
-         * There should be a similar Injection point on
-         * whatever printers are interested in what this
-         * concrete runner will dispatch.
-         */
+        
+		/**
+		 * 
+		 */
+		//TODO: perhaps add a getter for this to IRunner
         public var result:IResult;
 
         // partially exposed for unit testing
         internal var currentTest:Object;
         internal var async:IAsync;
+		/** Supplies dependencies to tests, e.g. IAsync, context Sprite. */
+		internal var testInjector:Injector;
 
-        protected var asyncMembers:Iterator;
         protected var currentMethod:Method;
         protected var currentTestReflection:Reflection;
-        protected var injectableMembers:Iterator;
         protected var methodIsExecuting:Boolean = false;
         protected var methodPassed:Boolean = true;
         protected var methodTimeoutID:Number;
@@ -65,8 +59,11 @@ package asunit.runners {
 
         public function TestRunner(result:IResult = null) {
             async  = new Async();
-            this.result = result || new Result();
-            timer  = new Timer(0, 1);
+            this.result = result ||= new Result();
+            testInjector = new Injector();
+			testInjector.mapValue(IAsync, async);
+			testInjector.mapValue(Async, async);
+            timer = new Timer(0, 1);
             timer.addEventListener(TimerEvent.TIMER, runNextMethod);
             visualInstances = [];
         }
@@ -78,19 +75,18 @@ package asunit.runners {
         public function runMethodByName(test:Class, methodName:String=null, visualContext:DisplayObjectContainer=null):void {
             currentTestReflection  = Reflection.create(test);
             this.visualContext     = visualContext;
+			testInjector.mapValue(Sprite, visualContext);
             currentMethod          = null;
             testMethodNameReceived = (methodName != null);
 
             try {
-                currentTest            = new test();
+                currentTest = testInjector.instantiate(test);
             }
             catch(e:VerifyError) {
                 warn("Unable to instantiate provided test case with: " + currentTestReflection.name);
                 return;
             }
 
-            initializeInjectableMembers();
-            
             async.addEventListener(TimeoutCommandEvent.CALLED,     onAsyncMethodCalled);
             async.addEventListener(TimeoutCommandEvent.TIMED_OUT,  onAsyncMethodTimedOut);
             
@@ -109,23 +105,10 @@ package asunit.runners {
             return new TestIterator(test, testMethodName);
         }
 
-        protected function initializeInjectableMembers():void {
-            injectableMembers = new ArrayIterator(currentTestReflection.getMembersByMetaData('Inject'));
-        }
-
         protected function runNextMethod(e:TimerEvent = null):void {
-            if(!testMethodNameReceived && methodsToRun.readyToTearDown) {
-                removeInjectedMembers();
-                removeInjectedVisualInstances();
-            }
-            
             if (testCompleted) {
                 onTestCompleted();
                 return;
-            }
-
-            if(methodsToRun.readyToSetUp) {
-                prepareForSetUp();
             }
 
             runMethod(methodsToRun.next());
@@ -230,151 +213,10 @@ package asunit.runners {
         
         protected function get testCompleted():Boolean {
             return (!methodsToRun.hasNext() && !async.hasPending);
+
         }
-
-        protected function removeInjectedMembers():void {
-            var member:ReflectionVariable;
-            while(injectableMembers.hasNext()) {
-                removeInjectedMember(injectableMembers.next());
-            }
-            injectableMembers.reset();
-        }
-
-        protected function removeInjectedVisualInstances():void {
-            var visuals:Iterator = new ArrayIterator(visualInstances);
-            while(visuals.hasNext()) {
-                visualContext.removeChild(visuals.next());
-            }
-            visualInstances = [];
-        }
-
-        protected function removeInjectedMember(member:ReflectionVariable):void {
-            if(!member) return;
-            currentTest[member.name] = null;
-        }
-
-        protected function prepareForSetUp():void {
-            injectMembers();
-        }
-
-        protected function injectMembers():void {
-            var member:ReflectionVariable;
-            while(injectableMembers.hasNext()) {
-                injectMember(injectableMembers.next());
-            }
-            injectableMembers.reset();
-        }
-
-        protected function injectMember(member:ReflectionVariable):void {
-            if(!member) return;
-            var definition:Class;
-            try {
-                definition = getDefinitionByName(member.type) as Class;
-            }
-            catch(referenceError:ReferenceError) {
-                warn("Unable to [Inject] with " + member.type + ". Maybe this was an inner class? That makes it unavailable to external code, try putting it in it's own file.");
-                return;
-            }
-            var reflection:Reflection = Reflection.create(definition);
-            try {
-                var instance:* = createInstanceFromReflection(reflection);
-                configureInjectedInstance(member, instance);
-                currentTest[member.name] = instance;
-            }
-            catch(e:VerifyError) {
-                throw new VerifyError("Failed to instantiate " + member.type + " in order to inject public var " + member.name);
-            }
-        }
-
-        protected function configureInjectedInstance(member:ReflectionVariable, instance:*):void {
-            var injectTag:ReflectionMetaData = member.getMetaDataByName('Inject');
-            var args:Array = injectTag.args;
-            var arg:Object;
-            var len:int = args.length;
-            for(var i:int; i < len; i++) {
-                arg = args[i];
-                try {
-                    instance[arg.key] = coerceArgumentType(member, arg.value);
-                }
-                catch(e:ReferenceError) {
-                    var reflect:Reflection = Reflection.create(instance);
-                    warn("Unable to inject attribute " + arg.key + " on " + reflect.name);
-                }
-            }
-        }
-
-        protected function coerceArgumentType(member:ReflectionVariable, value:String):* {
-            switch(value) {
-                case "false" :
-                    return false;
-                case "true" :
-                    return true;
-            }
-
-            return value;
-        }
-
-        protected function createInstanceFromReflection(reflection:Reflection):* {
-            // Return the shared async instance if they're expecting the interface
-            // or concrete instance, but NOT if their Inject is merely a subclass...
-            if(reflection.name == ASYNC_NAME || reflection.name == IASYNC_NAME) {
-                return async;
-            }
-
-            var clazz:Class = getClassReferenceFromReflection(reflection);
-            var constructorReflection:Reflection = Reflection.create(clazz);
-            try {
-                var instance:* = new constructorReflection.classReference();
-            }
-            catch(e:VerifyError) {
-                warn("Unable to instantiate: " + reflection.name + " for injection");
-            }
-
-            if(constructorReflection.isA(DISPLAY_OBJECT_CONTAINER)) {
-                // Add injected DisplayObjectContainers to a collection
-                // for removal, and add them to the visualContext if
-                // one was provided to the run() method.
-                if(visualContext) {
-                    visualInstances.push(instance);
-                    visualContext.addChild(instance);
-                } 
-                else {
-                    warn("TestRunner is injecting a DisplayObjectContainer on your Test but wasn't given a visualContext when run was called. This means your visual entity will not be attached to the Display List.");
-                }
-            }
-
-            return instance;
-        }
-
         protected function warn(message:String, method:Method=null):void {
             result.onWarning(new TestWarning(message, method));
-        }
-
-        protected function getClassReferenceFromReflection(reflection:Reflection):Class {
-            // This will attempt to deal with I-prefixed interfaces - like IAsync.
-            if(reflection.isInterface) {
-                return attemptToGetClassReferenceFromReflection(reflection);
-            }
-            return reflection.classReference;
-        }
-
-        protected function attemptToGetClassReferenceFromReflection(reflection:Reflection):Class {
-            var fullName:String = reflection.name;
-            var parts:Array = fullName.split("::");
-            var interfaceName:String = parts.pop();
-            var expr:RegExp = /I([AZ].+)/;
-            var match:Object = expr.exec(interfaceName);
-            if(match) {
-                parts.push(match[1]);
-                var implementationName:String = parts.join("::");
-                return Class(getDefinitionByName(implementationName));
-            }
-            throw new VerifyError("Unable to find class instance for interface " + fullName);
-        }
-
-        // TODO: Implement this method:
-        protected function argumentFreeConstructor(reflection:Reflection):Boolean {
-            return true;
         }
     }
 }

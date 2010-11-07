@@ -9,7 +9,7 @@ package asunit.core {
 
         override protected function initializeObservers():void {
             super.initializeObservers();
-            addObserver(new FlexUnitCIPrinter());
+            addListener(new FlexUnitCIPrinter());
         }
 
 		override protected function onRunCompleted():void {

@@ -5,8 +5,6 @@
 		function addListener(listener:IRunListener):void;
 		function removeListener(listener:IRunListener):void;
 
-        function addObserver(observer:TestObserver):void;
-		
 		function get errors():Array;
 		function get errorCount():uint;
 		

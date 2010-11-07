@@ -8,7 +8,7 @@ package asunit.core {
 
         override protected function initializeObservers():void {
             super.initializeObservers();
-            addObserver(new FlashDevelopPrinter());
+            addListener(new FlashDevelopPrinter());
         }
 
 		override protected function onRunCompleted():void {

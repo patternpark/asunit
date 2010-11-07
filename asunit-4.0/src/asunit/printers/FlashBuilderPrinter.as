@@ -1,12 +1,10 @@
 package asunit.printers {
 	import asunit.framework.ITestFailure;
 	import asunit.framework.ITestWarning;
-
 	import asunit.framework.IResult;
 	import asunit.framework.IRunListener;
 	import asunit.framework.ITestSuccess;
 	import asunit.framework.Method;
-	import asunit.framework.TestObserver;
 
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -14,7 +12,7 @@ package asunit.printers {
 	import flash.net.XMLSocket;
 	import flash.utils.getQualifiedClassName;
 
-	public class FlashBuilderPrinter implements IRunListener, TestObserver {
+	public class FlashBuilderPrinter implements IRunListener {
 		protected var projectName:String;
 		protected var contextName:String;
 		protected var messageQueue:Array;

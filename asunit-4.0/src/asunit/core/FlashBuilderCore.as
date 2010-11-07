@@ -10,7 +10,7 @@ package asunit.core {
             super.initializeObservers();
 
             var projectName:String = 'SomeProject';
-            addObserver(new FlashBuilderPrinter(projectName));
+            addListener(new FlashBuilderPrinter(projectName));
         } 
 		override protected function onRunCompleted():void {
             super.onRunCompleted();

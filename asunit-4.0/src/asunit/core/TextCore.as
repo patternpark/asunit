@@ -23,7 +23,7 @@ package asunit.core {
             super.initializeObservers();
 
             textPrinter = new TextPrinter();
-            addObserver(textPrinter);
+            addListener(textPrinter);
         }
 
         /* Delegate some configuration to the TextPrinter */

@@ -5,7 +5,6 @@ package asunit.printers {
 	import asunit.framework.ITestSuccess;
 	import asunit.framework.ITestWarning;
 	import asunit.framework.Method;
-	import asunit.framework.TestObserver;
 
 	import flash.events.DataEvent;
 	import flash.events.Event;

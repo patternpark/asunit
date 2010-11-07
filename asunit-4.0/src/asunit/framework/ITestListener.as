@@ -1,9 +1,8 @@
 ﻿package asunit.framework {
 
 	import asunit.framework.ITestFailure;
-    import asunit.framework.TestObserver;
 	
-	public interface ITestListener extends TestObserver {
+	public interface ITestListener {
 		function onTestStarted(test:Object):void;
 		function onTestCompleted(test:Object):void;
 		function onTestFailure(failure:ITestFailure):void;

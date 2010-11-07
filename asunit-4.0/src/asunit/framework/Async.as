@@ -61,7 +61,7 @@ package asunit.framework {
         }
 		
         /**
-         * Returns a new async handler that should be used as the observer of some
+         * Returns a new async handler that should be used as the listener of some
          * presumably asynchronous event.
          *
          * You can optionally pass a function closure that you would like to have

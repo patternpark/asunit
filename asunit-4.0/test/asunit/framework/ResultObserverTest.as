@@ -8,18 +8,18 @@ package asunit.framework {
 
         private var result:Result;
 
-        private var observer:FakeObserver;
+        private var listener:FakeObserver;
 
         [Before]
         public function createObserver():void {
-            observer = new FakeObserver();
+            listener = new FakeObserver();
 			result = new Result();
-            result.addListener(observer);
+            result.addListener(listener);
         }
 
         [After]
         public function destroyObserver():void {
-            observer = null;
+            listener = null;
         }
 
         [Test]
@@ -30,13 +30,13 @@ package asunit.framework {
         [Test]
         public function addedListenerReceivesOnRunStarted():void {
             result.onRunStarted();
-            assertTrue(observer.onRunStartedCalled);
+            assertTrue(listener.onRunStartedCalled);
         }
 
         [Test]
         public function addedListenerReceivesOnTestStarted():void {
             result.onTestStarted(null);
-            assertTrue(observer.onTestStartedCalled);
+            assertTrue(listener.onTestStartedCalled);
         }
 
 		[Test]

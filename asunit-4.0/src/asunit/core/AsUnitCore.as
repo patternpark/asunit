@@ -5,7 +5,7 @@ package asunit.core {
 	import asunit.framework.Result;
 	import asunit.framework.IRunner;
 	import asunit.framework.RunnerFactory;
-	import asunit.framework.TestObserver;
+	import asunit.framework.IRunListener;
 	import asunit.runners.LegacyRunner;
 	import org.swiftsuspenders.Injector;
 
@@ -19,7 +19,6 @@ package asunit.core {
 
 		protected var injector:Injector;
         protected var legacyRunnerReference:LegacyRunner;
-        protected var observers:Array;
         protected var runner:IRunner;
         protected var _visualContext:DisplayObjectContainer;
 
@@ -55,18 +54,8 @@ package asunit.core {
         }
 
         /**
-         * Add a new Observer instance to this test run. 
+         * Add a listener to this test run. 
          *
-         * The TestObserver interface is simply a marker interface
-         * that indicates your observer has at least one [Inject]
-         * variable where a bridge will be injected.
-         *
-         * Concrete observers are coupled to concrete runners
-         * by using [Inject] metadata and Bridges for message passing.
-         *
-         * The primary TestRunner, CallbackBridge and TextPrinter
-         * are good examples of how to build this relationship.
-         * 
          * To use a different TestRunner on a Suite or Test, simply set:
          *
          *   [RunWith("fully.qualified.ClassName")]
@@ -80,8 +69,8 @@ package asunit.core {
          * provided by a couple of concrete runners.
          *
          */
-        public function addObserver(observer:TestObserver):void {
-			result.addObserver(observer);
+        public function addListener(listener:IRunListener):void {
+			result.addListener(listener);
 		}
 
         /**
@@ -119,25 +108,20 @@ package asunit.core {
 
 			var factory:IRunnerFactory = injector.getInstance(IRunnerFactory);
 			runner = factory.runnerFor(testOrSuite);
-			runner.addEventListener(Event.COMPLETE, runCompleteHandler);
+			runner.addEventListener(Event.COMPLETE, onRunCompleted);
 			result.onRunStarted();
 			runner.run(testOrSuite, testMethodName, this.visualContext);
 		}
 
-        private function runCompleteHandler(event:Event):void {
+         /**
+         * Subclasses can override to perform some
+         * operation when the run is complete.
+         */
+       protected function onRunCompleted(event:Event):void {
 			runner.removeEventListener(Event.COMPLETE, onRunCompleted);
 			result.onRunCompleted(result);
             onRunCompleted();
             dispatchEvent(event);
         }
-
-
-        /**
-         * Template method that subclasses can override to perform some
-         * operation when the run is complete.
-         */
-		protected function onRunCompleted():void {
-		}
-
 	}
 }

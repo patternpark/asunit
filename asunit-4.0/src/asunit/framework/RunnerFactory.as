@@ -37,18 +37,17 @@ package asunit.framework {
         public function RunnerFactory(injector:Injector = null) {
             DefaultSuiteRunner = DEFAULT_SUITE_RUNNER;
             DefaultTestRunner  = DEFAULT_TEST_RUNNER;
-            this.injector = injector || new Injector();
+            this.injector = injector ||= new Injector();
+			injector.mapValue(Injector, injector);
         }
 		
 		private var _injector:Injector;
 		
-		public function get injector():Injector
-		{
+		public function get injector():Injector {
 			return _injector;
 		}
 		
-		public function set injector(value:Injector):void
-		{
+		public function set injector(value:Injector):void {
 			_injector = value;
 		}
 		
@@ -56,7 +55,6 @@ package asunit.framework {
          * runnerFor is the primary inerface to the RunnerFactory
          */
         public function runnerFor(testOrSuite:Class):IRunner {
-            //trace(">> runnerFor: " + testOrSuite + " with current default of: " + DefaultTestRunner);
             validate(testOrSuite);
             return getRunnerForTestOrSuite(testOrSuite);
         }

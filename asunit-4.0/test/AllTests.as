@@ -14,7 +14,6 @@ package {
     import asunit.framework.AsyncMethodTest;
     import asunit.framework.AsyncTest;
     import asunit.framework.CallbackBridgeTest;
-    import asunit.framework.InjectionDelegateTest;
     import asunit.framework.NestedSuiteIteratorTest;
     import asunit.framework.ProceedOnEventTest;
     import asunit.framework.ResultTest;
@@ -47,7 +46,6 @@ package {
         public var asunit_framework_AsyncMethodTest:asunit.framework.AsyncMethodTest;
         public var asunit_framework_AsyncTest:asunit.framework.AsyncTest;
         public var asunit_framework_CallbackBridgeTest:asunit.framework.CallbackBridgeTest;
-        public var asunit_framework_InjectionDelegateTest:asunit.framework.InjectionDelegateTest;
         public var asunit_framework_NestedSuiteIteratorTest:asunit.framework.NestedSuiteIteratorTest;
         public var asunit_framework_ProceedOnEventTest:asunit.framework.ProceedOnEventTest;
         public var asunit_framework_ResultTest:asunit.framework.ResultTest;

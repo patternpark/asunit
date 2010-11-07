@@ -7,16 +7,12 @@
     import asunit.framework.TestCase;
 
     import flash.events.Event;
-    import flash.events.EventDispatcher;
     import flash.utils.setTimeout;
 
     public class AsyncTest {
 
         [Inject]
         public var async:IAsync;
-
-        [Inject]
-        public var dispatcher:EventDispatcher;
 
         private var orphanAsync:IAsync;
         private var command:TimeoutCommand;

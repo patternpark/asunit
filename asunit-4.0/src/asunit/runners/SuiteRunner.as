@@ -1,34 +1,42 @@
 package asunit.runners {
 	
 	import asunit.framework.CallbackBridge;
+	import asunit.framework.IResult;
 	import asunit.framework.IRunner;
 	import asunit.framework.IRunnerFactory;
+	import asunit.framework.Result;
 	import asunit.framework.RunnerFactory;
 	import asunit.framework.SuiteIterator;
 	import asunit.util.Iterator;
+	import org.swiftsuspenders.Injector;
 
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import flash.events.IEventDispatcher;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
     
-    public class SuiteRunner implements IEventDispatcher, IRunner {
+    public class SuiteRunner extends EventDispatcher implements IRunner {
 
-        protected var dispatcher:IEventDispatcher;
+		public var result:IResult;
+		
         protected var testClasses:Iterator;
         protected var timer:Timer;
         protected var visualContext:DisplayObjectContainer;
         protected var testMethod:String;
-
-        private var factory:IRunnerFactory;
+ 		protected var injector:Injector;
+        protected var factory:IRunnerFactory;
         
-        public function SuiteRunner(factory:IRunnerFactory = null) {
-            timer      = new Timer(0, 1);
-            dispatcher = new EventDispatcher();
-			this.factory = factory || new RunnerFactory();
-        }
+        public function SuiteRunner(factory:IRunnerFactory = null, result:IResult = null, injector:Injector = null) {
+            timer = new Timer(0, 1);
+
+			this.injector = injector ||= new Injector();
+			injector.mapValue(Injector, injector);
+ 			this.result = result ||= new Result();
+			injector.mapValue(IResult, result);
+			this.factory = factory ||= injector.instantiate(RunnerFactory);
+ 			injector.mapValue(IRunnerFactory, factory);
+		}
         
         public function run(suite:Class, testMethod:String=null, visualContext:DisplayObjectContainer=null):void {
             this.visualContext = visualContext;
@@ -78,29 +86,5 @@ package asunit.runners {
          */
         protected function onRunCompleted():void {
         }
-
-        // BEGIN: Implement the IEvent Dispatcher Interface:
-
-        public function addEventListener(type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void {
-            dispatcher.addEventListener(type, listener, useCapture, priority, useWeakReference);
-        }
-        
-        public function removeEventListener(type:String, listener:Function, useCapture:Boolean=false):void {
-            dispatcher.removeEventListener(type, listener, useCapture);
-        }
-        
-        public function dispatchEvent(event:Event):Boolean {
-            return dispatcher.dispatchEvent(event);
-        }
-        
-        public function hasEventListener(type:String):Boolean {
-            return dispatcher.hasEventListener(type);
-        }
-        
-        public function willTrigger(type:String):Boolean {
-            return dispatcher.willTrigger(type);
-        }
-
-        // END: Implement the IEvent Dispatcher Interface:
     }
 }

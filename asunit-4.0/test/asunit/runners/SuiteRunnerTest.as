@@ -5,6 +5,7 @@ package asunit.runners {
     import asunit.framework.Result;
     import asunit.support.DoubleFailSuite;
     import asunit.support.InjectionVerification;
+	import flash.display.Sprite;
 
     import flash.events.Event;
 
@@ -12,12 +13,14 @@ package asunit.runners {
 
         [Inject]
         public var async:IAsync;
-
-        [Inject]
-        public var suiteRunner:SuiteRunner;
-
-        [Inject]
-        public var runnerResult:Result;
+        private var suiteRunner:SuiteRunner;
+        private var runnerResult:Result;
+		
+        [Before]
+        public function setUp():void {
+			runnerResult = new Result();
+			suiteRunner = new SuiteRunner(null, runnerResult);
+		}
 
         public function testRunTriggersCompleteEvent():void {
             suiteRunner.addEventListener(Event.COMPLETE, async.add(checkResultWasNotSuccessful));
@@ -31,7 +34,7 @@ package asunit.runners {
         [Test]
         public function testCanHandATestToSuiteRunner():void {
             suiteRunner.addEventListener(Event.COMPLETE, async.add());
-            suiteRunner.run(InjectionVerification);
+            suiteRunner.run(InjectionVerification, null, new Sprite());
             assertFalse(runnerResult.wasSuccessful);
         }
     }

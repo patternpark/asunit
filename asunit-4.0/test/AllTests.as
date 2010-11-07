@@ -15,6 +15,7 @@ package {
     import asunit.framework.AsyncTest;
     import asunit.framework.NestedSuiteIteratorTest;
     import asunit.framework.ProceedOnEventTest;
+    import asunit.framework.ResultObserverTest;
     import asunit.framework.ResultTest;
     import asunit.framework.RunnerFactoryTest;
     import asunit.framework.SuiteIteratorTest;
@@ -46,6 +47,7 @@ package {
         public var asunit_framework_AsyncTest:asunit.framework.AsyncTest;
         public var asunit_framework_NestedSuiteIteratorTest:asunit.framework.NestedSuiteIteratorTest;
         public var asunit_framework_ProceedOnEventTest:asunit.framework.ProceedOnEventTest;
+        public var asunit_framework_ResultObserverTest:asunit.framework.ResultObserverTest;
         public var asunit_framework_ResultTest:asunit.framework.ResultTest;
         public var asunit_framework_RunnerFactoryTest:asunit.framework.RunnerFactoryTest;
         public var asunit_framework_SuiteIteratorTest:asunit.framework.SuiteIteratorTest;

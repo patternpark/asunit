@@ -4,7 +4,6 @@ package asunit.core {
 	import asunit.framework.IRunnerFactory;
 	import asunit.framework.Result;
 	import asunit.framework.IRunner;
-	import asunit.framework.InjectionDelegate;
 	import asunit.framework.RunnerFactory;
 	import asunit.framework.TestObserver;
 	import asunit.runners.LegacyRunner;
@@ -13,15 +12,12 @@ package asunit.core {
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import flash.events.IEventDispatcher;
 	
-	public class AsUnitCore implements IEventDispatcher {
+	public class AsUnitCore extends EventDispatcher {
 
         internal var result:IResult;
 
 		protected var injector:Injector;
-		protected var bridgeInjector:InjectionDelegate;
-        protected var dispatcher:IEventDispatcher;
         protected var legacyRunnerReference:LegacyRunner;
         protected var observers:Array;
         protected var runner:IRunner;
@@ -30,7 +26,6 @@ package asunit.core {
         public function AsUnitCore() {
             super();
 			initializeInjector();
-            initializeDispatcher();
             initializeObservers();
             initialize();
         }
@@ -42,10 +37,6 @@ package asunit.core {
  			result = new Result();
 			injector.mapValue(IResult, result);
 		}
-		
-        protected function initializeDispatcher():void {
-            dispatcher = new EventDispatcher(this);
-        }
 
         /**
          * Template method for subclasses to override,
@@ -148,28 +139,5 @@ package asunit.core {
 		protected function onRunCompleted():void {
 		}
 
-        // BEGIN: Implement the IEventDispatcher Interface:
-
-		public function addEventListener(type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void {
-			dispatcher.addEventListener(type, listener, useCapture, priority, useWeakReference);
-		}
-		
-		public function removeEventListener(type:String, listener:Function, useCapture:Boolean=false):void {
-			dispatcher.removeEventListener(type, listener, useCapture);
-		}
-		
-		public function dispatchEvent(event:Event):Boolean {
-			return dispatcher.dispatchEvent(event);
-		}
-		
-		public function hasEventListener(type:String):Boolean {
-			return dispatcher.hasEventListener(type);
-		}
-		
-		public function willTrigger(type:String):Boolean {
-			return dispatcher.willTrigger(type);
-		}
-
-        // END: Implement the IEvent Dispatcher Interface:
 	}
 }

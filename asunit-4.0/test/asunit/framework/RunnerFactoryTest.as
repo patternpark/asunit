@@ -14,9 +14,13 @@ package asunit.framework {
 
 	public class RunnerFactoryTest {
 
-        [Inject]
-        public var factory:RunnerFactory;
-
+        private var factory:IRunnerFactory;
+	
+		[Before]
+		public function before():void {
+			factory = new RunnerFactory();
+		}
+		
         [Test]
         public function shouldCreateDefaultRunner():void {
             var result:IRunner = factory.runnerFor(SucceedAssertTrue);

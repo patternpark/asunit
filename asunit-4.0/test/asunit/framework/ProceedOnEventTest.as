@@ -15,8 +15,6 @@ package asunit.framework {
 
         [Inject]
         public var async:IAsync;
-
-        [Inject]
         public var dispatcher:EventDispatcher;
 
         private var orphanAsync:IAsync;
@@ -26,6 +24,7 @@ package asunit.framework {
         [Before]
         public function setUp():void {
             orphanAsync = new Async();
+			dispatcher = new EventDispatcher();
         }
 
         [After]

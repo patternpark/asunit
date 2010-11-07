@@ -17,9 +17,12 @@ package asunit.runners {
 
         [Inject]
         public var async:IAsync;
-
-        [Inject]
-        public var runner:TestRunner;
+        private var runner:TestRunner;
+		
+		[Before]
+		public function before():void {
+			runner = new TestRunner();
+		}
 
         [Test]
         public function asyncShouldWork():void {

@@ -108,19 +108,24 @@ package asunit.core {
 
 			var factory:IRunnerFactory = injector.getInstance(IRunnerFactory);
 			runner = factory.runnerFor(testOrSuite);
-			runner.addEventListener(Event.COMPLETE, onRunCompleted);
+			runner.addEventListener(Event.COMPLETE, onRunnerComplete);
 			result.onRunStarted();
 			runner.run(testOrSuite, testMethodName, this.visualContext);
 		}
 
+        protected function onRunnerComplete(event:Event):void {
+			runner.removeEventListener(Event.COMPLETE, onRunCompleted);
+			result.onRunCompleted(result);
+			onRunCompleted();
+            dispatchEvent(event);
+        }
+		
          /**
          * Subclasses can override to perform some
          * operation when the run is complete.
          */
-       protected function onRunCompleted(event:Event):void {
-			runner.removeEventListener(Event.COMPLETE, onRunCompleted);
-			result.onRunCompleted(result);
-            dispatchEvent(event);
-        }
+		protected function onRunCompleted():void {
+			
+		}
 	}
 }

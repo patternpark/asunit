@@ -373,24 +373,34 @@ package asunit.framework {
             if (expected.length != actual.length) {
                 failNotEquals(message, expected, actual);
             }
-            for (var i : int = 0; i < expected.length; i++) {
-                var foundMatch : Boolean = false;
-                var expectedMember : Object = expected[i];
-                for (var j : int = 0; j < actual.length; j++) {
-                    var actualMember : Object = actual[j];
+            
+            var unusedPotentialMatches:Array = actual.slice();
+		    
+			var iLength:uint = expected.length;
+			var jLength:uint;
+			
+			searchingForExpectedItems: 
+			for (var i:int = 0; i < iLength; i++)
+			{
+				var expectedMember : Object = expected[i];
+				jLength = unusedPotentialMatches.length;
+				
+				checkingAgainstActualItems: 
+				for (var j : int = 0; j < jLength; j++) {
+                    var actualMember : Object = unusedPotentialMatches[j];
                     try {
                         assertEquals(expectedMember, actualMember);
-                        foundMatch = true;
-                        break;
+                        unusedPotentialMatches.splice(j, 1);
+						continue searchingForExpectedItems;
                     }
                     catch (e : AssertionFailedError) {
                         //  no match, try next
                     }
                 }
-                if (!foundMatch) {
-                    failNotEquals("Found no match for " + expectedMember + ";", expected, actual);
-                }
-            }
+				
+				failNotEquals("Found no match for " + expectedMember + ";", expected, actual);
+				
+			}
         }
 
         static private function failNotEquals(message:String, expected:Object, actual:Object):void {

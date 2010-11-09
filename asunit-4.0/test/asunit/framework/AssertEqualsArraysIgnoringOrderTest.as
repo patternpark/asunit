@@ -3,6 +3,7 @@
     import asunit.errors.AssertionFailedError;
     import asunit.framework.TestCase;
     import asunit.framework.Assert;
+    import flash.display.Sprite;
     
     /**
      * Tests assertEqualsArraysIgnoringOrder
@@ -84,5 +85,18 @@
         public function testArrayDifferentLength2():void {
             assertAssertionFailed(Assert.assertEqualsArraysIgnoringOrder, ["abc", "def"], ["abc", "def", "ghi"]);
         }
+
+		public function testArrayWithRepeatedItems():void {
+			var spr1:Sprite = new Sprite();
+			var spr2:Sprite = new Sprite();
+			var spr3:Sprite = new Sprite();
+			
+			var controlArray:Array = [spr1, spr2, spr3, spr1];
+			var matchingArray:Array = [spr1, spr2, spr1, spr3];
+			var nonMatchingArray:Array = [spr1, spr2, spr3, spr2];
+			
+			assertEqualsArraysIgnoringOrder('these arrays should match', controlArray, matchingArray);
+			assertAssertionFailed(Assert.assertEqualsArraysIgnoringOrder, controlArray, nonMatchingArray);
+		}
     }
 }

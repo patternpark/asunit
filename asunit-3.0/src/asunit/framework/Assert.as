@@ -147,22 +147,29 @@ package asunit.framework {
                 throw new IllegalOperationError("Invalid argument count");
             }
 
-            if(expected == null && actual == null) {
+            if(bothNull(expected, actual)) {
                 return;
             }
 
-            try {
-                if(expected != null && expected.equals(actual)) {
+            if(eitherNull(expected, actual)) {
+      			throw new AssertionFailedError(format(message, expected, actual));
+			}
+            
+			// now we know both are not null
+
+			try {
+                if(expected.equals(actual)) {
                     return;
                 }
             }
             catch(e:Error) {
-                if(expected != null && expected == actual) {
+                if(expected == actual) {
                     return;
                 }
             }
 
-            throw new AssertionFailedError(format(message, expected, actual));
+  			throw new AssertionFailedError(format(message, expected, actual));
+
         }
         /**
          * Asserts that an object isn't null. If it is
@@ -323,17 +330,18 @@ package asunit.framework {
                 throw new IllegalOperationError("Invalid argument count");
             }
 
-            if (expected == null && actual == null) {
+            if (bothNull(expected, actual)) {
                 return;
             }
-            if ((expected == null && actual != null) || (expected != null && actual == null)) {
+            if (eitherNull(expected, actual)) {
                 failNotEquals(message, expected, actual);
             }
             // from here on: expected != null && actual != null
-            if (expected.length != actual.length) {
+            if (differentLengths(expected, actual)) {
                 failNotEquals(message, expected, actual);
             }
-            for (var i : int = 0; i < expected.length; i++) {
+			var iLength:uint = expected.length;
+            for (var i : int = 0; i < iLength; i++) {
                 assertEquals(expected[i], actual[i]);
             }
         }
@@ -363,36 +371,47 @@ package asunit.framework {
                 throw new IllegalOperationError("Invalid argument count");
             }
 
-            if (expected == null && actual == null) {
+            if (bothNull(expected, actual)) {
                 return;
             }
-            if ((expected == null && actual != null) || (expected != null && actual == null)) {
+            if (eitherNull(expected, actual)) {
                 failNotEquals(message, expected, actual);
             }
             // from here on: expected != null && actual != null
-            if (expected.length != actual.length) {
+            if (differentLengths(expected, actual)) {
                 failNotEquals(message, expected, actual);
             }
-            for (var i : int = 0; i < expected.length; i++) {
-                var foundMatch : Boolean = false;
-                var expectedMember : Object = expected[i];
-                for (var j : int = 0; j < actual.length; j++) {
-                    var actualMember : Object = actual[j];
+            
+            var unusedPotentialMatches:Array = actual.slice();
+		    
+			var iLength:uint = expected.length;
+			var jLength:uint;
+			
+			searchingForExpectedItems: 
+			for (var i:int = 0; i < iLength; i++)
+			{
+				var expectedMember : Object = expected[i];
+				jLength = unusedPotentialMatches.length;
+				
+				checkingAgainstActualItems: 
+				for (var j : int = 0; j < jLength; j++) {
+                    var actualMember : Object = unusedPotentialMatches[j];
                     try {
                         assertEquals(expectedMember, actualMember);
-                        foundMatch = true;
-                        break;
+                        unusedPotentialMatches.splice(j, 1);
+						continue searchingForExpectedItems;
                     }
                     catch (e : AssertionFailedError) {
                         //  no match, try next
                     }
                 }
-                if (!foundMatch) {
-                    failNotEquals("Found no match for " + expectedMember + ";", expected, actual);
-                }
-            }
+				
+				failNotEquals("Found no match for " + expectedMember + ";", expected, actual);
+				
+			}
         }
-
+        
+		
         static private function failNotEquals(message:String, expected:Object, actual:Object):void {
             fail(format(message, expected, actual));
         }
@@ -404,5 +423,20 @@ package asunit.framework {
             }
             return formatted + "expected:<" + expected + "> but was:<" + actual + ">";
         }
+
+		static public function bothNull(v1:*, v2:*):Boolean
+		{
+			return ((v1==null)&&(v2==null));
+		}
+		
+		static public function eitherNull(v1:*, v2:*):Boolean
+		{
+			return ((v1==null)||(v2==null));
+		}
+		
+		static public function differentLengths(v1:*, v2:*):Boolean
+		{
+			return (v1.length != v2.length);
+		}
     }
 }

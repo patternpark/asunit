@@ -19,25 +19,27 @@ package asunit.printers {
     import flash.utils.getTimer;
 
     public class TextPrinter extends Sprite implements IRunListener {
-        public static var LOCAL_PATH_PATTERN:RegExp = /([A-Z]:\\[^\/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^\/:\*\?<>\|]+\.\w{2,6})/g;
-        public static var BACKGROUND_COLOR:uint = 0x333333;
-        public static var DEFAULT_HEADER:String = "AsUnit 4.0 by Luke Bayes, Ali Mills and Robert Penner\n\nFlash Player version: " + Capabilities.version
-        public static var FONT_SIZE:int = 12;
-        public static var TEXT_COLOR:uint = 0xffffff;
+        public static const LOCAL_PATH_PATTERN:RegExp = /([A-Z]:\\[^\/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^\/:\*\?<>\|]+\.\w{2,6})/g;
+        public static const DEFAULT_BACKGROUND_COLOR:uint = 0x333333;
+        public static const DEFAULT_HEADER:String = "AsUnit 4.0 by Luke Bayes, Ali Mills and Robert Penner\n\nFlash Player version: " + Capabilities.version
+        public static const DEFAULT_FOOTER:String = "";
+        public static const DEFAULT_FONT_SIZE:int = 12;
+        public static const DEFAULT_TEXT_COLOR:uint = 0xffffff;
 
-        public var backgroundColor:uint              = BACKGROUND_COLOR;
+        public var header:String                     = DEFAULT_HEADER;
+        public var footer:String                     = DEFAULT_FOOTER;
+        public var backgroundColor:uint              = DEFAULT_BACKGROUND_COLOR;
+        public var textColor:uint                    = DEFAULT_TEXT_COLOR;
         public var displayPerformanceDetails:Boolean = true;
-        public var localPathPattern:RegExp;
-        public var textColor:uint                    = TEXT_COLOR;
         public var traceOnComplete:Boolean           = true;
+        public var hideLocalPaths:Boolean            = false;
+        public var localPathPattern:RegExp           = LOCAL_PATH_PATTERN;
 
         protected var textDisplay:TextField;
 
         private var backgroundFill:Shape;
         private var dots:Array;
         private var failures:Array;
-        private var footer:String;
-        private var header:String;
         private var ignores:Array;
         private var resultBar:Shape;
         private var resultBarHeight:uint = 3;
@@ -59,10 +61,6 @@ package asunit.printers {
             testTimes = [];
             warnings  = [];
             
-            footer           = '';
-            header           = DEFAULT_HEADER;
-            localPathPattern = LOCAL_PATH_PATTERN;
-
             if(stage) {
                 initializeDisplay();
             } else {
@@ -88,7 +86,7 @@ package asunit.printers {
         private function getFailureStackTrace(failure:ITestFailure):String {
             var stack:String = "";
             stack = failure.thrownException.getStackTrace();
-            //stack = stack.replace(localPathPattern, '');
+			if (hideLocalPaths) stack = stack.replace(localPathPattern, '');
             stack = stack.replace(/AssertionFailedError: /, '');
             stack += "\n\n";
             return stack;
@@ -281,7 +279,7 @@ package asunit.printers {
 
             var format:TextFormat = textDisplay.getTextFormat();
             format.font           = '_sans';
-            format.size           = FONT_SIZE;
+            format.size           = DEFAULT_FONT_SIZE;
             format.leftMargin     = 5;
             format.rightMargin    = 5;
             textDisplay.defaultTextFormat = format;

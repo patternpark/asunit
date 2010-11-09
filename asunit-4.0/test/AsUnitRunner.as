@@ -10,6 +10,7 @@ package {
 
         public function AsUnitRunner() {
             core = new TextCore();
+			core.textPrinter.hideLocalPaths = true;
             core.start(AllTests, null, this);
         }
     }

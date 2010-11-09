@@ -92,7 +92,6 @@ package asunit.printers {
 				return;
 			}
 			socket.send(message);
-			//trace('+++++++++ sendMessage() - \n' + message + '\n');
 		}
 		
 		protected function getFailureMessage(failure:ITestFailure):String {
@@ -117,7 +116,6 @@ package asunit.printers {
 		
 		protected function onErrorEvent(event:Event):void {
 			trace('FlashBuilderPrinter::onErrorEvent() - event: ' + event);
-			//throw new Error('FlashBuilderPrinter::onErrorEvent() - event: ' + event);
 		}
 		
 		protected static function xmlEscapeMessage(message:String):String {
@@ -127,6 +125,5 @@ package asunit.printers {
 			escape.setChildren( message );
 			return escape.children()[0].toXMLString();
 		}
-		
 	}
 }

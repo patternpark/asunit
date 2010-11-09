@@ -8,10 +8,10 @@ package asunit.core {
 
         override protected function initializeObservers():void {
             super.initializeObservers();
-
             var projectName:String = 'SomeProject';
             addListener(new FlashBuilderPrinter(projectName));
         } 
+		
 		override protected function onRunCompleted():void {
             super.onRunCompleted();
 			fscommand('quit'); // fails silently if not in debug player

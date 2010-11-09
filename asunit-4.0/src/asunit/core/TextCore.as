@@ -17,7 +17,7 @@ package asunit.core {
      */
     public class TextCore extends AsUnitCore {
 
-        private var textPrinter:TextPrinter;
+        public var textPrinter:TextPrinter;
 
         override protected function initializeObservers():void {
             super.initializeObservers();
@@ -25,24 +25,6 @@ package asunit.core {
             textPrinter = new TextPrinter();
             addListener(textPrinter);
         }
-
-        /* Delegate some configuration to the TextPrinter */
-        public function set displayPerformanceDetails(show:Boolean):void {
-            textPrinter.displayPerformanceDetails = show;
-        }
-
-        public function get displayPerformanceDetails():Boolean {
-            return textPrinter.displayPerformanceDetails;
-        }
-
-        public function set traceOnComplete(should:Boolean):void {
-            textPrinter.traceOnComplete = should;
-        }
-
-        public function get traceOnComplete():Boolean {
-            return textPrinter.traceOnComplete;
-        }
-        
 
         override public function set visualContext(context:DisplayObjectContainer):void {
             super.visualContext = context;

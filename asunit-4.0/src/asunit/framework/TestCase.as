@@ -44,8 +44,7 @@ package asunit.framework {
         }
 
         protected function addChild(child:DisplayObject):DisplayObject {
-            context.addChild(child);
-            return child;
+            return context.addChild(child);
         }
 
         protected function removeChild(child:DisplayObject):DisplayObject {
@@ -92,7 +91,7 @@ package asunit.framework {
         }
 
         protected function assertEqualsFloat(...args:Array):void {
-            Assert.assertEquals.apply(null, args);
+            Assert.assertEqualsFloat.apply(null, args);
         }
 
         protected function assertEqualsArrays(...args:Array):void {

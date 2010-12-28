@@ -9,6 +9,7 @@
         private var _scopeName:String;
 
 		public var expects:String;
+		public var message:String;
 		public var ignore:Boolean;
         public var ignoreDescription:String;
 		public var metadata:ReflectionMetaData;
@@ -34,6 +35,7 @@
 
                 handleTimeoutMetaData();
                 applyMetaData('expects');
+                applyMetaData('message');
                 applyMetaData('order');
             }
         }

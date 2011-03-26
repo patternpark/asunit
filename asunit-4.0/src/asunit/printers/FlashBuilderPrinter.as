@@ -1,19 +1,22 @@
 package asunit.printers {
+	import asunit.framework.ITestFailure;
+	import asunit.framework.ITestWarning;
+	import asunit.framework.IResult;
+	import asunit.framework.IRunListener;
+	import asunit.framework.ITestSuccess;
+	import asunit.framework.Method;
 
-    import asunit.errors.AssertionFailedError;
-    import asunit.framework.Test;
-    import asunit.framework.TestListener;
-    import asunit.framework.TestResult;
-    import flash.events.EventDispatcher;
-	import flash.net.XMLSocket;
-    import flash.utils.setTimeout;
-    import flash.utils.Dictionary;
-    
+	import flash.events.Event;
+	import flash.events.IOErrorEvent;
+	import flash.events.SecurityErrorEvent;
+	import flash.utils.getQualifiedClassName;
+    import flash.net.XMLSocket;
+
     /**
      * FlashBuilderPrinter should connect to the running Flash Builder test result
      * view over an XMLSocket and send it test results as they accumulate.
      */
-    public class FlashBuilderPrinter extends XMLResultPrinter {
+    public class FlashBuilderPrinter extends XMLPrinter {
         
 		protected var socket:XMLSocket;
 
@@ -62,7 +65,7 @@ package asunit.printers {
 			}
 		}
 		
-		protected function sendMessage(message:String):void {
+		override protected function sendMessage(message:String):void {
 			if (!socket.connected) {
 				messageQueue.push(message);
 				return;

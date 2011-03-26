@@ -4,7 +4,7 @@ $:.unshift File.dirname(__FILE__)
 
 module AsUnit
   NAME    = 'asunit4'
-  VERSION = '4.2.2.pre'
+  VERSION = '4.2.3.pre'
 end
 
 require 'asunit4/test_class_generator'

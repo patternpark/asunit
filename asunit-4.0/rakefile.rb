@@ -139,6 +139,7 @@ compc "bin/AsUnit-#{AsUnit::VERSION}.swc" do |t|
   apply_as3_meta_data_args(t)
 end
 
+desc "Build the SWC file for #{AsUnit::VERSION}"
 task :swc => "bin/AsUnit-#{AsUnit::VERSION}.swc"
 
 ##########################################
@@ -173,7 +174,7 @@ task :gem => [:clean, :swc, "bin/asunit4-#{AsUnit::VERSION}.gem"]
 
 
 desc "Create the gem package"
-task :package_gem => :swc do
+task :package => :swc do
   sh "gem build asunit4.gemspec"
 end
 

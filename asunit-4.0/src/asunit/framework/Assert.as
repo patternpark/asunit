@@ -219,6 +219,30 @@ package asunit.framework {
 				throw new AssertionFailedError(message + "expected not null but was:<" + actual + ">");
 			}
         }
+
+        static public function assertMatches(...args:Array):void {
+            var message:String;
+            var expr:RegExp;
+            var content:String;
+
+            if(args.length == 2) {
+                message = "";
+                expr = args[0];
+                content = args[1];
+            }
+            else if(args.length == 3) {
+                message = args[0];
+                expr = args[1];
+                content = args[2];
+            }
+            else {
+                throw new IllegalOperationError("Invalid argument count");
+            }
+            if(!content.match(expr)) {
+                fail("Unable to match [" + expr + "] in content: [" + content + "]");
+            }
+        }
+
         /**
          * Asserts that an object is null.  If it is not
          * an AssertionFailedError is thrown with the given message.

@@ -112,6 +112,37 @@ package asunit.framework {
         }
 
         /**
+        *  Asserts that the provided block throws an exception that matches
+        *  the type and message provided.
+        *
+        *  <listing>
+        *  public function testFailingCode():void {
+        *     assertThrows(CustomError, "Invalid state", function():void {
+        *           var instance:Sprite = new Sprite();
+        *           instance.callMethodThatThrows();
+        *     });
+        *  }
+        *  </listing>
+        **/
+        static public function assertThrowsWithMessage(errorType:Class, errorMessage:String, block:Function):void {
+			try {
+				block.call();
+			}
+			catch(e:Error) {
+				if(!(e is errorType)) {
+					throw new AssertionFailedError("expected error type:<" + getQualifiedClassName(errorType)
+						+"> but was:<" + getQualifiedClassName(e) + ">");
+				}
+				if(e.message != errorMessage) {
+					throw new AssertionFailedError("expected error message:<" + errorMessage
+						+"> but was:<" + e.message + ">");
+				}
+				return;
+			}
+			throw new AssertionFailedError("expected error type:<" + getQualifiedClassName(errorType) + "> with message:<" + errorMessage + "> but none was thrown." );
+        }
+
+        /**
          *  Asserts that two objects are equal. If they are not
          *  an AssertionFailedError is thrown with the given message.
          *

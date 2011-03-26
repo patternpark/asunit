@@ -70,6 +70,12 @@ package asunit.framework {
             Assert.assertThrows(errorType, block);
         }
 
+        protected function assertThrowsWithMessage(errorType:Class,
+												   errorMessage:String,
+												   block:Function):void {
+            Assert.assertThrowsWithMessage(errorType, errorMessage, block);
+        }
+
         protected function assertEquals(...args:Array):void {
             Assert.assertEquals.apply(null, args);
         }

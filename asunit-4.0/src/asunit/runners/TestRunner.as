@@ -139,7 +139,13 @@ package asunit.runners {
             if (currentMethod.expects) {
                 try {
                     var errorClass:Class = getDefinitionByName(currentMethod.expects) as Class;
-                    Assert.assertThrows(errorClass, currentMethod.value);
+                    var errorMessage:String = currentMethod.message;
+                    if(errorMessage == null) {
+                    	Assert.assertThrows(errorClass, currentMethod.value);
+                    }
+                    else {
+                        Assert.assertThrowsWithMessage(errorClass, errorMessage, currentMethod.value);
+                    }
                 }
                 catch(definitionError:ReferenceError) {
                     // NOTE: [luke] Added ReferenceError catch here b/c I had a bad class name in my expects.

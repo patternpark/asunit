@@ -11,6 +11,7 @@ package {
     import asunit.framework.AssertEqualsArraysTest;
     import asunit.framework.AssertTest;
     import asunit.framework.AssertThrowsTest;
+    import asunit.framework.AssertThrowsWithMessageTest;
     import asunit.framework.AsyncMethodTest;
     import asunit.framework.AsyncTest;
     import asunit.framework.NestedSuiteIteratorTest;
@@ -31,6 +32,7 @@ package {
     import asunit.runners.TestRunnerAsyncMethodTest;
     import asunit.runners.TestRunnerErrorMethodTest;
     import asunit.runners.TestRunnerExpectsErrorTest;
+    import asunit.runners.TestRunnerExpectsErrorWithMessageTest;
     import asunit.runners.TestRunnerIgnoredMethodTest;
     import asunit.runners.TestRunnerTest;
     import asunit.util.ArrayIteratorTest;
@@ -42,6 +44,7 @@ package {
         public var asunit_framework_AssertEqualsArraysIgnoringOrderTest:asunit.framework.AssertEqualsArraysIgnoringOrderTest;
         public var asunit_framework_AssertEqualsArraysTest:asunit.framework.AssertEqualsArraysTest;
         public var asunit_framework_AssertTest:asunit.framework.AssertTest;
+        public var asunit_framework_AssertThrowsWithMessageTest:asunit.framework.AssertThrowsWithMessageTest;
         public var asunit_framework_AssertThrowsTest:asunit.framework.AssertThrowsTest;
         public var asunit_framework_AsyncMethodTest:asunit.framework.AsyncMethodTest;
         public var asunit_framework_AsyncTest:asunit.framework.AsyncTest;
@@ -63,6 +66,7 @@ package {
         public var asunit_runners_TestRunnerAsyncMethodTest:asunit.runners.TestRunnerAsyncMethodTest;
         public var asunit_runners_TestRunnerErrorMethodTest:asunit.runners.TestRunnerErrorMethodTest;
         public var asunit_runners_TestRunnerExpectsErrorTest:asunit.runners.TestRunnerExpectsErrorTest;
+        public var asunit_runners_TestRunnerExpectsErrorWithMessageTest:asunit.runners.TestRunnerExpectsErrorWithMessageTest;
         public var asunit_runners_TestRunnerIgnoredMethodTest:asunit.runners.TestRunnerIgnoredMethodTest;
         public var asunit_runners_TestRunnerTest:asunit.runners.TestRunnerTest;
         public var asunit_util_ArrayIteratorTest:asunit.util.ArrayIteratorTest;

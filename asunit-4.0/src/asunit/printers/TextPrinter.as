@@ -24,6 +24,7 @@ package asunit.printers {
         public static const DEFAULT_HEADER:String = "AsUnit 4.0 by Luke Bayes, Ali Mills and Robert Penner\n\nFlash Player version: " + Capabilities.version
         public static const DEFAULT_FOOTER:String = "";
         public static const DEFAULT_FONT_SIZE:int = 12;
+        public static const DEFAULT_PERFORMANCE_COUNT:int = 10;
         public static const DEFAULT_TEXT_COLOR:uint = 0xffffff;
 
         public var header:String                     = DEFAULT_HEADER;
@@ -34,6 +35,7 @@ package asunit.printers {
         public var traceOnComplete:Boolean           = true;
         public var hideLocalPaths:Boolean            = false;
         public var localPathPattern:RegExp           = LOCAL_PATH_PATTERN;
+        public var performanceCount:int              = DEFAULT_PERFORMANCE_COUNT;
 
         protected var textDisplay:TextField;
 
@@ -187,7 +189,7 @@ package asunit.printers {
             println();
             println('Time Summary:');
             println();
-            var len:Number = testTimes.length;
+            var len:Number = Math.min(performanceCount, testTimes.length);
             var total:Number = 0;
             var testTime:Object;
             for (var i:Number = 0; i < len; i++) {

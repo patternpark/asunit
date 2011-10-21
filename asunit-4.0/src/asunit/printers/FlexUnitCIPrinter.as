@@ -31,9 +31,9 @@ package asunit.printers {
 		private static const FAILURE:String = "failure";
 		private static const IGNORE:String = "ignore";
 		
-		private static const START_OF_TEST_RUN_ACK : String = "<startOfTestRunAck/>";
-		private static const END_OF_TEST_ACK : String ="<endOfTestRunAck/>";
-		private static const END_OF_TEST_RUN : String = "<endOfTestRun/>";
+        private static const END_OF_TEST_ACK: String ="<endOfTestRunAck/>";
+        private static const END_OF_TEST_RUN: String = "<endOfTestRun/>";
+        private static const START_OF_TEST_RUN_ACK: String = "<startOfTestRunAck/>";
 		
 		private var socket:XMLSocket;		
 		private var connectTimeout:Timer;
@@ -77,7 +77,7 @@ package asunit.printers {
 		
 		public function onTestIgnored(method:Method):void {
 			var xmlMessageIgnore:String = "<testcase classname='" + getQualifiedClassName(method.scope)
-				+ "' name='" + method.name + "' status='"+IGNORE+"'>"
+				+ "' name='" + method.name + "' time='0' status='"+IGNORE+"'>"
 				+ "<skipped />"
 				+ "</testcase>";
 			sendMessage(xmlMessageIgnore);
@@ -102,7 +102,7 @@ package asunit.printers {
 			var xml:String =
 				"<testcase classname='" + getQualifiedClassName(failure.failedTest)
 				+ "' name='" + failure.failedMethod
-				+ "' time='0.000' status='" + status + "'>"
+				+ "' time='0' status='" + status + "'>"
 				
 					+ "<error message='" + xmlEscapeMessage(failure.exceptionMessage) 
 					+ "' type='"+ getQualifiedClassName(failure.thrownException) +"' >"
@@ -119,25 +119,41 @@ package asunit.printers {
 				messageQueue.push(message);
 				return;
 			}
+			
 			socket.send(message);
+			trace(message);
 		}
 	
 		protected function onConnect(event:Event):void {
 			connectTimeout.stop();
-			sendQueuedMessages();
 		}
 		
 		protected function sendQueuedMessages():void {
+		    trace("sendQueuedMessages()");
 			while (messageQueue.length) {
 				sendMessage(messageQueue.shift());
 			}
 		}		
+		
+		protected function serverReady(): void
+		{
+            // now that we are connectd lets send all the test results which are already available
+		    sendQueuedMessages();
+		}
 
 		private function onData( event : DataEvent ) : void
 		{
-			if (event.data == END_OF_TEST_ACK) {
-				exit();
-			}
+            var data : String = event.data;
+
+            // If we received an acknowledgement on startup, the java server is read and we can start sending.          
+            if ( data == START_OF_TEST_RUN_ACK ) {
+                serverReady();
+            } else if ( data == END_OF_TEST_ACK ) {
+                // If we received an acknowledgement finish-up.
+                // Close the socket.
+                socket.close();
+                exit();
+            }
 		}
 
 		protected function onErrorEvent(event:Event):void {
@@ -159,9 +175,10 @@ package asunit.printers {
 		public function onTestSuccess(success:ITestSuccess):void 
 		{
 			//TODO: move test time into ITestSuccess
-            var duration:Number = (getTimer() - startTime) / 1000;
-			var xmlMessageSuccess:String = "<testcase classname='" + getQualifiedClassName(success.test) 
-				+ "' name='" + success.method + "' time='0.000' status='"+SUCCESS+"'/>";
+            var testTime:Number = (getTimer() - startTime); // flexunit doesn't accept float numbers
+            var className: String = getQualifiedClassName(success.test);
+            var methodName: String = success.method;
+            var xmlMessageSuccess:String = "<testcase classname=\"" + className +"\" name=\"" + methodName +"\" time=\"" + testTime +"\" status=\"success\" />";
 			sendMessage(xmlMessageSuccess);			
 		}
 				
@@ -171,7 +188,6 @@ package asunit.printers {
 		
 		protected function exit():void
 		{
-			socket.close();
 			fscommand("quit");
 		}
 

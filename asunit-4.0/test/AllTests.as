@@ -26,6 +26,7 @@ package {
     import asunit.framework.TestIteratorOrderedTestMethodTest;
     import asunit.framework.TestIteratorSingleMethodTest;
     import asunit.framework.VisualTestCaseTest;
+    import asunit.printers.ColorTracePrinterTest;
     import asunit.printers.TextPrinterTest;
     import asunit.printers.XMLPrinterTest;
     import asunit.printers.FlashBuilderPrinterTest;
@@ -64,6 +65,7 @@ package {
         public var asunit_framework_VisualTestCaseTest:asunit.framework.VisualTestCaseTest;
         public var asunit_printers_TextPrinterTest:asunit.printers.TextPrinterTest;
         public var asunit_printers_FlashBuilderPrinterTest:asunit.printers.FlashBuilderPrinterTest;
+        public var asunit_printers_ColorTracePrinterTest:asunit.printers.ColorTracePrinterTest;
         public var asunit_runners_LegacyRunnerTest:asunit.runners.LegacyRunnerTest;
         public var asunit_runners_SuiteRunnerTest:asunit.runners.SuiteRunnerTest;
         public var asunit_runners_TestRunnerAsyncMethodTest:asunit.runners.TestRunnerAsyncMethodTest;

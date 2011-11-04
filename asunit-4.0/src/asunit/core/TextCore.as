@@ -1,5 +1,6 @@
 package asunit.core {
 
+	import asunit.printers.ColorTracePrinter;
 	import asunit.printers.TextPrinter;
 
 	import flash.display.DisplayObjectContainer;
@@ -23,7 +24,10 @@ package asunit.core {
             super.initializeObservers();
 
             textPrinter = new TextPrinter();
+			textPrinter.traceOnComplete = false;
             addListener(textPrinter);
+
+			addListener(new ColorTracePrinter());
         }
 
         override public function set visualContext(context:DisplayObjectContainer):void {
